@@ -24,7 +24,17 @@ export const generatedCourses: CourseData[] = [
     "id": "cse-302",
     "code": "CSE 302",
     "title": "CSE 302",
-    "chapters": [],
+    "chapters": [
+      {
+        "id": "1.DBMS_Intro.pdf",
+        "title": "1.DBMS Intro",
+        "filename": "1.DBMS_Intro.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20302/Chapters/1.DBMS_Intro.pdf",
+        "sizeInBytes": 1416396
+      }
+    ],
     "others": []
   },
   {
