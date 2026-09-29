@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Logic Design - Chapter 1 & 2 Master Study Guide</title>
+    <!-- MathJax for rendering LaTeX formulas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/polyfill/3.111.0/polyfill.min.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2b6cb0;
+            --accent-color: #319795;
+            --bg-light: #f7fafc;
+            --card-bg: #ffffff;
+            --text-dark: #2d3748;
+            --text-muted: #718096;
+            --border-color: #e2e8f0;
+            --highlight-bg: #feebc8;
+            --highlight-border: #dd6b20;
+            --success-bg: #f0fff4;
+            --success-border: #38a169;
+            --exam-bg: #ebf8ff;
+            --exam-border: #3182ce;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 25px;
+            margin-bottom: 35px;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .author-info {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        nav.toc {
+            background: #edf2f7;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        nav.toc h2 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        nav.toc ul {
+            list-style-type: none;
+            padding-left: 10px;
+        }
+
+        nav.toc ul li {
+            margin-bottom: 8px;
+        }
+
+        nav.toc ul ul {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+
+        nav.toc a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav.toc a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2.chapter-title {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            margin-top: 40px;
+        }
+
+        h3.section-title {
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        h4.subsection-title {
+            color: var(--accent-color);
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 1.15rem;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .bangla-explain {
+            background: #faf5ff;
+            border-left: 4px solid #805ad5;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 1.02rem;
+        }
+
+        .real-example {
+            background: #fffaf0;
+            border-left: 4px solid #dd6b20;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .real-example h5 {
+            color: #c05621;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+
+        .exam-prep {
+            background: var(--exam-bg);
+            border: 1px solid var(--exam-border);
+            padding: 18px 22px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .exam-prep h5 {
+            color: #2b6cb0;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .revision-card {
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
+            padding: 18px 22px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .revision-card h5 {
+            color: #276749;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #edf2f7;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f7fafc;
+        }
+
+        .diagram-container {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+            overflow-x: auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+        }
+
+        .diagram-container svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .diagram-caption {
+            margin-top: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .diagram-explanation {
+            margin-top: 10px;
+            font-size: 0.92rem;
+            color: var(--text-dark);
+            background: #f7fafc;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: left;
+        }
+
+        .formula-box {
+            background: #edf2f7;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            margin: 15px 0;
+            font-size: 1.1rem;
+        }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        .highlight {
+            background-color: var(--highlight-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+            background-color: var(--secondary-color);
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 18px;
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+            h2.chapter-title {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>DIGITAL LOGIC DESIGN</h1>
+        <p>Comprehensive Study Guide for University Exams (Chapter 1 & Chapter 2)</p>
+        <p class="author-info">Based on textbook by Md. Mozammel Huq Azad Khan</p>
+    </header>
+
+    <!-- TOPIC LIST / SYLLABUS OVERVIEW -->
+    <nav class="toc">
+        <h2>📋 Complete Topics Overview (Chapter 1 & 2)</h2>
+        <ul>
+            <li><strong><a href="#chap1">CHAPTER 1: INTRODUCTION TO DIGITAL SYSTEMS</a></strong>
+                <ul>
+                    <li><a href="#sec1-1">1.1 Introduction</a></li>
+                    <li><a href="#sec1-2">1.2 Digital and Analog Systems</a>
+                        <ul><li>Advantages of Digital Techniques</li></ul>
+                    </li>
+                    <li><a href="#sec1-3">1.3 Binary Numbers in Digital Systems</a></li>
+                    <li><a href="#sec1-4">1.4 Binary Logic</a>
+                        <ul>
+                            <li><a href="#sec1-4-1">1.4.1 Definition of Binary Logic</a></li>
+                            <li><a href="#sec1-4-2">1.4.2 Truth Table</a></li>
+                            <li><a href="#sec1-4-3">1.4.3 Switching Circuits</a></li>
+                            <li><a href="#sec1-4-4">1.4.4 Logic Gates</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#sec1-5">1.5 Integrated Circuits</a></li>
+                </ul>
+            </li>
+            <li><strong><a href="#chap2">CHAPTER 2: NUMBER SYSTEMS AND CODES</a></strong>
+                <ul>
+                    <li><a href="#sec2-1">2.1 Introduction</a></li>
+                    <li><a href="#sec2-2">2.2 Number Systems (Positional System)</a></li>
+                    <li><a href="#sec2-3">2.3 Complements</a>
+                        <ul>
+                            <li><a href="#sec2-3-1">2.3.1 The $r$'s Complement</a></li>
+                            <li><a href="#sec2-3-2">2.3.2 The $(r-1)$'s Complement</a></li>
+                            <li><a href="#sec2-3-3">2.3.3 Subtraction with $r$'s Complement</a></li>
+                            <li><a href="#sec2-3-4">2.3.4 Subtraction with $(r-1)$'s Complement</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#sec2-4">2.4 Binary Number System</a>
+                        <ul>
+                            <li><a href="#sec2-4-1">2.4.1 Binary Number Representation</a></li>
+                            <li><a href="#sec2-4-2">2.4.2 Binary to Decimal Conversion</a></li>
+                            <li><a href="#sec2-4-3">2.4.3 Decimal to Binary Conversion</a></li>
+                            <li><a href="#sec2-4-4">2.4.4 2's Complement of Binary Numbers</a></li>
+                            <li><a href="#sec2-4-5">2.4.5 1's Complement of Binary Numbers</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#sec2-5">2.5 Binary Arithmetic</a>
+                        <ul>
+                            <li><a href="#sec2-5-1">2.5.1 Binary Addition</a></li>
+                            <li><a href="#sec2-5-2">2.5.2 Binary Subtraction</a></li>
+                            <li><a href="#sec2-5-3">2.5.3 Binary Multiplication</a></li>
+                            <li><a href="#sec2-5-4">2.5.4 Binary Division</a></li>
+                            <li><a href="#sec2-5-5">2.5.5 Signed Binary Numbers (Sign-Magnitude, 1's Comp, 2's Comp)</a></li>
+                            <li><a href="#sec2-5-6">2.5.6 1's Complement Binary Arithmetic</a></li>
+                            <li><a href="#sec2-5-7">2.5.7 2's Complement Binary Arithmetic & Overflow</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#sec2-6">2.6 Octal Number System</a>
+                        <ul>
+                            <li><a href="#sec2-6-1">2.6.1 Octal Representation</a></li>
+                            <li><a href="#sec2-6-2">2.6.2 Octal to Decimal Conversion</a></li>
+                            <li><a href="#sec2-6-3">2.6.3 Decimal to Octal Conversion</a></li>
+                            <li><a href="#sec2-6-4">2.6.4 Octal to Binary Conversion</a></li>
+                            <li><a href="#sec2-6-5">2.6.5 Binary to Octal Conversion</a></li>
+                            <li><a href="#sec2-6-6">2.6.6 Decimal to Binary via Octal and Vice Versa</a></li>
+                            <li><a href="#sec2-6-7">2.6.7 Octal Arithmetic</a></li>
+                            <li><a href="#sec2-6-8">2.6.8 Application of Octal System</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#sec2-7">2.7 Hexadecimal Number System</a>
+                        <ul>
+                            <li><a href="#sec2-7-1">2.7.1 Hexadecimal Representation</a></li>
+                            <li><a href="#sec2-7-2">2.7.2 Hexadecimal to Decimal Conversion</a></li>
+                            <li><a href="#sec2-7-3">2.7.3 Decimal to Hexadecimal Conversion</a></li>
+                            <li><a href="#sec2-7-4">2.7.4 Hexadecimal to Binary Conversion</a></li>
+                            <li><a href="#sec2-7-5">2.7.5 Binary to Hexadecimal Conversion</a></li>
+                            <li><a href="#sec2-7-6">2.7.6 Hexadecimal to Octal Conversion and Vice Versa</a></li>
+                            <li><a href="#sec2-7-7">2.7.7 Decimal to Binary via Hexadecimal and Vice Versa</a></li>
+                            <li><a href="#sec2-7-8">2.7.8 Hexadecimal Arithmetic</a></li>
+                            <li><a href="#sec2-7-9">2.7.9 Application of Hexadecimal System</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#sec2-8">2.8 Binary Codes</a>
+                        <ul>
+                            <li><a href="#sec2-8-1">2.8.1 BCD Code</a></li>
+                            <li><a href="#sec2-8-2">2.8.2 Excess-3 Code</a></li>
+                            <li><a href="#sec2-8-3">2.8.3 Gray Code (Construction, Binary-Gray Conversion)</a></li>
+                            <li><a href="#sec2-8-4">2.8.4 Error-Detection Code (Parity Bit & CRC)</a></li>
+                            <li><a href="#sec2-8-5">2.8.5 ASCII Character Code</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- CHAPTER 1 -->
+    <section id="chap1">
+        <h2 class="chapter-title">CHAPTER 1: INTRODUCTION TO DIGITAL SYSTEMS</h2>
+
+        <div id="sec1-1">
+            <h3 class="section-title">1.1 Introduction</h3>
+            <p>
+                When most of us hear the term <strong>digital</strong>, we immediately think of a "digital calculator" or "digital computer". However, calculators and computers represent only one of the many applications of digital circuits and principles. Digital circuits are widely used in video games, microwave ovens, automobile control systems, as well as test equipment like digital voltmeters, signal generators, and oscilloscopes.
+            </p>
+            <div class="bangla-explain">
+                <strong>সহজ ভাষায় ব্যাখা:</strong> 
+                আমরা "ডিজিটাল" শুনলেই কম্পিউটার বা ক্যালকুলেটরের কথা ভাবি। কিন্তু ডিজিটাল সার্কিট শুধু কম্পিউটারেই সীমাবদ্ধ নয়। আমাদের বাসাবাড়ির ওভেন, ওয়াশিং মেশিন, আধুনিক গাড়ি, এমনকি ডিজিটাল ঘড়ি ও টিভিতেও ডিজিটাল সার্কিট ব্যবহৃত হয়। আগে যেখানে এনালগ প্রযুক্তি ছিল (যেমন ক্যাসেট প্লেয়ার বা পুরানো রেডিও), এখন সেখানে ডিজিটাল টেকনোলজি ব্যবহার করা হয়।
+            </div>
+        </div>
+
+        <div id="sec1-2">
+            <h3 class="section-title">1.2 Digital and Analog Systems</h3>
+            <p>
+                In physical systems, quantities are measured, monitored, recorded, or manipulated arithmetically. Numerical values of quantities are represented in two basic ways:
+            </p>
+            <ul>
+                <li><strong>Analog Representation:</strong> A quantity is represented by a continuously proportional physical signal (voltage, current, or meter movement). It varies over a continuous range of values.</li>
+                <li><strong>Digital Representation:</strong> Quantities are represented not by proportional signals, but by discrete symbols called <em>digits</em>. Values change in discrete steps rather than continuously.</li>
+            </ul>
+
+            <div class="real-example">
+                <h5> বাস্তব জীবনের উদাহরণ (Real-Life Example):</h5>
+                <p><strong>Analog Example:</strong> গাড়ির স্পিডোমিটার (Speedometer)। গাড়ি যখন ১-১০-৫০ কিমি/ঘণ্টা গতি বাড়ায়, তার কাঁটাটি ০ থেকে ১০০ এর মধ্যে যেকোনো মান (যেমন ৪২.৫, ৪২.৫৭৩...) মসৃণভাবে অতিক্রম করে।</p>
+                <p><strong>Digital Example:</strong> ডিজিটাল ঘড়ি (Digital Watch)। সময় মসৃণভাবে পরিবর্তন হলেও ডিজিটগুলো লাফিয়ে লাফিয়ে বদলায় (যেমন ১০:১৫:০১ এর পর সরাসরি ১০:১৫:০২)। মাঝখানের ১০:১৫:০১.৫ সময়টি ঘড়ির স্ক্রিনে আলাদা দেখায় না।</p>
+            </div>
+
+            <h4 class="subsection-title">Advantages of Digital Techniques</h4>
+            <p>Why are digital techniques replacing analog techniques across modern engineering?</p>
+            <ol>
+                <li><strong>Easier to Design:</strong> Exact voltage/current values are not critical; only LOW or HIGH states matter.</li>
+                <li><strong>Easy Information Storage:</strong> Special circuits (latches, memories) can hold binary data indefinitely.</li>
+                <li><strong>Greater Accuracy and Precision:</strong> Precision is increased simply by adding more binary digits (bits).</li>
+                <li><strong>Programmable Operation:</strong> System function can be altered by simply changing stored software/instructions.</li>
+                <li><strong>Less Affected by Noise:</strong> Spurious electrical noise doesn't corrupt binary states unless it is huge.</li>
+                <li><strong>Higher Integration (IC Chips):</strong> Millions of logic components fit on tiny silicon chips.</li>
+            </ol>
+
+            <div class="exam-prep">
+                <h5> Exam Tip: Analog vs Digital System Comparison</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Analog System</th>
+                            <th>Digital System</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Value Range</td>
+                            <td>Continuous values</td>
+                            <td>Discrete steps (0 or 1)</td>
+                        </tr>
+                        <tr>
+                            <td>Accuracy & Precision</td>
+                            <td>Lower (affected by components)</td>
+                            <td>Very high (depends on bit length)</td>
+                        </tr>
+                        <tr>
+                            <td>Noise Effect</td>
+                            <td>High distortion from noise</td>
+                            <td>Extremely low sensitivity to noise</td>
+                        </tr>
+                        <tr>
+                            <td>Storage Ability</td>
+                            <td>Difficult to store long term</td>
+                            <td>Very easy (RAM, Flash, Disks)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="sec1-3">
+            <h3 class="section-title">1.3 Binary Numbers in Digital Systems</h3>
+            <p>
+                Digital electronic devices naturally operate in <strong>two stable states</strong> (e.g., ON/OFF, High/Low voltage, Magnetized/Demagnetized). Because they have two states, they are inherently <strong>binary</strong>. The binary number system contains only two digits: $0$ and $1$.
+            </p>
+
+            <!-- DIAGRAM 1.1 -->
+            <div class="diagram-container">
+                <svg width="500" height="160" viewBox="0 0 500 160">
+                    <!-- Switch 1: Closed (1) -->
+                    <g transform="translate(30, 40)">
+                        <circle cx="20" cy="50" r="5" fill="#2b6cb0"/>
+                        <circle cx="60" cy="50" r="5" fill="#2b6cb0"/>
+                        <line x1="20" y1="50" x2="60" y2="50" stroke="#2b6cb0" stroke-width="3"/>
+                        <text x="40" y="25" text-anchor="middle" font-weight="bold" fill="#2d3748">SW1 (CLOSED)</text>
+                        <text x="40" y="85" text-anchor="middle" font-size="18" font-weight="bold" fill="#319795">1</text>
+                    </g>
+                    <!-- Switch 2: Open (0) -->
+                    <g transform="translate(120, 40)">
+                        <circle cx="20" cy="50" r="5" fill="#2b6cb0"/>
+                        <circle cx="60" cy="50" r="5" fill="#2b6cb0"/>
+                        <line x1="20" y1="50" x2="55" y2="30" stroke="#e53e3e" stroke-width="3"/>
+                        <text x="40" y="25" text-anchor="middle" font-weight="bold" fill="#2d3748">SW2 (OPEN)</text>
+                        <text x="40" y="85" text-anchor="middle" font-size="18" font-weight="bold" fill="#319795">0</text>
+                    </g>
+                    <!-- Switch 3: Open (0) -->
+                    <g transform="translate(210, 40)">
+                        <circle cx="20" cy="50" r="5" fill="#2b6cb0"/>
+                        <circle cx="60" cy="50" r="5" fill="#2b6cb0"/>
+                        <line x1="20" y1="50" x2="55" y2="30" stroke="#e53e3e" stroke-width="3"/>
+                        <text x="40" y="25" text-anchor="middle" font-weight="bold" fill="#2d3748">SW3 (OPEN)</text>
+                        <text x="40" y="85" text-anchor="middle" font-size="18" font-weight="bold" fill="#319795">0</text>
+                    </g>
+                    <!-- Switch 4: Closed (1) -->
+                    <g transform="translate(300, 40)">
+                        <circle cx="20" cy="50" r="5" fill="#2b6cb0"/>
+                        <circle cx="60" cy="50" r="5" fill="#2b6cb0"/>
+                        <line x1="20" y1="50" x2="60" y2="50" stroke="#2b6cb0" stroke-width="3"/>
+                        <text x="40" y="25" text-anchor="middle" font-weight="bold" fill="#2d3748">SW4 (CLOSED)</text>
+                        <text x="40" y="85" text-anchor="middle" font-size="18" font-weight="bold" fill="#319795">1</text>
+                    </g>
+                    <!-- Switch 5: Open (0) -->
+                    <g transform="translate(390, 40)">
+                        <circle cx="20" cy="50" r="5" fill="#2b6cb0"/>
+                        <circle cx="60" cy="50" r="5" fill="#2b6cb0"/>
+                        <line x1="20" y1="50" x2="55" y2="30" stroke="#e53e3e" stroke-width="3"/>
+                        <text x="40" y="25" text-anchor="middle" font-weight="bold" fill="#2d3748">SW5 (OPEN)</text>
+                        <text x="40" y="85" text-anchor="middle" font-size="18" font-weight="bold" fill="#319795">0</text>
+                    </g>
+                </svg>
+                <div class="diagram-caption">Figure 1.1: Using mechanical switches to represent the binary number 10010</div>
+                <div class="diagram-explanation">
+                    <strong>চিত্রের ব্যাখা:</strong> এখানে ৫টি সুইচের একটি সেট দেখানো হয়েছে। সুইচ Closed/ON থাকলে সেটা বাইনারি $1$ নির্দেশ করে, আর Open/OFF থাকলে বাইনারি $0$ নির্দেশ করে। ছবি অনুযায়ী SWITCH গুলোর অবস্থা হলো: Closed-Open-Open-Closed-Open, যা বাইনারি সংখ্যা <strong>10010</strong> নির্দেশ করছে।
+                </div>
+            </div>
+
+            <p>
+                In digital electronic circuits, binary 0 and binary 1 are represented by voltage ranges rather than exact single numbers to allow for voltage fluctuations.
+            </p>
+
+            <!-- DIAGRAM 1.2 -->
+            <div class="diagram-container">
+                <svg width="650" height="220" viewBox="0 0 650 220">
+                    <!-- Part (a): Voltage assignment -->
+                    <g transform="translate(20, 20)">
+                        <text x="100" y="15" text-anchor="middle" font-weight="bold" font-size="14">VOLTAGE LEVEL RANGES</text>
+                        <!-- Y Axis -->
+                        <line x1="40" y1="30" x2="40" y2="170" stroke="#2d3748" stroke-width="2"/>
+                        <text x="35" y="35" text-anchor="end" font-size="12">5V</text>
+                        <text x="35" y="85" text-anchor="end" font-size="12">2.4V</text>
+                        <text x="35" y="135" text-anchor="end" font-size="12">0.4V</text>
+                        <text x="35" y="170" text-anchor="end" font-size="12">0V</text>
+                        
+                        <!-- Ranges Boxes -->
+                        <rect x="50" y="30" width="100" height="50" fill="#c6f6d5" stroke="#38a169"/>
+                        <text x="100" y="60" text-anchor="middle" font-weight="bold" fill="#22543d">Binary 1</text>
+                        
+                        <rect x="50" y="80" width="100" height="50" fill="#fed7d7" stroke="#e53e3e" stroke-dasharray="3,3"/>
+                        <text x="100" y="110" text-anchor="middle" font-size="11" fill="#742a2a">Not Used</text>
+
+                        <rect x="50" y="130" width="100" height="40" fill="#ebf8ff" stroke="#3182ce"/>
+                        <text x="100" y="155" text-anchor="middle" font-weight="bold" fill="#2b6cb0">Binary 0</text>
+                        <text x="100" y="195" text-anchor="middle" font-weight="bold">(a)</text>
+                    </g>
+
+                    <!-- Part (b): Digital Signal Waveform -->
+                    <g transform="translate(240, 20)">
+                        <text x="180" y="15" text-anchor="middle" font-weight="bold" font-size="14">DIGITAL SIGNAL WAVEFORM (10010)</text>
+                        <!-- Axes -->
+                        <line x1="30" y1="30" x2="30" y2="170" stroke="#2d3748" stroke-width="2"/>
+                        <line x1="30" y1="170" x2="370" y2="170" stroke="#2d3748" stroke-width="2"/>
+                        <text x="25" y="40" text-anchor="end" font-size="11">5V</text>
+                        <text x="25" y="165" text-anchor="end" font-size="11">0V</text>
+                        <text x="370" y="185" text-anchor="middle" font-size="11">Time</text>
+
+                        <!-- Waveform 1 0 0 1 0 -->
+                        <!-- Bit 1: 1 (5V) -->
+                        <path d="M 30,40 L 90,40 L 90,160 L 210,160 L 210,40 L 270,40 L 270,160 L 330,160" fill="none" stroke="#e53e3e" stroke-width="3"/>
+                        
+                        <!-- Bit values on top -->
+                        <text x="60" y="30" text-anchor="middle" font-weight="bold" fill="#e53e3e">1</text>
+                        <text x="120" y="150" text-anchor="middle" font-weight="bold" fill="#e53e3e">0</text>
+                        <text x="180" y="150" text-anchor="middle" font-weight="bold" fill="#e53e3e">0</text>
+                        <text x="240" y="30" text-anchor="middle" font-weight="bold" fill="#e53e3e">1</text>
+                        <text x="300" y="150" text-anchor="middle" font-weight="bold" fill="#e53e3e">0</text>
+                        <text x="180" y="195" text-anchor="middle" font-weight="bold">(b)</text>
+                    </g>
+                </svg>
+                <div class="diagram-caption">Figure 1.2: (a) Typical logic voltage assignments (b) Digital pulse waveform representing binary sequence 10010</div>
+                <div class="diagram-explanation">
+                    <strong>চিত্রের ব্যাখা:</strong> 
+                    <br><strong>(a)</strong> ডিজিটাল সার্কিটে $0.0\text{V}$ থেকে $0.4\text{V}$ পর্যন্ত নির্দেশ করে <strong>Binary 0</strong>। আর $2.4\text{V}$ থেকে $5.0\text{V}$ পর্যন্ত নির্দেশ করে <strong>Binary 1</strong>। $0.4\text{V}$ থেকে $2.4\text{V}$ এর মাঝের ভোল্টেজটি "Unused / Invalid Zone"।
+                    <br><strong>(b)</strong> সময়ে ডিজিটাল সিগন্যালের ওয়েভফর্ম (Waveform)। ভোল্টেজ হাই ($5\text{V}$) হলে $1$, আর ভোল্টেজ লো ($0\text{V}$) হলে $0$ হিসাব করে <strong>10010</strong> সিগন্যাল তৈরি হয়েছে।
+                </div>
+            </div>
+        </div>
+
+        <div id="sec1-4">
+            <h3 class="section-title">1.4 Binary Logic</h3>
+            <p>
+                Binary logic deals with binary variables (which take on values $0$ or $1$) and logical operations that assume logical meaning. It forms the foundation of <strong>Boolean Algebra</strong>.
+            </p>
+
+            <div id="sec1-4-1">
+                <h4 class="subsection-title">1.4.1 Definition of Binary Logic</h4>
+                <p>Binary variables are designated by letters ($A, B, C, x, y, z$). There are 3 fundamental logical operations:</p>
+                <ul>
+                    <li><strong>AND Operation ($\cdot$ or absence of operator):</strong> $z = x \cdot y$ or $z = xy$. Output $z=1$ <em>if and only if</em> both $x=1$ and $y=1$. Otherwise, $z=0$.</li>
+                    <li><strong>OR Operation ($+$):</strong> $z = x + y$. Output $z=1$ if $x=1$ OR $y=1$ OR both are $1$. Output $z=0$ only if both $x=0$ and $y=0$.</li>
+                    <li><strong>NOT Operation (' or $\overline{\text{X}}$):</strong> $z = x'$ or $z = \bar{x}$. Inverts the variable. If $x=1$, then $z=0$. If $x=0$, then $z=1$.</li>
+                </ul>
+            </div>
+
+            <div id="sec1-4-2">
+                <h4 class="subsection-title">1.4.2 Truth Table</h4>
+                <p>A Truth Table is a tabular representation listing all possible combinations of input binary variables alongside their corresponding output binary logic result.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="2">Inputs</th>
+                            <th colspan="3">Outputs</th>
+                        </tr>
+                        <tr>
+                            <th>$x$</th>
+                            <th>$y$</th>
+                            <th>AND ($z = x \cdot y$)</th>
+                            <th>OR ($z = x + y$)</th>
+                            <th>NOT ($z = x'$)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="sec1-4-3">
+                <h4 class="subsection-title">1.4.3 Switching Circuits</h4>
+                <p>Logical operations can be physically visualized using mechanical switches, a power source (battery), and a load (lamp/light bulb).</p>
+
+                <!-- DIAGRAM 1.3 -->
+                <div class="diagram-container">
+                    <svg width="700" height="220" viewBox="0 0 700 220">
+                        <!-- AND Circuit (Series) -->
+                        <g transform="translate(10, 20)">
+                            <text x="100" y="15" text-anchor="middle" font-weight="bold">(a) AND Circuit (Series)</text>
+                            <!-- Battery -->
+                            <line x1="20" y1="80" x2="20" y2="120" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="10" y1="90" x2="30" y2="90" stroke="#2d3748" stroke-width="3"/>
+                            <line x1="15" y1="110" x2="25" y2="110" stroke="#2d3748" stroke-width="1.5"/>
+                            <text x="5" y="105" font-size="10">E</text>
+
+                            <line x1="20" y1="80" x2="20" y2="50" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="20" y1="50" x2="50" y2="50" stroke="#2d3748" stroke-width="2"/>
+                            
+                            <!-- Switch A -->
+                            <circle cx="50" cy="50" r="3" fill="#2d3748"/>
+                            <line x1="50" y1="50" x2="75" y2="35" stroke="#e53e3e" stroke-width="2"/>
+                            <circle cx="80" cy="50" r="3" fill="#2d3748"/>
+                            <text x="62" y="30" text-anchor="middle" font-weight="bold">A</text>
+
+                            <line x1="80" y1="50" x2="110" y2="50" stroke="#2d3748" stroke-width="2"/>
+
+                            <!-- Switch B -->
+                            <circle cx="110" cy="50" r="3" fill="#2d3748"/>
+                            <line x1="110" y1="50" x2="135" y2="35" stroke="#e53e3e" stroke-width="2"/>
+                            <circle cx="140" cy="50" r="3" fill="#2d3748"/>
+                            <text x="122" y="30" text-anchor="middle" font-weight="bold">B</text>
+
+                            <line x1="140" y1="50" x2="170" y2="50" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="170" y1="50" x2="170" y2="80" stroke="#2d3748" stroke-width="2"/>
+
+                            <!-- Bulb L -->
+                            <circle cx="170" cy="100" r="12" fill="#fff5f5" stroke="#d69e2e" stroke-width="2"/>
+                            <path d="M 164,95 L 176,105 M 164,105 L 176,95" stroke="#d69e2e" stroke-width="1.5"/>
+                            <text x="190" y="105" font-weight="bold">L</text>
+
+                            <line x1="170" y1="112" x2="170" y2="150" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="170" y1="150" x2="20" y2="150" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="20" y1="150" x2="20" y2="120" stroke="#2d3748" stroke-width="2"/>
+                        </g>
+
+                        <!-- OR Circuit (Parallel) -->
+                        <g transform="translate(245, 20)">
+                            <text x="110" y="15" text-anchor="middle" font-weight="bold">(b) OR Circuit (Parallel)</text>
+                            <!-- Battery -->
+                            <line x1="20" y1="80" x2="20" y2="120" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="10" y1="90" x2="30" y2="90" stroke="#2d3748" stroke-width="3"/>
+                            <line x1="15" y1="110" x2="25" y2="110" stroke="#2d3748" stroke-width="1.5"/>
+
+                            <line x1="20" y1="80" x2="20" y2="50" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="20" y1="50" x2="50" y2="50" stroke="#2d3748" stroke-width="2"/>
+
+                            <line x1="50" y1="50" x2="50" y2="30" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="50" y1="50" x2="50" y2="70" stroke="#2d3748" stroke-width="2"/>
+
+                            <!-- Branch A -->
+                            <circle cx="50" cy="30" r="3" fill="#2d3748"/>
+                            <line x1="50" y1="30" x2="85" y2="15" stroke="#e53e3e" stroke-width="2"/>
+                            <circle cx="90" cy="30" r="3" fill="#2d3748"/>
+                            <text x="70" y="10" text-anchor="middle" font-weight="bold">A</text>
+
+                            <!-- Branch B -->
+                            <circle cx="50" cy="70" r="3" fill="#2d3748"/>
+                            <line x1="50" y1="70" x2="85" y2="55" stroke="#e53e3e" stroke-width="2"/>
+                            <circle cx="90" cy="70" r="3" fill="#2d3748"/>
+                            <text x="70" y="90" text-anchor="middle" font-weight="bold">B</text>
+
+                            <line x1="90" y1="30" x2="110" y2="30" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="90" y1="70" x2="110" y2="70" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="110" y1="30" x2="110" y2="70" stroke="#2d3748" stroke-width="2"/>
+
+                            <line x1="110" y1="50" x2="150" y2="50" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="150" y1="50" x2="150" y2="80" stroke="#2d3748" stroke-width="2"/>
+
+                            <!-- Bulb L -->
+                            <circle cx="150" cy="100" r="12" fill="#fff5f5" stroke="#d69e2e" stroke-width="2"/>
+                            <path d="M 144,95 L 156,105 M 144,105 L 156,95" stroke="#d69e2e" stroke-width="1.5"/>
+
+                            <line x1="150" y1="112" x2="150" y2="150" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="150" y1="150" x2="20" y2="150" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="20" y1="150" x2="20" y2="120" stroke="#2d3748" stroke-width="2"/>
+                        </g>
+
+                        <!-- NOT Circuit (Shunt Inverter) -->
+                        <g transform="translate(480, 20)">
+                            <text x="100" y="15" text-anchor="middle" font-weight="bold">(c) NOT Circuit (Inverter)</text>
+                            <!-- Battery -->
+                            <line x1="20" y1="80" x2="20" y2="120" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="10" y1="90" x2="30" y2="90" stroke="#2d3748" stroke-width="3"/>
+                            <line x1="15" y1="110" x2="25" y2="110" stroke="#2d3748" stroke-width="1.5"/>
+
+                            <line x1="20" y1="80" x2="20" y2="50" stroke="#2d3748" stroke-width="2"/>
+                            <!-- Resistor R -->
+                            <rect x="40" y="43" width="30" height="14" fill="#edf2f7" stroke="#2d3748"/>
+                            <text x="55" y="35" text-anchor="middle" font-size="10">R</text>
+                            <line x1="20" y1="50" x2="40" y2="50" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="70" y1="50" x2="100" y2="50" stroke="#2d3748" stroke-width="2"/>
+
+                            <!-- Shunt Switch A -->
+                            <line x1="100" y1="50" x2="100" y2="70" stroke="#2d3748" stroke-width="2"/>
+                            <circle cx="100" cy="70" r="3" fill="#2d3748"/>
+                            <line x1="100" y1="70" x2="120" y2="85" stroke="#e53e3e" stroke-width="2"/>
+                            <circle cx="100" cy="110" r="3" fill="#2d3748"/>
+                            <line x1="100" y1="110" x2="100" y2="150" stroke="#2d3748" stroke-width="2"/>
+                            <text x="120" y="75" font-weight="bold">A</text>
+
+                            <line x1="100" y1="50" x2="160" y2="50" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="160" y1="50" x2="160" y2="80" stroke="#2d3748" stroke-width="2"/>
+
+                            <!-- Bulb L -->
+                            <circle cx="160" cy="100" r="12" fill="#fff5f5" stroke="#d69e2e" stroke-width="2"/>
+                            <path d="M 154,95 L 166,105 M 154,105 L 166,95" stroke="#d69e2e" stroke-width="1.5"/>
+
+                            <line x1="160" y1="112" x2="160" y2="150" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="160" y1="150" x2="20" y2="150" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="20" y1="150" x2="20" y2="120" stroke="#2d3748" stroke-width="2"/>
+                        </g>
+                    </svg>
+                    <div class="diagram-caption">Figure 1.3: Switch representations of (a) AND circuit (b) OR circuit (c) NOT circuit</div>
+                    <div class="diagram-explanation">
+                        <strong>চিত্রের ব্যাখা:</strong>
+                        <br><strong>(a) AND (Series):</strong> দুটি সুইচ $A$ এবং $B$ সিরিজে সংযুক্ত। লাইট $L$ জ্বলবে কেবল তখনই, যখন $A$ এবং $B$ উভয় সুইচই বন্ধ (Closed = 1) থাকবে ($L = A \cdot B$)।
+                        <br><strong>(b) OR (Parallel):</strong> দুটি সুইচ প্যারালালে সংযুক্ত। যেকোনো একটি সুইচ বন্ধ করলেই কারেন্ট প্রবাহিত হবে এবং লাইট জ্বলবে ($L = A + B$)।
+                        <br><strong>(c) NOT (Shunt Inverter):</strong> সুইচ $A$ কে লোডের সাথে প্যারালালে বসানো হয়েছে। সুইচ $A$ খোলা (0) থাকলে কারেন্ট বাল্বে যাবে ($L=1$)। সুইচ $A$ বন্ধ (1) করলে কারেন্ট শর্ট সার্কিট হয়ে সুইচ দিয়ে চলে যাবে, বাল্ব নিভে যাবে ($L=0$)।
+                    </div>
+                </div>
+            </div>
+
+            <div id="sec1-4-4">
+                <h4 class="subsection-title">1.4.4 Logic Gates</h4>
+                <p>
+                    Electronic digital circuits are called <strong>logic circuits</strong> because they establish logical manipulation paths. The hardware components performing basic logic operations are called <strong>Logic Gates</strong>.
+                </p>
+
+                <!-- DIAGRAM 1.4 -->
+                <div class="diagram-container">
+                    <svg width="650" height="230" viewBox="0 0 650 230">
+                        <!-- (a) 2-input AND -->
+                        <g transform="translate(20, 20)">
+                            <text x="70" y="15" text-anchor="middle" font-weight="bold" font-size="12">(a) 2-input AND Gate</text>
+                            <line x1="10" y1="40" x2="40" y2="40" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="10" y1="70" x2="40" y2="70" stroke="#2d3748" stroke-width="2"/>
+                            <text x="5" y="45" font-size="12">x</text>
+                            <text x="5" y="75" font-size="12">y</text>
+
+                            <path d="M 40,25 L 70,25 A 30,30 0 0,1 70,85 L 40,85 Z" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+                            <line x1="100" y1="55" x2="130" y2="55" stroke="#2d3748" stroke-width="2"/>
+                            <text x="135" y="60" font-size="12" font-weight="bold">z = xy</text>
+                        </g>
+
+                        <!-- (b) 2-input OR -->
+                        <g transform="translate(220, 20)">
+                            <text x="70" y="15" text-anchor="middle" font-weight="bold" font-size="12">(b) 2-input OR Gate</text>
+                            <line x1="10" y1="40" x2="45" y2="40" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="10" y1="70" x2="45" y2="70" stroke="#2d3748" stroke-width="2"/>
+                            <text x="5" y="45" font-size="12">x</text>
+                            <text x="5" y="75" font-size="12">y</text>
+
+                            <path d="M 40,25 Q 55,55 40,85 Q 75,85 100,55 Q 75,25 40,25 Z" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+                            <line x1="100" y1="55" x2="130" y2="55" stroke="#2d3748" stroke-width="2"/>
+                            <text x="135" y="60" font-size="12" font-weight="bold">z = x + y</text>
+                        </g>
+
+                        <!-- (c) NOT Gate -->
+                        <g transform="translate(440, 20)">
+                            <text x="70" y="15" text-anchor="middle" font-weight="bold" font-size="12">(c) NOT Gate / Inverter</text>
+                            <line x1="10" y1="55" x2="40" y2="55" stroke="#2d3748" stroke-width="2"/>
+                            <text x="0" y="60" font-size="12">x</text>
+
+                            <polygon points="40,30 40,80 85,55" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+                            <circle cx="90" cy="55" r="5" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+                            
+                            <line x1="95" y1="55" x2="125" y2="55" stroke="#2d3748" stroke-width="2"/>
+                            <text x="130" y="60" font-size="12" font-weight="bold">z = x'</text>
+                        </g>
+
+                        <!-- (d) 3-input AND -->
+                        <g transform="translate(20, 120)">
+                            <text x="80" y="15" text-anchor="middle" font-weight="bold" font-size="12">(d) 3-input AND Gate</text>
+                            <line x1="10" y1="35" x2="40" y2="35" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="10" y1="55" x2="40" y2="55" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="10" y1="75" x2="40" y2="75" stroke="#2d3748" stroke-width="2"/>
+                            <text x="0" y="40" font-size="11">A</text>
+                            <text x="0" y="60" font-size="11">B</text>
+                            <text x="0" y="80" font-size="11">C</text>
+
+                            <path d="M 40,25 L 70,25 A 30,30 0 0,1 70,85 L 40,85 Z" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+                            <line x1="100" y1="55" x2="130" y2="55" stroke="#2d3748" stroke-width="2"/>
+                            <text x="135" y="60" font-size="12" font-weight="bold">F = ABC</text>
+                        </g>
+
+                        <!-- (e) 4-input OR -->
+                        <g transform="translate(280, 120)">
+                            <text x="100" y="15" text-anchor="middle" font-weight="bold" font-size="12">(e) 4-input OR Gate</text>
+                            <line x1="10" y1="30" x2="45" y2="30" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="10" y1="46" x2="45" y2="46" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="10" y1="62" x2="45" y2="62" stroke="#2d3748" stroke-width="2"/>
+                            <line x1="10" y1="78" x2="45" y2="78" stroke="#2d3748" stroke-width="2"/>
+                            <text x="0" y="34" font-size="11">A</text>
+                            <text x="0" y="50" font-size="11">B</text>
+                            <text x="0" y="66" font-size="11">C</text>
+                            <text x="0" y="82" font-size="11">D</text>
+
+                            <path d="M 40,20 Q 55,55 40,90 Q 80,90 105,55 Q 80,20 40,20 Z" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+                            <line x1="105" y1="55" x2="135" y2="55" stroke="#2d3748" stroke-width="2"/>
+                            <text x="140" y="60" font-size="12" font-weight="bold">F = A+B+C+D</text>
+                        </g>
+                    </svg>
+                    <div class="diagram-caption">Figure 1.4: Standard IEEE/ANSI symbols for basic digital logic gates</div>
+                    <div class="diagram-explanation">
+                        <strong>চিত্রের ব্যাখা:</strong> এখানে মৌলিক লজিক গেটগুলোর প্রতীক (Standard Logic Gate Symbols) দেখানো হয়েছে:
+                        (a) ২-ইনপুট AND গেট, (b) ২-ইনপুট OR গেট, (c) NOT গেট (ইনভার্টার, যার সামনে বাবল থাকে), (d) ৩-ইনপুট AND গেট এবং (e) ৪-ইনপুট OR গেট।
+                    </div>
+                </div>
+
+                <!-- DIAGRAM 1.5 -->
+                <div class="diagram-container">
+                    <svg width="600" height="230" viewBox="0 0 600 230">
+                        <text x="300" y="20" text-anchor="middle" font-weight="bold" font-size="14">TIMING DIAGRAM FOR LOGIC GATES</text>
+                        
+                        <!-- Inputs x and y -->
+                        <g transform="translate(50, 40)">
+                            <text x="-10" y="15" text-anchor="end" font-weight="bold">x</text>
+                            <path d="M 0,20 L 100,20 L 100,0 L 200,0 L 200,20 L 200,0 L 300,0 L 300,20 L 400,20" fill="none" stroke="#2d3748" stroke-width="2"/>
+                            <text x="50" y="-5" font-size="11">0</text>
+                            <text x="150" y="-5" font-size="11">0</text>
+                            <text x="250" y="-5" font-size="11">1</text>
+                            <text x="350" y="-5" font-size="11">1</text>
+                        </g>
+
+                        <g transform="translate(50, 80)">
+                            <text x="-10" y="15" text-anchor="end" font-weight="bold">y</text>
+                            <path d="M 0,20 L 50,20 L 50,0 L 100,0 L 100,20 L 150,20 L 150,0 L 200,0 L 200,20 L 250,20 L 250,0 L 300,0 L 300,20 L 350,20 L 350,0 L 400,0" fill="none" stroke="#2d3748" stroke-width="2"/>
+                            <text x="25" y="-5" font-size="11">0</text>
+                            <text x="75" y="-5" font-size="11">1</text>
+                            <text x="125" y="-5" font-size="11">0</text>
+                            <text x="175" y="-5" font-size="11">1</text>
+                            <text x="225" y="-5" font-size="11">0</text>
+                            <text x="275" y="-5" font-size="11">1</text>
+                            <text x="325" y="-5" font-size="11">0</text>
+                            <text x="375" y="-5" font-size="11">1</text>
+                        </g>
+
+                        <!-- Output AND -->
+                        <g transform="translate(50, 130)">
+                            <text x="-10" y="15" text-anchor="end" font-weight="bold" fill="#319795">AND (xy)</text>
+                            <path d="M 0,20 L 275,20 L 275,0 L 300,0 L 300,20 L 375,20 L 375,0 L 400,0" fill="none" stroke="#319795" stroke-width="2.5"/>
+                            <text x="135" y="-5" font-size="11" fill="#319795">0</text>
+                            <text x="285" y="-5" font-size="11" fill="#319795">1</text>
+                        </g>
+
+                        <!-- Output OR -->
+                        <g transform="translate(50, 165)">
+                            <text x="-10" y="15" text-anchor="end" font-weight="bold" fill="#2b6cb0">OR (x+y)</text>
+                            <path d="M 0,20 L 25,20 L 25,0 L 100,0 L 100,20 L 100,20 L 100,0 L 200,0 L 200,20 L 200,0 L 400,0" fill="none" stroke="#2b6cb0" stroke-width="2.5"/>
+                            <text x="12" y="-5" font-size="11" fill="#2b6cb0">0</text>
+                            <text x="60" y="-5" font-size="11" fill="#2b6cb0">1</text>
+                        </g>
+
+                        <!-- Output NOT -->
+                        <g transform="translate(50, 200)">
+                            <text x="-10" y="15" text-anchor="end" font-weight="bold" fill="#e53e3e">NOT (x')</text>
+                            <path d="M 0,0 L 200,0 L 200,20 L 400,20" fill="none" stroke="#e53e3e" stroke-width="2.5"/>
+                            <text x="100" y="-5" font-size="11" fill="#e53e3e">1</text>
+                            <text x="300" y="-5" font-size="11" fill="#e53e3e">0</text>
+                        </g>
+                    </svg>
+                    <div class="diagram-caption">Figure 1.5: Input-output timing waveforms for AND, OR, and NOT gates</div>
+                    <div class="diagram-explanation">
+                        <strong>চিত্রের ব্যাখা:</strong> সময়ের সাথে ইনপুট $x$ ও $y$ এর মান পরিবর্তনের ফলে AND, OR, এবং NOT গেটের আউটপুট কীভাবে পরিবর্তিত হয় তা টাইমিং ডায়াগ্রামে দেখানো হয়েছে। লক্ষ্য করুন, AND গেটে আউটপুট $1$ হয় কেবল যখন $x=1$ এবং $y=1$ দুটিই একযোগে সক্রিয় থাকে।
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="sec1-5">
+            <h3 class="section-title">1.5 Integrated Circuits (ICs)</h3>
+            <p>
+                Logic gates are fabricated on silicon semiconductor chips called <strong>Integrated Circuits (ICs)</strong>. Depending on the density of gates inside a single silicon package, ICs are broadly classified into:
+            </p>
+            <ul>
+                <li><strong>SSI (Small-Scale Integration):</strong> Contains fewer than 10 or 12 logic gates (e.g., basic gate ICs like 7400).</li>
+                <li><strong>MSI (Medium-Scale Integration):</strong> Contains 10 to 100 logic gates (e.g., decoders, adders, counters, multiplexers).</li>
+                <li><strong>LSI (Large-Scale Integration):</strong> Contains 100 to thousands of logic gates (e.g., small memories, microprocessors).</li>
+                <li><strong>VLSI (Very Large-Scale Integration):</strong> Contains thousands to millions of gates (e.g., modern CPUs, GPUs, RAMs).</li>
+            </ul>
+        </div>
+
+        <div class="revision-card">
+            <h5> Chapter 1 Short Revision Summary</h5>
+            <p>✔ <strong>Analog:</strong> Continuous range of values. | <strong>Digital:</strong> Discrete steps ($0$ and $1$).</p>
+            <p>✔ <strong>Binary Logic Operators:</strong> AND ($\cdot$), OR ($+$), NOT ($'$).</p>
+            <p>✔ <strong>Voltage Ranges:</strong> LOW ($0\text{V}-0.4\text{V} \implies 0$), HIGH ($2.4\text{V}-5.0\text{V} \implies 1$).</p>
+            <p>✔ <strong>Gates & Circuits:</strong> AND is Series circuit; OR is Parallel circuit; NOT is Inverter circuit.</p>
+        </div>
+    </section>
+
+    <!-- CHAPTER 2 -->
+    <section id="chap2">
+        <h2 class="chapter-title">CHAPTER 2: NUMBER SYSTEMS AND CODES</h2>
+
+        <div id="sec2-1">
+            <h3 class="section-title">2.1 Introduction</h3>
+            <p>
+                Digital computers and digital systems store and compute data using various number bases (Radix $r$) and coded representations. In this chapter, we explore positional number systems, mathematical complements, binary, octal, hexadecimal representations, arithmetic operations, and discrete binary coding schemes.
+            </p>
+        </div>
+
+        <div id="sec2-2">
+            <h3 class="section-title">2.2 Number Systems</h3>
+            <p>
+                A <strong>positional number system</strong> uses a base or radix $r$. The general positional weighted representation of a number $(N)_r$ with $n$ integer digits and $m$ fractional digits is expressed as:
+            </p>
+
+            <div class="formula-box">
+                $$(N)_r = d_{n-1} r^{n-1} + d_{n-2} r^{n-2} + \dots + d_1 r^1 + d_0 r^0 + d_{-1} r^{-1} + \dots + d_{-m} r^{-m} = \sum_{i=-m}^{n-1} d_i r^i$$
+            </div>
+
+            <p>Where:</p>
+            <ul>
+                <li>$r$ = Base or Radix of the system ($r > 1$)</li>
+                <li>$d_{n-1}$ = Most Significant Digit (MSD) with highest positional weight $r^{n-1}$</li>
+                <li>$d_{-m}$ = Least Significant Digit (LSD) with lowest positional weight $r^{-m}$</li>
+                <li>$0 \le d_i \le (r-1)$</li>
+            </ul>
+
+            <div class="bangla-explain">
+                <strong>উদাহরণ সহ ব্যাখা:</strong> যেমন ডেসিমেল সংখ্যা $(2356.3294)_{10}$
+                <br>
+                $= 2\times10^3 + 3\times10^2 + 5\times10^1 + 6\times10^0 + 3\times10^{-1} + 2\times10^{-2} + 9\times10^{-3} + 4\times10^{-4}$
+                <br>
+                $= 2000 + 300 + 50 + 6 + 0.3 + 0.02 + 0.009 + 0.0004 = 2356.3294$
+            </div>
+        </div>
+
+        <div id="sec2-3">
+            <h3 class="section-title">2.3 Complements</h3>
+            <p>
+                Complements are mathematical tools used in digital computers to <strong>simplify subtraction</strong> operations by converting subtraction into simple addition. For any base-$r$ system, there are two types of complements:
+            </p>
+            <ol>
+                <li>The $r$'s Complement (Diminished Radix Complement + 1)</li>
+                <li>The $(r-1)$'s Complement (Diminished Radix Complement)</li>
+            </ol>
+
+            <div id="sec2-3-1">
+                <h4 class="subsection-title">2.3.1 The $r$'s Complement</h4>
+                <p>Given a positive number $N$ in base $r$ with an integer part of $n$ digits, the $r$'s complement of $N$ is defined as:</p>
+                <div class="formula-box">
+                    $$\text{The } r\text{'s complement of } N = \begin{cases} r^n - N & \text{if } N \neq 0 \\ 0 & \text{if } N = 0 \end{cases}$$
+                </div>
+
+                <div class="real-example">
+                    <h5> 10's Complement Examples (Decimal, $r=10$):</h5>
+                    <p>1. 10's complement of $52520$ ($n=5$ digits): $10^5 - 52520 = 100000 - 52520 = \mathbf{47480}$</p>
+                    <p>2. 10's complement of $0.3267$ ($n=0$ integer digits): $10^0 - 0.3267 = 1 - 0.3267 = \mathbf{0.6733}$</p>
+                    <p>3. 10's complement of $25.639$ ($n=2$ integer digits): $10^2 - 25.639 = 100 - 25.639 = \mathbf{74.361}$</p>
+                    <p><strong>Shortcut Rule for 10's Complement:</strong> Leave all least significant zeros unchanged, subtract the first non-zero digit from 10, and subtract all remaining higher digits from 9.</p>
+                </div>
+            </div>
+
+            <div id="sec2-3-2">
+                <h4 class="subsection-title">2.3.2 The $(r-1)$'s Complement</h4>
+                <p>Given a positive number $N$ in base $r$ with integer part $n$ digits and fraction part $m$ digits:</p>
+                <div class="formula-box">
+                    $$\text{The } (r-1)\text{'s complement of } N = r^n - r^{-m} - N$$
+                </div>
+
+                <div class="real-example">
+                    <h5> 9's Complement Examples (Decimal, $r=10, r-1=9$):</h5>
+                    <p>1. 9's complement of $52520$ ($n=5, m=0$): $10^5 - 10^0 - 52520 = 99999 - 52520 = \mathbf{47479}$</p>
+                    <p>2. 9's complement of $0.3267$ ($n=0, m=4$): $10^0 - 10^{-4} - 0.3267 = 0.9999 - 0.3267 = \mathbf{0.6732}$</p>
+                    <p>3. 9's complement of $25.639$ ($n=2, m=3$): $10^2 - 10^{-3} - 25.639 = 99.999 - 25.639 = \mathbf{74.360}$</p>
+                    <p><strong>Shortcut Rule for 9's Complement:</strong> Subtract every individual digit of the decimal number from 9.</p>
+                    <p><em>Note:</em> $r\text{'s complement} = (r-1)\text{'s complement} + r^{-m}$. Complement of a complement restores the original number!</p>
+                </div>
+            </div>
+
+            <div id="sec2-3-3">
+                <h4 class="subsection-title">2.3.3 Subtraction with $r$'s Complement</h4>
+                <p>To compute $M - N$ (where $M, N > 0$ in base $r$):</p>
+                <ol>
+                    <li>Add the $r$'s complement of subtrahend $N$ to minuend $M$: $\text{Sum} = M + (r^n - N)$.</li>
+                    <li>Inspect the result for an <strong>End Carry</strong>:
+                        <ul>
+                            <li><strong>If End Carry occurs:</strong> Discard the carry. The remaining result is positive: $M - N$.</li>
+                            <li><strong>If NO End Carry occurs:</strong> Result is negative. Take the $r$'s complement of the sum and place a minus sign in front: $-(N - M)$.</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <div class="real-example">
+                    <h5> Step-by-Step Examples:</h5>
+                    <p><strong>Example 1:</strong> $72532 - 3250$ (5 digits: $03250$)</p>
+                    <p>10's complement of $03250$ is $96750$.</p>
+                    <p>Add: $72532 + 96750 = \mathbf{(1)}69282 \implies$ End carry occurs! Discard carry $\implies \mathbf{+69282}$.</p>
+                    <br>
+                    <p><strong>Example 2:</strong> $3250 - 72532 \implies 03250 - 72532$</p>
+                    <p>10's complement of $72532$ is $27468$.</p>
+                    <p>Add: $03250 + 27468 = \mathbf{30718} \implies$ NO end carry!</p>
+                    <p>Take 10's complement of $30718 \implies 69282$. Result is $\mathbf{-69282}$.</p>
+                </div>
+            </div>
+
+            <div id="sec2-3-4">
+                <h4 class="subsection-title">2.3.4 Subtraction with $(r-1)$'s Complement</h4>
+                <p>To compute $M - N$ using $(r-1)$'s complement:</p>
+                <ol>
+                    <li>Add $(r-1)$'s complement of $N$ to minuend $M$.</li>
+                    <li>Inspect for End Carry:
+                        <ul>
+                            <li><strong>If End Carry occurs:</strong> Add the carry to the Least Significant Digit (LSD). This process is called <strong>End-Around Carry</strong>!</li>
+                            <li><strong>If NO End Carry occurs:</strong> Take the $(r-1)$'s complement of the result and add a minus sign.</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <div class="real-example">
+                    <h5> Step-by-Step Example (End-Around Carry):</h5>
+                    <p>$72532 - 03250$</p>
+                    <p>9's complement of $03250 = 96749$.</p>
+                    <p>Sum $= 72532 + 96749 = \mathbf{(1)} 69281$.</p>
+                    <p>Add End-Around Carry: $69281 + 1 = \mathbf{69282}$.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="sec2-4">
+            <h3 class="section-title">2.4 Binary Number System</h3>
+            
+            <div id="sec2-4-1">
+                <h4 class="subsection-title">2.4.1 Binary Number Representation</h4>
+                <p>Base $r = 2$. Digits used are $0$ and $1$ (called <strong>bits</strong>). Leftmost bit = MSB (Most Significant Bit), rightmost bit = LSB (Least Significant Bit). 4 bits = <strong>Nibble</strong>, 8 bits = <strong>Byte</strong>.</p>
+                <p>With $n$ bits, numbers from $0$ to $(2^n - 1)$ can be represented.</p>
+
+                <table>
+                    <thead>
+                        <tr><th>4-Bit Binary</th><th>Decimal Equivalent</th><th>4-Bit Binary</th><th>Decimal Equivalent</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>0000</td><td>0</td><td>1000</td><td>8</td></tr>
+                        <tr><td>0001</td><td>1</td><td>1001</td><td>9</td></tr>
+                        <tr><td>0010</td><td>2</td><td>1010</td><td>10</td></tr>
+                        <tr><td>0011</td><td>3</td><td>1011</td><td>11</td></tr>
+                        <tr><td>0100</td><td>4</td><td>1100</td><td>12</td></tr>
+                        <tr><td>0101</td><td>5</td><td>1101</td><td>13</td></tr>
+                        <tr><td>0110</td><td>6</td><td>1110</td><td>14</td></tr>
+                        <tr><td>0111</td><td>7</td><td>1111</td><td>15</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="sec2-4-2">
+                <h4 class="subsection-title">2.4.2 Binary to Decimal Conversion</h4>
+                <p>Expand using powers of 2:</p>
+                <div class="formula-box">
+                    $$(1010.011)_2 = 1\times2^3 + 0\times2^2 + 1\times2^1 + 0\times2^0 + 0\times2^{-1} + 1\times2^{-2} + 1\times2^{-3}$$
+                    $$= 8 + 0 + 2 + 0 + 0 + 0.25 + 0.125 = \mathbf{(10.375)_{10}}$$
+                </div>
+            </div>
+
+            <div id="sec2-4-3">
+                <h4 class="subsection-title">2.4.3 Decimal to Binary Conversion</h4>
+                <p>For integer part: <strong>Successive Division by 2</strong> (collect remainders bottom-up).<br>For fractional part: <strong>Successive Multiplication by 2</strong> (collect integer carries top-down).</p>
+
+                <div class="real-example">
+                    <h5> Conversion of $(13.6875)_{10}$ to Binary:</h5>
+                    <p><strong>Integer Part (13):</strong></p>
+                    <ul>
+                        <li>$13 \div 2 = 6$, remainder $1$ (LSB)</li>
+                        <li>$6 \div 2 = 3$, remainder $0$</li>
+                        <li>$3 \div 2 = 1$, remainder $1$</li>
+                        <li>$1 \div 2 = 0$, remainder $1$ (MSB)</li>
+                        <li>$(13)_{10} = (\mathbf{1101})_2$</li>
+                    </ul>
+                    <p><strong>Fractional Part (0.6875):</strong></p>
+                    <ul>
+                        <li>$0.6875 \times 2 = 1.375 \implies$ Integer part $1$ (MSB)</li>
+                        <li>$0.375 \times 2 = 0.75 \implies$ Integer part $0$</li>
+                        <li>$0.75 \times 2 = 1.50 \implies$ Integer part $1$</li>
+                        <li>$0.50 \times 2 = 1.00 \implies$ Integer part $1$ (LSB)</li>
+                        <li>$(0.6875)_{10} = (\mathbf{.1011})_2$</li>
+                    </ul>
+                    <p>Combined Result: $(13.6875)_{10} = \mathbf{(1101.1011)_2}$</p>
+                </div>
+            </div>
+
+            <div id="sec2-4-4">
+                <h4 class="subsection-title">2.4.4 2's Complement of Binary Numbers</h4>
+                <p>Definition: $2^n - N$. Shortcut Rule: Leave all LSB zeros and the first '1' bit unchanged; invert all subsequent higher significant bits ($0 \to 1, 1 \to 0$).</p>
+                <p>Example: 2's complement of $(101100)_2 \implies \mathbf{010100}_2$.</p>
+            </div>
+
+            <div id="sec2-4-5">
+                <h4 class="subsection-title">2.4.5 1's Complement of Binary Numbers</h4>
+                <p>Definition: $(2^n - 2^{-m} - N)$. Rule: Simply invert all bits ($1 \to 0, 0 \to 1$).</p>
+                <p>Example: 1's complement of $(101100)_2 \implies \mathbf{010011}_2$.</p>
+                <p><em>Relationship:</em> $\text{2's Complement} = \text{1's Complement} + 1$.</p>
+            </div>
+        </div>
+
+        <div id="sec2-5">
+            <h3 class="section-title">2.5 Binary Arithmetic</h3>
+
+            <div id="sec2-5-1">
+                <h4 class="subsection-title">2.5.1 Binary Addition</h4>
+                <table>
+                    <thead><tr><th>$x + y$</th><th>Sum</th><th>Carry</th></tr></thead>
+                    <tbody>
+                        <tr><td>$0 + 0$</td><td>0</td><td>0</td></tr>
+                        <tr><td>$0 + 1$</td><td>1</td><td>0</td></tr>
+                        <tr><td>$1 + 0$</td><td>1</td><td>0</td></tr>
+                        <tr><td>$1 + 1$</td><td>0</td><td>1</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="sec2-5-2">
+                <h4 class="subsection-title">2.5.2 Binary Subtraction</h4>
+                <table>
+                    <thead><tr><th>$x - y$</th><th>Difference</th><th>Borrow</th></tr></thead>
+                    <tbody>
+                        <tr><td>$0 - 0$</td><td>0</td><td>0</td></tr>
+                        <tr><td>$0 - 1$</td><td>1</td><td>1 (Borrow 1 from higher position)</td></tr>
+                        <tr><td>$1 - 0$</td><td>1</td><td>0</td></tr>
+                        <tr><td>$1 - 1$</td><td>0</td><td>0</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="sec2-5-3">
+                <h4 class="subsection-title">2.5.3 Binary Multiplication</h4>
+                <p>Identical to decimal multiplication. Partial products are either all $0$s or identical to multiplicand.</p>
+                <div class="formula-box">
+<pre style="font-family:monospace; text-align:center; line-height:1.2;">
+   1 0 0 1  (Multiplicand = 9)
+ x 1 1 0 1  (Multiplier = 13)
+ ---------
+   1 0 0 1
+ 0 0 0 0
+ 1 0 0 1
+1 0 0 1
+----------------
+1 1 1 0 1 0 1  (Product = 117)
+</pre>
+                </div>
+            </div>
+
+            <div id="sec2-5-4">
+                <h4 class="subsection-title">2.5.4 Binary Division</h4>
+                <p>Performed via repeated subtraction and shifting identical to long division in decimal.</p>
+            </div>
+
+            <div id="sec2-5-5">
+                <h4 class="subsection-title">2.5.5 Signed Binary Numbers</h4>
+                <p>In signed binary representation, the Most Significant Bit (MSB) acts as the <strong>Sign Bit</strong> ($0 = \text{Positive}$, $1 = \text{Negative}$). There are three forms:</p>
+
+                <ol>
+                    <li><strong>Sign-Magnitude Form:</strong> MSB = Sign bit, remaining bits = absolute magnitude.
+                        <br><em>Disadvantage:</em> Dual representation of zero ($+0 = 0000$, $-0 = 1000$). Range for $n$ bits: $-(2^{n-1}-1)$ to $+(2^{n-1}-1)$.</li>
+                    <li><strong>1's Complement Form:</strong> Negative number formed by taking 1's complement of positive number.
+                        <br><em>Disadvantage:</em> Dual representation of zero ($+0 = 0000$, $-0 = 1111$). Range: $-(2^{n-1}-1)$ to $+(2^{n-1}-1)$.</li>
+                    <li><strong>2's Complement Form:</strong> Negative number formed by taking 2's complement of positive number.
+                        <br><em>Advantage:</em> <strong>Unique zero (0000)</strong>. Extra negative number representation! Range for $n$ bits: $\mathbf{-2^{n-1}}$ to $\mathbf{+(2^{n-1}-1)}$. Widely used in all digital computers!</li>
+                </ol>
+
+                <div class="exam-prep">
+                    <h5> 4-Bit Signed Number Comparison Table</h5>
+                    <table>
+                        <thead>
+                            <tr><th>Decimal</th><th>Sign-Magnitude</th><th>1's Complement</th><th>2's Complement</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>+7</td><td>0111</td><td>0111</td><td>0111</td></tr>
+                            <tr><td>+1</td><td>0001</td><td>0001</td><td>0001</td></tr>
+                            <tr><td>+0</td><td>0000</td><td>0000</td><td>0000</td></tr>
+                            <tr><td>-0</td><td>1000</td><td>1111</td><td>0000 (Unique)</td></tr>
+                            <tr><td>-1</td><td>1001</td><td>1110</td><td>1111</td></tr>
+                            <tr><td>-5</td><td>1101</td><td>1010</td><td>1011</td></tr>
+                            <tr><td>-7</td><td>1111</td><td>1000</td><td>1001</td></tr>
+                            <tr><td>-8</td><td>N/A</td><td>N/A</td><td>1000</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="sec2-5-6">
+                <h4 class="subsection-title">2.5.6 1's Complement Binary Arithmetic</h4>
+                <p>To subtract $M - N$: Add 1's complement of subtrahend $N$ to $M$. If End Carry generated, add it back to LSB (End-Around Carry). If End Carry = 0, result is negative and in 1's complement form.</p>
+            </div>
+
+            <div id="sec2-5-7">
+                <h4 class="subsection-title">2.5.7 2's Complement Binary Arithmetic & Overflow</h4>
+                <p>To subtract $M - N$: Add 2's complement of subtrahend $N$ to $M$.</p>
+                <ul>
+                    <li>If End Carry generated $\implies$ Discard carry. Result is positive.</li>
+                    <li>If NO End Carry generated $\implies$ Result is negative and in 2's complement form.</li>
+                </ul>
+
+                <div class="real-example">
+                    <h5> 8-bit 2's Complement Arithmetic Examples:</h5>
+                    <p><strong>Example 1 ($48 - 23 = +25$):</strong></p>
+                    <p>$+48 = 00110000$, $-23 = 11101001$ (2's comp of 23)</p>
+                    <p>Sum $= 00110000 + 11101001 = \mathbf{(1)}00011001 \implies$ Discard Carry $\implies \mathbf{+25}$.</p>
+                    <br>
+                    <p><strong>Example 2 ($23 - 48 = -25$):</strong></p>
+                    <p>$+23 = 00010111$, $-48 = 11010000$ (2's comp of 48)</p>
+                    <p>Sum $= 00010111 + 11010000 = \mathbf{11100111} \implies$ No Carry. Take 2's complement $\implies -00011001 = \mathbf{-25}$.</p>
+                </div>
+
+                <div class="bangla-explain">
+                    <strong>Overflow Detection Rule (ওভারফ্লো বোঝার নিয়ম):</strong>
+                    <br>
+                    ১. যদি দুটি বিপরীত চিহ্নের (Opposite Sign) সংখ্যার মধ্যে যোগ/বিয়োগ করা হয়, তবে কখনো Overflow হতে পারে না।
+                    <br>
+                    ২. যদি একই চিহ্নের (Same Sign) দুটি সংখ্যা যোগ করা হয়, এবং ফলাফল যদি বিপরীত চিহ্নের চলে আসে (যেমন: দুটি Positive যোগ করে MSB 1 বা Negative আসল), তবে <strong>Overflow</strong> ঘটেছে! অর্থাৎ ফলাফল ৮-বিটের সীমার মধ্যে আঁটছে না।
+                </div>
+            </div>
+        </div>
+
+        <div id="sec2-6">
+            <h3 class="section-title">2.6 Octal Number System</h3>
+            <p>Base $r = 8$. Digits used: $0, 1, 2, 3, 4, 5, 6, 7$. Weights are powers of $8^i$.</p>
+
+            <div id="sec2-6-1">
+                <h4 class="subsection-title">2.6.1 - 2.6.3 Octal Representations & Conversions</h4>
+                <p><strong>Octal to Decimal:</strong> Multiply by weights $8^i$.<br>
+                $(6327.4051)_8 = 6\times8^3 + 3\times8^2 + 2\times8^1 + 7\times8^0 + 4\times8^{-1} + 0\times8^{-2} + 5\times8^{-3} + 1\times8^{-4} = \mathbf{(3287.5100098)_{10}}$</p>
+                <p><strong>Decimal to Octal:</strong> Divide integer part by $8$, multiply fraction by $8$.</p>
+            </div>
+
+            <div id="sec2-6-4">
+                <h4 class="subsection-title">2.6.4 & 2.6.5 Octal $\leftrightarrow$ Binary Conversions</h4>
+                <p>Each octal digit maps directly to a <strong>3-bit binary pattern</strong>!</p>
+                <p>Example: $(736.42)_8 \implies (111 \ 011 \ 110 \ . \ 100 \ 010)_2 = \mathbf{(111011110.100010)_2}$.</p>
+                <p><em>Binary to Octal:</em> Group binary bits into sets of 3 starting from binary point (pad zeros if necessary).</p>
+            </div>
+
+            <div id="sec2-6-8">
+                <h4 class="subsection-title">2.6.8 Application of Octal System</h4>
+                <p>Shortens long binary strings for human operators. Entering 376 in octal is much less error-prone than entering 011111110 in binary.</p>
+            </div>
+        </div>
+
+        <div id="sec2-7">
+            <h3 class="section-title">2.7 Hexadecimal Number System</h3>
+            <p>Base $r = 16$. Digits used: $0-9$ and $A(10), B(11), C(12), D(13), E(14), F(15)$. Weights are powers of $16^i$. Each Hex digit maps to a <strong>4-bit binary group</strong>.</p>
+
+            <div class="exam-prep">
+                <h5> Hexadecimal Mapping Table</h5>
+                <table>
+                    <thead><tr><th>Hex</th><th>Decimal</th><th>4-Bit Binary</th><th>Hex</th><th>Decimal</th><th>4-Bit Binary</th></tr></thead>
+                    <tbody>
+                        <tr><td>0</td><td>0</td><td>0000</td><td>8</td><td>8</td><td>1000</td></tr>
+                        <tr><td>1</td><td>1</td><td>0001</td><td>9</td><td>9</td><td>1001</td></tr>
+                        <tr><td>2</td><td>2</td><td>0010</td><td>A</td><td>10</td><td>1010</td></tr>
+                        <tr><td>3</td><td>3</td><td>0011</td><td>B</td><td>11</td><td>1011</td></tr>
+                        <tr><td>4</td><td>4</td><td>0100</td><td>C</td><td>12</td><td>1100</td></tr>
+                        <tr><td>5</td><td>5</td><td>0101</td><td>D</td><td>13</td><td>1101</td></tr>
+                        <tr><td>6</td><td>6</td><td>0110</td><td>E</td><td>14</td><td>1110</td></tr>
+                        <tr><td>7</td><td>7</td><td>0111</td><td>F</td><td>15</td><td>1111</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="sec2-7-4">
+                <h4 class="subsection-title">2.7.4 & 2.7.5 Hexadecimal $\leftrightarrow$ Binary</h4>
+                <p>Example Hex to Binary: $(2F9A.5B)_{16} = (\mathbf{0010 \ 1111 \ 1001 \ 1010 . 0101 \ 1011})_2$.</p>
+                <p>Example Binary to Hex: Group in sets of 4 bits from radix point.</p>
+            </div>
+
+            <div id="sec2-7-6">
+                <h4 class="subsection-title">2.7.6 Hexadecimal $\leftrightarrow$ Octal Conversion</h4>
+                <p>Convert Hex to Binary first, then group binary into 3-bit sets for Octal (and vice versa).</p>
+            </div>
+        </div>
+
+        <div id="sec2-8">
+            <h3 class="section-title">2.8 Binary Codes</h3>
+
+            <div id="sec2-8-1">
+                <h4 class="subsection-title">2.8.1 BCD Code (Binary-Coded Decimal)</h4>
+                <p>
+                    In BCD (specifically 8421 BCD), each decimal digit ($0-9$) is individually encoded into 4 binary bits. 
+                    Combinations $1010$ to $1111$ ($10$ to $15$) are <strong>invalid/unassigned</strong> in BCD.
+                </p>
+                <p>Example: $(23)_{10} \implies \mathbf{0010 \ 0011}_{\text{BCD}}$.</p>
+            </div>
+
+            <div id="sec2-8-2">
+                <h4 class="subsection-title">2.8.2 Excess-3 Code</h4>
+                <p>
+                    Unweighted code formed by adding $3$ (0011) to the BCD code of each decimal digit. 
+                    Property: It is a <strong>Self-Complementing Code</strong> (1's complement of Excess-3 code gives 9's complement of decimal number).
+                </p>
+                <p>Example: Decimal $2 \implies 0010 + 0011 = \mathbf{0101}_{\text{XS-3}}$.</p>
+            </div>
+
+            <div id="sec2-8-3">
+                <h4 class="subsection-title">2.8.3 Gray Code</h4>
+                <p>
+                    Gray code is a non-weighted <strong>unit-distance code</strong>: consecutive decimal numbers differ by exactly <strong>ONE bit</strong>. Used extensively in rotary optical shaft encoders to prevent transition errors.
+                </p>
+
+                <h5 style="margin-top:15px;">1. Binary to Gray Code Formula:</h5>
+                <p>For $n$-bit binary $b_{n-1}\dots b_0$ to Gray code $g_{n-1}\dots g_0$:</p>
+                <div class="formula-box">
+                    $$g_{n-1} = b_{n-1}$$
+                    $$g_i = b_i \oplus b_{i+1} \quad (\text{Modulo-2 XOR addition: } 0\oplus0=0, 0\oplus1=1, 1\oplus0=1, 1\oplus1=0)$$
+                </div>
+
+                <div class="real-example">
+                    <h5> Example: Convert Binary 1010 (Decimal 10) to Gray Code</h5>
+                    <ul>
+                        <li>$g_3 = b_3 = \mathbf{1}$</li>
+                        <li>$g_2 = b_2 \oplus b_3 = 0 \oplus 1 = \mathbf{1}$</li>
+                        <li>$g_1 = b_1 \oplus b_2 = 1 \oplus 0 = \mathbf{1}$</li>
+                        <li>$g_0 = b_0 \oplus b_1 = 0 \oplus 1 = \mathbf{1}$</li>
+                        <li>Gray Code Result $= \mathbf{1111}_{\text{Gray}}$</li>
+                    </ul>
+                </div>
+
+                <h5 style="margin-top:15px;">2. Gray Code to Binary Formula:</h5>
+                <div class="formula-box">
+                    $$b_{n-1} = g_{n-1}$$
+                    $$b_i = g_i \oplus b_{i+1}$$
+                </div>
+
+                <div class="real-example">
+                    <h5> Example: Convert Gray Code 1001 (Decimal 14) to Binary</h5>
+                    <ul>
+                        <li>$b_3 = g_3 = \mathbf{1}$</li>
+                        <li>$b_2 = g_2 \oplus b_3 = 0 \oplus 1 = \mathbf{1}$</li>
+                        <li>$b_1 = g_1 \oplus b_2 = 0 \oplus 1 = \mathbf{1}$</li>
+                        <li>$b_0 = g_0 \oplus b_1 = 1 \oplus 1 = \mathbf{0}$</li>
+                        <li>Binary Result $= \mathbf{1110}_2 = 14_{10}$</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="sec2-8-4">
+                <h4 class="subsection-title">2.8.4 Error-Detection Codes</h4>
+                
+                <h5>1. Parity Bit:</h5>
+                <p>An extra bit $P$ attached to data message to ensure total number of $1$s is either Even (Even Parity) or Odd (Odd Parity). Detects single-bit errors.</p>
+
+                <h5>2. Cyclic Redundancy Check (CRC):</h5>
+                <p>
+                    A powerful error-detecting technique using polynomial <strong>Modulo-2 Arithmetic</strong> (XOR without carries).
+                </p>
+
+                <div class="bangla-explain">
+                    <strong>CRC কিভাবে কাজ করে? (Step-by-Step Mechanism):</strong>
+                    <br>
+                    ১. আমাদের $k$-বিটের মেসেজ $M$ এবং একটি $(n+1)$-বিটের ডিভিজর প্যাটার্ন $P$ দেওয়া থাকবে।
+                    <br>
+                    ২. FCS ($F$) তৈরি করতে মেসেজ $M$ এর ডানে $n$-টি শূন্য ($0$) বসানো হয় ($2^n M$)।
+                    <br>
+                    ৩. $2^n M$ কে $P$ দিয়ে Modulo-2 ভাগ (Division) করা হয়। যে ভাগশেষ (Remainder $R$) থাকে, সেটাই হলো FCS।
+                    <br>
+                    ৪. পাঠানো মেসেজ $T = 2^n M + R$। রিসিভার $T$ কে $P$ দিয়ে ভাগ করবে। ভাগশেষ $0$ হলে ডাটা নির্ভুল!
+                </div>
+
+                <!-- DIAGRAM FOR CRC DIVISION -->
+                <div class="diagram-container">
+                    <text font-weight="bold" font-size="14">FULL WORKED CRC DIVISION DIAGRAM</text>
+                    <p style="text-align:center; font-size:0.9rem; margin-top:5px;">Message $M = 1010001101$ (10 bits), Pattern $P = 110101$ (6 bits, so $n=5$ bits FCS)</p>
+                    
+                    <div style="font-family: monospace; font-size: 1.05rem; line-height: 1.4; display: inline-block; text-align: left; background: #2d3748; color: #63b3ed; padding: 20px; border-radius: 8px; margin-top:10px;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f6e05e;">1101010110</span> (Quotient Q)<br>
+                        P: 110101 | 1010001101<span style="color:#e53e3e;">00000</span> ($2^5 M$ padded with 5 zeros)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#48bb78;">110101</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;111011<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#48bb78;">110101</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;111010<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#48bb78;">110101</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;111110<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#48bb78;">110101</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;101100<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#48bb78;">110101</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;110010<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#48bb78;">110101</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f6ad55; font-weight:bold;">01110</span> (Remainder R = FCS)<br>
+                    </div>
+                    <div class="diagram-explanation">
+                        Transmitted Message $T = 1010001101 \mathbf{01110}$. 
+                        রিসিভার সাইডে $T$ কে পুনরায় $P = 110101$ দিয়ে ভাগ করলে ভাগশেষ $00000$ পাওয়া যাবে, যা প্রমাণ করে যে মেসেজে কোনো বিট ত্রুটি (Bit Error) নেই।
+                    </div>
+                </div>
+            </div>
+
+            <div id="sec2-8-5">
+                <h4 class="subsection-title">2.8.5 ASCII Character Code</h4>
+                <p>
+                    <strong>ASCII</strong> (American Standard Code for Information Interchange) is a 7-bit alphanumeric code representing 128 ($2^7$) characters: 94 printable graphic characters (letters A-Z, a-z, digits 0-9, symbols) and 34 non-printable control characters.
+                </p>
+                <p>Example: Letter 'A' in ASCII is represented as column $100_2$ and row $0001_2} \implies \mathbf{1000001_2} = 65_{10}$.</p>
+            </div>
+        </div>
+
+        <div class="revision-card">
+            <h5> Chapter 2 Master Revision Points</h5>
+            <p>✔ <strong>Complements:</strong> 10's comp $= 10^n - N$; 9's comp $= 99..9 - N$. 2's comp $= \text{1's comp} + 1$.</p>
+            <p>✔ <strong>2's Complement Range:</strong> $-2^{n-1}$ to $+(2^{n-1}-1)$. Unique zero!</p>
+            <p>✔ <strong>Quick Base Conversions:</strong> Octal $\leftrightarrow$ 3-bit Binary; Hex $\leftrightarrow$ 4-bit Binary.</p>
+            <p>✔ <strong>Codes:</strong> BCD (8421, weighted), Excess-3 (Self-complementing), Gray (Unit distance, $\oplus$ XOR based), CRC (Modulo-2 division for error detection).</p>
+        </div>
+    </section>
+
+</div>
+
+</body>
+</html>
