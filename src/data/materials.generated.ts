@@ -63,5 +63,12 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 89765
       }
     ]
+  },
+  {
+    "id": "gen-209",
+    "code": "GEN 209",
+    "title": "GEN 209",
+    "chapters": [],
+    "others": []
   }
 ];
