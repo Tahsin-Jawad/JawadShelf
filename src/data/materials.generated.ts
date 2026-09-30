@@ -80,6 +80,15 @@ export const generatedCourses: CourseData[] = [
         "extension": "html",
         "url": "/materials/CSE%20302/Others/LAB%201-2-3.html",
         "sizeInBytes": 76113
+      },
+      {
+        "id": "lecture 1 to 4.html",
+        "title": "Lecture 1 To 4",
+        "filename": "lecture 1 to 4.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/CSE%20302/Others/lecture%201%20to%204.html",
+        "sizeInBytes": 56674
       }
     ]
   },

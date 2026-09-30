@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSE302: Database Systems - Interactive Study Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#111827',
+                            900: '#0f172a',
+                            950: '#020617',
+                        },
+                        cyan: {
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                        },
+                        emerald: {
+                            400: '#34d399',
+                            500: '#10b981',
+                        },
+                        indigo: {
+                            400: '#818cf8',
+                            500: '#6366f1',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- MathJax for TeX/LaTeX math expressions -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        .glossary-term {
+            border-bottom: 1px dotted #22d3ee;
+            color: #38bdf8;
+            cursor: help;
+        }
+        .code-block {
+            background-color: #030712;
+            border: 1px solid #1e293b;
+        }
+        .highlight-bilingual {
+            background: linear-gradient(135deg, rgba(34,211,238,0.08) 0%, rgba(99,102,241,0.08) 100%);
+            border-left: 3px solid #22d3ee;
+        }
+        /* Flip Card Animation */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        .flashcard-inner {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 font-sans antialiased selection:bg-cyan-500 selection:text-slate-950 min-h-screen flex flex-col">
+
+    <!-- Top Header -->
+    <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo & Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="p-2.5 bg-gradient-to-tr from-cyan-500 via-indigo-500 to-emerald-400 rounded-xl text-slate-950 font-bold shadow-md shadow-cyan-500/20">
+                        <i class="fa-solid fa-database text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-base sm:text-xl font-extrabold bg-gradient-to-r from-cyan-400 via-indigo-300 to-emerald-400 bg-clip-text text-transparent">
+                            CSE302: Database Systems
+                        </h1>
+                        <p class="text-[11px] text-slate-400 hidden sm:block">East West University • Comprehensive Interactive Hub</p>
+                    </div>
+                </div>
+
+                <!-- Global Search & Control Actions -->
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <div class="relative w-36 sm:w-64">
+                        <input type="text" id="searchInput" onkeyup="filterNotes()" placeholder="Search topics, keys, math..." 
+                            class="w-full pl-9 pr-3 py-1.5 text-xs sm:text-sm bg-slate-950 border border-slate-700 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-500 text-xs"></i>
+                    </div>
+
+                    <!-- Quick Symbol Drawer Trigger -->
+                    <button onclick="toggleSymbolModal()" class="px-2.5 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 rounded-lg transition flex items-center gap-1.5" title="Relational Algebra Symbols">
+                        <span class="font-mono font-bold text-sm">σ</span>
+                        <span class="hidden md:inline">Symbols</span>
+                    </button>
+
+                    <!-- Mobile Navigation Toggle -->
+                    <button onclick="toggleMobileSidebar()" class="lg:hidden p-2 text-slate-400 hover:text-white rounded-lg bg-slate-800 border border-slate-700">
+                        <i class="fa-solid fa-bars text-base"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Custom Toast Message Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 border border-cyan-500/50 text-cyan-300 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+        <i class="fa-solid fa-circle-check text-cyan-400 text-lg"></i>
+        <span id="toastMessage" class="text-xs font-medium">Notification message</span>
+    </div>
+
+    <!-- Main Workspace Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 flex gap-8 w-full">
+
+        <!-- Left Sidebar / Table of Contents -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-slate-900/95 lg:bg-transparent backdrop-blur-lg lg:backdrop-blur-none p-4 lg:p-0 border-r border-slate-800 lg:border-none transform -translate-x-full lg:translate-x-0 lg:static lg:block transition-transform duration-300 ease-in-out shrink-0">
+            <div class="sticky top-20 space-y-4 max-h-[calc(100vh-6rem)] overflow-y-auto pr-2">
+                <div class="flex items-center justify-between lg:hidden mb-4">
+                    <span class="font-semibold text-cyan-400">Navigation Menu</span>
+                    <button onclick="toggleMobileSidebar()" class="text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Navigation List -->
+                <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl">
+                    <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 px-2">Table of Contents</h2>
+                    <nav class="space-y-1" id="toc-nav">
+                        <a href="#section-1" class="toc-item flex items-center px-3 py-2 text-xs font-medium text-slate-300 rounded-lg hover:bg-slate-800 hover:text-cyan-400 transition">
+                            <span class="w-5 text-cyan-400 font-mono">01</span> Data vs Information
+                        </a>
+                        <a href="#section-2" class="toc-item flex items-center px-3 py-2 text-xs font-medium text-slate-300 rounded-lg hover:bg-slate-800 hover:text-cyan-400 transition">
+                            <span class="w-5 text-cyan-400 font-mono">02</span> Database & DBMS
+                        </a>
+                        <a href="#section-3" class="toc-item flex items-center px-3 py-2 text-xs font-medium text-slate-300 rounded-lg hover:bg-slate-800 hover:text-cyan-400 transition">
+                            <span class="w-5 text-cyan-400 font-mono">03</span> Database Architecture
+                        </a>
+                        <a href="#section-4" class="toc-item flex items-center px-3 py-2 text-xs font-medium text-slate-300 rounded-lg hover:bg-slate-800 hover:text-cyan-400 transition">
+                            <span class="w-5 text-cyan-400 font-mono">04</span> Schemas & Data Indep.
+                        </a>
+                        <a href="#section-5" class="toc-item flex items-center px-3 py-2 text-xs font-medium text-slate-300 rounded-lg hover:bg-slate-800 hover:text-cyan-400 transition">
+                            <span class="w-5 text-cyan-400 font-mono">05</span> Relational Model
+                        </a>
+                        <a href="#section-6" class="toc-item flex items-center px-3 py-2 text-xs font-medium text-slate-300 rounded-lg hover:bg-slate-800 hover:text-cyan-400 transition">
+                            <span class="w-5 text-cyan-400 font-mono">06</span> Keys & Constraints
+                        </a>
+                        <a href="#section-7" class="toc-item flex items-center px-3 py-2 text-xs font-medium text-slate-300 rounded-lg hover:bg-slate-800 hover:text-cyan-400 transition">
+                            <span class="w-5 text-cyan-400 font-mono">07</span> Relational Algebra
+                        </a>
+                        <a href="#interactive-sim" class="toc-item flex items-center px-3 py-2 text-xs font-medium text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition">
+                            <span class="w-5 text-emerald-400 font-mono">08</span> Interactive Simulator
+                        </a>
+                        <a href="#flashcards-section" class="toc-item flex items-center px-3 py-2 text-xs font-medium text-slate-300 rounded-lg hover:bg-slate-800 hover:text-indigo-400 transition">
+                            <span class="w-5 text-indigo-400 font-mono">09</span> Exam Flashcards
+                        </a>
+                        <a href="#quiz-section" class="toc-item flex items-center px-3 py-2 text-xs font-medium text-slate-300 rounded-lg hover:bg-slate-800 hover:text-amber-400 transition">
+                            <span class="w-5 text-amber-400 font-mono">10</span> Practice Self-Quiz
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Exam Tip Box -->
+                <div class="p-3 bg-gradient-to-br from-slate-900 to-indigo-950/40 border border-indigo-900/40 rounded-xl text-xs space-y-2">
+                    <div class="font-semibold text-indigo-300 flex items-center gap-1.5">
+                        <i class="fa-solid fa-lightbulb text-amber-400"></i> Exam Tip
+                    </div>
+                    <p class="text-slate-400 leading-relaxed">
+                        Bangla explanations give instant conceptual intuition (মূল ধারণা). Practice Relational Algebra queries in Section 08!
+                    </p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0 space-y-12">
+
+            <!-- Hero Banner -->
+            <section class="bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 relative overflow-hidden shadow-2xl">
+                <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl"></div>
+                <div class="relative z-10 space-y-3">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold rounded-full uppercase tracking-wide">
+                            East West University • CSE302
+                        </span>
+                        <span class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold rounded-full uppercase tracking-wide">
+                            Interactive Web App
+                        </span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                        Database Systems Complete Course Study Hub
+                    </h1>
+                    <p class="text-slate-400 text-sm max-w-2xl leading-relaxed">
+                        Comprehensive notes with dual English/Bangla conceptual breakdowns, interactive query execution simulator, exam flashcard deck, and practice quizzes.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SECTION 1: DATA VS INFORMATION -->
+            <section id="section-1" class="note-section bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+                <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+                    <span class="p-2 bg-cyan-500/10 text-cyan-400 rounded-lg text-lg font-bold font-mono">01</span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white">Data vs Information</h2>
+                </div>
+
+                <div class="highlight-bilingual p-4 rounded-xl space-y-2">
+                    <p class="text-sm text-cyan-300 font-medium"><i class="fa-solid fa-comment-dots mr-2"></i>সহজ ভাষায় Concept (Bangla Intuition):</p>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        <strong class="text-white">Data</strong> হচ্ছে একদম কাঁচা বা অসংসোধিত ফ্যাক্টস (Raw Facts)। এর একা একা কোনো নির্দিষ্ট অর্থ নাও থাকতে পারে। আর যখন এই Data-কে প্রসেস করে বা সাজিয়ে অর্থপূর্ণ কোনো মেসেজে রূপান্তর করা হয়, তখন তাকে <strong class="text-white">Information</strong> বলে। 
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+                        <h3 class="text-cyan-400 font-semibold flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-cubes text-xs"></i> Data (Raw Material)
+                        </h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Unorganized, unprocessed facts, figures, symbols, or observations. Holds no inherent context or direct meaning on its own.
+                        </p>
+                        <div class="mt-2 text-xs font-mono bg-slate-900 p-2 rounded text-slate-300">
+                            Examples: "EWU", "101", "3.95", "Mr. X"
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+                        <h3 class="text-emerald-400 font-semibold flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-chart-pie text-xs"></i> Information (Processed)
+                        </h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Data that has been processed, structured, or contextualized to provide meaning and utility for decision making.
+                        </p>
+                        <div class="mt-2 text-xs font-mono bg-slate-900 p-2 rounded text-slate-300">
+                            Example: "Student Mr. X (ID: 101) at EWU achieved a GPA of 3.95."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Processing Pipeline Flowchart -->
+                <div class="bg-slate-950 p-4 border border-slate-800 rounded-xl">
+                    <h4 class="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider text-center">Data Processing Cycle</h4>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 text-xs">
+                        <div class="px-4 py-2 bg-slate-900 border border-cyan-500/30 rounded-lg text-cyan-300 text-center w-full sm:w-auto">
+                            Raw Data<br><span class="text-[10px] text-slate-500">(Inputs)</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-right text-slate-600 hidden sm:block"></i>
+                        <i class="fa-solid fa-arrow-down text-slate-600 sm:hidden"></i>
+                        <div class="px-4 py-2 bg-indigo-950/60 border border-indigo-500/40 rounded-lg text-indigo-300 text-center w-full sm:w-auto">
+                            Processing & Context<br><span class="text-[10px] text-slate-400">(DBMS Logic)</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-right text-slate-600 hidden sm:block"></i>
+                        <i class="fa-solid fa-arrow-down text-slate-600 sm:hidden"></i>
+                        <div class="px-4 py-2 bg-slate-900 border border-emerald-500/30 rounded-lg text-emerald-300 text-center w-full sm:w-auto">
+                            Information<br><span class="text-[10px] text-slate-500">(Meaningful Output)</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: DATABASE & DBMS FUNDAMENTALS -->
+            <section id="section-2" class="note-section bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+                <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+                    <span class="p-2 bg-cyan-500/10 text-cyan-400 rounded-lg text-lg font-bold font-mono">02</span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white">Database & DBMS Fundamentals</h2>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-md font-semibold text-slate-200">Why do we need a Database?</h3>
+                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                        A <strong class="text-slate-200">Database</strong> is an organized collection of logically related data. It allows organizations to systematically perform core CRUD operations: <span class="text-cyan-400">Create</span>, <span class="text-cyan-400">Read</span>, <span class="text-cyan-400">Update</span>, and <span class="text-cyan-400">Delete</span>.
+                    </p>
+                </div>
+
+                <!-- Comparison Table -->
+                <div class="space-y-3">
+                    <h3 class="text-md font-semibold text-slate-200">Comparison: DBMS vs RDBMS vs NoSQL</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-slate-950 text-slate-300 border-b border-slate-800">
+                                    <th class="p-3 font-semibold">Feature</th>
+                                    <th class="p-3 font-semibold">DBMS</th>
+                                    <th class="p-3 font-semibold text-cyan-400">RDBMS</th>
+                                    <th class="p-3 font-semibold text-indigo-400">NoSQL</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800 text-slate-400">
+                                <tr>
+                                    <td class="p-3 font-medium text-slate-200">Data Storage</td>
+                                    <td class="p-3">File format / Hierarchical</td>
+                                    <td class="p-3">Tabular (Tables with Rows & Columns)</td>
+                                    <td class="p-3">Document (JSON/BSON), Key-Value, Graph</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium text-slate-200">Relationships</td>
+                                    <td class="p-3">Not supported or primitive</td>
+                                    <td class="p-3">Explicit via Foreign Keys</td>
+                                    <td class="p-3">Non-relational / Nested structures</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium text-slate-200">ACID Compliance</td>
+                                    <td class="p-3">No</td>
+                                    <td class="p-3">Strictly Enforced</td>
+                                    <td class="p-3">BASE model (Eventual Consistency)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: DATABASE ARCHITECTURE -->
+            <section id="section-3" class="note-section bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+                <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+                    <span class="p-2 bg-cyan-500/10 text-cyan-400 rounded-lg text-lg font-bold font-mono">03</span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white">Database Architecture (2-Tier vs 3-Tier)</h2>
+                </div>
+
+                <div class="highlight-bilingual p-4 rounded-xl space-y-2">
+                    <p class="text-sm text-cyan-300 font-medium"><i class="fa-solid fa-comment-dots mr-2"></i>সহজ ভাষায় Concept (Bangla Intuition):</p>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        <strong class="text-white">2-Tier Architecture</strong> এ ক্লায়েন্ট সরাসরি ডাটাবেজের সাথে যোগাযোগ করে। কিন্তু <strong class="text-white">3-Tier Architecture</strong> এ মাঝে একটি Application Server (Business Logic Layer) থাকে যা সিস্টেমকে নিরাপদ ও Scalable করে!
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-5 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
+                        <h3 class="font-bold text-slate-200 text-sm">2-Tier Architecture</h3>
+                        <div class="p-3 bg-slate-900 border border-slate-800 rounded-lg text-center text-xs space-y-2 font-mono">
+                            <div class="p-1.5 bg-slate-800 text-cyan-300 rounded">Client App (UI + Logic)</div>
+                            <i class="fa-solid fa-arrow-down-up text-slate-500"></i>
+                            <div class="p-1.5 bg-slate-800 text-emerald-300 rounded">Database Server</div>
+                        </div>
+                    </div>
+
+                    <div class="p-5 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
+                        <h3 class="font-bold text-slate-200 text-sm">3-Tier Architecture</h3>
+                        <div class="p-3 bg-slate-900 border border-slate-800 rounded-lg text-center text-xs space-y-1.5 font-mono">
+                            <div class="p-1.5 bg-slate-800 text-cyan-300 rounded">User Client (Presentation Layer)</div>
+                            <i class="fa-solid fa-arrow-down-up text-slate-500"></i>
+                            <div class="p-1.5 bg-indigo-950 text-indigo-300 border border-indigo-800/50 rounded">Application Server (Business Logic)</div>
+                            <i class="fa-solid fa-arrow-down-up text-slate-500"></i>
+                            <div class="p-1.5 bg-slate-800 text-emerald-300 rounded">Database Server (Data Layer)</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: SCHEMAS & DATA INDEPENDENCE -->
+            <section id="section-4" class="note-section bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+                <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+                    <span class="p-2 bg-cyan-500/10 text-cyan-400 rounded-lg text-lg font-bold font-mono">04</span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white">Database Schemas & Data Independence</h2>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+                        <h3 class="text-cyan-400 font-semibold flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-drafting-compass"></i> Schema (Blueprint)
+                        </h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            The overall logical design/structure of the database. Rarely changes once designed.
+                        </p>
+                    </div>
+                    <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+                        <h3 class="text-emerald-400 font-semibold flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-camera"></i> Instance (Snapshot)
+                        </h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            The actual content/data stored in the database at a particular point in time.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5 & 6: RELATIONAL MODEL & KEYS -->
+            <section id="section-6" class="note-section bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+                <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+                    <span class="p-2 bg-cyan-500/10 text-cyan-400 rounded-lg text-lg font-bold font-mono">06</span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white">Keys & Integrity Constraints</h2>
+                </div>
+
+                <!-- Interactive Schema Visualizer Toggle -->
+                <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-bold text-slate-200">Interactive University Relational Schema Visualizer</h3>
+                        <span class="text-[10px] bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded border border-cyan-500/30">Schema Blueprint</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs font-mono">
+                        <!-- Instructor Table Card -->
+                        <div class="p-3 bg-slate-900 border border-cyan-500/40 rounded-lg space-y-2">
+                            <div class="flex justify-between border-b border-slate-800 pb-1">
+                                <span class="font-bold text-cyan-400">INSTRUCTOR</span>
+                                <span class="text-[10px] text-slate-500">Table</span>
+                            </div>
+                            <ul class="space-y-1 text-slate-300 text-[11px]">
+                                <li class="text-emerald-400 font-bold flex items-center justify-between">
+                                    <span>ID</span> <span class="text-[9px] bg-emerald-950 text-emerald-400 px-1 rounded">PK</span>
+                                </li>
+                                <li>name</li>
+                                <li>dept_name</li>
+                                <li>salary</li>
+                            </ul>
+                        </div>
+
+                        <!-- Course Table Card -->
+                        <div class="p-3 bg-slate-900 border border-indigo-500/40 rounded-lg space-y-2">
+                            <div class="flex justify-between border-b border-slate-800 pb-1">
+                                <span class="font-bold text-indigo-400">TEACHES</span>
+                                <span class="text-[10px] text-slate-500">Table</span>
+                            </div>
+                            <ul class="space-y-1 text-slate-300 text-[11px]">
+                                <li class="text-indigo-300 font-bold flex items-center justify-between">
+                                    <span>ID</span> <span class="text-[9px] bg-indigo-950 text-indigo-300 px-1 rounded">FK → Instructor</span>
+                                </li>
+                                <li class="text-indigo-300 font-bold flex items-center justify-between">
+                                    <span>course_id</span> <span class="text-[9px] bg-indigo-950 text-indigo-300 px-1 rounded">FK → Course</span>
+                                </li>
+                                <li>sec_id</li>
+                                <li>semester</li>
+                            </ul>
+                        </div>
+
+                        <!-- Department Table Card -->
+                        <div class="p-3 bg-slate-900 border border-slate-800 rounded-lg space-y-2">
+                            <div class="flex justify-between border-b border-slate-800 pb-1">
+                                <span class="font-bold text-slate-300">DEPARTMENT</span>
+                                <span class="text-[10px] text-slate-500">Table</span>
+                            </div>
+                            <ul class="space-y-1 text-slate-300 text-[11px]">
+                                <li class="text-emerald-400 font-bold flex items-center justify-between">
+                                    <span>dept_name</span> <span class="text-[9px] bg-emerald-950 text-emerald-400 px-1 rounded">PK</span>
+                                </li>
+                                <li>building</li>
+                                <li>budget</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 7: RELATIONAL ALGEBRA -->
+            <section id="section-7" class="note-section bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+                <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+                    <span class="p-2 bg-cyan-500/10 text-cyan-400 rounded-lg text-lg font-bold font-mono">07</span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white">Relational Algebra Operations</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+                        <span class="font-bold text-cyan-400 text-sm">Select Operator (σ)</span>
+                        <p class="text-slate-400">Filters rows based on predicate condition.</p>
+                        <div class="code-block p-2 rounded text-cyan-300 font-mono">σ<sub>salary > 75000</sub>(instructor)</div>
+                    </div>
+
+                    <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+                        <span class="font-bold text-cyan-400 text-sm">Project Operator (Π)</span>
+                        <p class="text-slate-400">Selects specific columns and removes duplicate rows.</p>
+                        <div class="code-block p-2 rounded text-cyan-300 font-mono">Π<sub>name, salary</sub>(instructor)</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 08: INTERACTIVE RELATIONAL ALGEBRA & SQL SIMULATOR -->
+            <section id="interactive-sim" class="note-section bg-slate-900 border border-cyan-500/30 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xl">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg text-lg font-bold font-mono">08</span>
+                        <div>
+                            <h2 class="text-xl sm:text-2xl font-bold text-white">Interactive Query Execution Simulator</h2>
+                            <p class="text-xs text-slate-400">Run Relational Algebra operations against real sample database tables!</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-full text-[11px] font-semibold">Live Tool</span>
+                </div>
+
+                <!-- Simulator Controls -->
+                <div class="space-y-4">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-xs font-semibold text-slate-300">Preset Sample Queries:</span>
+                        <button onclick="loadSampleQuery('select')" class="px-2.5 py-1 text-xs bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 rounded-lg transition">
+                            σ (Salary > 75k)
+                        </button>
+                        <button onclick="loadSampleQuery('project')" class="px-2.5 py-1 text-xs bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 rounded-lg transition">
+                            Π (Name, Dept)
+                        </button>
+                        <button onclick="loadSampleQuery('join')" class="px-2.5 py-1 text-xs bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 rounded-lg transition">
+                            Instructor ⨝ Teaches
+                        </button>
+                        <button onclick="loadSampleQuery('reset')" class="px-2.5 py-1 text-xs bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 rounded-lg transition">
+                            Reset View
+                        </button>
+                    </div>
+
+                    <!-- Query Command Display -->
+                    <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-400 font-mono" id="queryAlgebraLabel">Relational Algebra: <span class="text-cyan-400">σ dept_name='Comp. Sci.' (INSTRUCTOR)</span></span>
+                            <span class="text-slate-500 text-[10px]" id="querySqlLabel">SQL: SELECT * FROM INSTRUCTOR WHERE dept_name='Comp. Sci.';</span>
+                        </div>
+                    </div>
+
+                    <!-- Result Output Table -->
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Query Results Matrix:</h4>
+                        <div class="overflow-x-auto bg-slate-950 border border-slate-800 rounded-xl p-2">
+                            <table id="simResultTable" class="w-full text-left text-xs border-collapse">
+                                <!-- Populated dynamically by JS -->
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 09: EXAM FLASHCARDS -->
+            <section id="flashcards-section" class="note-section bg-slate-900 border border-indigo-500/30 rounded-2xl p-6 sm:p-8 space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="p-2 bg-indigo-500/10 text-indigo-400 rounded-lg text-lg font-bold font-mono">09</span>
+                        <div>
+                            <h2 class="text-xl sm:text-2xl font-bold text-white">Exam Night Revision Flashcards</h2>
+                            <p class="text-xs text-slate-400">Click any card to flip and reveal the key exam definition and Bangla explanation!</p>
+                        </div>
+                    </div>
+                    <span class="text-xs text-slate-400 font-mono" id="cardProgress">Card 1 of 4</span>
+                </div>
+
+                <!-- Flashcard Deck Container -->
+                <div class="flex flex-col items-center justify-center space-y-4">
+                    <div id="flashcard" onclick="flipFlashcard()" class="flashcard w-full max-w-lg h-56 perspective-1000 cursor-pointer">
+                        <div class="flashcard-inner relative w-full h-full transform-style-3d rounded-2xl border border-slate-700 bg-slate-950 shadow-2xl p-6 flex items-center justify-center text-center">
+                            <!-- Front Side -->
+                            <div class="flashcard-front absolute inset-0 backface-hidden p-6 flex flex-col justify-between items-center">
+                                <span class="text-[10px] uppercase font-mono tracking-widest text-cyan-400 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-800/40">Question / Term</span>
+                                <p id="flashFrontText" class="text-base sm:text-lg font-bold text-white leading-relaxed">
+                                    What is Entity Integrity Constraint?
+                                </p>
+                                <span class="text-[11px] text-slate-500"><i class="fa-solid fa-rotate mr-1"></i>Click to reveal definition</span>
+                            </div>
+
+                            <!-- Back Side -->
+                            <div class="flashcard-back absolute inset-0 backface-hidden rotate-y-180 p-6 flex flex-col justify-between items-center bg-gradient-to-br from-slate-950 via-indigo-950/40 to-slate-950 rounded-2xl">
+                                <span class="text-[10px] uppercase font-mono tracking-widest text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">Explanation</span>
+                                <p id="flashBackText" class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                                    Primary Key attributes can NEVER contain NULL values, ensuring every tuple in a relation is uniquely identifiable.<br>
+                                    <span class="text-cyan-300 text-xs block mt-2">(বাংলা: প্রাইমারি কী কখনও NULL হতে পারবে না)</span>
+                                </p>
+                                <span class="text-[11px] text-slate-500"><i class="fa-solid fa-rotate mr-1"></i>Click to flip back</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Controls -->
+                    <div class="flex items-center space-x-3">
+                        <button onclick="prevCard()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold transition">
+                            <i class="fa-solid fa-chevron-left mr-1"></i> Previous
+                        </button>
+                        <button onclick="nextCard()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition shadow-md shadow-indigo-600/30">
+                            Next Card <i class="fa-solid fa-chevron-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 10: PRACTICE QUIZ ENGINE -->
+            <section id="quiz-section" class="note-section bg-slate-900 border border-amber-500/30 rounded-2xl p-6 sm:p-8 space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="p-2 bg-amber-500/10 text-amber-400 rounded-lg text-lg font-bold font-mono">10</span>
+                        <div>
+                            <h2 class="text-xl sm:text-2xl font-bold text-white">Interactive Practice Quiz</h2>
+                            <p class="text-xs text-slate-400">Test your midterm knowledge with instant feedback!</p>
+                        </div>
+                    </div>
+                    <span id="quizScoreBadge" class="px-3 py-1 bg-slate-800 text-slate-300 border border-slate-700 rounded-full text-xs font-mono">Score: 0 / 3</span>
+                </div>
+
+                <div id="quizContainer" class="space-y-6">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="text-center text-xs text-slate-500 pt-6 pb-12 border-t border-slate-800">
+                <p>CSE302 Database Systems • Interactive Study Platform • East West University</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Relational Algebra Symbol Drawer Modal -->
+    <div id="symbolModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-copy text-cyan-400"></i> Relational Algebra Symbol Palette
+                </h3>
+                <button onclick="toggleSymbolModal()" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <p class="text-xs text-slate-400">Click any symbol to instantly copy it to your clipboard for assignment writing!</p>
+
+            <div class="grid grid-cols-4 gap-2 text-center">
+                <button onclick="copySymbol('σ', 'Select Operator (σ)')" class="p-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg transition font-mono text-cyan-400 text-lg">σ</button>
+                <button onclick="copySymbol('Π', 'Project Operator (Π)')" class="p-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg transition font-mono text-cyan-400 text-lg">Π</button>
+                <button onclick="copySymbol('⨝', 'Theta Join (⨝)')" class="p-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg transition font-mono text-cyan-400 text-lg">⨝</button>
+                <button onclick="copySymbol('ρ', 'Rename Operator (ρ)')" class="p-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg transition font-mono text-cyan-400 text-lg">ρ</button>
+                <button onclick="copySymbol('∪', 'Union (∪)')" class="p-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg transition font-mono text-cyan-400 text-lg">∪</button>
+                <button onclick="copySymbol('∩', 'Intersection (∩)')" class="p-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg transition font-mono text-cyan-400 text-lg">∩</button>
+                <button onclick="copySymbol('−', 'Set Difference (−)')" class="p-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg transition font-mono text-cyan-400 text-lg">−</button>
+                <button onclick="copySymbol('×', 'Cartesian Product (×)')" class="p-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg transition font-mono text-cyan-400 text-lg">×</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Client Application Logic -->
+    <script>
+        // Sample Instructor Data
+        const instructorData = [
+            { ID: '10101', name: 'Srinivasan', dept_name: 'Comp. Sci.', salary: 65000 },
+            { ID: '12121', name: 'Wu', dept_name: 'Finance', salary: 90000 },
+            { ID: '15151', name: 'Mozart', dept_name: 'Music', salary: 40000 },
+            { ID: '22222', name: 'Einstein', dept_name: 'Physics', salary: 95000 },
+            { ID: '32343', name: 'El Said', dept_name: 'History', salary: 60000 },
+            { ID: '45565', name: 'Katz', dept_name: 'Comp. Sci.', salary: 75000 },
+            { ID: '83821', name: 'Brandt', dept_name: 'Comp. Sci.', salary: 92000 }
+        ];
+
+        function loadSampleQuery(type) {
+            const table = document.getElementById('simResultTable');
+            const algLabel = document.getElementById('queryAlgebraLabel');
+            const sqlLabel = document.getElementById('querySqlLabel');
+            
+            let filtered = [];
+            let columns = [];
+
+            if (type === 'select') {
+                algLabel.innerHTML = 'Relational Algebra: <span class="text-cyan-400">σ salary > 75000 (INSTRUCTOR)</span>';
+                sqlLabel.innerText = 'SQL: SELECT * FROM INSTRUCTOR WHERE salary > 75000;';
+                filtered = instructorData.filter(item => item.salary > 75000);
+                columns = ['ID', 'name', 'dept_name', 'salary'];
+            } else if (type === 'project') {
+                algLabel.innerHTML = 'Relational Algebra: <span class="text-cyan-400">Π name, dept_name (INSTRUCTOR)</span>';
+                sqlLabel.innerText = 'SQL: SELECT DISTINCT name, dept_name FROM INSTRUCTOR;';
+                filtered = instructorData.map(item => ({ name: item.name, dept_name: item.dept_name }));
+                columns = ['name', 'dept_name'];
+            } else if (type === 'join') {
+                algLabel.innerHTML = 'Relational Algebra: <span class="text-cyan-400">INSTRUCTOR ⨝ TEACHES</span>';
+                sqlLabel.innerText = 'SQL: SELECT * FROM INSTRUCTOR NATURAL JOIN TEACHES;';
+                filtered = [
+                    { ID: '10101', name: 'Srinivasan', course_id: 'CS-101', sec_id: '1', semester: 'Fall' },
+                    { ID: '10101', name: 'Srinivasan', course_id: 'CS-315', sec_id: '1', semester: 'Spring' },
+                    { ID: '45565', name: 'Katz', course_id: 'CS-190', sec_id: '1', semester: 'Spring' },
+                    { ID: '83821', name: 'Brandt', course_id: 'CS-190', sec_id: '2', semester: 'Spring' }
+                ];
+                columns = ['ID', 'name', 'course_id', 'sec_id', 'semester'];
+            } else {
+                algLabel.innerHTML = 'Relational Algebra: <span class="text-cyan-400">INSTRUCTOR</span>';
+                sqlLabel.innerText = 'SQL: SELECT * FROM INSTRUCTOR;';
+                filtered = [...instructorData];
+                columns = ['ID', 'name', 'dept_name', 'salary'];
+            }
+
+            renderTable(table, columns, filtered);
+            showToast("Query Executed Successfully!");
+        }
+
+        function renderTable(table, columns, data) {
+            let headerHtml = `<tr class="bg-slate-900 border-b border-slate-800 text-cyan-400">`;
+            columns.forEach(col => {
+                headerHtml += `<th class="p-2.5 font-bold font-mono">${col}</th>`;
+            });
+            headerHtml += `</tr>`;
+
+            let bodyHtml = `<tbody class="divide-y divide-slate-800/60 text-slate-300 font-mono">`;
+            data.forEach(row => {
+                bodyHtml += `<tr class="hover:bg-slate-900/50 transition">`;
+                columns.forEach(col => {
+                    bodyHtml += `<td class="p-2.5">${row[col]}</td>`;
+                });
+                bodyHtml += `</tr>`;
+            });
+            bodyHtml += `</tbody>`;
+
+            table.innerHTML = headerHtml + bodyHtml;
+        }
+
+        const flashcards = [
+            {
+                q: "What is Entity Integrity Constraint?",
+                a: "Primary Key attributes can NEVER contain NULL values, ensuring every tuple in a relation is uniquely identifiable.<br><span class='text-cyan-300'>(বাংলা: প্রাইমারি কী কখনও NULL হতে পারবে না)</span>"
+            },
+            {
+                q: "What is Referential Integrity Constraint?",
+                a: "Foreign Key values in table B must either exist in Primary Key of referenced table A or be completely NULL.<br><span class='text-cyan-300'>(বাংলা: Foreign Key এর ডাটা অবশ্যই Primary Key তে থাকতে হবে)</span>"
+            },
+            {
+                q: "What is the difference between σ and Π in Relational Algebra?",
+                a: "σ (Select) filters rows based on a condition, while Π (Project) selects columns and eliminates duplicate rows.<br><span class='text-cyan-300'>(বাংলা: σ সারি বাছাই করে, Π কলাম বাছাই করে)</span>"
+            },
+            {
+                q: "What is Union Compatibility?",
+                a: "Two relations must have the exact same number of attributes (same arity) and matching corresponding domain types.<br><span class='text-cyan-300'>(বাংলা: টেবিল দুটির কলাম সংখ্যা ও টাইপ একই হতে হবে)</span>"
+            }
+        ];
+
+        let currentCardIndex = 0;
+
+        function flipFlashcard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+
+        function updateFlashcard() {
+            const card = document.getElementById('flashcard');
+            card.classList.remove('flipped');
+            setTimeout(() => {
+                document.getElementById('flashFrontText').innerText = flashcards[currentCardIndex].q;
+                document.getElementById('flashBackText').innerHTML = flashcards[currentCardIndex].a;
+                document.getElementById('cardProgress').innerText = `Card ${currentCardIndex + 1} of ${flashcards.length}`;
+            }, 150);
+        }
+
+        function nextCard() {
+            currentCardIndex = (currentCardIndex + 1) % flashcards.length;
+            updateFlashcard();
+        }
+
+        function prevCard() {
+            currentCardIndex = (currentCardIndex - 1 + flashcards.length) % flashcards.length;
+            updateFlashcard();
+        }
+
+        const quizQuestions = [
+            {
+                q: "Which of the following relational algebra operators is UNARY and selects COLUMNS?",
+                options: ["σ (Select)", "Π (Project)", "⨝ (Join)", "× (Cartesian Product)"],
+                correct: 1,
+                explanation: "Project (Π) is a unary operator that outputs specified attributes/columns."
+            },
+            {
+                q: "Can a Foreign Key (FK) contain NULL values?",
+                options: ["No, never", "Yes, unless constrained", "Only if it is also a Primary Key", "Only in NoSQL"],
+                correct: 1,
+                explanation: "Referential integrity allows FK values to be NULL unless NOT NULL constraint is specified."
+            },
+            {
+                q: "In 3-Tier Database Architecture, where does Business Logic reside?",
+                options: ["Presentation Client Tier", "Application Server Tier", "Database Server Tier", "Physical Disk Tier"],
+                correct: 1,
+                explanation: "The Application Server Tier processes business logic between user interface and database."
+            }
+        ];
+
+        let userScore = 0;
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            let html = '';
+
+            quizQuestions.forEach((item, index) => {
+                html += `
+                    <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
+                        <p class="font-semibold text-slate-200 text-xs sm:text-sm">Q${index + 1}: ${item.q}</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                            ${item.options.map((opt, i) => `
+                                <button onclick="checkAnswer(${index}, ${i}, this)" class="option-btn-${index} p-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-left text-slate-300 transition">
+                                    ${opt}
+                                </button>
+                            `).join('')}
+                        </div>
+                        <p id="quizExplain-${index}" class="hidden text-xs p-2 rounded bg-slate-900 text-slate-300 border border-slate-800"></p>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function checkAnswer(qIdx, optionIdx, btn) {
+            const buttons = document.querySelectorAll(`.option-btn-${qIdx}`);
+            buttons.forEach(b => b.disabled = true);
+
+            const explain = document.getElementById(`quizExplain-${qIdx}`);
+            const q = quizQuestions[qIdx];
+
+            if (optionIdx === q.correct) {
+                btn.classList.add('bg-emerald-950', 'border-emerald-500', 'text-emerald-300');
+                userScore++;
+                showToast("Correct Answer! 🎉");
+            } else {
+                btn.classList.add('bg-red-950', 'border-red-500', 'text-red-300');
+                buttons[q.correct].classList.add('bg-emerald-950', 'border-emerald-500', 'text-emerald-300');
+                showToast("Incorrect Answer");
+            }
+
+            explain.innerText = q.explanation;
+            explain.classList.remove('hidden');
+
+            document.getElementById('quizScoreBadge').innerText = `Score: ${userScore} / ${quizQuestions.length}`;
+        }
+
+        function toggleSymbolModal() {
+            const modal = document.getElementById('symbolModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function copySymbol(sym, name) {
+            const tempInput = document.createElement('input');
+            tempInput.value = sym;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            showToast(`Copied ${name} to clipboard!`);
+            toggleSymbolModal();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+
+        function filterNotes() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const sections = document.querySelectorAll('.note-section');
+
+            sections.forEach(section => {
+                const text = section.innerText.toLowerCase();
+                if (text.includes(input)) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize default view on window load
+        window.onload = function() {
+            loadSampleQuery('default');
+            renderQuiz();
+            updateFlashcard();
+        }
+    </script>
+</body>
+</html>
