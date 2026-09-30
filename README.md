@@ -1,32 +1,140 @@
-# React + TypeScript + Vite
+# 📚 Jawad Shelf — Personal Study Library
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+> **Jawad Shelf** is a personal study library made by me for **Myself** to keep university course materials organized in one place.
+>
+> 🌐 **Live Demo:** [jawadshelf.netlify.app](https://jawadshelf.netlify.app/)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ Features
 
-## React Compiler
+* 📚 Organize materials by course
+* 📄 Support PDF, PPTX, DOCX, HTML & Images
+* 🌐 Open interactive study guides
+* 🗂️ Simple folder-based organization
+* 🔄 Automatically update materials
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the Oxlint configuration
+## 🚀 Clone & Run
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+Clone the repository:
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+git clone https://github.com/Tahsin-Jawad/JawadShelf.git
+cd JawadShelf
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Install dependencies:
+
+```bash
+npm install
+```
+
+Sync the study materials:
+
+```bash
+node scripts/generate-materials.js
+```
+
+Start the app:
+
+```bash
+npm run dev
+```
+
+Then open:
+
+```text
+http://localhost:5173
+```
+
+---
+
+## 📁 Add New Materials
+
+Create a course folder inside:
+
+```text
+public/materials/
+```
+
+Use this structure:
+
+```text
+CSE 345/
+├── Chapters/
+│   ├── chapter_1.pdf
+│   └── lecture_2.pptx
+└── Others/
+    ├── guide.html
+    └── diagram.png
+```
+
+* **`Chapters/`** → PDF, PPTX, DOCX
+* **`Others/`** → HTML, Images, other files
+
+> ⚠️ Avoid special characters like `& # % ?` in file and folder names. Use `_` or `-` instead.
+
+---
+
+## 🔄 Update & Deploy
+
+After adding, removing, renaming, or changing materials:
+
+### 1. Update the manifest
+
+```bash
+node scripts/generate-materials.js
+```
+
+### 2. Get the latest GitHub changes
+
+```bash
+git pull origin main
+```
+
+### 3. Push your changes
+
+```bash
+git add .
+git commit -m "Added new materials"
+git push origin main
+```
+
+Netlify will automatically update the live website after the changes are pushed to GitHub.
+
+> ⚠️ If `git push` is rejected and you know you need to replace the remote version:
+>
+> ```bash
+> git push origin main --force
+> ```
+>
+> Use `--force` carefully because it can overwrite remote changes.
+
+---
+
+## 🧩 Customize for Yourself
+
+If you clone this project for your own study library:
+
+1. Change **`Jawad Shelf`** to your preferred name in the app files.
+2. Update the page title in `index.html`.
+3. Replace the materials inside `public/materials/` with your own courses.
+
+---
+
+## 🛠️ Main Commands
+
+| Command                              | Purpose                   |
+| ------------------------------------ | ------------------------- |
+| `npm install`                        | Install dependencies      |
+| `node scripts/generate-materials.js` | Update materials          |
+| `npm run dev`                        | Run locally               |
+| `npm run build`                      | Build for production      |
+| `git pull origin main`               | Get latest GitHub changes |
+| `git push origin main`               | Upload changes to GitHub  |
+
+---
+
+> **Study smarter. Keep everything in one place.**
