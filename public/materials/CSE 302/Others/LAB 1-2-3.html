@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Systems Lab Notebook | Interactive Master Guide</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Fira Code -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        },
+                        codebg: '#0f172a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 font-sans antialiased min-h-screen flex flex-col">
+
+<!-- Header & Navigation -->
+<header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur border-b border-slate-800 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/20">
+                <i class="fa-solid me-0 fa-database"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg text-white leading-tight">Database Lab Notebook</h1>
+                <p class="text-xs text-blue-400 font-medium">CSE Lab 01, 02 & 03 Master Study Guide</p>
+            </div>
+        </div>
+
+        <!-- Quick Controls -->
+        <div class="flex items-center gap-3">
+            <div class="relative hidden md:block">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+                <input type="text" id="quickSearch" onkeyup="filterContent()" placeholder="Search query, keyword, concept..." 
+                       class="bg-slate-800 text-xs text-slate-200 pl-9 pr-4 py-2 rounded-lg border border-slate-700 focus:outline-none focus:border-blue-500 w-64 transition">
+            </div>
+            <button onclick="toggleAllAccordions()" class="px-3 py-1.5 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition flex items-center gap-1.5">
+                <i class="fa-solid fa-expand text-blue-400"></i> Expand All
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 flex flex-col md:flex-row gap-8 w-full">
+
+    <!-- Sidebar Sticky TOC -->
+    <aside class="w-full md:w-64 flex-shrink-0">
+        <div class="sticky top-20 bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl">
+            <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-2 flex items-center justify-between">
+                <span><i class="fa-solid fa-list-ul mr-2 text-blue-400"></i> Table of Contents</span>
+            </h2>
+            <nav class="space-y-1 text-sm font-medium" id="tocList">
+                <a href="#lab1-section" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800/80 rounded-lg transition">
+                    <span class="w-2 h-2 rounded-full bg-blue-500"></span> Lab 1: DDL & DML
+                </a>
+                <a href="#lab2-section" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800/80 rounded-lg transition">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span> Lab 2: Aggregates & LIKE
+                </a>
+                <a href="#lab3-section" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800/80 rounded-lg transition">
+                    <span class="w-2 h-2 rounded-full bg-purple-500"></span> Lab 3: Schema & Constraints
+                </a>
+                <a href="#joins-practice" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800/80 rounded-lg transition pl-6 text-xs text-slate-400">
+                    <i class="fa-solid fa-angle-right"></i> Joins & Practice Qs
+                </a>
+                <a href="#subquery-evolution" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800/80 rounded-lg transition pl-6 text-xs text-slate-400">
+                    <i class="fa-solid fa-angle-right"></i> Execution Order & HAVING
+                </a>
+                <a href="#cascade-section" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800/80 rounded-lg transition pl-6 text-xs text-slate-400">
+                    <i class="fa-solid fa-angle-right"></i> CASCADE & Foreign Keys
+                </a>
+                <a href="#quick-revision" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800/80 rounded-lg transition">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Quick Revision
+                </a>
+                <a href="#viva-section" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800/80 rounded-lg transition">
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span> Viva Questions
+                </a>
+                <a href="#practice-tasks" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800/80 rounded-lg transition">
+                    <span class="w-2 h-2 rounded-full bg-cyan-500"></span> Self Practice
+                </a>
+            </nav>
+
+            <!-- Quick Stats Card -->
+            <div class="mt-6 pt-4 border-t border-slate-800 text-xs text-slate-400 space-y-2">
+                <div class="flex justify-between"><span>Labs Covered:</span> <strong class="text-slate-200">Lab 01, 02, 03</strong></div>
+                <div class="flex justify-between"><span>Tables Built:</span> <strong class="text-blue-400">student, employee, department</strong></div>
+                <div class="flex justify-between"><span>Status:</span> <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check-circle"></i> Cleaned & Verified</span></div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Notebook Content Area -->
+    <main class="flex-1 space-y-10 min-w-0">
+
+        <!-- Banner Intro -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-900/40 via-indigo-900/30 to-slate-900 border border-blue-500/30 p-6 sm:p-8 shadow-2xl">
+            <div class="relative z-10">
+                <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+                    <i class="fa-solid fa-book-open mr-1"></i> Interactive Personal Lab Notebook
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">
+                    Database Systems Lab Study Guide
+                </h2>
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl">
+                    ল্যাবের অগোছালো নোটসগুলোকে এখানে সহজ বাংলায় ব্যাখ্যা, ভুল সংশোধন (Corrections), ইন্টারঅ্যাকটিভ কুয়েরি আউটপুট এবং Visual Step-by-Step Evolution দিয়ে সাজানো হয়েছে।
+                </p>
+            </div>
+            <div class="absolute -right-10 -bottom-10 opacity-10 text-white text-9xl pointer-events-none">
+                <i class="fa-solid fa-database"></i>
+            </div>
+        </div>
+
+        <!-- SECTION 1: LAB 1 (DDL & DML) -->
+        <section id="lab1-section" class="scroll-mt-20">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="w-3 h-8 bg-blue-500 rounded-full"></span>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Lab 1: Data Definition (DDL) & Manipulation (DML)</h2>
+                    <p class="text-xs text-slate-400">ডাটাবেজ এবং টেবিল তৈরি, স্ট্রাকচার মডিফিকেশন এবং মৌলিক CRUD অপারেশনস</p>
+                </div>
+            </div>
+
+            <!-- Correction Alert 1 -->
+            <div class="mb-6 bg-rose-950/40 border border-rose-500/40 rounded-xl p-4 flex gap-3 text-sm text-rose-200">
+                <div class="text-rose-400 text-lg flex-shrink-0 mt-0.5"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div>
+                    <strong class="font-bold text-rose-300">⚠️ Correction in Raw Notes:</strong>
+                    <ul class="list-disc list-inside mt-1 space-y-1 text-xs sm:text-sm text-rose-200/90">
+                        <li>আপনার নোটে হেডিং ছিল <code class="bg-rose-900/60 px-1 py-0.5 rounded text-rose-100">DLD</code>। সঠিক টার্মটি হলো <strong>DDL (Data Definition Language)</strong>।</li>
+                        <li><code>ALTER TABLE CHANGE</code> কমান্ডে নতুন কলামের ডাটা টাইপ <code class="bg-rose-900/60 px-1 py-0.5 rounded">varchar(20)</code> লেখা বাকি ছিল, যা পরবর্তীতে ভুল সিনট্যাক্স তৈরি করত। নিচে তা সংশোধন করা হয়েছে।</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- DDL Section Accordion/Card -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg mb-6">
+                <div class="bg-slate-800/80 px-6 py-4 border-b border-slate-800 flex justify-between items-center">
+                    <h3 class="font-bold text-lg text-blue-400 flex items-center gap-2">
+                        <i class="fa-solid fa-cubes"></i> 1.1 Data Definition Language (DDL)
+                    </h3>
+                    <span class="text-xs bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-full font-mono">CREATE | ALTER | DROP | TRUNCATE</span>
+                </div>
+                <div class="p-6 space-y-6">
+
+                    <!-- Database Create & Drop -->
+                    <div>
+                        <h4 class="font-semibold text-slate-200 mb-2 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-circle-right text-blue-500 text-xs"></i> Database Creation and Removal
+                        </h4>
+                        <div class="bg-codebg rounded-xl p-4 border border-slate-800 font-mono text-sm relative group">
+                            <button onclick="copyCode(this)" class="absolute right-3 top-3 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700 transition">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+<pre><code class="text-slate-200"><span class="text-blue-400 font-bold">CREATE DATABASE</span> University;
+
+<span class="text-rose-400 font-bold">DROP DATABASE</span> University;</code></pre>
+                        </div>
+                        <div class="mt-2 bg-slate-800/50 p-3 rounded-lg text-xs text-slate-300 space-y-1">
+                            <p>👉 <strong>CREATE DATABASE:</strong> একটি নতুন ডাটাবেজ স্টোরেজ তৈরি করে।</p>
+                            <p>👉 <strong>DROP DATABASE:</strong> পুরো ডাটাবেজ এবং তার সকল টেবিল ডাটা সহ চিরতরে মুছে ফেলে।</p>
+                        </div>
+                    </div>
+
+                    <!-- Table Creation -->
+                    <div>
+                        <h4 class="font-semibold text-slate-200 mb-2 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-circle-right text-blue-500 text-xs"></i> Table Creation (student)
+                        </h4>
+                        <div class="bg-codebg rounded-xl p-4 border border-slate-800 font-mono text-sm relative">
+                            <button onclick="copyCode(this)" class="absolute right-3 top-3 bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+<pre><code class="text-slate-200"><span class="text-blue-400 font-bold">CREATE TABLE</span> student( 
+    student_id <span class="text-emerald-400">INT</span>,
+    name <span class="text-emerald-400">VARCHAR(20)</span>,
+    CGPA <span class="text-emerald-400">DECIMAL(3,2)</span>
+);</code></pre>
+                        </div>
+                        <div class="mt-2 bg-slate-800/50 p-3 rounded-lg text-xs text-slate-300">
+                            💡 <strong>DECIMAL(3,2) অর্থ:</strong> সর্বমোট ৩টি ডিজিট থাকতে পারবে, যার মধ্যে দশমিকের পর অবশ্যই ২টি ডিজিট থাকবে (যেমন: <code class="text-amber-300">3.75</code>)।
+                        </div>
+                    </div>
+
+                    <!-- Alter Operations -->
+                    <div>
+                        <h4 class="font-semibold text-slate-200 mb-2 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-circle-right text-blue-500 text-xs"></i> Altering Table Structure (ADD, MODIFY, DROP, CHANGE)
+                        </h4>
+                        <div class="bg-codebg rounded-xl p-4 border border-slate-800 font-mono text-sm relative">
+                            <button onclick="copyCode(this)" class="absolute right-3 top-3 bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+<pre><code class="text-slate-200"><span class="text-slate-500">-- ১. টেবিলে নতুন কলাম যুক্ত করা</span>
+<span class="text-blue-400 font-bold">ALTER TABLE</span> student <span class="text-blue-400">ADD</span> AGE <span class="text-emerald-400">INT</span>;
+
+<span class="text-slate-500">-- ২. কলামের ডাটা টাইপ পরিবর্তন (INT থেকে VARCHAR)</span>
+<span class="text-blue-400 font-bold">ALTER TABLE</span> student <span class="text-blue-400">MODIFY</span> student_id <span class="text-emerald-400">VARCHAR(20)</span>;
+
+<span class="text-slate-500">-- ৩. কলামের নাম ও ডাটা টাইপ একসাথে পরিবর্তন করা (⚠️ Corrected syntax)</span>
+<span class="text-blue-400 font-bold">ALTER TABLE</span> student <span class="text-blue-400">CHANGE</span> name STUDENT_NAME <span class="text-emerald-400">VARCHAR(20)</span>;
+
+<span class="text-slate-500">-- ৪. কলাম মুছে ফেলা</span>
+<span class="text-blue-400 font-bold">ALTER TABLE</span> student <span class="text-blue-400">DROP COLUMN</span> AGE;</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Table Rename, Truncate, Drop -->
+                    <div>
+                        <h4 class="font-semibold text-slate-200 mb-2 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-circle-right text-blue-500 text-xs"></i> Rename, Truncate & Drop Table
+                        </h4>
+                        <div class="bg-codebg rounded-xl p-4 border border-slate-800 font-mono text-sm relative">
+                            <button onclick="copyCode(this)" class="absolute right-3 top-3 bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+<pre><code class="text-slate-200"><span class="text-slate-500">-- টেবিল রিনেম করা</span>
+<span class="text-blue-400 font-bold">RENAME TABLE</span> student <span class="text-blue-400">TO</span> STUDENT_CSE;
+
+<span class="text-slate-500">-- টেবিলের সব ডাটা খালি করা (কাঠামো/স্ট্রাকচার থেকে যাবে)</span>
+<span class="text-amber-400 font-bold">TRUNCATE TABLE</span> STUDENT_CSE;
+
+<span class="text-slate-500">-- টেবিল ডাটা ও স্ট্রাকচার দুটোই মুছে ফেলা</span>
+<span class="text-rose-400 font-bold">DROP TABLE</span> STUDENT_CSE;</code></pre>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- DML Section Accordion/Card -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
+                <div class="bg-slate-800/80 px-6 py-4 border-b border-slate-800 flex justify-between items-center">
+                    <h3 class="font-bold text-lg text-emerald-400 flex items-center gap-2">
+                        <i class="fa-solid fa-table-cells"></i> 1.2 Data Manipulation Language (DML) & Filtering
+                    </h3>
+                    <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full font-mono">INSERT | SELECT | UPDATE | DELETE</span>
+                </div>
+                <div class="p-6 space-y-6">
+
+                    <!-- Inserting Data -->
+                    <div>
+                        <h4 class="font-semibold text-slate-200 mb-2 text-sm">1. Inserting Rows Into <code class="text-emerald-400">STUDENT_CSE</code></h4>
+                        <div class="bg-codebg rounded-xl p-4 border border-slate-800 font-mono text-sm relative">
+                            <button onclick="copyCode(this)" class="absolute right-3 top-3 bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+<pre><code class="text-slate-200"><span class="text-slate-500">-- সিঙ্গল রো ইনসার্ট</span>
+<span class="text-emerald-400 font-bold">INSERT INTO</span> STUDENT_CSE (student_id, name, CGPA) <span class="text-emerald-400">VALUES</span> (100, <span class="text-amber-300">'ALICE'</span>, 3.00);
+
+<span class="text-slate-500">-- মাল্টিপল রো একসাথে ইনসার্ট</span>
+<span class="text-emerald-400 font-bold">INSERT INTO</span> STUDENT_CSE (student_id, name, CGPA) <span class="text-emerald-400">VALUES</span> 
+(101, <span class="text-amber-300">'BOB'</span>, 3.25),
+(102, <span class="text-amber-300">'ASIF'</span>, 3.30),
+(103, <span class="text-amber-300">'ALIF'</span>, 3.35);
+
+<span class="text-slate-500">-- আংশিক ডাটা ইনসার্ট (CGPA অটোমেটিক NULL হবে)</span>
+<span class="text-emerald-400 font-bold">INSERT INTO</span> STUDENT_CSE (student_id, name) <span class="text-emerald-400">VALUES</span> (104, <span class="text-amber-300">'AKIF'</span>);</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Table Visual State -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs font-bold uppercase text-slate-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-table text-emerald-400"></i> Visual Table State: STUDENT_CSE
+                            </span>
+                            <span class="text-xs text-slate-500">5 Rows Inserted</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-800 text-slate-300 border-b border-slate-700">
+                                        <th class="p-2.5 font-bold">student_id</th>
+                                        <th class="p-2.5 font-bold">name</th>
+                                        <th class="p-2.5 font-bold">CGPA</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-800 font-mono text-slate-300">
+                                    <tr class="hover:bg-slate-800/50"><td class="p-2.5 text-blue-400">100</td><td class="p-2.5">ALICE</td><td class="p-2.5 text-emerald-400">3.00</td></tr>
+                                    <tr class="hover:bg-slate-800/50"><td class="p-2.5 text-blue-400">101</td><td class="p-2.5">BOB</td><td class="p-2.5 text-emerald-400">3.25</td></tr>
+                                    <tr class="hover:bg-slate-800/50"><td class="p-2.5 text-blue-400">102</td><td class="p-2.5">ASIF</td><td class="p-2.5 text-emerald-400">3.30</td></tr>
+                                    <tr class="hover:bg-slate-800/50"><td class="p-2.5 text-blue-400">103</td><td class="p-2.5">ALIF</td><td class="p-2.5 text-emerald-400">3.35</td></tr>
+                                    <tr class="hover:bg-slate-800/50 bg-rose-950/20"><td class="p-2.5 text-blue-400">104</td><td class="p-2.5">AKIF</td><td class="p-2.5 text-rose-400 font-semibold">NULL</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Selection & Filtering Examples -->
+                    <div>
+                        <h4 class="font-semibold text-slate-200 mb-2 text-sm">2. SELECT, WHERE, BETWEEN, IN & DISTINCT</h4>
+                        <div class="bg-codebg rounded-xl p-4 border border-slate-800 font-mono text-sm relative space-y-3">
+                            <button onclick="copyCode(this)" class="absolute right-3 top-3 bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+<pre><code class="text-slate-200"><span class="text-slate-500">-- ১. specific id filtering</span>
+<span class="text-blue-400 font-bold">SELECT</span> * <span class="text-blue-400 font-bold">FROM</span> STUDENT_CSE <span class="text-blue-400 font-bold">WHERE</span> student_id = 101;
+
+<span class="text-slate-500">-- ২. Multiple conditions (OR)</span>
+<span class="text-blue-400 font-bold">SELECT</span> * <span class="text-blue-400 font-bold">FROM</span> STUDENT_CSE <span class="text-blue-400 font-bold">WHERE</span> student_id = 101 <span class="text-indigo-400">OR</span> student_id = 102;
+
+<span class="text-slate-500">-- ৩. NULL Value খোঁজা (IS NULL)</span>
+<span class="text-blue-400 font-bold">SELECT</span> * <span class="text-blue-400 font-bold">FROM</span> STUDENT_CSE <span class="text-blue-400 font-bold">WHERE</span> CGPA <span class="text-amber-400">IS NULL</span>;
+
+<span class="text-slate-500">-- ৪. Range Filtering (BETWEEN inclusive)</span>
+<span class="text-blue-400 font-bold">SELECT</span> * <span class="text-blue-400 font-bold">FROM</span> STUDENT_CSE <span class="text-blue-400 font-bold">WHERE</span> student_id <span class="text-amber-400">BETWEEN</span> 100 <span class="text-amber-400">AND</span> 103;
+
+<span class="text-slate-500">-- ৫. List Matching (IN operator)</span>
+<span class="text-blue-400 font-bold">SELECT</span> * <span class="text-blue-400 font-bold">FROM</span> STUDENT_CSE <span class="text-blue-400 font-bold">WHERE</span> student_id <span class="text-amber-400">IN</span> (100, 102);
+
+<span class="text-slate-500">-- ৬. Unique values প্রদর্শন</span>
+<span class="text-blue-400 font-bold">SELECT DISTINCT</span> name <span class="text-blue-400 font-bold">FROM</span> STUDENT_CSE;</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Update & Delete -->
+                    <div>
+                        <h4 class="font-semibold text-slate-200 mb-2 text-sm">3. UPDATE & DELETE Operations</h4>
+                        <div class="bg-codebg rounded-xl p-4 border border-slate-800 font-mono text-sm relative">
+                            <button onclick="copyCode(this)" class="absolute right-3 top-3 bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+<pre><code class="text-slate-200"><span class="text-slate-500">-- ১. ডাটা আপডেট করা (ID 104 এর নাম AKIF -> ASHIK)</span>
+<span class="text-indigo-400 font-bold">UPDATE</span> STUDENT_CSE 
+<span class="text-indigo-400 font-bold">SET</span> name = <span class="text-amber-300">'ASHIK'</span> 
+<span class="text-blue-400 font-bold">WHERE</span> student_id = 104;
+
+<span class="text-slate-500">-- ২. Specific Row মুছে ফেলা</span>
+<span class="text-rose-400 font-bold">DELETE FROM</span> STUDENT_CSE <span class="text-blue-400 font-bold">WHERE</span> CGPA <span class="text-amber-400">IS NULL</span>;
+
+<span class="text-slate-500">-- ৩. পুরো টেবিলের সব সারি মুছে ফেলা (WHERE 1 অথবা WHERE TRUE)</span>
+<span class="text-rose-400 font-bold">DELETE FROM</span> STUDENT_CSE <span class="text-blue-400 font-bold">WHERE</span> 1;</code></pre>
+                        </div>
+                        <div class="mt-2 bg-amber-950/30 border border-amber-500/30 p-3 rounded-lg text-xs text-amber-200 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-exclamation text-amber-400 text-base"></i>
+                            <span><code>DELETE FROM table WHERE 1;</code> কমান্ডটি টেবিলের সকল ডাটা মুছে ফেলে কারণ শর্ত <code>1</code> (True) সবসময় প্রযোজ্য!</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: LAB 2 (AGGREGATES & WILDCARDS) -->
+        <section id="lab2-section" class="scroll-mt-20">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="w-3 h-8 bg-amber-500 rounded-full"></span>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Lab 2: Aggregate Functions & Pattern Matching</h2>
+                    <p class="text-xs text-slate-400">COUNT, SUM, GROUP BY এবং LIKE Operator ওয়াইল্ডকার্ড ট্রিকস</p>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg space-y-6 p-6">
+                
+                <!-- Aggregate Functions -->
+                <div>
+                    <h3 class="font-bold text-lg text-amber-400 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-calculator"></i> 2.1 Aggregate Functions & GROUP BY
+                    </h3>
+                    <div class="bg-codebg rounded-xl p-4 border border-slate-800 font-mono text-sm relative">
+                        <button onclick="copyCode(this)" class="absolute right-3 top-3 bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700">
+                            <i class="fa-regular fa-copy"></i> Copy
+                        </button>
+<pre><code class="text-slate-200"><span class="text-slate-500">-- ১. মোট নন-নাল বেতনের সংখ্যা গণনা</span>
+<span class="text-blue-400 font-bold">SELECT</span> <span class="text-amber-400 font-bold">COUNT</span>(salary) <span class="text-blue-400 font-bold">FROM</span> employee;
+
+<span class="text-slate-500">-- ২. ইউনিক বেতনের সংখ্যা বের করা</span>
+<span class="text-blue-400 font-bold">SELECT</span> <span class="text-amber-400 font-bold">COUNT</span>(<span class="text-blue-400">DISTINCT</span> salary) <span class="text-blue-400 font-bold">FROM</span> employee;
+
+<span class="text-slate-500">-- ৩. মোট বেতনের সাম বা যোগফল</span>
+<span class="text-blue-400 font-bold">SELECT</span> <span class="text-amber-400 font-bold">SUM</span>(salary) <span class="text-blue-400 font-bold">FROM</span> employee;
+
+<span class="text-slate-500">-- ৪. নির্দিষ্ট ডিপার্টমেন্টের বেতনের যোগফল (WHERE filter)</span>
+<span class="text-blue-400 font-bold">SELECT</span> dept, <span class="text-amber-400 font-bold">SUM</span>(salary) <span class="text-blue-400 font-bold">FROM</span> employee <span class="text-blue-400 font-bold">WHERE</span> dept = <span class="text-amber-300">'HR'</span>;
+
+<span class="text-slate-500">-- ৫. বিভাগ অনুযায়ী কর্মচারীর মোট সংখ্যা (GROUP BY)</span>
+<span class="text-blue-400 font-bold">SELECT</span> dept, <span class="text-amber-400 font-bold">COUNT</span>(*) <span class="text-blue-400 font-bold">FROM</span> employee <span class="text-blue-400 font-bold">GROUP BY</span> dept;
+
+<span class="text-slate-500">-- ৬. বিভাগ অনুযায়ী মোট বেতন</span>
+<span class="text-blue-400 font-bold">SELECT</span> dept, <span class="text-amber-400 font-bold">SUM</span>(salary) <span class="text-blue-400 font-bold">FROM</span> employee <span class="text-blue-400 font-bold">GROUP BY</span> dept;</code></pre>
+                    </div>
+                </div>
+
+                <!-- Wildcards & LIKE Operators -->
+                <div>
+                    <h3 class="font-bold text-lg text-amber-400 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-filter"></i> 2.2 Pattern Matching with Wildcards (<code>%</code> and <code>_</code>)
+                    </h3>
+                    <p class="text-xs text-slate-400 mb-3">
+                        <code>%</code> = ০, ১ বা একাধিক ক্যারেক্টার | <code>_</code> = ঠিক ১টি নির্দিষ্ট ক্যারেক্টার
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-codebg p-4 rounded-xl border border-slate-800 text-xs font-mono space-y-2">
+                            <span class="text-blue-400 font-bold">// Ending with 'i'</span>
+                            <p class="text-slate-300"><span class="text-blue-400">SELECT</span> E_name <span class="text-blue-400">FROM</span> employee <span class="text-blue-400">WHERE</span> E_name <span class="text-amber-400">LIKE</span> <span class="text-amber-300">'%i'</span>;</p>
+                        </div>
+                        <div class="bg-codebg p-4 rounded-xl border border-slate-800 text-xs font-mono space-y-2">
+                            <span class="text-blue-400 font-bold">// Starting with 'M'</span>
+                            <p class="text-slate-300"><span class="text-blue-400">SELECT</span> dept <span class="text-blue-400">FROM</span> employee <span class="text-blue-400">WHERE</span> dept <span class="text-amber-400">LIKE</span> <span class="text-amber-300">'M%'</span>;</p>
+                        </div>
+                        <div class="bg-codebg p-4 rounded-xl border border-slate-800 text-xs font-mono space-y-2">
+                            <span class="text-blue-400 font-bold">// 2nd letter is 'o'</span>
+                            <p class="text-slate-300"><span class="text-blue-400">SELECT</span> E_name <span class="text-blue-400">FROM</span> employee <span class="text-blue-400">WHERE</span> E_name <span class="text-amber-400">LIKE</span> <span class="text-amber-300">'_o%'</span>;</p>
+                        </div>
+                        <div class="bg-codebg p-4 rounded-xl border border-slate-800 text-xs font-mono space-y-2">
+                            <span class="text-blue-400 font-bold">// Doesn't contain 'a'</span>
+                            <p class="text-slate-300"><span class="text-blue-400">SELECT</span> dept <span class="text-blue-400">FROM</span> employee <span class="text-blue-400">WHERE</span> dept <span class="text-amber-400">NOT LIKE</span> <span class="text-amber-300">'%a%'</span>;</p>
+                        </div>
+                        <div class="bg-codebg p-4 rounded-xl border border-slate-800 text-xs font-mono space-y-2">
+                            <span class="text-blue-400 font-bold">// Exactly 5 letters starting with 'R'</span>
+                            <p class="text-slate-300"><span class="text-blue-400">SELECT</span> E_name <span class="text-blue-400">FROM</span> employee <span class="text-blue-400">WHERE</span> E_name <span class="text-amber-400">LIKE</span> <span class="text-amber-300">'R____'</span>;</p>
+                        </div>
+                        <div class="bg-codebg p-4 rounded-xl border border-slate-800 text-xs font-mono space-y-2">
+                            <span class="text-blue-400 font-bold">// Salary NOT NULL & contains 'n'</span>
+                            <p class="text-slate-300"><span class="text-blue-400">SELECT</span> E_name <span class="text-blue-400">FROM</span> employee <span class="text-blue-400">WHERE</span> salary <span class="text-amber-400">IS NOT NULL</span> <span class="text-indigo-400">AND</span> E_name <span class="text-amber-400">LIKE</span> <span class="text-amber-300">'%n%'</span>;</p>
+                        </div>
+                    </div>
+
+                    <!-- Special Trick Queries for Exactly 1 'A' -->
+                    <div class="mt-4 bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <h4 class="text-xs font-bold text-amber-300 uppercase mb-2 flex items-center gap-1.5">
+                            <i class="fa-solid fa-lightbulb"></i> Advanced Pattern Trick: Exactly ONE 'A' in Name
+                        </h4>
+                        <div class="space-y-3 font-mono text-xs">
+                            <div class="bg-codebg p-3 rounded-lg border border-slate-800">
+                                <span class="text-slate-500">// Approach 1: Wildcard combination</span>
+                                <p class="text-slate-200 mt-1"><span class="text-blue-400">SELECT</span> E_name <span class="text-blue-400">FROM</span> employee <span class="text-blue-400">WHERE</span> E_name <span class="text-amber-400">LIKE</span> <span class="text-amber-300">'%A%'</span> <span class="text-indigo-400">AND</span> E_name <span class="text-amber-400">NOT LIKE</span> <span class="text-amber-300">'%A%A%'</span>;</p>
+                            </div>
+                            <div class="bg-codebg p-3 rounded-lg border border-slate-800">
+                                <span class="text-slate-500">// Approach 2: String Length Trick (Fixed Syntax from raw notes)</span>
+                                <p class="text-slate-200 mt-1"><span class="text-blue-400">SELECT</span> E_name <span class="text-blue-400">FROM</span> employee <span class="text-blue-400">WHERE</span> <span class="text-amber-400">LENGTH</span>(E_name) - <span class="text-amber-400">LENGTH</span>(<span class="text-amber-400">REPLACE</span>(<span class="text-amber-400">LOWER</span>(E_name), <span class="text-amber-300">'a'</span>, <span class="text-amber-300">''</span>)) = 1;</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-2">
+                            💡 <strong>ব্যাখ্যা:</strong> মূল নামের লেন্থ থেকে 'a' মুছে ফেলার পর লেন্থ বিয়োগ করলে যদি ১ থাকে, তবে নামটিতে ঠিক ১টিই 'a' ছিল!
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 3: LAB 3 (SCHEMA, CONSTRAINTS & JOINS) -->
+        <section id="lab3-section" class="scroll-mt-20">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="w-3 h-8 bg-purple-500 rounded-full"></span>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Lab 3: Relational Schema, Foreign Keys & Queries</h2>
+                    <p class="text-xs text-slate-400">Department & Employee Tables, Constraints, Table Aliases & Subqueries</p>
+                </div>
+            </div>
+
+            <!-- Correction Alert 2 -->
+            <div class="mb-6 bg-rose-950/40 border border-rose-500/40 rounded-xl p-4 flex gap-3 text-sm text-rose-200">
+                <div class="text-rose-400 text-lg flex-shrink-0 mt-0.5"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div>
+                    <strong class="font-bold text-rose-300">⚠️ Correction in Raw Notes Data:</strong>
+                    <p class="text-xs sm:text-sm mt-1 text-rose-200/90">
+                        আপনার কাঁচা নোটে ఇన్సర్ట్ করেছিলেন <code class="bg-rose-900/60 px-1 py-0.5 rounded text-rose-100">'Human resorces'</code> (Spelling mistake), কিন্তু পরবর্তীতে কুয়েরিতে ফিল্টার করেছিলেন <code class="bg-rose-900/60 px-1 py-0.5 rounded">'Human Resorces'</code>। SQL-এ String Exact Match হতে হয়। এখানে সঠিক বানান <code class="bg-emerald-900/60 text-emerald-200 px-1 py-0.5 rounded">'Human Resources'</code> ব্যবহার করা হয়েছে।
+                    </p>
+                </div>
+            </div>
+
+            <!-- Schema Creation -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-6 mb-6">
+                <h3 class="font-bold text-lg text-purple-400 flex items-center gap-2">
+                    <i class="fa-solid fa-sitemap"></i> 3.1 Creating Parent and Child Tables with Constraints
+                </h3>
+
+                <div class="bg-codebg rounded-xl p-4 border border-slate-800 font-mono text-sm relative">
+                    <button onclick="copyCode(this)" class="absolute right-3 top-3 bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700">
+                        <i class="fa-regular fa-copy"></i> Copy
+                    </button>
+<pre><code class="text-slate-200"><span class="text-slate-500">-- ১. Department টেবিল (Parent Table)</span>
+<span class="text-blue-400 font-bold">CREATE TABLE</span> Department (
+    dept_code <span class="text-emerald-400">VARCHAR(20)</span>,
+    dept_name <span class="text-emerald-400">VARCHAR(50)</span>, 
+    <span class="text-purple-400 font-bold">PRIMARY KEY</span> (dept_code)
+);
+
+<span class="text-slate-500">-- ২. Employee টেবিল (Child Table with FK, AUTO_INCREMENT & CHECK)</span>
+<span class="text-blue-400 font-bold">CREATE TABLE</span> employee (
+    emp_id <span class="text-emerald-400">INT AUTO_INCREMENT</span>,
+    name <span class="text-emerald-400">VARCHAR(30)</span>,
+    salary <span class="text-emerald-400">INT</span> <span class="text-amber-400 font-bold">CHECK</span> (salary <span class="text-amber-400">BETWEEN</span> 10000 <span class="text-amber-400">AND</span> 80000),
+    dept_code <span class="text-emerald-400">VARCHAR(20)</span>,
+    <span class="text-purple-400 font-bold">PRIMARY KEY</span> (emp_id),
+    <span class="text-indigo-400 font-bold">FOREIGN KEY</span> (dept_code) <span class="text-indigo-400">REFERENCES</span> Department (dept_code)
+) <span class="text-emerald-400 font-bold">AUTO_INCREMENT</span> = 101;</code></pre>
+                </div>
+
+                <!-- Data Insertion -->
+                <div class="space-y-2">
+                    <h4 class="font-semibold text-slate-200 text-sm">Populating Department & Employee Data:</h4>
+                    <div class="bg-codebg rounded-xl p-4 border border-slate-800 font-mono text-xs">
+<pre><code class="text-slate-200"><span class="text-emerald-400 font-bold">INSERT INTO</span> Department (dept_code, dept_name) <span class="text-emerald-400">VALUES</span> 
+(<span class="text-amber-300">'HR'</span>, <span class="text-amber-300">'Human Resources'</span>),
+(<span class="text-amber-300">'IT'</span>, <span class="text-amber-300">'Information Tech'</span>),
+(<span class="text-amber-300">'QA'</span>, <span class="text-amber-300">'Quality Assurance'</span>),
+(<span class="text-amber-300">'MKT'</span>, <span class="text-amber-300">'Marketing'</span>),
+(<span class="text-amber-300">'FIN'</span>, <span class="text-amber-300">'Finance'</span>);
+
+<span class="text-emerald-400 font-bold">INSERT INTO</span> employee (name, salary, dept_code) <span class="text-emerald-400">VALUES</span> 
+(<span class="text-amber-300">'Robin'</span>, 30000, <span class="text-amber-300">'HR'</span>),
+(<span class="text-amber-300">'Akash'</span>, 45000, <span class="text-amber-300">'MKT'</span>),
+(<span class="text-amber-300">'Noyon'</span>, 50000, <span class="text-amber-300">'IT'</span>),
+(<span class="text-amber-300">'Rakib'</span>, 40000, <span class="text-amber-300">'QA'</span>),
+(<span class="text-amber-300">'Fahim'</span>, 40000, <span class="text-amber-300">'IT'</span>);</code></pre>
+                    </div>
+                </div>
+
+                <!-- Visual State of Both Tables -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-2">
+                    <!-- Dept Table -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <span class="text-xs font-bold text-purple-400 uppercase tracking-wider block mb-2">
+                            <i class="fa-solid fa-building"></i> Department Table (Parent)
+                        </span>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead>
+                                    <tr class="bg-slate-800 text-slate-300 border-b border-slate-700">
+                                        <th class="p-2 font-bold text-purple-300">dept_code (PK)</th>
+                                        <th class="p-2 font-bold">dept_name</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-800 font-mono text-slate-300">
+                                    <tr><td class="p-2 font-bold text-purple-400">HR</td><td class="p-2">Human Resources</td></tr>
+                                    <tr><td class="p-2 font-bold text-purple-400">IT</td><td class="p-2">Information Tech</td></tr>
+                                    <tr><td class="p-2 font-bold text-purple-400">QA</td><td class="p-2">Quality Assurance</td></tr>
+                                    <tr><td class="p-2 font-bold text-purple-400">MKT</td><td class="p-2">Marketing</td></tr>
+                                    <tr><td class="p-2 font-bold text-purple-400">FIN</td><td class="p-2">Finance</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Emp Table -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider block mb-2">
+                            <i class="fa-solid fa-users"></i> Employee Table (Child)
+                        </span>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead>
+                                    <tr class="bg-slate-800 text-slate-300 border-b border-slate-700">
+                                        <th class="p-2 font-bold text-blue-400">emp_id (PK)</th>
+                                        <th class="p-2 font-bold">name</th>
+                                        <th class="p-2 font-bold">salary</th>
+                                        <th class="p-2 font-bold text-purple-300">dept_code (FK)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-800 font-mono text-slate-300">
+                                    <tr><td class="p-2 text-blue-400">101</td><td class="p-2">Robin</td><td class="p-2 text-emerald-400">30000</td><td class="p-2 text-purple-300">HR</td></tr>
+                                    <tr><td class="p-2 text-blue-400">102</td><td class="p-2">Akash</td><td class="p-2 text-emerald-400">45000</td><td class="p-2 text-purple-300">MKT</td></tr>
+                                    <tr><td class="p-2 text-blue-400">103</td><td class="p-2">Noyon</td><td class="p-2 text-emerald-400">50000</td><td class="p-2 text-purple-300">IT</td></tr>
+                                    <tr><td class="p-2 text-blue-400">104</td><td class="p-2">Rakib</td><td class="p-2 text-emerald-400">40000</td><td class="p-2 text-purple-300">QA</td></tr>
+                                    <tr><td class="p-2 text-blue-400">105</td><td class="p-2">Fahim</td><td class="p-2 text-emerald-400">40000</td><td class="p-2 text-purple-300">IT</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Practice Queries & Aliases -->
+            <div id="joins-practice" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-6">
+                <h3 class="font-bold text-lg text-purple-400 flex items-center gap-2">
+                    <i class="fa-solid fa-laptop-code"></i> 3.2 Practice Queries & Aliases
+                </h3>
+
+                <!-- Practice Q1 & Q2 -->
+                <div class="space-y-4">
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                        <span class="text-xs font-bold text-blue-400 uppercase">Practice Q1: Display Employee info with Department Name</span>
+                        <div class="bg-codebg p-3 rounded-lg font-mono text-xs text-slate-200">
+                            <span class="text-blue-400">SELECT</span> E.*, D.dept_name <span class="text-blue-400">FROM</span> employee E, Department D <span class="text-blue-400">WHERE</span> E.dept_code = D.dept_code;
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                        <span class="text-xs font-bold text-blue-400 uppercase">Practice Q2: Display name and salary of 'Human Resources' employees</span>
+                        <div class="bg-codebg p-3 rounded-lg font-mono text-xs text-slate-200">
+                            <span class="text-blue-400">SELECT</span> E.name, E.salary <span class="text-blue-400">FROM</span> employee E, Department D <span class="text-blue-400">WHERE</span> E.dept_code = D.dept_code <span class="text-indigo-400">AND</span> D.dept_name = <span class="text-amber-300">'Human Resources'</span>;
+                        </div>
+                    </div>
+
+                    <!-- Practice Q4 & Q5 (2nd Highest Salary) -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+                        <span class="text-xs font-bold text-purple-400 uppercase">Practice Q4 & Q5: Finding 2nd Highest Salary & Employee Details</span>
+                        
+                        <div class="bg-codebg p-3 rounded-lg font-mono text-xs text-slate-200">
+                            <span class="text-slate-500">// Q4: Find only 2nd Highest Salary value (Output: 45000)</span><br>
+                            <span class="text-blue-400">SELECT</span> <span class="text-amber-400">MAX</span>(salary) <span class="text-blue-400">FROM</span> employee <span class="text-blue-400">WHERE</span> salary < <span class="font-bold text-purple-300">(SELECT MAX(salary) FROM employee)</span>;
+                        </div>
+
+                        <div class="bg-codebg p-3 rounded-lg font-mono text-xs text-slate-200">
+                            <span class="text-slate-500">// Q5: Find Employee Name & Salary getting 2nd Highest Salary</span><br>
+                            <span class="text-blue-400">SELECT</span> name, salary <span class="text-blue-400">FROM</span> employee <span class="text-blue-400">WHERE</span> salary = (
+                                <span class="text-blue-400">SELECT</span> <span class="text-amber-400">MAX</span>(salary) <span class="text-blue-400">FROM</span> employee <span class="text-blue-400">WHERE</span> salary < (<span class="text-blue-400">SELECT</span> <span class="text-amber-400">MAX</span>(salary) <span class="text-blue-400">FROM</span> employee)
+                            );
+                        </div>
+
+                        <!-- Correction note on = vs IN comment in raw notes -->
+                        <div class="bg-amber-950/30 border border-amber-500/30 p-3 rounded-lg text-xs text-amber-200">
+                            <strong class="font-bold text-amber-300">⚠️ Correction on your Raw Note's Comment:</strong><br>
+                            আপনার নোটে লেখা ছিল: <em>"if there will specific value then we will use 'in', otherwise '='"</em>.<br>
+                            <strong>সঠিক নিয়ম:</strong> Subquery যদি <strong>একমাত্র ১টি Single Value (1 row, 1 col)</strong> দেয়, তবে <code>=</code> ব্যবহার করা সঠিক। কিন্তু Subquery থেকে যদি <strong>একাধিক Rows</strong> আসার সম্ভাবনা থাকে, তখন <code>IN</code> ব্যবহার করতে হয়।
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step-by-Step Query Evolution Section -->
+            <div id="subquery-evolution" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-6">
+                
+                <div class="flex justify-between items-start flex-wrap gap-2">
+                    <div>
+                        <h3 class="font-bold text-lg text-blue-400 flex items-center gap-2">
+                            <i class="fa-solid fa-diagram-project"></i> 3.3 Query Evolution: Step-by-Step Building to Final Answer
+                        </h3>
+                        <p class="text-xs text-slate-400">যেসব ডিপার্টমেন্টের গড় বেতন, পুরো কোম্পানির গড় বেতনের চেয়ে বেশি তাদের বের করার পদ্ধতি</p>
+                    </div>
+                    <span class="px-3 py-1 bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-full text-xs font-bold">
+                        ⭐ Lab Final Query
+                    </span>
+                </div>
+
+                <!-- Execution Order Badge Bar -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <span class="text-xs font-bold text-slate-400 uppercase block mb-2">⚡ Mandatory SQL Execution Order (ইঞ্জিন যেভাবে সিরিয়াল মেনে চলে):</span>
+                    <div class="flex flex-wrap items-center gap-2 text-xs font-mono font-bold">
+                        <span class="px-2.5 py-1 bg-slate-800 border border-slate-700 text-blue-400 rounded">1. FROM</span>
+                        <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                        <span class="px-2.5 py-1 bg-slate-800 border border-slate-700 text-blue-400 rounded">2. WHERE</span>
+                        <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                        <span class="px-2.5 py-1 bg-slate-800 border border-slate-700 text-blue-400 rounded">3. GROUP BY</span>
+                        <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                        <span class="px-2.5 py-1 bg-slate-800 border border-slate-700 text-amber-400 rounded">4. HAVING</span>
+                        <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                        <span class="px-2.5 py-1 bg-slate-800 border border-slate-700 text-emerald-400 rounded">5. SELECT</span>
+                        <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                        <span class="px-2.5 py-1 bg-slate-800 border border-slate-700 text-purple-400 rounded">6. ORDER BY</span>
+                    </div>
+                </div>
+
+                <!-- Step 1 -->
+                <div class="relative pl-6 border-l-2 border-slate-700 space-y-2">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-800 border-2 border-blue-500"></div>
+                    <h4 class="text-sm font-bold text-slate-200">Step 1: Department-wise Average Salary বের করা</h4>
+                    <div class="bg-codebg p-3 rounded-lg font-mono text-xs text-slate-200">
+                        <span class="text-blue-400">SELECT</span> dept_code, <span class="text-amber-400">AVG</span>(salary) <span class="text-blue-400">FROM</span> employee <span class="text-blue-400">GROUP BY</span> dept_code;
+                    </div>
+                    <p class="text-xs text-slate-400">প্রথমে ডিপার্টমেন্ট অনুযায়ী ভাগ করে তাদের গড় বেতন বের করে নিলাম।</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative pl-6 border-l-2 border-slate-700 space-y-2">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-800 border-2 border-amber-500"></div>
+                    <h4 class="text-sm font-bold text-slate-200">Step 2: HAVING ও Total Avg Subquery যুক্ত করা (Department Name ছাড়া)</h4>
+                    <div class="bg-codebg p-3 rounded-lg font-mono text-xs text-slate-200">
+                        <span class="text-blue-400">SELECT</span> dept_code, <span class="text-amber-400">AVG</span>(salary) <span class="text-blue-400">FROM</span> employee <span class="text-blue-400">GROUP BY</span> dept_code 
+                        <span class="text-amber-400 font-bold">HAVING AVG</span>(salary) > (<span class="text-blue-400">SELECT AVG</span>(salary) <span class="text-blue-400">FROM</span> employee);
+                    </div>
+                    <p class="text-xs text-slate-400">এখানে <code>HAVING</code> ব্যবহার করেছি কারণ Aggregate Function (<code>AVG</code>) এর ওপর ফিল্টার বসাতে <code>WHERE</code> কাজ করে না।</p>
+                </div>
+
+                <!-- Final Step -->
+                <div class="relative pl-6 border-l-2 border-emerald-500 space-y-3">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-emerald-500 border-2 border-emerald-300 animate-pulse"></div>
+                    <h4 class="text-sm font-bold text-emerald-400">🏆 Step 3 (Final Solution): Department Table Join করে Name নিয়ে আসা</h4>
+                    
+                    <div class="bg-codebg p-4 rounded-xl border border-emerald-500/40 font-mono text-sm relative">
+                        <button onclick="copyCode(this)" class="absolute right-3 top-3 bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700">
+                            <i class="fa-regular fa-copy"></i> Copy
+                        </button>
+<pre><code class="text-slate-200"><span class="text-blue-400 font-bold">SELECT</span> E.dept_code, D.dept_name, <span class="text-amber-400 font-bold">AVG</span>(E.salary) <span class="text-blue-400 font-bold">AS</span> avg_salary
+<span class="text-blue-400 font-bold">FROM</span> employee E, Department D
+<span class="text-blue-400 font-bold">WHERE</span> E.dept_code = D.dept_code
+<span class="text-blue-400 font-bold">GROUP BY</span> E.dept_code, D.dept_name
+<span class="text-amber-400 font-bold">HAVING AVG</span>(E.salary) > (<span class="text-blue-400 font-bold">SELECT AVG</span>(salary) <span class="text-blue-400 font-bold">FROM</span> employee);</code></pre>
+                    </div>
+
+                    <!-- Final Output Table -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <span class="text-xs font-bold text-emerald-400 uppercase mb-2 block">Expected Output Result:</span>
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="bg-slate-800 text-slate-300">
+                                    <th class="p-2 font-bold">dept_code</th>
+                                    <th class="p-2 font-bold">dept_name</th>
+                                    <th class="p-2 font-bold">avg_salary</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800 font-mono text-slate-300">
+                                <tr><td class="p-2 text-purple-400">IT</td><td class="p-2">Information Tech</td><td class="p-2 text-emerald-400">45000.0000</td></tr>
+                                <tr><td class="p-2 text-purple-400">MKT</td><td class="p-2">Marketing</td><td class="p-2 text-emerald-400">45000.0000</td></tr>
+                            </tbody>
+                        </table>
+                        <p class="text-[11px] text-slate-500 mt-2">* কোম্পানির সামগ্রিক গড় বেতন ছিল 41000। তাই IT (45k) এবং MKT (45k) এই শর্তে পাস করেছে।</p>
+                    </div>
+                </div>
+
+                <!-- 3-level Nested Alternative -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                    <span class="text-xs font-bold text-slate-400 uppercase">Alternative 3-Level Subquery Version (From your raw notes):</span>
+                    <div class="bg-codebg p-3 rounded-lg font-mono text-xs text-slate-200">
+                        <span class="text-blue-400">SELECT</span> dept_name <span class="text-blue-400">FROM</span> Department <span class="text-blue-400">WHERE</span> dept_code <span class="text-amber-400">IN</span> (
+                            <span class="text-blue-400">SELECT</span> dept_code <span class="text-blue-400">FROM</span> employee <span class="text-blue-400">GROUP BY</span> dept_code 
+                            <span class="text-amber-400">HAVING AVG</span>(salary) > (<span class="text-blue-400">SELECT AVG</span>(salary) <span class="text-blue-400">FROM</span> employee)
+                        );
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- CASCADE Section -->
+            <div id="cascade-section" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-4">
+                <h3 class="font-bold text-lg text-rose-400 flex items-center gap-2">
+                    <i class="fa-solid fa-link-slash"></i> 3.4 Foreign Key Constraints & ON UPDATE/DELETE CASCADE
+                </h3>
+
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    যদি আমরা <code>CASCADE</code> ছাড়া সরাসরি Department টেবিলের <code>dept_code</code> পরিবর্তন করতে যাই:
+                </p>
+
+                <div class="bg-codebg p-3 rounded-lg font-mono text-xs text-slate-200">
+                    <span class="text-indigo-400">UPDATE</span> Department <span class="text-indigo-400">SET</span> dept_code = <span class="text-amber-300">'CSE'</span> <span class="text-blue-400">WHERE</span> dept_code = <span class="text-amber-300">'IT'</span>;
+                </div>
+
+                <div class="bg-rose-950/40 border border-rose-500/40 p-3 rounded-lg text-xs text-rose-200">
+                    ❌ <strong>Error: Cannot delete or update a parent row: a foreign key constraint fails!</strong><br>
+                    কারণ <code>employee</code> টেবিলে 'IT' কোডটি Foreign Key হিসেবে যুক্ত আছে।
+                </div>
+
+                <h4 class="font-bold text-xs text-slate-200 uppercase pt-2">সমাধান: ON UPDATE CASCADE & ON DELETE CASCADE যুক্ত করা</h4>
+
+                <div class="bg-codebg rounded-xl p-4 border border-slate-800 font-mono text-xs text-slate-200">
+<pre><code><span class="text-blue-400 font-bold">CREATE TABLE</span> employee (
+    emp_id <span class="text-emerald-400">INT AUTO_INCREMENT</span>,
+    name <span class="text-emerald-400">VARCHAR(30)</span>,
+    salary <span class="text-emerald-400">INT</span>,
+    dept_code <span class="text-emerald-400">VARCHAR(20)</span>,
+    <span class="text-purple-400 font-bold">PRIMARY KEY</span> (emp_id),
+    <span class="text-indigo-400 font-bold">FOREIGN KEY</span> (dept_code) <span class="text-indigo-400">REFERENCES</span> Department (dept_code)
+        <span class="text-rose-400 font-bold">ON DELETE CASCADE</span>
+        <span class="text-amber-400 font-bold">ON UPDATE CASCADE</span>
+) <span class="text-emerald-400 font-bold">AUTO_INCREMENT</span> = 101;</code></pre>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div class="bg-slate-800/60 p-3 rounded-lg border border-slate-700">
+                        <strong class="text-amber-400 block mb-1">ON UPDATE CASCADE:</strong>
+                        প্যারেন্ট টেবিলে ডিপার্টমেন্ট কোড চেঞ্জ হলে চাইল্ড টেবিলে সকল এমপ্লয়ির ডিপার্টমেন্ট কোড অটোমেটিক আপডেট হয়ে যাবে।
+                    </div>
+                    <div class="bg-slate-800/60 p-3 rounded-lg border border-slate-700">
+                        <strong class="text-rose-400 block mb-1">ON DELETE CASCADE:</strong>
+                        প্যারেন্ট টেবিল থেকে কোনো ডিপার্টমেন্ট মুছে দিলে ওই বিভাগের সকল এমপ্লয়ি তথ্য স্বয়ংক্রিয়ভাবে মুছে যাবে।
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SECTION 4: QUICK REVISION & VIVA -->
+        <section id="quick-revision" class="scroll-mt-20">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="w-3 h-8 bg-emerald-500 rounded-full"></span>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">⚡ Quick Revision Summary</h2>
+                    <p class="text-xs text-slate-400">পরীক্ষা ও ভাইভার জন্য দ্রুত রিভিশন পয়েন্টসমূহ</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-2">
+                    <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-sm">DDL</div>
+                    <h3 class="font-bold text-slate-200 text-sm">Data Definition Language</h3>
+                    <p class="text-xs text-slate-400">CREATE, ALTER, DROP, TRUNCATE, RENAME. এগুলো ডাটাবেজের কাঠামো তৈরি ও পরিবর্তন করে। (Auto-commit)</p>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-2">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">DML</div>
+                    <h3 class="font-bold text-slate-200 text-sm">Data Manipulation Language</h3>
+                    <p class="text-xs text-slate-400">INSERT, SELECT, UPDATE, DELETE. এগুলো টেবিলের ভেতরের রো বা ডাটা ম্যানিপুলেট করে।</p>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-2">
+                    <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">W vs H</div>
+                    <h3 class="font-bold text-slate-200 text-sm">WHERE vs HAVING</h3>
+                    <p class="text-xs text-slate-400">WHERE কাজ করে Individual rows এর ওপর (Group করার আগে)। HAVING কাজ করে Aggregated Groups এর ওপর।</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: VIVA QUESTIONS -->
+        <section id="viva-section" class="scroll-mt-20">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="w-3 h-8 bg-rose-500 rounded-full"></span>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">🎯 Viva / Exam Questions & Answers</h2>
+                    <p class="text-xs text-slate-400">ল্যাব ভাইভায় শিক্ষক যে প্রশ্নগুলো সচরাচর ধরে থাকেন</p>
+                </div>
+            </div>
+
+            <div class="space-y-3" id="vivaList">
+                
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                    <button onclick="toggleAnswer(this)" class="w-full text-left font-semibold text-sm text-slate-200 flex justify-between items-center">
+                        <span>Q1: <code>COUNT(*)</code> এবং <code>COUNT(column_name)</code> এর মধ্যে পার্থক্য কী?</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition transform"></i>
+                    </button>
+                    <div class="mt-3 text-xs text-slate-300 hidden pt-3 border-t border-slate-800 leading-relaxed">
+                        <strong>Ans:</strong> <code>COUNT(*)</code> টেবিলের মোট রো সংখ্যা গোনে (NULL ভ্যালু সহ)। অন্যদিকে <code>COUNT(column_name)</code> শুধুমাত্র নির্দিষ্ট কলামের Non-NULL ভ্যালুগুলো গণনা করে (NULL বাদ দেয়)।
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                    <button onclick="toggleAnswer(this)" class="w-full text-left font-semibold text-sm text-slate-200 flex justify-between items-center">
+                        <span>Q2: SQL Query Execution Order কীভাবে কাজ করে?</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition transform"></i>
+                    </button>
+                    <div class="mt-3 text-xs text-slate-300 hidden pt-3 border-t border-slate-800 leading-relaxed font-mono">
+                        <strong>Ans:</strong> FROM ➔ WHERE ➔ GROUP BY ➔ HAVING ➔ SELECT ➔ ORDER BY।
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                    <button onclick="toggleAnswer(this)" class="w-full text-left font-semibold text-sm text-slate-200 flex justify-between items-center">
+                        <span>Q3: 2nd Highest Salary বের করার সাধারণ Subquery টি লেখ।</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition transform"></i>
+                    </button>
+                    <div class="mt-3 text-xs text-slate-300 hidden pt-3 border-t border-slate-800 leading-relaxed">
+                        <code class="bg-codebg p-2 rounded block font-mono text-blue-300">SELECT MAX(salary) FROM employee WHERE salary &lt; (SELECT MAX(salary) FROM employee);</code>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                    <button onclick="toggleAnswer(this)" class="w-full text-left font-semibold text-sm text-slate-200 flex justify-between items-center">
+                        <span>Q4: TRUNCATE এবং DELETE এর মূল পার্থক্য কী?</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition transform"></i>
+                    </button>
+                    <div class="mt-3 text-xs text-slate-300 hidden pt-3 border-t border-slate-800 leading-relaxed">
+                        <strong>Ans:</strong> <code>TRUNCATE</code> হলো DDL কমান্ড, যা পুরো টেবিল খালি করে খুব দ্রুত এবং এটি Rollback করা যায় না। <code>DELETE</code> হলো DML কমান্ড, যা নির্দিষ্ট শর্ত সাপেক্ষে একটি একটি করে সারি মুছে ফেলে।
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 6: SELF PRACTICE -->
+        <section id="practice-tasks" class="scroll-mt-20">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="w-3 h-8 bg-cyan-500 rounded-full"></span>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">✍️ Self Practice Questions</h2>
+                    <p class="text-xs text-slate-400">আজকের ল্যাবের ওপর ভিত্তি করে নিজেকে যাচাই করার জন্য ৩টি প্রশ্ন</p>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                <ol class="list-decimal list-inside text-sm text-slate-300 space-y-3">
+                    <li class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                        যেসব কর্মচারীর নামের ১ম অক্ষর 'A' এবং নামের দৈর্ঘ্য অন্তত ৪ ক্যারেক্টার, তাদের তালিকা দেখানোর SQL লেখ।
+                    </li>
+                    <li class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                        প্রতিটি ডিপার্টমেন্টের জন্য সর্বনিম্ন (MIN) এবং সর্বোচ্চ (MAX) বেতনের পার্থক্য বের করার SQL কুয়েরি লেখ।
+                    </li>
+                    <li class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                        <code>ON DELETE CASCADE</code> দেওয়া না থাকলে কীভাবে চাইল্ড টেবিলের ডাটা নষ্ট না করে প্যারেন্ট টেবিল ডিলিট করা যায়?
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- Footer -->
+<footer class="bg-slate-900 border-t border-slate-800 py-6 mt-12 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4">
+        <p>Database Systems Lab Notebook • Generative Study Partner</p>
+    </div>
+</footer>
+
+<!-- JavaScript logic for Copy, Expand/Collapse, Search & Accordions -->
+<script>
+    // Copy Code snippet to clipboard
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement.querySelector('code');
+        const textToCopy = codeBlock.innerText;
+
+        // Using standard textarea fallback for compatibility inside iframe
+        const textarea = document.createElement('textarea');
+        textarea.value = textToCopy;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> Copied!';
+        btn.classList.add('bg-emerald-950', 'border-emerald-500');
+
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.classList.remove('bg-emerald-950', 'border-emerald-500');
+        }, 2000);
+    }
+
+    // Toggle Viva Answers
+    function toggleAnswer(btn) {
+        const ans = btn.nextElementSibling;
+        const icon = btn.querySelector('i');
+        ans.classList.toggle('hidden');
+        icon.classList.toggle('rotate-180');
+    }
+
+    // Filter Content on Search
+    function filterContent() {
+        const query = document.getElementById('quickSearch').value.toLowerCase();
+        const codeBlocks = document.querySelectorAll('pre, .bg-codebg, h3, h4');
+
+        codeBlocks.forEach(el => {
+            if (el.innerText.toLowerCase().includes(query)) {
+                el.classList.remove('opacity-20');
+            } else if (query.length > 2) {
+                el.classList.add('opacity-20');
+            } else {
+                el.classList.remove('opacity-20');
+            }
+        });
+    }
+
+    // Toggle Expand/Collapse
+    let expanded = false;
+    function toggleAllAccordions() {
+        expanded = !expanded;
+        document.querySelectorAll('#vivaList .hidden').forEach(el => {
+            if (expanded) el.classList.remove('hidden');
+        });
+    }
+</script>
+
+</body>
+</html>

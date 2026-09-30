@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Logic Design - Chapter 3 & 4 (Complete Masterclass)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax for Formula Rendering -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+        code, pre {
+            font-family: 'Fira Code', monospace;
+        }
+        .custom-scroll::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+        .bangla-highlight {
+            background-color: rgba(59, 130, 246, 0.15);
+            border-left: 4px solid #3b82f6;
+        }
+        .exam-tip {
+            background-color: rgba(16, 185, 129, 0.15);
+            border-left: 4px solid #10b981;
+        }
+        .revision-box {
+            background-color: rgba(245, 158, 11, 0.15);
+            border-left: 4px solid #f59e0b;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-200">
+
+    <!-- Top Sticky Header -->
+    <header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold text-blue-400">Digital Logic Design Master Note</h1>
+                <p class="text-xs text-slate-400">Complete Coverage of Chapter 3 (Boolean Algebra) & Chapter 4 (Logic Gates)</p>
+            </div>
+            <nav class="flex flex-wrap gap-2 text-sm">
+                <a href="#toc" class="px-3 py-1 bg-slate-800 hover:bg-blue-600 rounded text-slate-300 transition">Table of Contents</a>
+                <a href="#chapter3" class="px-3 py-1 bg-blue-900/60 hover:bg-blue-600 rounded text-blue-200 transition">Chapter 3</a>
+                <a href="#chapter4" class="px-3 py-1 bg-indigo-900/60 hover:bg-indigo-600 rounded text-indigo-200 transition">Chapter 4</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-6 space-y-10">
+
+        <!-- Banner Announcement -->
+        <section class="bg-gradient-to-r from-blue-900/40 via-indigo-900/40 to-slate-900 p-6 rounded-2xl border border-blue-500/30">
+            <h2 class="text-2xl font-bold text-blue-300 mb-2">🎯 সম্পূর্ণ কোর্স নোট (Foundation Level to Exam Mastery)</h2>
+            <p class="text-slate-300 leading-relaxed">
+                এই ডকুমেন্টটি তোমার বিশ্ববিদ্যালয়ের পরীক্ষার (Midterm/Final) জন্য ১০০% নিখুঁতভাবে তৈরি করা হয়েছে। এখানে **Chapter 3** এবং **Chapter 4**-এর প্রতিটি টপিক একদম ক্রমানুসারে (Sequential order), সহজ **Bangla-English (Banglish)** ভাষায়, রিয়েল-লাইফ এক্সাম্পল, ম্যাথমেটিক্যাল প্রুফ, SVG ডায়াগ্রাম এবং এক্সাম টিপসসহ ব্যাখ্যা করা হয়েছে।
+            </p>
+        </section>
+
+        <!-- TABLE OF CONTENTS -->
+        <section id="toc" class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700">
+            <h2 class="text-2xl font-bold text-yellow-400 border-b border-slate-700 pb-3 mb-4">📜 Complete List of Topics (উভয় চ্যাপ্টারের সূচিপত্র)</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Chapter 3 Syllabus -->
+                <div class="space-y-2">
+                    <h3 class="text-lg font-bold text-blue-400 flex items-center gap-2">
+                        <span>📘 CHAPTER 3: BOOLEAN ALGEBRA</span>
+                    </h3>
+                    <ul class="list-disc list-inside text-sm text-slate-300 space-y-1 pl-2">
+                        <li><b>3.1 Introduction</b> (ডিজিটাল লজিক ও বুলিয়ান অ্যালজেব্রার মূল ধারণা)</li>
+                        <li><b>3.2 Axiomatic Definition of Boolean Algebra</b>
+                            <ul class="list-circle list-inside pl-4 text-slate-400">
+                                <li>3.2.1 Postulates of Boolean Algebra (Huntington Postulates 1-6)</li>
+                                <li>3.2.2 Two-valued Boolean Algebra (Set, Operators, Proof of Axioms)</li>
+                            </ul>
+                        </li>
+                        <li><b>3.3 Basic Theorems and Properties of Boolean Algebra</b>
+                            <ul class="list-circle list-inside pl-4 text-slate-400">
+                                <li>3.3.1 Duality Principle (দ্বৈত নীতি)</li>
+                                <li>3.3.2 Basic Theorems (Theorems 1 to 6 & Proofs)</li>
+                                <li>DeMorgan's Theorem for More Than Two Variables</li>
+                                <li>3.3.3 Operator Precedence (Parentheses, NOT, AND, OR)</li>
+                            </ul>
+                        </li>
+                        <li><b>3.4 Boolean Function</b>
+                            <ul class="list-circle list-inside pl-4 text-slate-400">
+                                <li>3.4.1 Algebraic Expression of Boolean Function</li>
+                                <li>3.4.2 Truth Table Representation of Boolean Function</li>
+                                <li>3.4.3 Non-unique Algebraic Expression of Boolean Function</li>
+                                <li>3.4.4 Logic Diagram (Gate Implementation)</li>
+                                <li>3.4.5 Complement of Boolean Function</li>
+                            </ul>
+                        </li>
+                        <li><b>3.5 Forms of Boolean Functions</b>
+                            <ul class="list-circle list-inside pl-4 text-slate-400">
+                                <li>3.5.1 Minterms and Maxterms</li>
+                                <li>3.5.2 Canonical Forms (CSOP & CPOS with Short Notations $\Sigma$ & $\prod$)</li>
+                                <li>Conversion between Canonical Forms</li>
+                                <li>3.5.3 Noncanonical Forms (SOP & POS Conversion)</li>
+                                <li>3.5.4 Nonstandard Form & Conversion to Standard Form</li>
+                            </ul>
+                        </li>
+                        <li><b>3.6 Incompletely Specified Boolean Functions</b> (Don't Care Conditions)</li>
+                    </ul>
+                </div>
+
+                <!-- Chapter 4 Syllabus -->
+                <div class="space-y-2">
+                    <h3 class="text-lg font-bold text-indigo-400 flex items-center gap-2">
+                        <span>📙 CHAPTER 4: LOGIC GATES</span>
+                    </h3>
+                    <ul class="list-disc list-inside text-sm text-slate-300 space-y-1 pl-2">
+                        <li><b>4.1 Introduction</b> (লজিক গেটের সংজ্ঞা ও ভিত্তি)</li>
+                        <li><b>4.2 Logic Operations</b> (16 Functions of Two Binary Variables)</li>
+                        <li><b>4.3 Logic Gates</b> (8 Standard Gates, Graphic Symbols, Extension to Multiple Inputs, Non-associativity of NAND/NOR, Parity of EXOR/EXNOR)</li>
+                        <li><b>4.4 Universality of NAND and NOR Gates</b> (NAND & NOR দিয়ে NOT, AND, OR তৈরি)</li>
+                        <li><b>4.5 Alternative Graphic Symbols for NAND, NOR, and NOT Gates</b> (Invert-OR, Invert-AND, Polarity Bubble)</li>
+                        <li><b>4.6 EXOR and EXNOR Gates</b>
+                            <ul class="list-circle list-inside pl-4 text-slate-400">
+                                <li>4.6.1 Properties of EXOR and EXNOR Operations (Theorems 1-4 & Proofs)</li>
+                                <li>4.6.2 EXOR and EXNOR Gate Implementations (AND-OR-NOT, NAND-only, NOR-only)</li>
+                            </ul>
+                        </li>
+                        <li><b>4.7 Integrated Circuit Logic Gates</b>
+                            <ul class="list-circle list-inside pl-4 text-slate-400">
+                                <li>4.7.1 IC Logic Families (TTL, ECL, MOS, CMOS, $I^2L$, SSI packages)</li>
+                                <li>4.7.2 Logic Conventions (Positive Logic vs. Negative Logic)</li>
+                                <li>4.7.3 Characteristics of IC Logic Families (Fan-out, Power Dissipation, Delay, Noise Margin)</li>
+                            </ul>
+                        </li>
+                        <li><b>4.8 Some Available TTL Logic Gates</b> (7400 Series Pinout Diagrams & Details)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- CHAPTER 3 DETAILED EXPLANATION -->
+        <!-- =================================================================== -->
+        <article id="chapter3" class="space-y-10 border-t-2 border-blue-600 pt-8">
+            <div class="bg-blue-950/40 p-6 rounded-2xl border border-blue-500/30">
+                <h1 class="text-3xl font-extrabold text-blue-400">CHAPTER 3: BOOLEAN ALGEBRA</h1>
+                <p class="text-slate-300 mt-2">বুলিয়ান অ্যালজেব্রা হলো ডিজিটাল সার্কিট অ্যানালাইসিস এবং ডিজাইনের মূল গাণিতিক ভিত্তি।</p>
+            </div>
+
+            <!-- 3.1 Introduction -->
+            <section class="space-y-4">
+                <h2 class="text-2xl font-bold text-blue-300 border-b border-slate-700 pb-2">3.1 Introduction</h2>
+                <div class="bangla-highlight p-4 rounded-r-lg">
+                    <p class="text-slate-200">
+                        <b>সহজ বাংলায় ব্যাখ্যা:</b> ডিজিটাল সার্কিটগুলো সব সময় **Binary Mode**-এ কাজ করে। বাইনারি মোড মানে হলো সার্কিটের প্রতিটি ইনপুট এবং আউটপুট এর মান হয় $0$ (LOW Voltage / OFF) হবে, না হয় $1$ (HIGH Voltage / ON) হবে। এই ১ আর ০-এর ডিজিটাল লজিককে গাণিতিকভাবে বিশ্লেষণ (Analysis) এবং ডিজাইন (Design) করার জন্য যে বিশেষ অ্যালজেব্রা ব্যবহার করা হয়, তাকেই **Boolean Algebra** বলে।
+                    </p>
+                </div>
+                <div class="bg-slate-800 p-4 rounded-xl text-sm">
+                    <p><b>সংক্ষিপ্ত ইতিহাস:</b> ১৮৫৪ সালে বিজ্ঞানী <b>George Boole</b> লজিক প্রকাশের জন্য এই সিস্টেম আবিষ্কার করেন। পরবর্তীতে ১৯৩৮ সালে <b>C. E. Shannon</b> ইলেক্ট্রিক্যাল সুইচিং সার্কিটে এর প্রয়োগ দেখান যাকে <i>Switching Algebra</i> বলা হয়।</p>
+                </div>
+            </section>
+
+            <!-- 3.2 Axiomatic Definition of Boolean Algebra -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-blue-300 border-b border-slate-700 pb-2">3.2 Axiomatic Definition of Boolean Algebra</h2>
+                <p class="text-slate-300">
+                    যেকোনো গাণিতিক কাঠামোর মতো বুলিয়ান অ্যালজেব্রাও কিছু Element (উপাদান), Operator (অপারেটর) এবং Unproved Axioms/Postulates (স্বীকার্য)-এর ওপর ভিত্তি করে প্রতিষ্ঠিত।
+                </p>
+
+                <div class="bg-slate-800/90 p-5 rounded-xl space-y-3">
+                    <h3 class="text-lg font-bold text-yellow-300">মূল গাণিতিক পরিভাষা (Basic Definitions):</h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-300 text-sm">
+                        <li><b>Set of Elements ($S$):</b> সমজাতীয় কিছু বস্তুর সংগ্রহ। যদি $x \in S$ হয়, তবে $x$ উপাদানটি $S$ সেটের সদস্য।</li>
+                        <li><b>Binary Operator (*):</b> একটি নিয়ম যা সেটের দুটি উপাদান থেকে একটি নির্দিষ্ট উপাদান তৈরি করে। যেমন: $a * b = c$। যদি $a, b \in S$ হয়ে $c \in S$ হয়, তবে * একটি বাইনারি অপারেটর।</li>
+                        <li><b>Postulates / Axioms:</b> প্রাথমিক মৌলিক ধারণা যা প্রমাণের প্রয়োজন হয় না, কিন্তু এগুলো থেকেই পুরো গণিতের নিয়মাবলী প্রমাণ করা হয়।</li>
+                    </ul>
+                </div>
+
+                <!-- 3.2.1 Postulates of Boolean Algebra -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-emerald-400">3.2.1 Postulates of Boolean Algebra (Huntington Postulates)</h3>
+                    <p class="text-slate-300">১৯০৪ সালে E. V. Huntington বুলিয়ান অ্যালজেব্রার ৬টি মৌলিক স্বীকার্য (Postulates) দেন। একটি সেট $B$ এবং দুটি বাইনারি অপারেটর $+$ (OR) ও $\cdot$ (AND)-এর জন্য এই স্বীকার্যগুলো নিম্নে দেওয়া হলো:</p>
+
+                    <div class="overflow-x-auto custom-scroll">
+                        <table class="w-full text-left text-sm text-slate-200 border-collapse border border-slate-700">
+                            <thead class="bg-slate-800 text-blue-300">
+                                <tr>
+                                    <th class="border border-slate-700 p-3">Postulate No.</th>
+                                    <th class="border border-slate-700 p-3">Part (a) [OR Operator / +]</th>
+                                    <th class="border border-slate-700 p-3">Part (b) [AND Operator / $\cdot$]</th>
+                                    <th class="border border-slate-700 p-3">বাংলা অর্থ ও ব্যাখ্যা</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-700">
+                                <tr>
+                                    <td class="border border-slate-700 p-3 font-semibold">1. Closure</td>
+                                    <td class="border border-slate-700 p-3">If $x, y \in B$, then $x + y = c \in B$</td>
+                                    <td class="border border-slate-700 p-3">If $x, y \in B$, then $x \cdot y = c \in B$</td>
+                                    <td class="border border-slate-700 p-3">অপারেশনের ফলাফল সর্বদা সেটের ভেতরেই থাকবে।</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-slate-700 p-3 font-semibold">2. Identity Element</td>
+                                    <td class="border border-slate-700 p-3">$x + 0 = 0 + x = x$ (Identity is 0)</td>
+                                    <td class="border border-slate-700 p-3">$x \cdot 1 = 1 \cdot x = x$ (Identity is 1)</td>
+                                    <td class="border border-slate-700 p-3">এমন উপাদান যার সাথে অপারেশন করলে মানের পরিবর্তন হয় না।</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-slate-700 p-3 font-semibold">3. Commutative</td>
+                                    <td class="border border-slate-700 p-3">$x + y = y + x$</td>
+                                    <td class="border border-slate-700 p-3">$x \cdot y = y \cdot x$</td>
+                                    <td class="border border-slate-700 p-3">ইনপুটের স্থান পরিবর্তন করলে ফলাফলের পরিবর্তন হয় না।</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-slate-700 p-3 font-semibold">4. Distributive</td>
+                                    <td class="border border-slate-700 p-3">$x \cdot (y + z) = (x \cdot y) + (x \cdot z)$</td>
+                                    <td class="border border-slate-700 p-3">$x + (y \cdot z) = (x + y) \cdot (x + z)$</td>
+                                    <td class="border border-slate-700 p-3">বণ্টন বিধি। (পার্থক্য: Normal Algebra-তে 4b সত্য নয়!)</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-slate-700 p-3 font-semibold">5. Complement</td>
+                                    <td class="border border-slate-700 p-3">$x + x' = 1$</td>
+                                    <td class="border border-slate-700 p-3">$x \cdot x' = 0$</td>
+                                    <td class="border border-slate-700 p-3">যেকোনো উপাদান $x$-এর জন্য তার বিপরীত $x'$ বিদ্যমান।</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-slate-700 p-3 font-semibold">6. Distinct Elements</td>
+                                    <td colspan="2" class="border border-slate-700 p-3 text-center">There exist at least two elements $x, y \in B$ such that $x \neq y$.</td>
+                                    <td class="border border-slate-700 p-3">সেটে কমপক্ষে ২টি ভিন্ন উপাদান থাকতে হবে (যেমন: $0 \neq 1$)।</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 3.2.2 Two-valued Boolean Algebra -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-emerald-400">3.2.2 Two-valued Boolean Algebra</h3>
+                    <div class="bangla-highlight p-4 rounded-r-lg">
+                        <p class="text-slate-200">
+                            আমরা যে বুলিয়ান অ্যালজেব্রা ব্যবহার করি তার সেটে মাত্র ২টি উপাদান থাকে: $B = \{0, 1\}$। 
+                            এখানে তিনটি মৌলিক অপারেটর হলো: <b>AND ($\cdot$)</b>, <b>OR ($+$)</b>, এবং <b>NOT ($'$)</b>।
+                        </p>
+                    </div>
+
+                    <!-- Truth Table 3.1 -->
+                    <p class="font-semibold text-slate-300">Table 3.1: Two-valued Boolean Operator Tables</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-slate-800 p-3 rounded-lg">
+                            <h4 class="text-xs font-bold text-blue-400 mb-2 text-center">AND Operation ($x \cdot y$)</h4>
+                            <table class="w-full text-center text-xs border border-slate-700">
+                                <thead class="bg-slate-700"><tr><th>x</th><th>y</th><th>$x \cdot y$</th></tr></thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-700"><td>0</td><td>0</td><td>0</td></tr>
+                                    <tr class="border-b border-slate-700"><td>0</td><td>1</td><td>0</td></tr>
+                                    <tr class="border-b border-slate-700"><td>1</td><td>0</td><td>0</td></tr>
+                                    <tr><td>1</td><td>1</td><td>1</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="bg-slate-800 p-3 rounded-lg">
+                            <h4 class="text-xs font-bold text-blue-400 mb-2 text-center">OR Operation ($x + y$)</h4>
+                            <table class="w-full text-center text-xs border border-slate-700">
+                                <thead class="bg-slate-700"><tr><th>x</th><th>y</th><th>$x + y$</th></tr></thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-700"><td>0</td><td>0</td><td>0</td></tr>
+                                    <tr class="border-b border-slate-700"><td>0</td><td>1</td><td>1</td></tr>
+                                    <tr class="border-b border-slate-700"><td>1</td><td>0</td><td>1</td></tr>
+                                    <tr><td>1</td><td>1</td><td>1</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="bg-slate-800 p-3 rounded-lg">
+                            <h4 class="text-xs font-bold text-blue-400 mb-2 text-center">NOT Operation ($x'$)</h4>
+                            <table class="w-full text-center text-xs border border-slate-700">
+                                <thead class="bg-slate-700"><tr><th>x</th><th>$x'$</th></tr></thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-700"><td>0</td><td>1</td></tr>
+                                    <tr><td>1</td><td>0</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Verification of Postulates with Truth Table (Table 3.2 & 3.3) -->
+                    <div class="space-y-3 mt-4">
+                        <h4 class="text-md font-bold text-yellow-300">Distributive Law-এর প্রমাণ (Proof of Postulate 4 via Truth Table):</h4>
+                        <p class="text-sm text-slate-300">
+                            পরীক্ষায় Postulate 4(b) অর্থাৎ $x + (y \cdot z) = (x + y) \cdot (x + z)$ প্রমাণ করতে দেয়। নিচে Truth Table দিয়ে প্রমাণটি দেখানো হলো (Table 3.3):
+                        </p>
+
+                        <div class="overflow-x-auto custom-scroll">
+                            <table class="w-full text-center text-xs border border-slate-700">
+                                <thead class="bg-slate-800 text-yellow-400">
+                                    <tr>
+                                        <th class="p-2 border border-slate-700">x y z</th>
+                                        <th class="p-2 border border-slate-700">$y \cdot z$</th>
+                                        <th class="p-2 border border-slate-700">$x + (y \cdot z)$ [LHS]</th>
+                                        <th class="p-2 border border-slate-700">$x + y$</th>
+                                        <th class="p-2 border border-slate-700">$x + z$</th>
+                                        <th class="p-2 border border-slate-700">$(x + y)(x + z)$ [RHS]</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-700 bg-slate-900/60">
+                                    <tr><td>0 0 0</td><td>0</td><td class="bg-blue-900/40 font-bold">0</td><td>0</td><td>0</td><td class="bg-blue-900/40 font-bold">0</td></tr>
+                                    <tr><td>0 0 1</td><td>0</td><td class="bg-blue-900/40 font-bold">0</td><td>0</td><td>1</td><td class="bg-blue-900/40 font-bold">0</td></tr>
+                                    <tr><td>0 1 0</td><td>0</td><td class="bg-blue-900/40 font-bold">0</td><td>1</td><td>0</td><td class="bg-blue-900/40 font-bold">0</td></tr>
+                                    <tr><td>0 1 1</td><td>1</td><td class="bg-blue-900/40 font-bold">1</td><td>1</td><td>1</td><td class="bg-blue-900/40 font-bold">1</td></tr>
+                                    <tr><td>1 0 0</td><td>0</td><td class="bg-blue-900/40 font-bold">1</td><td>1</td><td>1</td><td class="bg-blue-900/40 font-bold">1</td></tr>
+                                    <tr><td>1 0 1</td><td>0</td><td class="bg-blue-900/40 font-bold">1</td><td>1</td><td>1</td><td class="bg-blue-900/40 font-bold">1</td></tr>
+                                    <tr><td>1 1 0</td><td>0</td><td class="bg-blue-900/40 font-bold">1</td><td>1</td><td>1</td><td class="bg-blue-900/40 font-bold">1</td></tr>
+                                    <tr><td>1 1 1</td><td>1</td><td class="bg-blue-900/40 font-bold">1</td><td>1</td><td>1</td><td class="bg-blue-900/40 font-bold">1</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-xs text-emerald-400">✓ LHS এবং RHS কলামের মান সম্পূর্ণ এক। সুতরাং Distributive Law প্রমাণিত!</p>
+                    </div>
+                </div>
+
+                <div class="exam-tip p-4 rounded-r-lg text-sm">
+                    <b>💡 Exam Tip:</b> পরীক্ষায় যদি Huntington Postulates লিখতে বলে, তবে সংজ্ঞাসহ ৬টি পোস্টুলেটের Part (a) এবং Part (b) উভয়ই স্পষ্ট করে লিখবে।
+                </div>
+            </section>
+
+            <!-- 3.3 Basic Theorems and Properties of Boolean Algebra -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-blue-300 border-b border-slate-700 pb-2">3.3 Basic Theorems and Properties of Boolean Algebra</h2>
+
+                <!-- 3.3.1 Duality Principle -->
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-emerald-400">3.3.1 Duality Principle (দ্বৈত নীতি)</h3>
+                    <div class="bangla-highlight p-4 rounded-r-lg">
+                        <p class="text-slate-200">
+                            <b>Duality Principle</b> বলে যে, বুলিয়ান অ্যালজেব্রার যেকোনো সঠিক সমীকরণ (Algebraic Identity) সত্য থাকবে, যদি আমরা নিচের পরিবর্তনগুলো করি:
+                        </p>
+                        <ol class="list-decimal list-inside mt-2 space-y-1 font-semibold text-yellow-300">
+                            <li>AND ($\cdot$) অপারেটর এবং OR ($+$) অপারেটর পরস্পর স্থান পরিবর্তন করবে।</li>
+                            <li>Identity Element $0$ এবং $1$ স্থান পরিবর্তন করবে ($0 \rightarrow 1$ এবং $1 \rightarrow 0$)।</li>
+                        </ol>
+                    </div>
+                    <div class="bg-slate-800 p-3 rounded-lg text-sm">
+                        <b>উদাহরণ:</b> $x + 0 = x$-এর Dual হলো $x \cdot 1 = x$। 
+                        <br>মজার ব্যাপার হলো variables ($x, y, z$) বা Complement ($x'$) পরিবর্তন হবে না!
+                    </div>
+                </div>
+
+                <!-- 3.3.2 Basic Theorems of Boolean Algebra -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-emerald-400">3.3.2 Basic Theorems of Boolean Algebra (Table 3.4)</h3>
+                    <p class="text-slate-300 text-sm">উপপাদ্যগুলো অবশ্যই Postulate-এর সাহায্যে প্রমাণ করতে হয়। নিম্নে থিওরেমগুলোর তালিকা দেওয়া হলো:</p>
+
+                    <div class="overflow-x-auto custom-scroll">
+                        <table class="w-full text-left text-sm border border-slate-700">
+                            <thead class="bg-slate-800 text-blue-300">
+                                <tr>
+                                    <th class="p-2 border border-slate-700">Theorem / Postulate</th>
+                                    <th class="p-2 border border-slate-700">Part (a)</th>
+                                    <th class="p-2 border border-slate-700">Part (b) [Dual]</th>
+                                    <th class="p-2 border border-slate-700">Name</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-700 text-xs">
+                                <tr><td class="p-2 border border-slate-700">Postulate 2</td><td>$x + 0 = x$</td><td>$x \cdot 1 = x$</td><td>Identity</td></tr>
+                                <tr><td class="p-2 border border-slate-700">Postulate 3</td><td>$x + y = y + x$</td><td>$x \cdot y = y \cdot x$</td><td>Commutative</td></tr>
+                                <tr><td class="p-2 border border-slate-700">Postulate 4</td><td>$x(y + z) = xy + xz$</td><td>$x + yz = (x + y)(x + z)$</td><td>Distributive</td></tr>
+                                <tr><td class="p-2 border border-slate-700">Postulate 5</td><td>$x + x' = 1$</td><td>$x \cdot x' = 0$</td><td>Complement</td></tr>
+                                <tr class="bg-blue-950/40"><td class="p-2 border border-slate-700 font-bold">Theorem 1</td><td>$x + x = x$</td><td>$x \cdot x = x$</td><td>Idempotent Law</td></tr>
+                                <tr class="bg-blue-950/40"><td class="p-2 border border-slate-700 font-bold">Theorem 2</td><td>$x + 1 = 1$</td><td>$x \cdot 0 = 0$</td><td>Boundedness / Dominance</td></tr>
+                                <tr class="bg-blue-950/40"><td class="p-2 border border-slate-700 font-bold">Theorem 3</td><td colspan="2" class="text-center">$(x')' = x$</td><td>Involution Law</td></tr>
+                                <tr class="bg-blue-950/40"><td class="p-2 border border-slate-700 font-bold">Theorem 4</td><td>$x + (y + z) = (x + y) + z$</td><td>$x(yz) = (xy)z$</td><td>Associative Law</td></tr>
+                                <tr class="bg-blue-950/40"><td class="p-2 border border-slate-700 font-bold">Theorem 5</td><td>$(x + y)' = x'y'$</td><td>$(xy)' = x' + y'$</td><td>DeMorgan's Theorem</td></tr>
+                                <tr class="bg-blue-950/40"><td class="p-2 border border-slate-700 font-bold">Theorem 6</td><td>$x + xy = x$</td><td>$x(x + y) = x$</td><td>Absorption Law</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Algebraic Proofs -->
+                    <div class="bg-slate-800/80 p-5 rounded-xl space-y-4">
+                        <h4 class="text-lg font-bold text-yellow-300">ধাপে ধাপে গাণিতিক প্রমাণ (Step-by-Step Proofs):</h4>
+
+                        <!-- Proof 1a -->
+                        <div class="border-b border-slate-700 pb-3 text-sm">
+                            <p class="font-bold text-blue-300">Proof of Theorem 1(a): $x + x = x$</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-1 font-mono text-xs text-slate-300">
+                                <div>$x + x = (x + x) \cdot 1$</div><div class="text-slate-400">(by Postulate 2b: Identity)</div>
+                                <div>$= (x + x)(x + x')$</div><div class="text-slate-400">(by Postulate 5a: Complement)</div>
+                                <div>$= x + xx'$</div><div class="text-slate-400">(by Postulate 4b: Distributive)</div>
+                                <div>$= x + 0$</div><div class="text-slate-400">(by Postulate 5b: Complement)</div>
+                                <div class="text-emerald-400 font-bold">$= x$</div><div class="text-emerald-400 font-bold">(by Postulate 2a: Identity) [Proved]</div>
+                            </div>
+                        </div>
+
+                        <!-- Proof 2a -->
+                        <div class="border-b border-slate-700 pb-3 text-sm">
+                            <p class="font-bold text-blue-300">Proof of Theorem 2(a): $x + 1 = 1$</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-1 font-mono text-xs text-slate-300">
+                                <div>$x + 1 = (x + 1) \cdot 1$</div><div class="text-slate-400">(by Postulate 2b)</div>
+                                <div>$= 1 \cdot (x + 1)$</div><div class="text-slate-400">(by Postulate 3b)</div>
+                                <div>$= (x + x')(x + 1)$</div><div class="text-slate-400">(by Postulate 5a)</div>
+                                <div>$= x + x' \cdot 1$</div><div class="text-slate-400">(by Postulate 4b)</div>
+                                <div>$= x + x'$</div><div class="text-slate-400">(by Postulate 2b)</div>
+                                <div class="text-emerald-400 font-bold">$= 1$</div><div class="text-emerald-400 font-bold">(by Postulate 5a) [Proved]</div>
+                            </div>
+                        </div>
+
+                        <!-- Proof 6a -->
+                        <div class="text-sm">
+                            <p class="font-bold text-blue-300">Proof of Theorem 6(a) [Absorption]: $x + xy = x$</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-1 font-mono text-xs text-slate-300">
+                                <div>$x + xy = x \cdot 1 + xy$</div><div class="text-slate-400">(by Postulate 2b)</div>
+                                <div>$= x(1 + y)$</div><div class="text-slate-400">(by Postulate 4a)</div>
+                                <div>$= x(y + 1)$</div><div class="text-slate-400">(by Postulate 3a)</div>
+                                <div>$= x \cdot 1$</div><div class="text-slate-400">(by Theorem 2a: $y+1=1$)</div>
+                                <div class="text-emerald-400 font-bold">$= x$</div><div class="text-emerald-400 font-bold">(by Postulate 2b) [Proved]</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DeMorgan for Generalized -->
+                    <div class="bg-slate-800 p-4 rounded-xl text-sm space-y-2">
+                        <h4 class="font-bold text-yellow-300">Generalized DeMorgan's Theorem ($n$ Variables):</h4>
+                        <p>যেকোনো সংখ্যক চলকের জন্য ডি-মরগ্যানের সূত্র প্রযোজ্য:</p>
+                        <p class="font-mono text-blue-300">$(A + B + C + D + \dots)' = A' \cdot B' \cdot C' \cdot D' \dots$</p>
+                        <p class="font-mono text-blue-300">$(A \cdot B \cdot C \cdot D \dots)' = A' + B' + C' + D' + \dots$</p>
+                        <p class="text-xs text-slate-400"><b>নিয়ম:</b> ব্র্যাকেটের ওপরের বার/কমপ্লিমেন্ট ভাঙলে ভেতরে $+$ থাকলে $\cdot$ হবে, আর $\cdot$ থাকলে $+$ হবে এবং প্রতিটি ভ্যারিয়েবলের ওপর আলাদা বার বসবে।</p>
+                    </div>
+                </div>
+
+                <!-- 3.3.3 Operator Precedence -->
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-emerald-400">3.3.3 Operator Precedence (অপারেটরের অগ্রাধিকার)</h3>
+                    <p class="text-slate-300 text-sm">বুলিয়ান এক্সপ্রেশন মূল্যায়নে যে ক্রম অনুসরণ করা হয়:</p>
+                    <ol class="list-decimal list-inside text-sm bg-slate-800 p-4 rounded-xl text-yellow-300 space-y-1 font-semibold">
+                        <li>Parentheses (বন্ধনী - ব্র্যাকেটের ভেতরের কাজ আগে)</li>
+                        <li>NOT Operator ($'$)</li>
+                        <li>AND Operator ($\cdot$)</li>
+                        <li>OR Operator ($+$)</li>
+                    </ol>
+
+                    <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 text-xs font-mono">
+                        <p class="text-slate-400">// Example: Evaluate $F = xy' + z(x + y)'$ for $x=0, y=1, z=0$</p>
+                        <p>1. Parenthesis: $(x + y) = (0 + 1) = 1$</p>
+                        <p>2. NOT: $y' = 1' = 0$, and $(0+1)' = 1' = 0$</p>
+                        <p>3. AND: $x \cdot y' = 0 \cdot 0 = 0$, and $z \cdot 0 = 0 \cdot 0 = 0$</p>
+                        <p>4. OR: $0 + 0 = 0$</p>
+                        <p class="text-emerald-400 font-bold">Final Answer = 0</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3.4 Boolean Function -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-blue-300 border-b border-slate-700 pb-2">3.4 Boolean Function</h2>
+
+                <p class="text-slate-300 text-sm">
+                    একটি বুলিয়ান ফাংশন বাইনারি ভ্যারিয়েবল, বাইনারি অপারেটর (OR, AND), ইউনারি অপারেটর (NOT), বন্ধনী এবং সমান চিহ্নের সমন্বয়ে গঠিত হয়।
+                </p>
+
+                <!-- 3.4.1 & 3.4.2 Truth Table Representation -->
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-emerald-400">3.4.1 & 3.4.2 Boolean Functions & Truth Table (Table 3.5)</h3>
+                    <p class="text-slate-300 text-sm">$n$ টি বাইনারি চলক থাকলে ট্রুথ টেবিলে সারির সংখ্যা হবে $2^n$। ৩টি চলকের জন্য সারি হবে $2^3 = 8$ টি (000 থেকে 111)।</p>
+
+                    <div class="overflow-x-auto custom-scroll">
+                        <table class="w-full text-center text-xs border border-slate-700">
+                            <thead class="bg-slate-800 text-yellow-300">
+                                <tr>
+                                    <th class="p-2 border border-slate-700">x y z</th>
+                                    <th class="p-2 border border-slate-700">$F_1 = xyz'$</th>
+                                    <th class="p-2 border border-slate-700">$F_2 = x + y'z$</th>
+                                    <th class="p-2 border border-slate-700">$F_3 = x'y'z + x'yz + xy'$</th>
+                                    <th class="p-2 border border-slate-700">$F_4 = xy' + x'z$</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-700 bg-slate-900/50">
+                                <tr><td>0 0 0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                                <tr><td>0 0 1</td><td>0</td><td>1</td><td class="text-emerald-400 font-bold">1</td><td class="text-emerald-400 font-bold">1</td></tr>
+                                <tr><td>0 1 0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                                <tr><td>0 1 1</td><td>0</td><td>0</td><td class="text-emerald-400 font-bold">1</td><td class="text-emerald-400 font-bold">1</td></tr>
+                                <tr><td>1 0 0</td><td>0</td><td>1</td><td class="text-emerald-400 font-bold">1</td><td class="text-emerald-400 font-bold">1</td></tr>
+                                <tr><td>1 0 1</td><td>0</td><td>1</td><td class="text-emerald-400 font-bold">1</td><td class="text-emerald-400 font-bold">1</td></tr>
+                                <tr><td>1 1 0</td><td class="text-emerald-400 font-bold">1</td><td>1</td><td>0</td><td>0</td></tr>
+                                <tr><td>1 1 1</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 3.4.3 Non-unique Expression -->
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-emerald-400">3.4.3 Non-unique Algebraic Expression</h3>
+                    <div class="bangla-highlight p-4 rounded-r-lg text-sm">
+                        <b>গুরুত্বপূর্ণ পর্যবেক্ষণ:</b> ওপরের টেবিলে $F_3$ এবং $F_4$-এর প্রতি সারির মান নিখুঁতভাবে এক! কিন্তু তাদের অ্যালজেব্রাইক এক্সপ্রেশন দেখতে আলাদা। 
+                        এর অর্থ: <i>একটি বুলিয়ান ফাংশনের বীজগাণিতিক প্রকাশ অনন্য (Unique) নয়।</i> একই ফাংশনকে একাধিক উপায়ে লেখা যায়।
+                    </div>
+                    <div class="bg-slate-800 p-4 rounded-xl text-xs font-mono text-slate-300">
+                        <p class="text-yellow-300 font-bold">// Simplification of $F_3$ into $F_4$:</p>
+                        <p>$F_3 = x'y'z + x'yz + xy'$</p>
+                        <p>$= x'z(y' + y) + xy'$ &nbsp;&nbsp;&nbsp;&nbsp;[by Distributive Law]</p>
+                        <p>$= x'z(1) + xy'$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[since $y'+y=1$]</p>
+                        <p>$= x'z + xy' = xy' + x'z = F_4$ [Proved]</p>
+                    </div>
+                </div>
+
+                <!-- 3.4.4 Logic Diagram -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-emerald-400">3.4.4 Logic Diagram (Figure 3.1)</h3>
+                    <p class="text-slate-300 text-sm">বুলিয়ান ফাংশনকে লজিক গেট (AND, OR, NOT) দিয়ে সার্কিটে রূপান্তর করা হয়। নিচে $F_1, F_2, F_3, F_4$-এর আসল ডায়াগ্রাম দেওয়া হলো:</p>
+
+                    <!-- SVG Diagram for Fig 3.1 -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 overflow-x-auto custom-scroll">
+                        <p class="text-xs text-center text-slate-400 mb-3">Figure 3.1: Implementation of Boolean functions with gates ($F_1, F_2, F_3, F_4$)</p>
+                        <svg viewBox="0 0 750 360" class="w-[750px] mx-auto text-white">
+                            <!-- F1: xyz' -->
+                            <g transform="translate(20, 20)">
+                                <text x="0" y="15" fill="#60a5fa" font-weight="bold" font-size="14">F1 = x y z'</text>
+                                <text x="10" y="45" fill="#cbd5e1" font-size="12">x</text>
+                                <text x="10" y="70" fill="#cbd5e1" font-size="12">y</text>
+                                <text x="10" y="95" fill="#cbd5e1" font-size="12">z</text>
+                                <!-- Lines -->
+                                <line x1="25" y1="40" x2="110" y2="40" stroke="#94a3b8" stroke-width="2"/>
+                                <line x1="25" y1="65" x2="110" y2="65" stroke="#94a3b8" stroke-width="2"/>
+                                <line x1="25" y1="90" x2="45" y2="90" stroke="#94a3b8" stroke-width="2"/>
+                                <!-- NOT Gate for z -->
+                                <polygon points="45,82 45,98 65,90" fill="#334155" stroke="#e2e8f0" stroke-width="1.5"/>
+                                <circle cx="68" cy="90" r="3" fill="#0f172a" stroke="#e2e8f0" stroke-width="1.5"/>
+                                <line x1="71" y1="90" x2="110" y2="90" stroke="#94a3b8" stroke-width="2"/>
+                                <!-- 3-Input AND Gate -->
+                                <path d="M 110,30 L 130,30 A 35,35 0 0,1 130,100 L 110,100 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+                                <line x1="165" y1="65" x2="210" y2="65" stroke="#38bdf8" stroke-width="2"/>
+                                <text x="215" y="70" fill="#38bdf8" font-weight="bold" font-size="12">F1</text>
+                            </g>
+
+                            <!-- F2: x + y'z -->
+                            <g transform="translate(380, 20)">
+                                <text x="0" y="15" fill="#60a5fa" font-weight="bold" font-size="14">F2 = x + y'z</text>
+                                <text x="10" y="40" fill="#cbd5e1" font-size="12">x</text>
+                                <text x="10" y="75" fill="#cbd5e1" font-size="12">y</text>
+                                <text x="10" y="105" fill="#cbd5e1" font-size="12">z</text>
+                                <!-- y NOT -->
+                                <line x1="25" y1="70" x2="40" y2="70" stroke="#94a3b8" stroke-width="2"/>
+                                <polygon points="40,62 40,78 60,70" fill="#334155" stroke="#e2e8f0" stroke-width="1.5"/>
+                                <circle cx="63" cy="70" r="3" fill="#0f172a" stroke="#e2e8f0" stroke-width="1.5"/>
+                                <line x1="66" y1="70" x2="90" y2="70" stroke="#94a3b8" stroke-width="2"/>
+                                <line x1="25" y1="100" x2="90" y2="100" stroke="#94a3b8" stroke-width="2"/>
+                                <!-- AND for y'z -->
+                                <path d="M 90,60 L 105,60 A 25,25 0 0,1 105,110 L 90,110 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+                                <line x1="130" y1="85" x2="160" y2="85" stroke="#94a3b8" stroke-width="2"/>
+                                <!-- x line -->
+                                <line x1="25" y1="35" x2="160" y2="35" stroke="#94a3b8" stroke-width="2"/>
+                                <!-- OR Gate -->
+                                <path d="M 160,25 C 170,25 180,35 200,60 C 180,85 170,95 160,95 C 170,75 170,45 160,25 Z" fill="#1e293b" stroke="#4ade80" stroke-width="2"/>
+                                <line x1="200" y1="60" x2="240" y2="60" stroke="#4ade80" stroke-width="2"/>
+                                <text x="245" y="65" fill="#4ade80" font-weight="bold" font-size="12">F2</text>
+                            </g>
+
+                            <!-- F3: x'y'z + x'yz + xy' -->
+                            <g transform="translate(20, 160)">
+                                <text x="0" y="15" fill="#f43f5e" font-weight="bold" font-size="13">F3 = x'y'z + x'yz + xy' (Unsimplified: 3 AND + 1 OR)</text>
+                                <rect x="10" y="25" width="280" height="150" rx="8" fill="#1e1b4b" stroke="#6366f1" stroke-dasharray="4"/>
+                                <text x="80" y="105" fill="#a5b4fc" font-size="12">[ 3 AND Gates + 1 OR Gate ]</text>
+                                <text x="20" y="160" fill="#f43f5e" font-size="11"> Requires 4 Gates & 10 Inputs!</text>
+                            </g>
+
+                            <!-- F4: xy' + x'z -->
+                            <g transform="translate(380, 160)">
+                                <text x="0" y="15" fill="#34d399" font-weight="bold" font-size="13">F4 = xy' + x'z (Simplified Form)</text>
+                                <!-- AND 1: xy' -->
+                                <path d="M 70,30 L 85,30 A 20,20 0 0,1 85,70 L 70,70 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+                                <!-- AND 2: x'z -->
+                                <path d="M 70,90 L 85,90 A 20,20 0 0,1 85,130 L 70,130 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+                                <!-- Lines to OR -->
+                                <line x1="105" y1="50" x2="140" y2="65" stroke="#94a3b8" stroke-width="2"/>
+                                <line x1="105" y1="110" x2="140" y2="95" stroke="#94a3b8" stroke-width="2"/>
+                                <!-- OR Gate -->
+                                <path d="M 140,50 C 150,50 160,60 180,80 C 160,100 150,110 140,110 C 150,90 150,70 140,50 Z" fill="#1e293b" stroke="#34d399" stroke-width="2"/>
+                                <line x1="180" y1="80" x2="220" y2="80" stroke="#34d399" stroke-width="2"/>
+                                <text x="225" y="85" fill="#34d399" font-weight="bold" font-size="12">F4</text>
+                                <text x="20" y="160" fill="#34d399" font-size="11"> Economical! Requires fewer gates & inputs.</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 3.4.5 Complement of Boolean Function -->
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-emerald-400">3.4.5 Complement of Boolean Function</h3>
+                    <p class="text-slate-300 text-sm">কোনো ফাংশন $F$-এর কমপ্লিমেন্ট $F'$ নির্ণয় করার শ্রেষ্ঠ পদ্ধতি হলো **DeMorgan's Theorem** প্রয়োগ করা।</p>
+
+                    <div class="bg-slate-800 p-4 rounded-xl font-mono text-xs text-slate-300 space-y-2">
+                        <p class="text-yellow-300 font-bold">// Example: Find complement of $F_1 = x'yz' + x'y'z$</p>
+                        <p>$F_1' = (x'yz' + x'y'z)'$</p>
+                        <p>$= (x'yz')' \cdot (x'y'z)'$ &nbsp;&nbsp;&nbsp;&nbsp;[by DeMorgan: $(A+B)' = A'B'$]</p>
+                        <p class="text-emerald-400 font-bold">$= (x + y' + z)(x + y + z')$ [by DeMorgan: $(abc)' = a'+b'+c'$]</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3.5 Forms of Boolean Functions -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-blue-300 border-b border-slate-700 pb-2">3.5 Forms of Boolean Functions</h2>
+
+                <!-- 3.5.1 Minterms and Maxterms -->
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-emerald-400">3.5.1 Minterms and Maxterms</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="bg-slate-800 p-4 rounded-xl border border-blue-500/30">
+                            <h4 class="font-bold text-blue-400 mb-1">Minterm (Standard Product Term)</h4>
+                            <p class="text-slate-300">একটি AND টার্ম যেখানে সবকটি ভ্যারিয়েবল একবার করে থাকবে (Normal বা Complemented রূপে)।</p>
+                            <p class="text-xs text-yellow-300 mt-2"><b>নিয়ম:</b> Bit 1 হলে Unprimed ($x$), Bit 0 হলে Primed ($x'$)। চিহ্ণে ছোট হাতের $m_j$ ব্যবহার করা হয়।</p>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-xl border border-indigo-500/30">
+                            <h4 class="font-bold text-indigo-400 mb-1">Maxterm (Standard Sum Term)</h4>
+                            <p class="text-slate-300">একটি OR টার্ম যেখানে সবকটি ভ্যারিয়েবল একবার করে থাকবে (Normal বা Complemented রূপে)।</p>
+                            <p class="text-xs text-yellow-300 mt-2"><b>নিয়ম:</b> Bit 0 হলে Unprimed ($x$), Bit 1 হলে Primed ($x'$)। চিহ্ণে বড় হাতের $M_j$ ব্যবহার করা হয়।</p>
+                        </div>
+                    </div>
+
+                    <!-- Table 3.6 -->
+                    <p class="font-semibold text-slate-300 text-sm mt-3">Table 3.6: Minterms and Maxterms for 3 Binary Variables</p>
+                    <div class="overflow-x-auto custom-scroll">
+                        <table class="w-full text-center text-xs border border-slate-700">
+                            <thead class="bg-slate-800 text-yellow-300">
+                                <tr>
+                                    <th class="p-2 border border-slate-700">xyz</th>
+                                    <th class="p-2 border border-slate-700">Minterm Term</th>
+                                    <th class="p-2 border border-slate-700">Minterm Symbol</th>
+                                    <th class="p-2 border border-slate-700">Maxterm Term</th>
+                                    <th class="p-2 border border-slate-700">Maxterm Symbol</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-700 bg-slate-900/50">
+                                <tr><td>000</td><td>$x'y'z'$</td><td class="text-blue-400 font-bold">m0</td><td>$x + y + z$</td><td class="text-indigo-400 font-bold">M0</td></tr>
+                                <tr><td>001</td><td>$x'y'z$</td><td class="text-blue-400 font-bold">m1</td><td>$x + y + z'$</td><td class="text-indigo-400 font-bold">M1</td></tr>
+                                <tr><td>010</td><td>$x'yz'$</td><td class="text-blue-400 font-bold">m2</td><td>$x + y' + z$</td><td class="text-indigo-400 font-bold">M2</td></tr>
+                                <tr><td>011</td><td>$x'yz$</td><td class="text-blue-400 font-bold">m3</td><td>$x + y' + z'$</td><td class="text-indigo-400 font-bold">M3</td></tr>
+                                <tr><td>100</td><td>$xy'z'$</td><td class="text-blue-400 font-bold">m4</td><td>$x' + y + z$</td><td class="text-indigo-400 font-bold">M4</td></tr>
+                                <tr><td>101</td><td>$xy'z$</td><td class="text-blue-400 font-bold">m5</td><td>$x' + y + z'$</td><td class="text-indigo-400 font-bold">M5</td></tr>
+                                <tr><td>110</td><td>$xyz'$</td><td class="text-blue-400 font-bold">m6</td><td>$x' + y' + z$</td><td class="text-indigo-400 font-bold">M6</td></tr>
+                                <tr><td>111</td><td>$xyz$</td><td class="text-blue-400 font-bold">m7</td><td>$x' + y' + z'$</td><td class="text-indigo-400 font-bold">M7</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="exam-tip p-3 rounded-lg text-xs">
+                        <b>🔑 Key Property:</b> প্রতিটি Maxterm হলো তার সমতুল্য Minterm-এর কমপ্লিমেন্ট: $M_j = m_j'$।
+                    </div>
+                </div>
+
+                <!-- 3.5.2 Canonical Forms -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-emerald-400">3.5.2 Canonical Forms (CSOP & CPOS)</h3>
+                    <p class="text-slate-300 text-sm">ফাংশন যখন তার সবকটি মিনটার্মের সমষ্টি (OR) বা ম্যাক্সটার্মের গুণফল (AND) রূপে থাকে, তাকে **Canonical Form** বলে।</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <!-- CSOP -->
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-2">
+                            <h4 class="font-bold text-blue-400">Canonical Sum of Products (CSOP)</h4>
+                            <p class="text-xs text-slate-300">ট্রুথ টেবিলে যেখানে আউটপুট **1** থাকে, সেই মিনটার্মগুলোর OR করা হয়।</p>
+                            <p class="font-mono text-xs text-yellow-300">$f_1 = m_1 + m_4 + m_7$</p>
+                            <p class="font-bold text-emerald-400 text-xs">Short Notation: $f_1(x,y,z) = \Sigma(1, 4, 7)$</p>
+                        </div>
+
+                        <!-- CPOS -->
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-2">
+                            <h4 class="font-bold text-indigo-400">Canonical Product of Sums (CPOS)</h4>
+                            <p class="text-xs text-slate-300">ট্রুথ টেবিলে যেখানে আউটপুট **0** থাকে, সেই ম্যাক্সটার্মগুলোর AND করা হয়।</p>
+                            <p class="font-mono text-xs text-yellow-300">$f_1 = M_0 \cdot M_2 \cdot M_3 \cdot M_5 \cdot M_6$</p>
+                            <p class="font-bold text-emerald-400 text-xs">Short Notation: $f_1(x,y,z) = \prod(0, 2, 3, 5, 6)$</p>
+                        </div>
+                    </div>
+
+                    <!-- Conversion between Canonical Forms -->
+                    <div class="bg-slate-900 p-4 rounded-xl border border-blue-500/30 text-xs space-y-2">
+                        <h4 class="font-bold text-yellow-300 text-sm">Conversion Between Canonical Forms Rule:</h4>
+                        <p class="text-slate-300">এক ক্যানোনিকাল রূপ থেকে অন্য রূপের রূপান্তর করতে চিহ্ন $\Sigma$ এবং $\prod$ পরিবর্তন করতে হয় এবং সংকলনে অনুপস্থিত (Missing) সংখ্যাগুলো নিতে হয়।</p>
+                        <p class="font-mono text-blue-300">Example: Given $F(x,y,z) = \prod(0, 2, 4, 5)$ [Total terms = $2^3 = 8$, i.e., 0 to 7]</p>
+                        <p class="font-mono text-emerald-400">Missing terms = 1, 3, 6, 7 $\Rightarrow$ CSOP: $F(x,y,z) = \Sigma(1, 3, 6, 7)$</p>
+                    </div>
+                </div>
+
+                <!-- 3.5.3 Noncanonical Forms -->
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-emerald-400">3.5.3 Noncanonical Forms (SOP and POS)</h3>
+                    <p class="text-slate-300 text-sm">এখানে টার্মগুলোতে সবকটি চলক না-ও থাকতে পারে। যেমন: $F = y' + xy + x'yz'$ (SOP)।</p>
+
+                    <!-- Conversion Examples -->
+                    <div class="bg-slate-800 p-4 rounded-xl space-y-3 text-xs font-mono">
+                        <h4 class="font-bold text-yellow-300 text-sm font-sans">SOP-কে CSOP-তে রূপান্তর করার নিয়ম:</h4>
+                        <p class="text-slate-300">যে অ্যান্ড টার্মে কোনো ভ্যারিয়েবল অনুপস্থিত থাকে, সেটিকে $(X + X')$ দিয়ে AND করতে হবে।</p>
+                        <div class="bg-slate-900 p-3 rounded border border-slate-700">
+                            <p>Convert $F(A,B,C) = A + B'C$ to CSOP:</p>
+                            <p>$A = A(B + B')(C + C') = ABC + ABC' + AB'C + AB'C'$</p>
+                            <p>$B'C = (A + A')B'C = AB'C + A'B'C$</p>
+                            <p>OR-ing all terms and removing duplicates:</p>
+                            <p class="text-emerald-400 font-bold">$F = A'B'C + AB'C' + AB'C + ABC' + ABC = \Sigma(1, 4, 5, 6, 7)$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3.5.4 Nonstandard Form -->
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-emerald-400">3.5.4 Nonstandard Form & Standard Conversion</h3>
+                    <p class="text-slate-300 text-sm">যে এক্সপ্রেশন SOP বা POS কোনোটির নিয়মেই সরাসরি পড়ে না, তাকে Nonstandard Form বলে। যেমন: $F_3 = (AB + CD)(A'B' + C'D')$।</p>
+                    <p class="text-slate-300 text-sm">বণ্টন বিধি (Distributive Law) ব্যবহার করে এগুলোকে Standard SOP বা POS-এ আনা হয়।</p>
+                </div>
+            </section>
+
+            <!-- 3.6 Incompletely Specified Boolean Functions -->
+            <section class="space-y-4">
+                <h2 class="text-2xl font-bold text-blue-300 border-b border-slate-700 pb-2">3.6 Incompletely Specified Boolean Functions (Don't Care Conditions)</h2>
+                
+                <div class="bangla-highlight p-4 rounded-r-lg text-sm">
+                    <p class="text-slate-200">
+                        <b>Don't Care Condition ($x$ / $d$):</b> বাস্তব সার্কিটে এমন কিছু ইনপুট সংমিশ্রণ (Input Combinations) থাকতে পারে যা কখনো ঘটবে না (যেমন: BCD কোডে 1010 থেকে 1111 কখনোই আসে না) অথবা যাদের আউটপুট ১ হলো না ০ হলো তাতে সার্কিটের কাজের কোনো ব্যাঘাত ঘটে না। ট্রুথ টেবিলে এদের আউটপুট $x$ বা $d$ দিয়ে প্রকাশ করা হয়।
+                    </p>
+                </div>
+
+                <p class="text-sm font-semibold text-slate-300">Table 3.8: Truth Table of an Incompletely Specified Boolean Function</p>
+                <div class="overflow-x-auto custom-scroll">
+                    <table class="w-full text-center text-xs border border-slate-700">
+                        <thead class="bg-slate-800 text-yellow-300">
+                            <tr><th>x y z</th><th>f</th><th>বিবরণ</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700 bg-slate-900/50">
+                            <tr><td>0 0 0</td><td class="text-emerald-400 font-bold">1</td><td>m0</td></tr>
+                            <tr><td>0 0 1</td><td>0</td><td>-</td></tr>
+                            <tr class="bg-yellow-950/30"><td>0 1 0</td><td class="text-yellow-400 font-bold">X</td><td>Don't Care (d.c. 2)</td></tr>
+                            <tr><td>0 1 1</td><td>0</td><td>-</td></tr>
+                            <tr><td>1 0 0</td><td class="text-emerald-400 font-bold">1</td><td>m4</td></tr>
+                            <tr><td>1 0 1</td><td>0</td><td>-</td></tr>
+                            <tr class="bg-yellow-950/30"><td>1 1 0</td><td class="text-yellow-400 font-bold">X</td><td>Don't Care (d.c. 6)</td></tr>
+                            <tr><td>1 1 1</td><td class="text-emerald-400 font-bold">1</td><td>m7</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="bg-slate-800 p-4 rounded-xl text-xs font-mono space-y-1">
+                    <p class="text-yellow-300 font-bold">Short Notation Expression:</p>
+                    <p class="text-blue-300">$f(x,y,z) = \Sigma(0, 4, 7) + \Sigma_{d.c.}(2, 6)$</p>
+                    <p class="text-indigo-300">$f(x,y,z) = \prod(1, 3, 5) \cdot \prod_{d.c.}(2, 6)$</p>
+                </div>
+
+                <div class="revision-box p-4 rounded-r-lg text-sm">
+                    <b>📌 Chapter 3 Quick Exam Revision Summary:</b>
+                    <ul class="list-disc list-inside mt-1 text-xs space-y-1 text-slate-200">
+                        <li><b>Huntington Postulates:</b> Closure, Identity, Commutative, Distributive, Complement, 2 Elements.</li>
+                        <li><b>Dual Formula:</b> $+$ $\leftrightarrow$ $\cdot$ এবং $0$ $\leftrightarrow$ $1$ (Variables অপরিবর্তিত)।</li>
+                        <li><b>DeMorgan Laws:</b> $(x+y)' = x'y'$ এবং $(xy)' = x'+y'$।</li>
+                        <li><b>CSOP vs CPOS:</b> $\Sigma(\text{minterms for 1})$ এবং $\prod(\text{maxterms for 0})$।</li>
+                        <li><b>Conversion Rule:</b> $\Sigma$ $\rightarrow$ $\prod$ রূপান্তরে মিসিং টার্মগুলো নিতে হবে।</li>
+                    </ul>
+                </div>
+            </section>
+        </article>
+
+        <!-- =================================================================== -->
+        <!-- CHAPTER 4 DETAILED EXPLANATION -->
+        <!-- =================================================================== -->
+        <article id="chapter4" class="space-y-10 border-t-2 border-indigo-600 pt-8">
+            <div class="bg-indigo-950/40 p-6 rounded-2xl border border-indigo-500/30">
+                <h1 class="text-3xl font-extrabold text-indigo-400">CHAPTER 4: LOGIC GATES</h1>
+                <p class="text-slate-300 mt-2">লজিক গেট হলো ডিজিটাল সিস্টেমের মৌলিক ইলেকট্রনিক বিল্ডিং ব্লক।</p>
+            </div>
+
+            <!-- 4.1 Introduction -->
+            <section class="space-y-3">
+                <h2 class="text-2xl font-bold text-indigo-300 border-b border-slate-700 pb-2">4.1 Introduction</h2>
+                <div class="bangla-highlight p-4 rounded-r-lg text-sm">
+                    <b>সহজ বাংলায় ব্যাখ্যা:</b> লজিক গেট হলো এমন কিছু ইলেকট্রনিক সার্কিট (সাধারণত ট্রানজিস্টর, ডায়োড দিয়ে তৈরি) যা বুলিয়ান অ্যালজেব্রার লজিক্যাল অপারেশন পরিচালনা করে।
+                </div>
+            </section>
+
+            <!-- 4.2 Logic Operations -->
+            <section class="space-y-4">
+                <h2 class="text-2xl font-bold text-indigo-300 border-b border-slate-700 pb-2">4.2 Logic Operations (16 Functions of Two Variables)</h2>
+                <p class="text-slate-300 text-sm">
+                    $n$ টি বাইনারি চলকের জন্য সম্ভবপর বুলিয়ান ফাংশনের সংখ্যা $2^{2^n}$। দুটি চলকের জন্য ($n=2$), মোট ফাংশন সংখ্যা হবে $2^{2^2} = 2^4 = 16$ টি!
+                </p>
+
+                <!-- Table 4.2 -->
+                <p class="font-semibold text-slate-300 text-sm">Table 4.2: Boolean Expressions for the 16 Functions of Two Variables</p>
+                <div class="overflow-x-auto custom-scroll">
+                    <table class="w-full text-left text-xs border border-slate-700">
+                        <thead class="bg-slate-800 text-yellow-300">
+                            <tr>
+                                <th class="p-2 border border-slate-700">Function</th>
+                                <th class="p-2 border border-slate-700">Operator Symbol</th>
+                                <th class="p-2 border border-slate-700">Name</th>
+                                <th class="p-2 border border-slate-700">Comment / Definition</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700 text-slate-300 bg-slate-900/50">
+                            <tr><td>$F_0 = 0$</td><td>-</td><td>Null</td><td>Binary constant 0</td></tr>
+                            <tr class="bg-blue-950/40"><td>$F_1 = xy$</td><td>$x \cdot y$</td><td><b>AND</b></td><td>x and y</td></tr>
+                            <tr><td>$F_2 = xy'$</td><td>$x / y$</td><td>Inhibition</td><td>x but not y</td></tr>
+                            <tr><td>$F_3 = x$</td><td>-</td><td>Transfer</td><td>Transfer x</td></tr>
+                            <tr><td>$F_4 = x'y$</td><td>$y / x$</td><td>Inhibition</td><td>y but not x</td></tr>
+                            <tr><td>$F_5 = y$</td><td>-</td><td>Transfer</td><td>Transfer y</td></tr>
+                            <tr class="bg-indigo-950/40"><td>$F_6 = xy' + x'y$</td><td>$x \oplus y$</td><td><b>EXOR</b></td><td>x or y but not both</td></tr>
+                            <tr class="bg-blue-950/40"><td>$F_7 = x + y$</td><td>$x + y$</td><td><b>OR</b></td><td>x or y</td></tr>
+                            <tr class="bg-indigo-950/40"><td>$F_8 = (x + y)'$</td><td>$x \downarrow y$</td><td><b>NOR</b></td><td>Not-OR</td></tr>
+                            <tr class="bg-indigo-950/40"><td>$F_9 = xy + x'y'$</td><td>$x \otimes y$</td><td><b>EXNOR (Equivalence)</b></td><td>x equals y</td></tr>
+                            <tr class="bg-blue-950/40"><td>$F_{10} = y'$</td><td>$y'$</td><td><b>NOT</b></td><td>Inversion of y</td></tr>
+                            <tr><td>$F_{11} = x + y'$</td><td>$x \subset y$</td><td>Implication</td><td>If y then x</td></tr>
+                            <tr class="bg-blue-950/40"><td>$F_{12} = x'$</td><td>$x'$</td><td><b>NOT</b></td><td>Inversion of x</td></tr>
+                            <tr><td>$F_{13} = x' + y$</td><td>$x \subset y$</td><td>Implication</td><td>If x then y</td></tr>
+                            <tr class="bg-indigo-950/40"><td>$F_{14} = (xy)'$</td><td>$x \uparrow y$</td><td><b>NAND</b></td><td>Not-AND</td></tr>
+                            <tr><td>$F_{15} = 1$</td><td>-</td><td>Identity</td><td>Binary constant 1</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 4.3 Logic Gates -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-indigo-300 border-b border-slate-700 pb-2">4.3 Logic Gates (8 Standard Gates)</h2>
+                
+                <p class="text-slate-300 text-sm">১৬টি ফাংশনের মধ্যে ৮টি প্রধান ফাংশন মানসম্পন্ন লজিক গেট হিসেবে ব্যবহৃত হয় (Figure 4.1):</p>
+
+                <!-- SVG Diagram for 8 Standard Gates (Figure 4.1) -->
+                <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 overflow-x-auto custom-scroll">
+                    <p class="text-xs text-center text-slate-400 mb-4">Figure 4.1: Standard Digital Logic Gates (Graphic Symbols & Algebraic Functions)</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 min-w-[700px]">
+                        
+                        <!-- Buffer -->
+                        <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-center">
+                            <p class="font-bold text-blue-400 text-sm">Buffer</p>
+                            <svg viewBox="0 0 120 60" class="w-28 mx-auto my-1">
+                                <line x1="10" y1="30" x2="40" y2="30" stroke="#cbd5e1" stroke-width="2"/>
+                                <polygon points="40,10 40,50 80,30" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+                                <line x1="80" y1="30" x2="110" y2="30" stroke="#cbd5e1" stroke-width="2"/>
+                                <text x="0" y="34" fill="#a5b4fc" font-size="10">x</text>
+                                <text x="112" y="34" fill="#38bdf8" font-size="10">F</text>
+                            </svg>
+                            <p class="text-xs font-mono text-emerald-400">$F = x$</p>
+                        </div>
+
+                        <!-- NOT -->
+                        <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-center">
+                            <p class="font-bold text-blue-400 text-sm">NOT (Inverter)</p>
+                            <svg viewBox="0 0 120 60" class="w-28 mx-auto my-1">
+                                <line x1="10" y1="30" x2="40" y2="30" stroke="#cbd5e1" stroke-width="2"/>
+                                <polygon points="40,10 40,50 75,30" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+                                <circle cx="79" cy="30" r="4" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                                <line x1="83" y1="30" x2="110" y2="30" stroke="#cbd5e1" stroke-width="2"/>
+                            </svg>
+                            <p class="text-xs font-mono text-emerald-400">$F = x'$</p>
+                        </div>
+
+                        <!-- AND -->
+                        <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-center">
+                            <p class="font-bold text-blue-400 text-sm">AND Gate</p>
+                            <svg viewBox="0 0 120 60" class="w-28 mx-auto my-1">
+                                <line x1="10" y1="18" x2="40" y2="18" stroke="#cbd5e1" stroke-width="2"/>
+                                <line x1="10" y1="42" x2="40" y2="42" stroke="#cbd5e1" stroke-width="2"/>
+                                <path d="M 40,10 L 60,10 A 20,20 0 0,1 60,50 L 40,50 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+                                <line x1="80" y1="30" x2="110" y2="30" stroke="#cbd5e1" stroke-width="2"/>
+                            </svg>
+                            <p class="text-xs font-mono text-emerald-400">$F = xy$</p>
+                        </div>
+
+                        <!-- OR -->
+                        <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-center">
+                            <p class="font-bold text-blue-400 text-sm">OR Gate</p>
+                            <svg viewBox="0 0 120 60" class="w-28 mx-auto my-1">
+                                <line x1="10" y1="18" x2="40" y2="18" stroke="#cbd5e1" stroke-width="2"/>
+                                <line x1="10" y1="42" x2="40" y2="42" stroke="#cbd5e1" stroke-width="2"/>
+                                <path d="M 40,10 C 50,10 65,18 85,30 C 65,42 50,50 40,50 C 50,35 50,25 40,10 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+                                <line x1="85" y1="30" x2="110" y2="30" stroke="#cbd5e1" stroke-width="2"/>
+                            </svg>
+                            <p class="text-xs font-mono text-emerald-400">$F = x + y$</p>
+                        </div>
+
+                        <!-- NAND -->
+                        <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-center">
+                            <p class="font-bold text-indigo-400 text-sm">NAND Gate</p>
+                            <svg viewBox="0 0 120 60" class="w-28 mx-auto my-1">
+                                <line x1="10" y1="18" x2="40" y2="18" stroke="#cbd5e1" stroke-width="2"/>
+                                <line x1="10" y1="42" x2="40" y2="42" stroke="#cbd5e1" stroke-width="2"/>
+                                <path d="M 40,10 L 55,10 A 20,20 0 0,1 55,50 L 40,50 Z" fill="#1e293b" stroke="#818cf8" stroke-width="2"/>
+                                <circle cx="79" cy="30" r="4" fill="#0f172a" stroke="#818cf8" stroke-width="2"/>
+                                <line x1="83" y1="30" x2="110" y2="30" stroke="#cbd5e1" stroke-width="2"/>
+                            </svg>
+                            <p class="text-xs font-mono text-emerald-400">$F = (xy)'$</p>
+                        </div>
+
+                        <!-- NOR -->
+                        <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-center">
+                            <p class="font-bold text-indigo-400 text-sm">NOR Gate</p>
+                            <svg viewBox="0 0 120 60" class="w-28 mx-auto my-1">
+                                <line x1="10" y1="18" x2="40" y2="18" stroke="#cbd5e1" stroke-width="2"/>
+                                <line x1="10" y1="42" x2="40" y2="42" stroke="#cbd5e1" stroke-width="2"/>
+                                <path d="M 40,10 C 50,10 60,18 78,30 C 60,42 50,50 40,50 C 50,35 50,25 40,10 Z" fill="#1e293b" stroke="#818cf8" stroke-width="2"/>
+                                <circle cx="82" cy="30" r="4" fill="#0f172a" stroke="#818cf8" stroke-width="2"/>
+                                <line x1="86" y1="30" x2="110" y2="30" stroke="#cbd5e1" stroke-width="2"/>
+                            </svg>
+                            <p class="text-xs font-mono text-emerald-400">$F = (x + y)'$</p>
+                        </div>
+
+                        <!-- EXOR -->
+                        <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-center">
+                            <p class="font-bold text-yellow-400 text-sm">EXOR Gate</p>
+                            <svg viewBox="0 0 120 60" class="w-28 mx-auto my-1">
+                                <line x1="5" y1="18" x2="38" y2="18" stroke="#cbd5e1" stroke-width="2"/>
+                                <line x1="5" y1="42" x2="38" y2="42" stroke="#cbd5e1" stroke-width="2"/>
+                                <path d="M 32,10 C 42,25 42,35 32,50" fill="none" stroke="#facc15" stroke-width="2"/>
+                                <path d="M 40,10 C 50,10 65,18 85,30 C 65,42 50,50 40,50 C 50,35 50,25 40,10 Z" fill="#1e293b" stroke="#facc15" stroke-width="2"/>
+                                <line x1="85" y1="30" x2="110" y2="30" stroke="#cbd5e1" stroke-width="2"/>
+                            </svg>
+                            <p class="text-xs font-mono text-emerald-400">$F = x \oplus y$</p>
+                        </div>
+
+                        <!-- EXNOR -->
+                        <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-center">
+                            <p class="font-bold text-yellow-400 text-sm">EXNOR Gate</p>
+                            <svg viewBox="0 0 120 60" class="w-28 mx-auto my-1">
+                                <line x1="5" y1="18" x2="38" y2="18" stroke="#cbd5e1" stroke-width="2"/>
+                                <line x1="5" y1="42" x2="38" y2="42" stroke="#cbd5e1" stroke-width="2"/>
+                                <path d="M 32,10 C 42,25 42,35 32,50" fill="none" stroke="#facc15" stroke-width="2"/>
+                                <path d="M 40,10 C 50,10 60,18 78,30 C 60,42 50,50 40,50 C 50,35 50,25 40,10 Z" fill="#1e293b" stroke="#facc15" stroke-width="2"/>
+                                <circle cx="82" cy="30" r="4" fill="#0f172a" stroke="#facc15" stroke-width="2"/>
+                                <line x1="86" y1="30" x2="110" y2="30" stroke="#cbd5e1" stroke-width="2"/>
+                            </svg>
+                            <p class="text-xs font-mono text-emerald-400">$F = x \otimes y$</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Multiple Inputs & Non-associativity -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-emerald-400">Extension to Multiple Inputs & Non-Associativity of NAND/NOR</h3>
+                    
+                    <div class="bangla-highlight p-4 rounded-r-lg text-sm space-y-2">
+                        <p class="text-slate-200">
+                            <b>গুরুত্বপূর্ণ লজিক কনসেপ্ট (Exam Favorite Question):</b><br>
+                            AND এবং OR অপারেশন সংযোজন বিধি (Associative Law) মেনে চলে: $(xy)z = x(yz)$। কিন্তু **NAND এবং NOR অপারেশন Associative নয়!**
+                        </p>
+                        <p class="font-mono text-xs text-rose-300">
+                            $(x \uparrow y) \uparrow z \neq x \uparrow (y \uparrow z)$
+                        </p>
+                        <p class="text-xs text-slate-300">
+                            তাই একাধিক ইনপুটের NAND/NOR তৈরি করতে আমরা কেবল Complemented AND/OR হিসেবে ধরে নিই: $x \uparrow y \uparrow z = (xyz)'$।
+                        </p>
+                    </div>
+
+                    <!-- EXOR/EXNOR Odd and Even Parity Functions -->
+                    <div class="bg-slate-800 p-4 rounded-xl text-xs space-y-2">
+                        <h4 class="font-bold text-yellow-300 text-sm">Multiple-input EXOR and EXNOR Functions:</h4>
+                        <ul class="list-disc list-inside space-y-1 text-slate-300">
+                            <li><b>EXOR (Odd Function):</b> ইনপুটে বেজোড় সংখ্যক (Odd number of) **1** থাকলে আউটপুট **1** হবে।</li>
+                            <li><b>EXNOR (Even Function):</b> ইনপুটে জোড় সংখ্যক (Even number of) **0** থাকলে আউটপুট **1** হবে।</li>
+                            <li><b>ভ্যারিয়েবল সংখ্যার ওপর নির্ভরতা:</b> 
+                                <br>- যদি 변수/চলক সংখ্যা <b>EVEN</b> হয়, তবে EXOR ও EXNOR একে অপরের Complement।
+                                <br>- যদি 변수/চলক সংখ্যা <b>ODD</b> হয়, তবে EXOR ও EXNOR এর ট্রুথ টেবিল হুবহু এক! ($A \oplus B \oplus C = A \otimes B \otimes C$)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4.4 Universality of NAND and NOR Gates -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-indigo-300 border-b border-slate-700 pb-2">4.4 Universality of NAND and NOR Gates</h2>
+                
+                <p class="text-slate-300 text-sm">
+                    NAND এবং NOR গেটকে **Universal Gate** বলা হয়, কারণ কেবল NAND বা কেবল NOR গেট ব্যবহার করে যেকোনো মৌলিক লজিক অপারেশন (NOT, AND, OR) বাস্তবায়ন করা সম্ভব।
+                </p>
+
+                <!-- NAND Realization (Figure 4.6) -->
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-3">
+                    <h3 class="text-lg font-bold text-blue-400">Figure 4.6: NAND Gate Realization of NOT, AND, OR</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center text-xs">
+                        
+                        <!-- NOT via NAND -->
+                        <div class="bg-slate-900 p-3 rounded border border-slate-800">
+                            <p class="font-bold text-yellow-300 mb-1">(a) NOT Operation</p>
+                            <p class="text-slate-400">ইনপুট দুটিকে এক করে দিলে:</p>
+                            <p class="font-mono text-emerald-400 font-bold mt-2">$F = (A \cdot A)' = A'$</p>
+                        </div>
+
+                        <!-- AND via NAND -->
+                        <div class="bg-slate-900 p-3 rounded border border-slate-800">
+                            <p class="font-bold text-yellow-300 mb-1">(b) AND Operation</p>
+                            <p class="text-slate-400">NAND-এর পর একটি Inverter দিলে:</p>
+                            <p class="font-mono text-emerald-400 font-bold mt-2">$F = ((AB)')' = AB$</p>
+                        </div>
+
+                        <!-- OR via NAND -->
+                        <div class="bg-slate-900 p-3 rounded border border-slate-800">
+                            <p class="font-bold text-yellow-300 mb-1">(c) OR Operation</p>
+                            <p class="text-slate-400">ইনপুটগুলোকে আলাদা ইনভার্ট করে NAND করলে:</p>
+                            <p class="font-mono text-emerald-400 font-bold mt-2">$F = (A' \cdot B')' = A + B$</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- NOR Realization (Figure 4.7) -->
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-3">
+                    <h3 class="text-lg font-bold text-indigo-400">Figure 4.7: NOR Gate Realization of NOT, OR, AND</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center text-xs">
+                        
+                        <!-- NOT via NOR -->
+                        <div class="bg-slate-900 p-3 rounded border border-slate-800">
+                            <p class="font-bold text-yellow-300 mb-1">(a) NOT Operation</p>
+                            <p class="text-slate-400">ইনপুট দুটিকে এক করে দিলে:</p>
+                            <p class="font-mono text-emerald-400 font-bold mt-2">$F = (A + A)' = A'$</p>
+                        </div>
+
+                        <!-- OR via NOR -->
+                        <div class="bg-slate-900 p-3 rounded border border-slate-800">
+                            <p class="font-bold text-yellow-300 mb-1">(b) OR Operation</p>
+                            <p class="text-slate-400">NOR-এর পর একটি Inverter দিলে:</p>
+                            <p class="font-mono text-emerald-400 font-bold mt-2">$F = ((A + B)')' = A + B$</p>
+                        </div>
+
+                        <!-- AND via NOR -->
+                        <div class="bg-slate-900 p-3 rounded border border-slate-800">
+                            <p class="font-bold text-yellow-300 mb-1">(c) AND Operation</p>
+                            <p class="text-slate-400">ইনপুটগুলোকে আলাদা ইনভার্ট করে NOR করলে:</p>
+                            <p class="font-mono text-emerald-400 font-bold mt-2">$F = (A' + B')' = AB$</p>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4.5 Alternative Graphic Symbols -->
+            <section class="space-y-4">
+                <h2 class="text-2xl font-bold text-indigo-300 border-b border-slate-700 pb-2">4.5 Alternative Graphic Symbols for NAND, NOR, and NOT Gates (Figure 4.8)</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                        <h3 class="font-bold text-blue-400 mb-2">NAND Gate Alternative Symbols</h3>
+                        <p class="text-slate-300 mb-2"><b>1. AND-invert:</b> AND গেটের আউটপুটে বাবল।</p>
+                        <p class="text-slate-300"><b>2. Invert-OR:</b> OR গেটের প্রতিটি ইনপুটে বাবল। (ডি-মরগ্যান মতে: $(xy)' = x' + y'$)</p>
+                    </div>
+
+                    <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                        <h3 class="font-bold text-indigo-400 mb-2">NOR Gate Alternative Symbols</h3>
+                        <p class="text-slate-300 mb-2"><b>1. OR-invert:</b> OR গেটের আউটপুটে বাবল।</p>
+                        <p class="text-slate-300"><b>2. Invert-AND:</b> AND গেটের প্রতিটি ইনপুটে বাবল। (ডি-মরগ্যান মতে: $(x+y)' = x' \cdot y'$)</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4.6 EXOR and EXNOR Gates -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-indigo-300 border-b border-slate-700 pb-2">4.6 EXOR and EXNOR Gates</h2>
+
+                <!-- 4.6.1 Properties -->
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-emerald-400">4.6.1 Algebraic Properties & Theorems</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
+                        <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
+                            <p class="text-yellow-300 font-bold mb-1">EXOR Theorems:</p>
+                            <p>1. $x \oplus x = 0$</p>
+                            <p>2. $x \oplus x' = 1$</p>
+                            <p>3. $x \oplus 0 = x$, &nbsp; $x \oplus 1 = x'$</p>
+                            <p>4. $x \oplus y = x' \oplus y'$</p>
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
+                            <p class="text-yellow-300 font-bold mb-1">EXNOR Theorems:</p>
+                            <p>1. $x \otimes x = 1$</p>
+                            <p>2. $x \otimes x' = 0$</p>
+                            <p>3. $x \otimes 0 = x'$, &nbsp; $x \otimes 1 = x$</p>
+                            <p>4. $x \otimes y = x' \otimes y'$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4.6.2 Implementations -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-emerald-400">4.6.2 EXOR Gate Implementations (Figure 4.9)</h3>
+                    <p class="text-slate-300 text-sm">২-ইনপুট EXOR গেট অন্যান্য মৌলিক বা ইউনিভার্সাল গেট দিয়ে তৈরি করা যায়:</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                        <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
+                            <p class="font-bold text-blue-300 mb-1">(a) With AND-OR-NOT</p>
+                            <p class="font-mono text-emerald-400">$F = xy' + x'y$</p>
+                            <p class="text-slate-400 mt-1">২টি NOT, ২টি AND, ১টি OR গেট লাগে।</p>
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
+                            <p class="font-bold text-indigo-300 mb-1">(b) With NAND Only</p>
+                            <p class="font-mono text-emerald-400">$F = ((xy')' \cdot (x'y')')'$</p>
+                            <p class="text-slate-400 mt-1">ঠিক **৪টি NAND গেট** লাগে!</p>
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
+                            <p class="font-bold text-yellow-300 mb-1">(c) With NOR Only</p>
+                            <p class="font-mono text-emerald-400">$F = ((x+y)' + (x'+y')')'$</p>
+                            <p class="text-slate-400 mt-1">ঠিক **৫টি NOR গেট** লাগে!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4.7 Integrated Circuit Logic Gates -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-indigo-300 border-b border-slate-700 pb-2">4.7 Integrated Circuit Logic Gates</h2>
+
+                <!-- 4.7.1 IC Logic Families -->
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-emerald-400">4.7.1 IC Logic Families</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs text-center">
+                        <div class="bg-slate-800 p-3 rounded-lg border border-blue-500/30">
+                            <p class="font-bold text-blue-400">TTL</p>
+                            <p class="text-slate-400">Transistor-Transistor Logic (Most popular)</p>
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-lg border border-indigo-500/30">
+                            <p class="font-bold text-indigo-400">ECL</p>
+                            <p class="text-slate-400">Emitter-Coupled Logic (High Speed)</p>
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-lg border border-emerald-500/30">
+                            <p class="font-bold text-emerald-400">MOS</p>
+                            <p class="text-slate-400">Metal-Oxide Semiconductor (High Density)</p>
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-lg border border-yellow-500/30">
+                            <p class="font-bold text-yellow-400">CMOS</p>
+                            <p class="text-slate-400">Complementary MOS (Low Power)</p>
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-lg border border-rose-500/30">
+                            <p class="font-bold text-rose-400">$I^2L$</p>
+                            <p class="text-slate-400">Integrated-Injection Logic</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4.7.2 Logic Conventions -->
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-emerald-400">4.7.2 Logic Conventions: Positive vs. Negative Logic</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <h4 class="font-bold text-blue-400 mb-1">Positive Logic System</h4>
+                            <p class="text-slate-300">HIGH Level ($H$) $\rightarrow$ Represents **1**</p>
+                            <p class="text-slate-300">LOW Level ($L$) $\rightarrow$ Represents **0**</p>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <h4 class="font-bold text-rose-400 mb-1">Negative Logic System</h4>
+                            <p class="text-slate-300">LOW Level ($L$) $\rightarrow$ Represents **1**</p>
+                            <p class="text-slate-300">HIGH Level ($H$) $\rightarrow$ Represents **0**</p>
+                        </div>
+                    </div>
+                    <div class="bangla-highlight p-3 rounded-lg text-xs">
+                        <b>🔥 Important Duality Rule:</b> একটি ফিজিক্যাল গেট যা Positive Logic-এ **NAND** হিসেবে কাজ করে, সেটি Negative Logic-এ **NOR** হিসেবে কাজ করবে!
+                    </div>
+                </div>
+
+                <!-- 4.7.3 Characteristics -->
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-emerald-400">4.7.3 Characteristics of IC Logic Families (Table 4.3)</h3>
+                    
+                    <div class="overflow-x-auto custom-scroll">
+                        <table class="w-full text-left text-xs border border-slate-700">
+                            <thead class="bg-slate-800 text-yellow-300">
+                                <tr>
+                                    <th class="p-2 border border-slate-700">Parameter</th>
+                                    <th class="p-2 border border-slate-700">Definition (সংজ্ঞা)</th>
+                                    <th class="p-2 border border-slate-700">Standard TTL</th>
+                                    <th class="p-2 border border-slate-700">Schottky TTL</th>
+                                    <th class="p-2 border border-slate-700">Low-Power Schottky TTL</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-700 bg-slate-900/50">
+                                <tr>
+                                    <td class="p-2 border border-slate-700 font-bold text-blue-300">Fan-out</td>
+                                    <td>একটি গেটের আউটপুটে সর্বোচ্চ কতটি ইনপুট যুক্ত করা যায়।</td>
+                                    <td>10</td><td>10</td><td class="text-emerald-400 font-bold">20</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 border border-slate-700 font-bold text-blue-300">Power Dissipation</td>
+                                    <td>গেটে ব্যয়িত শক্তি (mW)।</td>
+                                    <td>10 mW</td><td>22 mW</td><td class="text-emerald-400 font-bold">2 mW</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 border border-slate-700 font-bold text-blue-300">Propagation Delay</td>
+                                    <td>ইনপুট থেকে আউটপুটে সিগন্যাল পৌঁছাতে লাগা সময় (ns)।</td>
+                                    <td>10 ns</td><td class="text-emerald-400 font-bold">3 ns</td><td>10 ns</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 border border-slate-700 font-bold text-blue-300">Noise Margin</td>
+                                    <td>গেটের সহ্য করার মতো সর্বোচ্চ নয়েজ সিগন্যাল (V)।</td>
+                                    <td>0.4 V</td><td>0.4 V</td><td>0.4 V</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4.8 Some Available TTL Logic Gates -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-indigo-300 border-b border-slate-700 pb-2">4.8 Some Available TTL Logic Gates (IC Pinout Diagrams)</h2>
+                
+                <p class="text-slate-300 text-sm">
+                    বাস্তবে IC গুলো ১৪-পিনের প্যাকেজে আসে। নিচে বহুল ব্যবহৃত কয়েকটি ৭৪০০ সিরিজের IC-এর নাম ও পিন সংযোগ দেখানো হলো (Figure 4.11 & 4.14):
+                </p>
+
+                <!-- IC Pinout Diagram SVG -->
+                <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 overflow-x-auto custom-scroll">
+                    <p class="text-xs text-center text-slate-400 mb-4">Figure 4.11 / 4.14: 14-Pin Dual In-line Package (DIP) TTL IC Pinouts</p>
+                    
+                    <div class="flex flex-col md:flex-row justify-center items-center gap-8 min-w-[650px]">
+                        
+                        <!-- 7400 Quad 2-input NAND -->
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 text-center w-72">
+                            <p class="font-bold text-yellow-400 text-sm mb-1">IC 7400</p>
+                            <p class="text-xs text-slate-400 mb-3">Quadruple 2-Input NAND Gates</p>
+                            <svg viewBox="0 0 200 240" class="w-48 mx-auto">
+                                <!-- IC Body -->
+                                <rect x="50" y="20" width="100" height="200" rx="5" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+                                <!-- Notch -->
+                                <path d="M 90,20 A 10,10 0 0,0 110,20 Z" fill="#0f172a" stroke="#64748b" stroke-width="1.5"/>
+                                <!-- Left Pins 1-7 -->
+                                <g stroke="#e2e8f0" stroke-width="2">
+                                    <line x1="20" y1="40" x2="50" y2="40"/><text x="10" y="44" fill="#a5b4fc" font-size="10">1 (1A)</text>
+                                    <line x1="20" y1="65" x2="50" y2="65"/><text x="10" y="69" fill="#a5b4fc" font-size="10">2 (1B)</text>
+                                    <line x1="20" y1="90" x2="50" y2="90"/><text x="10" y="94" fill="#34d399" font-size="10">3 (1Y)</text>
+                                    <line x1="20" y1="115" x2="50" y2="115"/><text x="10" y="119" fill="#a5b4fc" font-size="10">4 (2A)</text>
+                                    <line x1="20" y1="140" x2="50" y2="140"/><text x="10" y="144" fill="#a5b4fc" font-size="10">5 (2B)</text>
+                                    <line x1="20" y1="165" x2="50" y2="165"/><text x="10" y="169" fill="#34d399" font-size="10">6 (2Y)</text>
+                                    <line x1="20" y1="190" x2="50" y2="190"/><text x="5" y="194" fill="#f43f5e" font-weight="bold" font-size="10">7 (GND)</text>
+                                </g>
+                                <!-- Right Pins 8-14 -->
+                                <g stroke="#e2e8f0" stroke-width="2">
+                                    <line x1="150" y1="190" x2="180" y2="190"/><text x="185" y="194" fill="#34d399" font-size="10">8 (3Y)</text>
+                                    <line x1="150" y1="165" x2="180" y2="165"/><text x="185" y="169" fill="#a5b4fc" font-size="10">9 (3A)</text>
+                                    <line x1="150" y1="140" x2="180" y2="140"/><text x="185" y="144" fill="#a5b4fc" font-size="10">10 (3B)</text>
+                                    <line x1="150" y1="115" x2="180" y2="115"/><text x="185" y="119" fill="#34d399" font-size="10">11 (4Y)</text>
+                                    <line x1="150" y1="90" x2="180" y2="90"/><text x="185" y="94" fill="#a5b4fc" font-size="10">12 (4A)</text>
+                                    <line x1="150" y1="65" x2="180" y2="65"/><text x="185" y="69" fill="#a5b4fc" font-size="10">13 (4B)</text>
+                                    <line x1="150" y1="40" x2="180" y2="40"/><text x="185" y="44" fill="#f43f5e" font-weight="bold" font-size="10">14 (Vcc)</text>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <!-- 7404 Hex Inverters -->
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 text-center w-72">
+                            <p class="font-bold text-yellow-400 text-sm mb-1">IC 7404</p>
+                            <p class="text-xs text-slate-400 mb-3">Hex NOT Gates (6 Inverters)</p>
+                            <svg viewBox="0 0 200 240" class="w-48 mx-auto">
+                                <rect x="50" y="20" width="100" height="200" rx="5" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+                                <path d="M 90,20 A 10,10 0 0,0 110,20 Z" fill="#0f172a" stroke="#64748b" stroke-width="1.5"/>
+                                <!-- Pins -->
+                                <g stroke="#e2e8f0" stroke-width="2">
+                                    <line x1="20" y1="40" x2="50" y2="40"/><text x="10" y="44" fill="#a5b4fc" font-size="10">1 (1A)</text>
+                                    <line x1="20" y1="65" x2="50" y2="65"/><text x="10" y="69" fill="#34d399" font-size="10">2 (1Y)</text>
+                                    <line x1="20" y1="90" x2="50" y2="90"/><text x="10" y="94" fill="#a5b4fc" font-size="10">3 (2A)</text>
+                                    <line x1="20" y1="115" x2="50" y2="115"/><text x="10" y="119" fill="#34d399" font-size="10">4 (2Y)</text>
+                                    <line x1="20" y1="140" x2="50" y2="140"/><text x="10" y="144" fill="#a5b4fc" font-size="10">5 (3A)</text>
+                                    <line x1="20" y1="165" x2="50" y2="165"/><text x="10" y="169" fill="#34d399" font-size="10">6 (3Y)</text>
+                                    <line x1="20" y1="190" x2="50" y2="190"/><text x="5" y="194" fill="#f43f5e" font-weight="bold" font-size="10">7 (GND)</text>
+                                </g>
+                                <g stroke="#e2e8f0" stroke-width="2">
+                                    <line x1="150" y1="190" x2="180" y2="190"/><text x="185" y="194" fill="#a5b4fc" font-size="10">8 (4A)</text>
+                                    <line x1="150" y1="165" x2="180" y2="165"/><text x="185" y="169" fill="#34d399" font-size="10">9 (4Y)</text>
+                                    <line x1="150" y1="140" x2="180" y2="140"/><text x="185" y="144" fill="#a5b4fc" font-size="10">10 (5A)</text>
+                                    <line x1="150" y1="115" x2="180" y2="115"/><text x="185" y="119" fill="#34d399" font-size="10">11 (5Y)</text>
+                                    <line x1="150" y1="90" x2="180" y2="90"/><text x="185" y="94" fill="#a5b4fc" font-size="10">12 (6A)</text>
+                                    <line x1="150" y1="65" x2="180" y2="65"/><text x="185" y="69" fill="#34d399" font-size="10">13 (6Y)</text>
+                                    <line x1="150" y1="40" x2="180" y2="40"/><text x="185" y="44" fill="#f43f5e" font-weight="bold" font-size="10">14 (Vcc)</text>
+                                </g>
+                            </svg>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Table 4.4 Quick List -->
+                <p class="font-semibold text-slate-300 text-sm">Table 4.4: Common Available TTL IC Gates Summary</p>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
+                    <div class="bg-slate-800 p-2 rounded border border-slate-700"><b>7400:</b> Quad 2-In NAND</div>
+                    <div class="bg-slate-800 p-2 rounded border border-slate-700"><b>7402:</b> Quad 2-In NOR</div>
+                    <div class="bg-slate-800 p-2 rounded border border-slate-700"><b>7404:</b> Hex NOT Gates</div>
+                    <div class="bg-slate-800 p-2 rounded border border-slate-700"><b>7408:</b> Quad 2-In AND</div>
+                    <div class="bg-slate-800 p-2 rounded border border-slate-700"><b>7410:</b> Triple 3-In NAND</div>
+                    <div class="bg-slate-800 p-2 rounded border border-slate-700"><b>7420:</b> Dual 4-In NAND</div>
+                    <div class="bg-slate-800 p-2 rounded border border-slate-700"><b>7432:</b> Quad 2-In OR</div>
+                    <div class="bg-slate-800 p-2 rounded border border-slate-700"><b>7486:</b> Quad 2-In EXOR</div>
+                </div>
+
+                <div class="revision-box p-4 rounded-r-lg text-sm">
+                    <b>📌 Chapter 4 Quick Exam Revision Summary:</b>
+                    <ul class="list-disc list-inside mt-1 text-xs space-y-1 text-slate-200">
+                        <li><b>Universal Gates:</b> NAND এবং NOR দিয়ে যেকোনো সার্কিট বানানো সম্ভব।</li>
+                        <li><b>DeMorgan Symbol Equivalence:</b> NAND = Invert-OR; NOR = Invert-AND।</li>
+                        <li><b>EXOR Number of Gates:</b> NAND দিয়ে ৪টি, NOR দিয়ে ৫টি লাগে।</li>
+                        <li><b>IC Pin 14 & Pin 7:</b> ১৪ নম্বর পিন হলো $V_{CC}$ (+5V) এবং ৭ নম্বর পিন হলো GND (Ground)।</li>
+                        <li><b>Fan-out:</b> Standard TTL এর Fan-out ১০, Low-power Schottky এর Fan-out ২০।</li>
+                    </ul>
+                </div>
+            </section>
+        </article>
+
+    </main>
+
+    <footer class="bg-slate-950 border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+        <p>Digital Logic Design Chapter 3 & 4 Master Notes • Created for Academic & Exam Success</p>
+    </footer>
+
+</body>
+</html>

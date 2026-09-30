@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Logic Design - Chapter 5 Master Study Guide</title>
+    <!-- MathJax for rendering LaTeX formulas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/polyfill/3.111.0/polyfill.min.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2b6cb0;
+            --accent-color: #319795;
+            --bg-light: #f7fafc;
+            --card-bg: #ffffff;
+            --text-dark: #2d3748;
+            --text-muted: #718096;
+            --border-color: #e2e8f0;
+            --highlight-bg: #feebc8;
+            --highlight-border: #dd6b20;
+            --success-bg: #f0fff4;
+            --success-border: #38a169;
+            --exam-bg: #ebf8ff;
+            --exam-border: #3182ce;
+            --purple-bg: #faf5ff;
+            --purple-border: #805ad5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.75;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 25px;
+            margin-bottom: 35px;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.3rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .author-info {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        nav.toc {
+            background: #edf2f7;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        nav.toc h2 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        nav.toc ul {
+            list-style-type: none;
+            padding-left: 10px;
+        }
+
+        nav.toc ul li {
+            margin-bottom: 8px;
+        }
+
+        nav.toc ul ul {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+
+        nav.toc a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav.toc a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2.chapter-title {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            margin-top: 40px;
+        }
+
+        h3.section-title {
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        h4.subsection-title {
+            color: var(--accent-color);
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 1.15rem;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .bangla-explain {
+            background: var(--purple-bg);
+            border-left: 4px solid var(--purple-border);
+            padding: 15px 20px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 1.02rem;
+        }
+
+        .real-example {
+            background: #fffaf0;
+            border-left: 4px solid var(--highlight-border);
+            padding: 15px 20px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .real-example h5 {
+            color: #c05621;
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+        }
+
+        .exam-prep {
+            background: var(--exam-bg);
+            border: 1px solid var(--exam-border);
+            padding: 18px 22px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .exam-prep h5 {
+            color: #2b6cb0;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .revision-card {
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
+            padding: 18px 22px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .revision-card h5 {
+            color: #276749;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #edf2f7;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f7fafc;
+        }
+
+        .diagram-container {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+            overflow-x: auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+        }
+
+        .diagram-caption {
+            margin-top: 12px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .diagram-explanation {
+            margin-top: 10px;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            background: #f7fafc;
+            padding: 12px 16px;
+            border-radius: 6px;
+            text-align: left;
+        }
+
+        .formula-box {
+            background: #edf2f7;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            margin: 15px 0;
+            font-size: 1.1rem;
+        }
+
+        .step-box {
+            background: #ffffff;
+            border: 1px solid #cbd5e0;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        .highlight {
+            background-color: var(--highlight-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+            background-color: var(--secondary-color);
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        /* K-Map Specific Table Styling */
+        .kmap-table {
+            border-collapse: collapse;
+            margin: 15px auto;
+            background-color: #ffffff;
+        }
+        .kmap-table td, .kmap-table th {
+            width: 55px;
+            height: 50px;
+            text-align: center;
+            vertical-align: middle;
+            border: 2px solid #2b6cb0;
+            font-weight: bold;
+            font-size: 1.05rem;
+            position: relative;
+        }
+        .kmap-table th.kmap-header {
+            background-color: #ebf8ff;
+            border: 1px solid #cbd5e0;
+            font-weight: bold;
+            color: #2c5282;
+        }
+        .kmap-cell-num {
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            font-size: 0.7rem;
+            color: #718096;
+            font-weight: normal;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 18px;
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+            h2.chapter-title {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>DIGITAL LOGIC DESIGN</h1>
+        <p>Master Study Guide: Chapter 5 — Simplification of Boolean Functions</p>
+        <p class="author-info">Based on textbook by Md. Mozammel Huq Azad Khan | Designed for University Exam Preparation</p>
+    </header>
+
+    <!-- TABLE OF CONTENTS -->
+    <nav class="toc">
+        <h2>📋 Chapter 5 Topic Overview</h2>
+        <ul>
+            <li><strong><a href="#sec5-1">5.1 Introduction to Boolean Function Simplification</a></strong>
+                <ul>
+                    <li><a href="#sec5-1-1">Cost Metrics of Digital Logic Circuits</a></li>
+                    <li><a href="#sec5-1-2">Logic Circuit Diagrams for SOP and POS Forms</a></li>
+                </ul>
+            </li>
+            <li><strong><a href="#sec5-2">5.2 Algebraic Simplification of Boolean Functions</a></strong>
+                <ul>
+                    <li><a href="#sec5-2-1">Two-Step Strategy for Algebraic Minimization</a></li>
+                    <li><a href="#sec5-2-2">Detailed Worked Examples (Example 1, 2, 3)</a></li>
+                </ul>
+            </li>
+            <li><strong><a href="#sec5-3">5.3 Prime Implicants</a></strong>
+                <ul>
+                    <li><a href="#sec5-3-1">Concept of Implication & Implicants ($F_1 \subseteq F_2$)</a></li>
+                    <li><a href="#sec5-3-2">Prime Implicant (PI) vs Essential Prime Implicant (EPI)</a></li>
+                </ul>
+            </li>
+            <li><strong><a href="#sec5-4">5.4 Karnaugh-Map (K-Map) Method of Simplification</a></strong>
+                <ul>
+                    <li><a href="#sec5-4-1">Map Construction & Gray Code Adjacency</a></li>
+                    <li><a href="#sec5-4-2">2, 3, 4, and 5-Variable K-Maps</a></li>
+                    <li><a href="#sec5-4-3">Grouping/Looping Rules & Minterm Combining</a></li>
+                    <li><a href="#sec5-4-4">Don't-Care Conditions ($d$ or $X$)</a></li>
+                    <li><a href="#sec5-4-5">Product-of-Sums (POS) Simplification via K-Map</a></li>
+                </ul>
+            </li>
+            <li><strong><a href="#sec5-5">5.5 Quine-McCluskey (Tabular) Method of Simplification</a></strong>
+                <ul>
+                    <li><a href="#sec5-5-1">Why Tabular Method? (Handling $\ge 5$ Variables)</a></li>
+                    <li><a href="#sec5-5-2">Step-by-Step QM Algorithm & Prime Implicant Table</a></li>
+                    <li><a href="#sec5-5-3">Full Worked University Exam Problem</a></li>
+                </ul>
+            </li>
+            <li><strong><a href="#sec5-6">5.6 Iterated Consensus Method of Simplification</a></strong>
+                <ul>
+                    <li><a href="#sec5-6-1">Consensus Theorem & Consensus Terms</a></li>
+                    <li><a href="#sec5-6-2">Iterated Consensus Algorithm & Execution Steps</a></li>
+                </ul>
+            </li>
+            <li><strong><a href="#sec5-7">5.7 Master Revision & Exam Cheat Sheet</a></strong></li>
+        </ul>
+    </nav>
+
+    <!-- SECTION 5.1 -->
+    <section id="sec5-1">
+        <h2 class="chapter-title">5.1 Introduction to Boolean Function Simplification</h2>
+
+        <p>
+            In Section 3.4 of digital logic design, we introduced how Boolean functions are implemented using logic circuit diagrams. 
+            When implementing a <strong>Sum of Products (SOP)</strong> expression, each product term requires an <strong>AND gate</strong>, and their outputs are combined using a multi-input <strong>OR gate</strong>. 
+            Conversely, when implementing a <strong>Product of Sums (POS)</strong> expression, each sum term requires an <strong>OR gate</strong>, and their outputs are combined using a multi-input <strong>AND gate</strong>.
+        </p>
+
+        <div class="bangla-explain">
+            <strong>সহজ বাংলায় ব্যাখা (Concept of Simplification):</strong><br>
+            যেকোনো লজিক সার্কিট তৈরি করতে কতগুলো গেট (Gate) এবং গেটের ইনপুট কানেকশন (Literal) লাগবে, তা নির্ভর করে বুলিয়ান ফাংশনটির রূপের ওপর।
+            <ul>
+                <li><strong>SOP (Sum of Products) ফর্ম:</strong> প্রতিটি প্রোডাক্ট টার্মের জন্য একটি করে <strong>AND Gate</strong> লাগে এবং সবগুলোকে যুক্ত করার জন্য ১টি <strong>OR Gate</strong> লাগে।</li>
+                <li><strong>POS (Product of Sums) ফর্ম:</strong> প্রতিটি সাম টার্মের জন্য একটি করে <strong>OR Gate</strong> লাগে এবং সবগুলোকে যুক্ত করার জন্য ১টি <strong>AND Gate</strong> লাগে।</li>
+                <li><strong>ইনপুট ইনভার্টার (NOT Gate) কনভেনশন:</strong> আমরা ধরে নিই যে সব ইনপুট সংকেত (যেমন $x, y, z$) স্বাভাবিক রূপ ($x, y, z$) এবং পরিপূরক রূপ ($x', y', z'$) উভয় রূপেই সরাসরি পাওয়া যায়। তাই ইনপুটের NOT Gate গুলোকে সার্কিটের মূল খরচ (Cost) গণনায় ধরা হয় না।</li>
+            </ul>
+        </div>
+
+        <div id="sec5-1-1">
+            <h3 class="section-title">5.1.1 Circuit Cost Metrics & Reliability</h3>
+            <p>
+                The total manufacturing cost, power consumption, and physical size of a digital logic circuit are primarily determined by two parameters:
+            </p>
+            <ol>
+                <li><strong>Number of Gates:</strong> Number of AND gates in SOP or OR gates in POS.</li>
+                <li><strong>Number of Gate Inputs (Literals):</strong> The total number of variable connections feeding into the gates.</li>
+            </ol>
+
+            <div class="real-example">
+                <h5> বাস্তব জীবনের উদাহরণ ও সার্কিট নির্ভরযোগ্যতা (Circuit Reliability):</h5>
+                <p>
+                    মনে করুন, একটি কম্পিউটার প্রসেসরে ১টি আউটপুট পাওয়ার জন্য ১০টি গেট ও ৫০টি তারের সংযোগ (Connections) ব্যবহার করা হয়েছে। অন্য একটি ডিজাইন দিয়ে একই কাজ মাত্র ৩টি গেট ও ৮টি সংযোগ দিয়ে করা সম্ভব।
+                </p>
+                <p>
+                    <strong>কেন সংযোগ বেশি হলে সমস্যা?</strong> যত বেশি তারের সংযোগ (Input connections) থাকবে, সার্কিটের <strong>Reliability (নির্ভরযোগ্যতা)</strong> তত কমে যাবে। কারণ যেকোনো একটি পয়েন্টে ডিসকানেক্ট বা শোল্ডারিং নষ্ট হলে পুরো সার্কিট অকেজো হয়ে পড়বে (Malfunction)। তাই সার্কিটে টার্ম সংখ্যা (Gates) এবং লিটারেল সংখ্যা (Literals) সর্বনিম্ন করাই হলো <strong>Simplification or Minimization</strong>।
+                </p>
+            </div>
+        </div>
+
+        <div id="sec5-1-2">
+            <h3 class="section-title">5.1.2 Logic Circuit Implementation (Figure 5.1)</h3>
+            <p>
+                Below are the logic circuit implementations for both SOP and POS functions, illustrating how product terms map to AND gates and sum terms map to OR gates.
+            </p>
+
+            <!-- DIAGRAM 5.1 (a) and (b) -->
+            <div class="diagram-container">
+                <svg width="780" height="340" viewBox="0 0 780 340">
+                    <!-- CIRCUIT (a) SOP -->
+                    <g transform="translate(10, 10)">
+                        <text x="180" y="20" text-anchor="middle" font-weight="bold" font-size="14" fill="#1a365d">(a) SOP: F = x'y' + xy' + y'z'</text>
+                        
+                        <!-- Inputs x, y, z with NOT gates -->
+                        <!-- Input lines -->
+                        <line x1="30" y1="50" x2="110" y2="50" stroke="#2d3748" stroke-width="2"/>
+                        <text x="15" y="55" font-weight="bold">x</text>
+                        <!-- x' inverter -->
+                        <polygon points="60,42 60,58 75,50" fill="#edf2f7" stroke="#2b6cb0" stroke-width="1.5"/>
+                        <circle cx="78" cy="50" r="3" fill="#ffffff" stroke="#2b6cb0" stroke-width="1.5"/>
+
+                        <line x1="30" y1="120" x2="110" y2="120" stroke="#2d3748" stroke-width="2"/>
+                        <text x="15" y="125" font-weight="bold">y</text>
+                        <!-- y' inverter -->
+                        <polygon points="60,112 60,128 75,120" fill="#edf2f7" stroke="#2b6cb0" stroke-width="1.5"/>
+                        <circle cx="78" cy="120" r="3" fill="#ffffff" stroke="#2b6cb0" stroke-width="1.5"/>
+
+                        <line x1="30" y1="190" x2="110" y2="190" stroke="#2d3748" stroke-width="2"/>
+                        <text x="15" y="195" font-weight="bold">z</text>
+                        <!-- z' inverter -->
+                        <polygon points="60,182 60,198 75,190" fill="#edf2f7" stroke="#2b6cb0" stroke-width="1.5"/>
+                        <circle cx="78" cy="190" r="3" fill="#ffffff" stroke="#2b6cb0" stroke-width="1.5"/>
+
+                        <!-- AND Gate 1 (x'y') -->
+                        <path d="M 120,50 L 140,50 A 15,15 0 0,1 140,80 L 120,80 Z" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+                        <line x1="81" y1="50" x2="120" y2="55" stroke="#2d3748" stroke-width="1.5"/>
+                        <line x1="81" y1="120" x2="120" y2="75" stroke="#2d3748" stroke-width="1.5"/>
+                        <line x1="155" y1="65" x2="230" y2="65" stroke="#2d3748" stroke-width="2"/>
+                        <text x="165" y="60" font-size="11" fill="#2b6cb0">x'y'</text>
+
+                        <!-- AND Gate 2 (xy') -->
+                        <path d="M 120,110 L 140,110 A 15,15 0 0,1 140,140 L 120,140 Z" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+                        <line x1="30" y1="50" x2="120" y2="115" stroke="#2d3748" stroke-width="1.5"/>
+                        <line x1="81" y1="120" x2="120" y2="135" stroke="#2d3748" stroke-width="1.5"/>
+                        <line x1="155" y1="125" x2="230" y2="125" stroke="#2d3748" stroke-width="2"/>
+                        <text x="165" y="120" font-size="11" fill="#2b6cb0">xy'</text>
+
+                        <!-- AND Gate 3 (y'z') -->
+                        <path d="M 120,170 L 140,170 A 15,15 0 0,1 140,200 L 120,200 Z" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+                        <line x1="81" y1="120" x2="120" y2="175" stroke="#2d3748" stroke-width="1.5"/>
+                        <line x1="81" y1="190" x2="120" y2="195" stroke="#2d3748" stroke-width="1.5"/>
+                        <line x1="155" y1="185" x2="230" y2="185" stroke="#2d3748" stroke-width="2"/>
+                        <text x="165" y="180" font-size="11" fill="#2b6cb0">y'z'</text>
+
+                        <!-- Output OR Gate -->
+                        <path d="M 230,90 Q 242,125 230,160 Q 265,160 285,125 Q 265,90 230,90 Z" fill="#c6f6d5" stroke="#276749" stroke-width="2"/>
+                        <line x1="285" y1="125" x2="330" y2="125" stroke="#2d3748" stroke-width="2.5"/>
+                        <text x="335" y="130" font-weight="bold" font-size="14" fill="#276749">F</text>
+                    </g>
+
+                    <!-- CIRCUIT (b) POS -->
+                    <g transform="translate(400, 10)">
+                        <text x="180" y="20" text-anchor="middle" font-weight="bold" font-size="14" fill="#1a365d">(b) POS: F = (x+y')(x'+y)(y+z)</text>
+                        
+                        <!-- Inputs -->
+                        <line x1="30" y1="50" x2="110" y2="50" stroke="#2d3748" stroke-width="2"/>
+                        <text x="15" y="55" font-weight="bold">x</text>
+                        <polygon points="60,42 60,58 75,50" fill="#edf2f7" stroke="#2b6cb0" stroke-width="1.5"/>
+                        <circle cx="78" cy="50" r="3" fill="#ffffff" stroke="#2b6cb0" stroke-width="1.5"/>
+
+                        <line x1="30" y1="120" x2="110" y2="120" stroke="#2d3748" stroke-width="2"/>
+                        <text x="15" y="125" font-weight="bold">y</text>
+                        <polygon points="60,112 60,128 75,120" fill="#edf2f7" stroke="#2b6cb0" stroke-width="1.5"/>
+                        <circle cx="78" cy="120" r="3" fill="#ffffff" stroke="#2b6cb0" stroke-width="1.5"/>
+
+                        <line x1="30" y1="190" x2="110" y2="190" stroke="#2d3748" stroke-width="2"/>
+                        <text x="15" y="195" font-weight="bold">z</text>
+
+                        <!-- OR Gate 1 (x + y') -->
+                        <path d="M 120,40 Q 128,55 120,70 Q 140,70 155,55 Q 140,40 120,40 Z" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+                        <line x1="30" y1="50" x2="122" y2="45" stroke="#2d3748" stroke-width="1.5"/>
+                        <line x1="81" y1="120" x2="122" y2="65" stroke="#2d3748" stroke-width="1.5"/>
+                        <line x1="155" y1="55" x2="230" y2="65" stroke="#2d3748" stroke-width="2"/>
+
+                        <!-- OR Gate 2 (x' + y) -->
+                        <path d="M 120,110 Q 128,125 120,140 Q 140,140 155,125 Q 140,110 120,110 Z" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+                        <line x1="81" y1="50" x2="122" y2="115" stroke="#2d3748" stroke-width="1.5"/>
+                        <line x1="30" y1="120" x2="122" y2="135" stroke="#2d3748" stroke-width="1.5"/>
+                        <line x1="155" y1="125" x2="230" y2="125" stroke="#2d3748" stroke-width="2"/>
+
+                        <!-- OR Gate 3 (y + z) -->
+                        <path d="M 120,170 Q 128,185 120,200 Q 140,200 155,185 Q 140,170 120,170 Z" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+                        <line x1="30" y1="120" x2="122" y2="175" stroke="#2d3748" stroke-width="1.5"/>
+                        <line x1="30" y1="190" x2="122" y2="195" stroke="#2d3748" stroke-width="1.5"/>
+                        <line x1="155" y1="185" x2="230" y2="185" stroke="#2d3748" stroke-width="2"/>
+
+                        <!-- Output AND Gate -->
+                        <path d="M 230,90 L 255,90 A 35,35 0 0,1 255,160 L 230,160 Z" fill="#feebc8" stroke="#dd6b20" stroke-width="2"/>
+                        <line x1="290" y1="125" x2="330" y2="125" stroke="#2d3748" stroke-width="2.5"/>
+                        <text x="335" y="130" font-weight="bold" font-size="14" fill="#dd6b20">F</text>
+                    </g>
+                </svg>
+                <div class="diagram-caption">Figure 5.1: Logic circuit implementation of (a) $F = x'y' + xy' + y'z'$ and (b) $F = (x+y')(x'+y)(y+z)$</div>
+                <div class="diagram-explanation">
+                    <strong>চিত্রের বিশদ ব্যাখা:</strong><br>
+                    <strong>চিত্র (a):</strong> এখানে ৩টি প্রোডাক্ট টার্ম ($x'y'$, $xy'$, $y'z'$) বাস্তবায়নের জন্য ৩টি AND Gate এবং সেগুলোর আউটপুট যোগ করতে ১টি ৩-ইনপুট OR Gate ব্যবহার করা হয়েছে। মোট লিটারেল সংখ্যা = ৬।<br>
+                    <strong>চিত্র (b):</strong> এখানে ৩টি সাম টার্ম ($x+y'$, $x'+y$, $y+z$) বাস্তবায়নের জন্য ৩টি OR Gate এবং সেগুলোর গুণফল নির্গমন করতে ১টি ৩-ইনপুট AND Gate ব্যবহার করা হয়েছে।
+                </div>
+            </div>
+
+            <p>
+                In this chapter, we explore <strong>four primary methods</strong> to simplify Boolean functions:
+            </p>
+            <ul>
+                <li><strong>1. Algebraic Simplification:</strong> Using Boolean postulates and theorems.</li>
+                <li><strong>2. Karnaugh-Map (K-Map) Method:</strong> A graphical visual grouping technique.</li>
+                <li><strong>3. Quine-McCluskey (Tabular) Method:</strong> An algorithmic method ideal for computer programming.</li>
+                <li><strong>4. Iterated Consensus Method:</strong> An iterative algebraic method based on consensus terms.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- SECTION 5.2 -->
+    <section id="sec5-2">
+        <h2 class="chapter-title">5.2 Algebraic Simplification of Boolean Functions</h2>
+
+        <p>
+            Algebraic simplification utilizes Boolean postulates and theorems (such as Distributive Law, DeMorgan's Theorems, Complementarity, and Idempotence). 
+            However, algebraic minimization is often a process of <strong>trial and error</strong> because there is no simple rule telling us which theorem to apply next or whether the final result is in its absolute minimal form.
+        </p>
+
+        <div id="sec5-2-1">
+            <h3 class="section-title">5.2.1 Two-Step Strategy for Algebraic Simplification</h3>
+            <div class="step-box">
+                <strong>Step 1:</strong> Convert the original Boolean expression into <strong>Sum of Products (SOP)</strong> form using DeMorgan's Theorems and Distributive Laws.<br>
+                <strong>Step 2:</strong> Inspect the product terms for common factors and perform factoring. If necessary, duplicate certain product terms (using theorem $A + A = A$) to facilitate factoring, then apply $A + A' = 1$ and $A \cdot 1 = A$ to eliminate redundant terms.
+            </div>
+        </div>
+
+        <div id="sec5-2-2">
+            <h3 class="section-title">5.2.2 Detailed Step-by-Step Textbook Examples</h3>
+
+            <!-- EXAMPLE 1 -->
+            <div class="real-example">
+                <h5>📌 Example 1: Simplify $F = ABC + AB'(A'C')'$</h5>
+                <p><strong>Solution Step-by-Step:</strong></p>
+                <div class="formula-box">
+                    $$F = ABC + AB'(A'C')'$$
+                </div>
+                <ol>
+                    <li>Apply DeMorgan's Theorem $(A'C')' = (A')' + (C')' = A + C$:
+                        <br>$$F = ABC + AB'(A + C)$$
+                    </li>
+                    <li>Apply Distributive Law to expand the second term:
+                        <br>$$F = ABC + AB'A + AB'C = ABC + AB' + AB'C \quad (\text{since } A \cdot A = A)$$
+                    </li>
+                    <li>Factor out common terms $AC$ from $ABC$ and $AB'C$:
+                        <br>$$F = AC(B + B') + AB'$$
+                    </li>
+                    <li>Apply Complement postulate $B + B' = 1$:
+                        <br>$$F = AC(1) + AB' = \mathbf{AC + AB'}$$
+                    </li>
+                </ol>
+                <p><strong>Final Answer:</strong> $\mathbf{F = AC + AB'}$ (Reduced from 8 literals down to 4 literals!).</p>
+            </div>
+
+            <!-- EXAMPLE 2 -->
+            <div class="real-example">
+                <h5>📌 Example 2: Simplify $F = ABC + ABC' + AB'C$</h5>
+                <p><strong>Solution Step-by-Step:</strong></p>
+                <p>
+                    <em>Strategic Trick:</em> We can duplicate the term $ABC$ using the Idempotence theorem $A + A = A$, so that $ABC$ can pair separately with $ABC'$ and $AB'C$.
+                </p>
+                <div class="formula-box">
+                    $$F = ABC + ABC' + ABC + AB'C$$
+                </div>
+                <ol>
+                    <li>Group the terms into two pairs and factor out common terms:
+                        <br>$$F = AB(C + C') + AC(B + B')$$
+                    </li>
+                    <li>Apply $C + C' = 1$ and $B + B' = 1$:
+                        <br>$$F = AB(1) + AC(1) = \mathbf{AB + AC}$$
+                    </li>
+                </ol>
+                <p><strong>Final Answer:</strong> $\mathbf{F = AB + AC}$ or $A(B+C)$.</p>
+            </div>
+
+            <!-- EXAMPLE 3 -->
+            <div class="real-example">
+                <h5>📌 Example 3: Simplify $F = A'C(A'BD)' + A'BC'D' + AB'C$</h5>
+                <p><strong>Solution Step-by-Step:</strong></p>
+                <ol>
+                    <li>Apply DeMorgan's Theorem to $(A'BD)' \implies (A')' + B' + D' = A + B' + D'$:
+                        <br>$$F = A'C(A + B' + D') + A'BC'D' + AB'C$$
+                    </li>
+                    <li>Distribute $A'C$ inside the brackets:
+                        <br>$$F = A'CA + A'CB' + A'CD' + A'BC'D' + AB'C$$
+                    </li>
+                    <li>Since $A'A = 0$, the first term vanishes ($A'CA = 0$):
+                        <br>$$F = A'B'C + A'CD' + A'BC'D' + AB'C$$
+                    </li>
+                    <li>Combine the 1st and 4th terms by factoring out $B'C$:
+                        <br>$$F = B'C(A' + A) + A'CD' + A'BC'D'$$
+                    </li>
+                    <li>Since $A' + A = 1$:
+                        <br>$$F = \mathbf{B'C + A'CD' + A'BC'D'}$$
+                    </li>
+                </ol>
+                <p><strong>Final Answer:</strong> $\mathbf{F = B'C + A'CD' + A'BC'D'}$</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5.3 -->
+    <section id="sec5-3">
+        <h2 class="chapter-title">5.3 Prime Implicants</h2>
+
+        <p>
+            Before diving into systematic methods like Karnaugh Maps and Quine-McCluskey, we must understand the fundamental concepts of <strong>Implication</strong>, <strong>Implicants</strong>, <strong>Prime Implicants (PI)</strong>, and <strong>Essential Prime Implicants (EPI)</strong>.
+        </p>
+
+        <div id="sec5-3-1">
+            <h3 class="section-title">5.3.1 Definition of Implication & Implicants</h3>
+            <p>
+                A Boolean function $F_1$ <strong>implies</strong> a Boolean function $F_2$ (written as $F_1 \subseteq F_2$) if $F_2 = 1$ whenever $F_1 = 1$. 
+                In this case, $F_1$ is said to be an <strong>implicant</strong> of $F_2$, or $F_2$ is said to <strong>cover</strong> $F_1$.
+            </p>
+
+            <div class="bangla-explain">
+                <strong>সহজ ভাষায় ব্যাখা (Implication & Implicant):</strong><br>
+                ধরি দুটি বুলিয়ান ফাংশন $F_1$ এবং $F_2$। যদি $F_1 = 1$ হলেই নিশ্চিতভাবে $F_2 = 1$ হয়, তবে বলা হয় $F_1$ ফাংশনটি $F_2$ কে Imply করে ($F_1 \subseteq F_2$)। এক্ষেত্রে $F_1$ হলো $F_2$ এর একটি <strong>Implicant</strong>।<br>
+                সহজ কথায়: কোনো ফাংশনের ট্রুথ টেবিলে যেসব মিনটার্মে (Minterm) আউটপুট 1 আসে, তার যেকোনো একক মিনটার্ম বা মিনটার্মের দল হলো ওই ফাংশনের একটি Implicant।
+            </div>
+
+            <div class="real-example">
+                <h5>📌 Textbook Example of Implication:</h5>
+                <p>Consider three functions of 3 variables $(A, B, C)$ defined by their minterm sums:</p>
+                <ul>
+                    <li>$F_1(A,B,C) = \Sigma(0, 2, 5, 7)$</li>
+                    <li>$F_2(A,B,C) = \Sigma(0, 5)$</li>
+                    <li>$F_3(A,B,C) = \Sigma(0, 1, 3, 5, 7)$</li>
+                </ul>
+                <p>
+                    Here, every minterm of $F_2$ ($0$ and $5$) is present in $F_1$ ($0, 2, 5, 7$) and also in $F_3$ ($0, 1, 3, 5, 7$).<br>
+                    Therefore: $F_2 \subseteq F_1$ and $F_2 \subseteq F_3$. $F_2$ is an implicant of both $F_1$ and $F_3$.
+                </p>
+            </div>
+        </div>
+
+        <div id="sec5-3-2">
+            <h3 class="section-title">5.3.2 Prime Implicants (PI) vs Essential Prime Implicants (EPI)</h3>
+
+            <div class="formula-box" style="text-align:left;">
+                <p><strong>1. Prime Implicant (PI):</strong> A product term obtained by combining the maximum possible number of adjacent minterms. If you remove any literal from a Prime Implicant, the resulting term will no longer be an implicant of the function.</p>
+                <p><strong>2. Essential Prime Implicant (EPI):</strong> A Prime Implicant that covers at least one minterm that is <em>NOT covered by any other Prime Implicant</em>. Every Essential Prime Implicant MUST be included in the final minimized SOP expression!</p>
+            </div>
+
+            <div class="exam-prep">
+                <h5> Summary Hierarchy of Terms for Exams</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Term Type</th>
+                            <th>Definition</th>
+                            <th>Inclusion in Final Solution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Implicant</strong></td>
+                            <td>Any single minterm or group of minterms where $F=1$.</td>
+                            <td>Not necessarily minimal.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Prime Implicant (PI)</strong></td>
+                            <td>A group of $2^k$ minterms that cannot be merged into any larger group.</td>
+                            <td>Candidate for the minimal expression.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Essential Prime Implicant (EPI)</strong></td>
+                            <td>A PI that uniquely covers at least one minterm.</td>
+                            <td><strong>MANDATORY</strong> in the final simplified SOP function!</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5.4 -->
+    <section id="sec5-4">
+        <h2 class="chapter-title">5.4 Karnaugh-Map (K-Map) Method of Simplification</h2>
+
+        <p>
+            The <strong>Karnaugh Map (K-Map)</strong> is a graphical representation technique developed by Maurice Karnaugh in 1953. 
+            It organizes truth table minterms into a grid of adjacent cells such that adjacent cells differ by exactly <strong>one binary bit</strong> (Gray Code order).
+        </p>
+
+        <div id="sec5-4-1">
+            <h3 class="section-title">5.4.1 Gray Code Adjacency Principle</h3>
+            <p>
+                In a K-Map, row and column labels are arranged in Gray Code sequence: $00, 01, 11, 10$. 
+                This guarantees that moving horizontally or vertically between adjacent squares changes only one variable state. 
+                According to the Boolean identity $x \cdot y + x \cdot y' = x(y + y') = x$, combining two adjacent squares eliminates the variable that changes state!
+            </p>
+        </div>
+
+        <div id="sec5-4-2">
+            <h3 class="section-title">5.4.2 Structure of 2, 3, 4, and 5-Variable K-Maps</h3>
+
+            <h4 class="subsection-title">1. 3-Variable K-Map (8 Squares)</h4>
+            <p>Variables $A, B, C$: Rows represent $A$ ($0, 1$), Columns represent $BC$ ($00, 01, 11, 10$).</p>
+            
+            <div style="text-align:center;">
+                <table class="kmap-table">
+                    <tr>
+                        <th class="kmap-header" style="width:70px;">A \ BC</th>
+                        <th class="kmap-header">00</th>
+                        <th class="kmap-header">01</th>
+                        <th class="kmap-header">11</th>
+                        <th class="kmap-header">10</th>
+                    </tr>
+                    <tr>
+                        <th class="kmap-header">0</th>
+                        <td>m<sub>0</sub><span class="kmap-cell-num">0</span></td>
+                        <td>m<sub>1</sub><span class="kmap-cell-num">1</span></td>
+                        <td>m<sub>3</sub><span class="kmap-cell-num">3</span></td>
+                        <td>m<sub>2</sub><span class="kmap-cell-num">2</span></td>
+                    </tr>
+                    <tr>
+                        <th class="kmap-header">1</th>
+                        <td>m<sub>4</sub><span class="kmap-cell-num">4</span></td>
+                        <td>m<sub>5</sub><span class="kmap-cell-num">5</span></td>
+                        <td>m<sub>7</sub><span class="kmap-cell-num">7</span></td>
+                        <td>m<sub>6</sub><span class="kmap-cell-num">6</span></td>
+                    </tr>
+                </table>
+            </div>
+
+            <h4 class="subsection-title">2. 4-Variable K-Map (16 Squares)</h4>
+            <p>Variables $A, B, C, D$: Rows represent $AB$ ($00, 01, 11, 10$), Columns represent $CD$ ($00, 01, 11, 10$).</p>
+
+            <div style="text-align:center;">
+                <table class="kmap-table">
+                    <tr>
+                        <th class="kmap-header" style="width:80px;">AB \ CD</th>
+                        <th class="kmap-header">00</th>
+                        <th class="kmap-header">01</th>
+                        <th class="kmap-header">11</th>
+                        <th class="kmap-header">10</th>
+                    </tr>
+                    <tr>
+                        <th class="kmap-header">00</th>
+                        <td>m<sub>0</sub><span class="kmap-cell-num">0</span></td>
+                        <td>m<sub>1</sub><span class="kmap-cell-num">1</span></td>
+                        <td>m<sub>3</sub><span class="kmap-cell-num">3</span></td>
+                        <td>m<sub>2</sub><span class="kmap-cell-num">2</span></td>
+                    </tr>
+                    <tr>
+                        <th class="kmap-header">01</th>
+                        <td>m<sub>4</sub><span class="kmap-cell-num">4</span></td>
+                        <td>m<sub>5</sub><span class="kmap-cell-num">5</span></td>
+                        <td>m<sub>7</sub><span class="kmap-cell-num">7</span></td>
+                        <td>m<sub>6</sub><span class="kmap-cell-num">6</span></td>
+                    </tr>
+                    <tr>
+                        <th class="kmap-header">11</th>
+                        <td>m<sub>12</sub><span class="kmap-cell-num">12</span></td>
+                        <td>m<sub>13</sub><span class="kmap-cell-num">13</span></td>
+                        <td>m<sub>15</sub><span class="kmap-cell-num">15</span></td>
+                        <td>m<sub>14</sub><span class="kmap-cell-num">14</span></td>
+                    </tr>
+                    <tr>
+                        <th class="kmap-header">10</th>
+                        <td>m<sub>8</sub><span class="kmap-cell-num">8</span></td>
+                        <td>m<sub>9</sub><span class="kmap-cell-num">9</span></td>
+                        <td>m<sub>11</sub><span class="kmap-cell-num">11</span></td>
+                        <td>m<sub>10</sub><span class="kmap-cell-num">10</span></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="bangla-explain">
+                <strong>K-Map এর ঘর বিন্যাস মনে রাখার টেকনিক:</strong><br>
+                লক্ষ্য করুন, কলাম এবং সারির ক্রমানুসার হলো <strong>00, 01, 11, 10</strong> (গ্রে কোড)। 
+                তাই ৩য় কলামটি হলো $11$ এবং ৪র্থ কলামটি হলো $10$। একইভাবে ৩য় সারিটি হলো $11$ (12, 13, 15, 14) এবং ৪র্থ সারিটি হলো $10$ (8, 9, 11, 10)। পরীক্ষার খাতায় ঘর বসানোর সময় এই ৩য় ও ৪র্থ সারির অদলবদল খেয়াল রাখা অত্যন্ত জরুরি!
+            </div>
+        </div>
+
+        <div id="sec5-4-3">
+            <h3 class="section-title">5.4.3 Rules for Grouping / Looping Minterms</h3>
+            <ol>
+                <li><strong>Group Size:</strong> Groups must contain $2^k$ cells ($1, 2, 4, 8, 16, 32$). Never make groups of 3, 5, or 6 cells!</li>
+                <li><strong>Group Shape:</strong> Groups must be rectangular or square blocks.</li>
+                <li><strong>Wrap-Around Property:</strong> Top and bottom edges are adjacent; leftmost and rightmost columns are adjacent. The 4 corners ($m_0, m_2, m_8, m_{10}$) form a valid group of 4!</li>
+                <li><strong>Maximal Grouping Rule:</strong> Always make the largest possible group to eliminate the maximum number of variables:
+                    <ul>
+                        <li>Grouping 2 cells eliminates 1 variable.</li>
+                        <li>Grouping 4 cells eliminates 2 variables.</li>
+                        <li>Grouping 8 cells eliminates 3 variables.</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <!-- DIAGRAM FOR K-MAP EXAMPLE -->
+            <div class="diagram-container">
+                <svg width="600" height="300" viewBox="0 0 600 300">
+                    <text x="300" y="25" text-anchor="middle" font-weight="bold" font-size="15" fill="#1a365d">K-Map Grouping Example: F(A,B,C,D) = Σ(2, 3, 7, 10, 11, 15)</text>
+                    
+                    <g transform="translate(100, 50)">
+                        <!-- Grid Lines -->
+                        <rect x="80" y="40" width="320" height="200" fill="#ffffff" stroke="#2b6cb0" stroke-width="2"/>
+                        <line x1="160" y1="40" x2="160" y2="240" stroke="#cbd5e0" stroke-width="1.5"/>
+                        <line x1="240" y1="40" x2="240" y2="240" stroke="#cbd5e0" stroke-width="1.5"/>
+                        <line x1="320" y1="40" x2="320" y2="240" stroke="#cbd5e0" stroke-width="1.5"/>
+                        
+                        <line x1="80" y1="90" x2="400" y2="90" stroke="#cbd5e0" stroke-width="1.5"/>
+                        <line x1="80" y1="140" x2="400" y2="140" stroke="#cbd5e0" stroke-width="1.5"/>
+                        <line x1="80" y1="190" x2="400" y2="190" stroke="#cbd5e0" stroke-width="1.5"/>
+
+                        <!-- Labels -->
+                        <text x="40" y="30" font-weight="bold" font-size="12">AB \ CD</text>
+                        <text x="120" y="30" text-anchor="middle" font-size="11">00</text>
+                        <text x="200" y="30" text-anchor="middle" font-size="11">01</text>
+                        <text x="280" y="30" text-anchor="middle" font-size="11">11</text>
+                        <text x="360" y="30" text-anchor="middle" font-size="11">10</text>
+
+                        <text x="60" y="70" text-anchor="middle" font-size="11">00</text>
+                        <text x="60" y="120" text-anchor="middle" font-size="11">01</text>
+                        <text x="60" y="170" text-anchor="middle" font-size="11">11</text>
+                        <text x="60" y="220" text-anchor="middle" font-size="11">10</text>
+
+                        <!-- Cell Values -->
+                        <!-- Row 00: m2=1, m3=1 -->
+                        <text x="280" y="70" text-anchor="middle" font-weight="bold">1</text>
+                        <text x="360" y="70" text-anchor="middle" font-weight="bold">1</text>
+                        <!-- Row 01: m7=1 -->
+                        <text x="280" y="120" text-anchor="middle" font-weight="bold">1</text>
+                        <!-- Row 11: m15=1, m11=1 -->
+                        <text x="280" y="170" text-anchor="middle" font-weight="bold">1</text>
+                        <!-- Row 10: m10=1, m11=1 -->
+                        <text x="280" y="220" text-anchor="middle" font-weight="bold">1</text>
+                        <text x="360" y="220" text-anchor="middle" font-weight="bold">1</text>
+
+                        <!-- Group 1: Column CD=11 (Group of 4) -->
+                        <rect x="250" y="45" width="60" height="190" rx="10" fill="none" stroke="#e53e3e" stroke-width="3"/>
+                        <text x="280" y="255" text-anchor="middle" font-weight="bold" fill="#e53e3e">Group 1 (Red) = CD</text>
+
+                        <!-- Group 2: Corner/Edge wrap for m2, m3, m10, m11 (Group of 4) -->
+                        <rect x="255" y="48" width="130" height="40" rx="8" fill="none" stroke="#319795" stroke-width="2.5" stroke-dasharray="4,4"/>
+                        <rect x="255" y="198" width="130" height="40" rx="8" fill="none" stroke="#319795" stroke-width="2.5" stroke-dasharray="4,4"/>
+                        <text x="340" y="275" text-anchor="middle" font-weight="bold" fill="#319795">Group 2 (Green Wrap) = B'C</text>
+                    </g>
+                </svg>
+                <div class="diagram-caption">Figure 5.2: 4-Variable K-Map grouping for $F = \Sigma(2, 3, 7, 10, 11, 15)$</div>
+                <div class="diagram-explanation">
+                    <strong>চিত্রের ব্যাখা:</strong>
+                    <br>১. লাল রঙের গ্রুপটি কলাম $CD = 11$ এর ৪টি ১-কে নিয়ে গঠিত। এখান থেকে পাওয়া যায় $CD$।
+                    <br>২. সবুজ ড্যাশযুক্ত গ্রুপটি ১ম সারি ($AB=00$) এবং ৪র্থ সারির ($AB=10$) ডানপাশের ২টি করে ঘর ($m_2, m_3, m_{10}, m_{11}$) মিলিয়ে একটি ৪-এর গ্রুপ। এখান থেকে পাওয়া যায় $B'C$।
+                    <br>৩. সুতরাং ন্যূনতম আউটপুট: $\mathbf{F = CD + B'C}$।
+                </div>
+            </div>
+        </div>
+
+        <div id="sec5-4-4">
+            <h3 class="section-title">5.4.4 Don't-Care Conditions ($d$ or $X$)</h3>
+            <p>
+                In many practical digital systems, certain input combinations <strong>never occur</strong> (e.g., BCD codes $1010$ through $1111$) or their output values do not affect the system operation. 
+                These are called <strong>Don't-Care Conditions</strong> and are denoted by $d$ or $X$ in the K-map.
+            </p>
+
+            <div class="bangla-explain">
+                <strong>Don't-Care Conditions ব্যবহারের নিয়ম:</strong>
+                <ul>
+                    <li>ক্যালকুলেশনে বা লুপ তৈরি করার সময় Don't-Care ($X$) কে প্রয়োজন অনুযায়ী <strong>1</strong> অথবা <strong>0</strong> ধরা যায়।</li>
+                    <li>যদি কোনো $X$ কে অন্তর্ভুক্ত করলে বড় গ্রুপ তৈরি করা যায় (যেমন ২-এর গ্রুপ ৪ হয়, বা ৪-এর গ্রুপ ৮ হয়), তবে $X$ কে <strong>1</strong> হিসেবে ধরে বড় লুপ বানাবো।</li>
+                    <li>যদি $X$ অন্তর্ভুক্ত করলেও গ্রুপের আকার না বাড়ে, তবে $X$ কে অবহেলা করব (অর্থাৎ <strong>0</strong> ধরে ছেড়ে দেব)। সব $X$ কে কভার করার কোনো প্রয়োজন নেই!</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="sec5-4-5">
+            <h3 class="section-title">5.4.5 Product-of-Sums (POS) Simplification via K-Map</h3>
+            <p>
+                To obtain a minimized <strong>Product-of-Sums (POS)</strong> expression using a K-Map:
+            </p>
+            <ol>
+                <li>Group the <strong>0s</strong> in the K-map instead of the 1s to obtain the simplified expression for $F'$.</li>
+                <li>Apply DeMorgan's Theorem to $F'$ (take the complement $(F')'$) to obtain $F$ directly in POS form.</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- SECTION 5.5 -->
+    <section id="sec5-5">
+        <h2 class="chapter-title">5.5 Quine-McCluskey (Tabular) Method of Simplification</h2>
+
+        <p>
+            When the number of variables in a Boolean function exceeds 4 or 5, Karnaugh mapping becomes difficult, visually confusing, and prone to human error. 
+            The <strong>Quine-McCluskey (QM) method</strong> (or Tabular method) provides a fully systematic, step-by-step algorithmic procedure that is ideal for implementation in software/computers.
+        </p>
+
+        <div id="sec5-5-1">
+            <h3 class="section-title">5.5.1 The Two Phases of QM Algorithm</h3>
+            <ol>
+                <li><strong>Phase 1:</strong> Systematically combine minterms to determine ALL <strong>Prime Implicants (PI)</strong> of the function.</li>
+                <li><strong>Phase 2:</strong> Construct the <strong>Prime Implicant Table</strong> to select the minimum set of Prime Implicants that cover all essential minterms.</li>
+            </ol>
+        </div>
+
+        <div id="sec5-5-2">
+            <h3 class="section-title">5.5.2 Full Worked University Exam Problem</h3>
+
+            <div class="real-example">
+                <h5>📌 University Exam Problem: Simplify using Quine-McCluskey Method</h5>
+                <p>$$F(A,B,C,D) = \Sigma(0, 2, 5, 6, 7, 8, 10, 12, 13, 14, 15)$$</p>
+            </div>
+
+            <h4 class="subsection-title">Step 1: Group Minterms by Number of 1s (Index)</h4>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Group Index</th><th>Minterm</th><th>Binary Representation</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Group 0</strong> (No 1s)</td><td>m0</td><td>0000</td></tr>
+                        <tr style="border-top: 2px solid #2b6cb0;"><td><strong>Group 1</strong> (One 1)</td><td>m2<br>m8</td><td>0010<br>1000</td></tr>
+                        <tr style="border-top: 2px solid #2b6cb0;"><td><strong>Group 2</strong> (Two 1s)</td><td>m5<br>m6<br>m10<br>m12</td><td>0101<br>0110<br>1010<br>1100</td></tr>
+                        <tr style="border-top: 2px solid #2b6cb0;"><td><strong>Group 3</strong> (Three 1s)</td><td>m7<br>m13<br>m14</td><td>0111<br>1101<br>1110</td></tr>
+                        <tr style="border-top: 2px solid #2b6cb0;"><td><strong>Group 4</strong> (Four 1s)</td><td>m15</td><td>1111</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="subsection-title">Step 2: Combine Pairs from Adjacent Groups (1-Dash Terms)</h4>
+            <p>Compare terms in Group $i$ with Group $i+1$. If they differ by exactly 1 bit, combine them and replace the differing bit with a dash ($-$). Check ($\checkmark$) combined terms.</p>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Group Pair</th><th>Combined Minterms</th><th>Binary with Dash</th><th>Matches Variable</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Group (0,1)</td><td>(0, 2)<br>(0, 8)</td><td>00-0<br>-000</td><td>A'B'D'<br>B'C'D'</td></tr>
+                        <tr style="border-top: 2px solid #2b6cb0;"><td>Group (1,2)</td><td>(2, 6)<br>(2, 10)<br>(8, 10)<br>(8, 12)</td><td>0-10<br>-010<br>10-0<br>1-00</td><td>A'CD'<br>B'CD'<br>AB'D'<br>AC'D'</td></tr>
+                        <tr style="border-top: 2px solid #2b6cb0;"><td>Group (2,3)</td><td>(5, 7)<br>(5, 13)<br>(6, 7)<br>(6, 14)<br>(10, 14)<br>(12, 13)<br>(12, 14)</td><td>01-1<br>-101<br>011-<br>-110<br>1-10<br>110-<br>11-0</td><td>A'BD<br>BC'D<br>A'BC<br>BCD'<br>ACD'<br>ABC'<br>ABD'</td></tr>
+                        <tr style="border-top: 2px solid #2b6cb0;"><td>Group (3,4)</td><td>(7, 15)<br>(13, 15)<br>(14, 15)</td><td>-111<br>11-1<br>111-</td><td>BCD<br>ABD<br>ABC</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="subsection-title">Step 3: Combine Pairs into 4-Group Terms (2-Dash Terms)</h4>
+            <p>Combine 1-dash terms that have dashes in the same position and differ by 1 bit:</p>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Combined 4-Group</th><th>Binary Code</th><th>Reduced Algebraic Term</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>(0, 2, 8, 10)</td><td>-0-0</td><td><strong>B'D'</strong></td></tr>
+                        <tr><td>(2, 6, 10, 14)</td><td>--10</td><td><strong>CD'</strong></td></tr>
+                        <tr><td>(8, 10, 12, 14)</td><td>1--0</td><td><strong>AD'</strong></td></tr>
+                        <tr><td>(5, 7, 13, 15)</td><td>-1-1</td><td><strong>BD</strong></td></tr>
+                        <tr><td>(6, 7, 14, 15)</td><td>-11-</td><td><strong>BC</strong></td></tr>
+                        <tr><td>(12, 13, 14, 15)</td><td>11--</td><td><strong>AB</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="subsection-title">Step 4: Prime Implicant Table Construction</h4>
+            <p>Place cross ($\times$) in columns for covered minterms. Find columns with only <strong>ONE</strong> $\times$ to identify <strong>Essential Prime Implicants (EPI)</strong>.</p>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Prime Implicants</th>
+                            <th>0</th><th>2</th><th>5</th><th>6</th><th>7</th><th>8</th><th>10</th><th>12</th><th>13</th><th>14</th><th>15</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background-color: #f0fff4;">
+                            <td><strong>B'D'</strong> (0,2,8,10)</td>
+                            <td>$\times$</td><td>$\times$</td><td></td><td></td><td></td><td>$\times$</td><td>$\times$</td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        <tr>
+                            <td><strong>CD'</strong> (2,6,10,14)</td>
+                            <td></td><td>$\times$</td><td></td><td>$\times$</td><td></td><td></td><td>$\times$</td><td></td><td></td><td>$\times$</td><td></td>
+                        </tr>
+                        <tr>
+                            <td><strong>AD'</strong> (8,10,12,14)</td>
+                            <td></td><td></td><td></td><td></td><td></td><td>$\times$</td><td>$\times$</td><td>$\times$</td><td></td><td>$\times$</td><td></td>
+                        </tr>
+                        <tr style="background-color: #f0fff4;">
+                            <td><strong>BD</strong> (5,7,13,15)</td>
+                            <td></td><td></td><td>$\times$</td><td></td><td>$\times$</td><td></td><td></td><td></td><td>$\times$</td><td></td><td>$\times$</td>
+                        </tr>
+                        <tr>
+                            <td><strong>BC</strong> (6,7,14,15)</td>
+                            <td></td><td></td><td></td><td>$\times$</td><td>$\times$</td><td></td><td></td><td></td><td></td><td>$\times$</td><td>$\times$</td>
+                        </tr>
+                        <tr style="background-color: #f0fff4;">
+                            <td><strong>AB</strong> (12,13,14,15)</td>
+                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>$\times$</td><td>$\times$</td><td>$\times$</td><td>$\times$</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bangla-explain">
+                <strong>টেবিল থেকে Essential Prime Implicant খোঁজার পদ্ধতি:</strong>
+                <ol>
+                    <li>মিন্তার্ম <strong>0</strong> এবং <strong>5</strong> কলামে খেয়াল করুন: এদের জন্য পুরো কলামে মাত্র <strong>১টি</strong> করে ক্রসিং ($\times$) রয়েছে!</li>
+                    <li>মিন্তার্ম 0 কে কভার করার একমাত্র উপায় হলো <strong>B'D'</strong>। তাই <strong>B'D'</strong> একটি Essential Prime Implicant!</li>
+                    <li>মিন্তার্ম 5 কে কভার করার একমাত্র উপায় হলো <strong>BD</strong>। তাই <strong>BD</strong> একটি Essential Prime Implicant!</li>
+                    <li>মিন্তার্ম 12 বা 13 কভার করার জন্য বেছে নিই <strong>AB</strong>।</li>
+                    <li>এই ৩টি Prime Implicant ($B'D', BD, AB$) মিলে ফাংশনের সবকটি মিন্তার্মকে সম্পূর্ণভাবে কভার করে ফেলে!</li>
+                </ol>
+            </div>
+
+            <p class="formula-box" style="font-weight:bold; color:#276749;">
+                Final Minimized Function: $F = B'D' + BD + AB$
+            </p>
+        </div>
+    </section>
+
+    <!-- SECTION 5.6 -->
+    <section id="sec5-6">
+        <h2 class="chapter-title">5.6 Iterated Consensus Method of Simplification</h2>
+
+        <p>
+            The <strong>Iterated Consensus Method</strong> is an algebraic method that systematically generates all prime implicants of a Boolean function without needing to expand the function into full minterms.
+        </p>
+
+        <div id="sec5-6-1">
+            <h3 class="section-title">5.6.1 Consensus Theorem & Consensus Terms</h3>
+            <p>
+                Given two product terms $T_1$ and $T_2$, if $T_1$ contains literal $x$ and $T_2$ contains literal $x'$, and no other variable appears complemented between them, the <strong>consensus term</strong> is formed by ANDing all remaining literals of $T_1$ and $T_2$.
+            </p>
+
+            <div class="formula-box">
+                $$\text{Consensus of } (Ax) \text{ and } (B x') = AB$$
+                $$\text{Consensus Theorem: } AB + A'C + BC = AB + A'C$$
+            </div>
+
+            <div class="real-example">
+                <h5>📌 Consensus Term Calculation Examples:</h5>
+                <p>1. Consensus of $ABD$ and $A'C \implies \mathbf{BCD}$ (since variable $A$ appears in normal and complemented form).</p>
+                <p>2. Consensus of $AB'C$ and $A'B \implies$ <strong>No Consensus Term</strong> (because both $A, A'$ and $B', B$ are complemented; consensus exists if and only if EXACTLY ONE variable is complemented!).</p>
+            </div>
+        </div>
+
+        <div id="sec5-6-2">
+            <h3 class="section-title">5.6.2 Iterated Consensus Algorithm Execution</h3>
+            <div class="step-box">
+                <strong>Step 1:</strong> Start with the given SOP expression.<br>
+                <strong>Step 2:</strong> Compute the consensus term for every possible pair of product terms and add the new consensus terms to the expression.<br>
+                <strong>Step 3:</strong> Apply the Absorption Law ($P + PQ = P$) to eliminate redundant terms.<br>
+                <strong>Step 4:</strong> Repeat Steps 2 and 3 iteratively until no new consensus terms can be generated. The remaining set of terms represents ALL <strong>Prime Implicants</strong> of the function!
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5.7 SUMMARY -->
+    <section id="sec5-7">
+        <h2 class="chapter-title">5.7 Master Revision & Exam Cheat Sheet</h2>
+
+        <div class="revision-card">
+            <h5> Chapter 5 Key Summary Points for University Exams</h5>
+            <p>✔ <strong>Objective of Simplification:</strong> Minimize logic gates and gate input connections (literals) to maximize circuit reliability and lower power/cost.</p>
+            <p>✔ <strong>Algebraic Minimization:</strong> Uses theorems like DeMorgan's, Distributive, Idempotence ($A+A=A$), and Complementarity ($A+A'=1$). Fast but relies on trial & error.</p>
+            <p>✔ <strong>Prime Implicant (PI):</strong> Largest combined group of $2^k$ adjacent minterms that cannot be merged further.</p>
+            <p>✔ <strong>Essential Prime Implicant (EPI):</strong> A PI covering at least one unique minterm not covered by any other PI. Must appear in the final solution!</p>
+            <p>✔ <strong>K-Map Method:</strong> Best visual tool for $\le 4$ or $5$ variables. Uses Gray Code layout ($00, 01, 11, 10$). Remember wrap-around edges and Don't-Cares ($X$).</p>
+            <p>✔ <strong>Quine-McCluskey (Tabular) Method:</strong> Systematic algorithmic approach ideal for computer programs and functions with $\ge 5$ variables.</p>
+            <p>✔ <strong>Iterated Consensus Method:</strong> Uses consensus theorem $Ax + Bx' = AB$ to generate prime implicants without full minterm expansion.</p>
+        </div>
+    </section>
+
+</div>
+
+</body>
+</html>

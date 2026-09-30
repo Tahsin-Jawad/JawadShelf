@@ -33,15 +33,70 @@ export const generatedCourses: CourseData[] = [
         "extension": "pdf",
         "url": "/materials/CSE%20302/Chapters/1.DBMS_Intro.pdf",
         "sizeInBytes": 1416396
+      },
+      {
+        "id": "2.DBMS_Archi_Schema.pptx",
+        "title": "2.DBMS Archi Schema",
+        "filename": "2.DBMS_Archi_Schema.pptx",
+        "type": "PPTX",
+        "extension": "pptx",
+        "url": "/materials/CSE%20302/Chapters/2.DBMS_Archi_Schema.pptx",
+        "sizeInBytes": 1482827
+      },
+      {
+        "id": "3.1.Relational Model.pptx",
+        "title": "3.1.Relational Model",
+        "filename": "3.1.Relational Model.pptx",
+        "type": "PPTX",
+        "extension": "pptx",
+        "url": "/materials/CSE%20302/Chapters/3.1.Relational%20Model.pptx",
+        "sizeInBytes": 1244872
+      },
+      {
+        "id": "3.2.Relational Model Reference.pptx",
+        "title": "3.2.Relational Model Reference",
+        "filename": "3.2.Relational Model Reference.pptx",
+        "type": "PPTX",
+        "extension": "pptx",
+        "url": "/materials/CSE%20302/Chapters/3.2.Relational%20Model%20Reference.pptx",
+        "sizeInBytes": 1196397
+      },
+      {
+        "id": "4.Relational Algebra.pptx",
+        "title": "4.Relational Algebra",
+        "filename": "4.Relational Algebra.pptx",
+        "type": "PPTX",
+        "extension": "pptx",
+        "url": "/materials/CSE%20302/Chapters/4.Relational%20Algebra.pptx",
+        "sizeInBytes": 5719515
       }
     ],
-    "others": []
+    "others": [
+      {
+        "id": "LAB 1-2-3.html",
+        "title": "LAB 1 2 3",
+        "filename": "LAB 1-2-3.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/CSE%20302/Others/LAB%201-2-3.html",
+        "sizeInBytes": 76113
+      }
+    ]
   },
   {
     "id": "cse-345",
     "code": "CSE 345",
     "title": "CSE 345",
     "chapters": [
+      {
+        "id": "ch 1-2.pdf",
+        "title": "Ch 1 2",
+        "filename": "ch 1-2.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20345/Chapters/ch%201-2.pdf",
+        "sizeInBytes": 6884301
+      },
       {
         "id": "ch-3-4.pdf",
         "title": "Ch 3 4",
@@ -50,17 +105,44 @@ export const generatedCourses: CourseData[] = [
         "extension": "pdf",
         "url": "/materials/CSE%20345/Chapters/ch-3-4.pdf",
         "sizeInBytes": 12014109
+      },
+      {
+        "id": "ch 5.pdf",
+        "title": "Ch 5",
+        "filename": "ch 5.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20345/Chapters/ch%205.pdf",
+        "sizeInBytes": 5841231
       }
     ],
     "others": [
       {
-        "id": "chapter_1_2_complete_guide.html",
-        "title": "Chapter 1 2 Complete Guide",
-        "filename": "chapter_1_2_complete_guide.html",
+        "id": "ch_1_2.html",
+        "title": "Ch 1 2",
+        "filename": "ch_1_2.html",
         "type": "HTML",
         "extension": "html",
-        "url": "/materials/CSE%20345/Others/chapter_1_2_complete_guide.html",
+        "url": "/materials/CSE%20345/Others/ch_1_2.html",
         "sizeInBytes": 89765
+      },
+      {
+        "id": "ch_3_4.html",
+        "title": "Ch 3 4",
+        "filename": "ch_3_4.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/CSE%20345/Others/ch_3_4.html",
+        "sizeInBytes": 109462
+      },
+      {
+        "id": "ch 5.html",
+        "title": "Ch 5",
+        "filename": "ch 5.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/CSE%20345/Others/ch%205.html",
+        "sizeInBytes": 63691
       }
     ]
   },
@@ -68,7 +150,17 @@ export const generatedCourses: CourseData[] = [
     "id": "gen-209",
     "code": "GEN 209",
     "title": "GEN 209",
-    "chapters": [],
+    "chapters": [
+      {
+        "id": "1. Social Psychology Intro.pdf",
+        "title": "1. Social Psychology Intro",
+        "filename": "1. Social Psychology Intro.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/GEN%20209/Chapters/1.%20Social%20Psychology%20Intro.pdf",
+        "sizeInBytes": 1173091
+      }
+    ],
     "others": []
   }
 ];
