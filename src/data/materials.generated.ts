@@ -35,40 +35,40 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 1416396
       },
       {
-        "id": "2.DBMS_Archi_Schema.pptx",
+        "id": "2.DBMS_Archi_Schema.pdf",
         "title": "2.DBMS Archi Schema",
-        "filename": "2.DBMS_Archi_Schema.pptx",
-        "type": "PPTX",
-        "extension": "pptx",
-        "url": "/materials/CSE%20302/Chapters/2.DBMS_Archi_Schema.pptx",
-        "sizeInBytes": 1482827
+        "filename": "2.DBMS_Archi_Schema.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20302/Chapters/2.DBMS_Archi_Schema.pdf",
+        "sizeInBytes": 1126603
       },
       {
-        "id": "3.1.Relational Model.pptx",
+        "id": "3.1.Relational Model.pdf",
         "title": "3.1.Relational Model",
-        "filename": "3.1.Relational Model.pptx",
-        "type": "PPTX",
-        "extension": "pptx",
-        "url": "/materials/CSE%20302/Chapters/3.1.Relational%20Model.pptx",
-        "sizeInBytes": 1244872
+        "filename": "3.1.Relational Model.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20302/Chapters/3.1.Relational%20Model.pdf",
+        "sizeInBytes": 1111277
       },
       {
-        "id": "3.2.Relational Model Reference.pptx",
+        "id": "3.2.Relational Model Reference.pdf",
         "title": "3.2.Relational Model Reference",
-        "filename": "3.2.Relational Model Reference.pptx",
-        "type": "PPTX",
-        "extension": "pptx",
-        "url": "/materials/CSE%20302/Chapters/3.2.Relational%20Model%20Reference.pptx",
-        "sizeInBytes": 1196397
+        "filename": "3.2.Relational Model Reference.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20302/Chapters/3.2.Relational%20Model%20Reference.pdf",
+        "sizeInBytes": 1026590
       },
       {
-        "id": "4.Relational Algebra.pptx",
+        "id": "4.Relational Algebra.pdf",
         "title": "4.Relational Algebra",
-        "filename": "4.Relational Algebra.pptx",
-        "type": "PPTX",
-        "extension": "pptx",
-        "url": "/materials/CSE%20302/Chapters/4.Relational%20Algebra.pptx",
-        "sizeInBytes": 5719515
+        "filename": "4.Relational Algebra.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20302/Chapters/4.Relational%20Algebra.pdf",
+        "sizeInBytes": 2849142
       }
     ],
     "others": [
