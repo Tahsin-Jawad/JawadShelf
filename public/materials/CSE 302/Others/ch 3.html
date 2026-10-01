@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Lecture Notes: Relational Model | Antu Chowdhury</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0f172a',
+                        cardBg: '#1e293b',
+                        cardHover: '#334155',
+                        accent: '#38bdf8',
+                        accentIndigo: '#818cf8',
+                        textMain: '#e2e8f0',
+                        textMuted: '#94a3b8',
+                        borderSubtle: '#334155'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-textMain font-sans antialiased min-h-screen flex flex-col">
+
+    <header class="fixed top-0 left-0 right-0 h-16 bg-cardBg/90 backdrop-blur-md border-b border-borderSubtle z-50 flex items-center justify-between px-4 lg:px-8">
+        <div class="flex items-center space-x-3">
+            <button id="sidebarToggle" class="lg:hidden text-textMuted hover:text-accent p-2 rounded-lg transition">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+            <div class="flex items-center space-x-2">
+                <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-accent to-accentIndigo flex items-center justify-center text-darkBg font-bold shadow-lg shadow-accent/20">
+                    <i class="fa-solid fa-database"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-sm lg:text-base tracking-tight text-textMain">DBMS Lecture Notes: Relational Model</h1>
+                    <p class="text-xs text-textMuted">Antu Chowdhury • Dept. of CSE, East West University</p>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center space-x-3">
+            <!-- Search Bar -->
+            <div class="relative hidden sm:block w-48 md:w-64">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-textMuted">
+                    <i class="fa-solid fa-search text-xs"></i>
+                </span>
+                <input type="text" id="searchInput" placeholder="Search topics, keys, SQL..." 
+                    class="w-full bg-darkBg text-xs text-textMain pl-9 pr-4 py-2 rounded-lg border border-borderSubtle focus:outline-none focus:border-accent transition">
+            </div>
+            <a href="#quick-revision" class="hidden md:inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-accent/10 border border-accent/30 text-accent text-xs font-medium hover:bg-accent/20 transition">
+                <i class="fa-solid fa-bolt text-xs"></i>
+                <span>Quick Revision</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="flex pt-16 flex-1 relative">
+        <aside id="sidebar" class="fixed lg:sticky top-16 h-[calc(100vh-4rem)] w-72 bg-cardBg/95 backdrop-blur-md border-r border-borderSubtle z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-y-auto p-4 space-y-6">
+            <div class="sm:hidden pt-2">
+                <!-- Mobile Search -->
+                <div class="relative w-full">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-textMuted">
+                        <i class="fa-solid fa-search text-xs"></i>
+                    </span>
+                    <input type="text" id="mobileSearchInput" placeholder="Search notes..." 
+                        class="w-full bg-darkBg text-xs text-textMain pl-9 pr-4 py-2 rounded-lg border border-borderSubtle focus:outline-none focus:border-accent">
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <p class="text-[10px] font-semibold tracking-wider uppercase text-textMuted px-3 mb-2">Table of Contents</p>
+                
+                <a href="#intro-relational" class="nav-link flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-textMain hover:bg-cardHover transition">
+                    <span class="w-1.5 h-1.5 rounded-full bg-accent"></span>
+                    <span>1. Relational Model Concepts</span>
+                </a>
+                <a href="#unordered-relations" class="nav-link flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-textMain hover:bg-cardHover transition">
+                    <span class="w-1.5 h-1.5 rounded-full bg-textMuted"></span>
+                    <span>2. Relations are Unordered</span>
+                </a>
+                <a href="#schema-instance" class="nav-link flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-textMain hover:bg-cardHover transition">
+                    <span class="w-1.5 h-1.5 rounded-full bg-textMuted"></span>
+                    <span>3. Schema & Instance</span>
+                </a>
+                <a href="#database-structure" class="nav-link flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-textMain hover:bg-cardHover transition">
+                    <span class="w-1.5 h-1.5 rounded-full bg-textMuted"></span>
+                    <span>4. Database & Why Split Tables</span>
+                </a>
+                <a href="#key-constraints" class="nav-link flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-textMain hover:bg-cardHover transition">
+                    <span class="w-1.5 h-1.5 rounded-full bg-textMuted"></span>
+                    <span>5. Key Constraints Overview</span>
+                </a>
+                <a href="#super-key" class="nav-link flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-textMain hover:bg-cardHover transition">
+                    <span class="w-1.5 h-1.5 rounded-full bg-textMuted"></span>
+                    <span>6. Super Key</span>
+                </a>
+                <a href="#candidate-key" class="nav-link flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-textMain hover:bg-cardHover transition">
+                    <span class="w-1.5 h-1.5 rounded-full bg-textMuted"></span>
+                    <span>7. Candidate Key</span>
+                </a>
+                <a href="#primary-key" class="nav-link flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-textMain hover:bg-cardHover transition">
+                    <span class="w-1.5 h-1.5 rounded-full bg-textMuted"></span>
+                    <span>8. Primary Key & SQL</span>
+                </a>
+                <a href="#foreign-key" class="nav-link flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-textMain hover:bg-cardHover transition">
+                    <span class="w-1.5 h-1.5 rounded-full bg-textMuted"></span>
+                    <span>9. Foreign Key & Relationships</span>
+                </a>
+                <a href="#secondary-key" class="nav-link flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-textMain hover:bg-cardHover transition">
+                    <span class="w-1.5 h-1.5 rounded-full bg-textMuted"></span>
+                    <span>10. Secondary Key / Alternate Key</span>
+                </a>
+                <a href="#unique-key" class="nav-link flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-textMain hover:bg-cardHover transition">
+                    <span class="w-1.5 h-1.5 rounded-full bg-textMuted"></span>
+                    <span>11. Unique Key</span>
+                </a>
+                <a href="#composite-key" class="nav-link flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-textMain hover:bg-cardHover transition">
+                    <span class="w-1.5 h-1.5 rounded-full bg-textMuted"></span>
+                    <span>12. Composite Key</span>
+                </a>
+                <a href="#integrity-constraints" class="nav-link flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-textMain hover:bg-cardHover transition">
+                    <span class="w-1.5 h-1.5 rounded-full bg-textMuted"></span>
+                    <span>13. Integrity Constraints</span>
+                </a>
+                <a href="#key-comparisons" class="nav-link flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-textMain hover:bg-cardHover transition">
+                    <span class="w-1.5 h-1.5 rounded-full bg-textMuted"></span>
+                    <span>14. Key Comparisons & Summary</span>
+                </a>
+                <a href="#quick-revision" class="nav-link flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-accent hover:bg-cardHover transition mt-4 bg-accent/5 border border-accent/20">
+                    <i class="fa-solid fa-bolt text-accent"></i>
+                    <span>Quick Revision</span>
+                </a>
+            </div>
+
+            <div class="pt-4 border-t border-borderSubtle text-[11px] text-textMuted">
+                <p>Based on lectures by Antu Chowdhury.</p>
+                <p class="mt-1">Compiled into a clean personal study notebook.</p>
+            </div>
+        </aside>
+
+        <!-- Overlay for mobile sidebar -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+        <main class="flex-1 px-4 sm:px-8 lg:px-12 py-8 max-w-5xl mx-auto space-y-16">
+
+            <!-- Hero Section -->
+            <section class="bg-gradient-to-r from-cardBg to-cardHover border border-borderSubtle rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-accent/5 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 space-y-3">
+                    <span class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-accent/10 text-accent text-xs font-semibold">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span>Lecture Notes • CSE302 Database Systems</span>
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-textMain">Relational Model & Key Constraints</h2>
+                    <p class="text-sm text-textMuted leading-relaxed max-w-2xl">
+                        এখানে আমরা Relational Model এর বেসিক কনসেপ্ট, টেবিল, রো, কলাম, এবং ডাটাবেজ সুরক্ষার জন্য অত্যন্ত গুরুত্বপূর্ণ বিভিন্ন ধরনের <strong>Keys</strong> এবং <strong>Integrity Constraints</strong> সহজ বাংলায় শিখব।
+                    </p>
+                    <div class="flex flex-wrap items-center gap-4 pt-2 text-xs text-textMuted">
+                        <span class="flex items-center space-x-1"><i class="fa-solid fa-user-tie text-accent"></i> <span>Antu Chowdhury, Lecturer, CSE, EWU</span></span>
+                        <span class="flex items-center space-x-1"><i class="fa-solid fa-file-pdf text-accent"><span>3.1 Relational Model & 3.2 Reference</span></span></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topic 1: Relational Model Concepts -->
+            <section id="intro-relational" class="space-y-6 scroll-mt-24">
+                <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-textMain flex items-center space-x-2">
+                        <span class="text-accent">1.</span>
+                        <span>Relational Model Concepts & Terminology</span>
+                    </h3>
+                    <span class="text-xs font-mono text-textMuted bg-cardBg px-2.5 py-1 rounded-md border border-borderSubtle">Lecture 3.1 • Slides 2–4</span>
+                </div>
+
+                <div class="bg-cardBg border border-borderSubtle rounded-xl p-6 space-y-4 shadow-sm">
+                    <p class="text-sm text-textMain leading-relaxed">
+                        Relational Model এ পুরো ডাটাবেজকে কতগুলো টেবিলের (Tables) কালেকশন হিসেবে স্টোর করা হয়। প্রতিটি টেবিলকে বলা হয় একটি <strong>Relation</strong>।
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+                        <div class="bg-darkBg p-4 rounded-lg border border-borderSubtle space-y-1">
+                            <span class="text-xs font-bold text-accent uppercase tracking-wider">Relation</span>
+                            <p class="text-xs text-textMuted">একটি পুরো টেবিলকে (যেমন: Student) relation বলা হয়।</p>
+                        </div>
+                        <div class="bg-darkBg p-4 rounded-lg border border-borderSubtle space-y-1">
+                            <span class="text-xs font-bold text-accentIndigo uppercase tracking-wider">Tuple</span>
+                            <p class="text-xs text-textMuted"> টেবিলের প্রতিটি <strong>row</strong> বা রেকর্ডকে tuple বলে। এটি একটি রিয়েল-ওয়ার্ল্ড অবজেক্ট নির্দেশ করে।</p>
+                        </div>
+                        <div class="bg-darkBg p-4 rounded-lg border border-borderSubtle space-y-1">
+                            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Attribute</span>
+                            <p class="text-xs text-textMuted">টেবিলের প্রতিটি <strong>column header</strong> হলো attribute (যেমন: ID, Name)।</p>
+                        </div>
+                    </div>
+
+                    <!-- Example Table -->
+                    <div class="space-y-2">
+                        <p class="text-xs font-medium text-textMuted">উদাহরণস্বরূপ Student Table:</p>
+                        <div class="overflow-x-auto rounded-lg border border-borderSubtle">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-darkBg text-textMuted border-b border-borderSubtle uppercase font-mono">
+                                    <tr>
+                                        <th class="px-4 py-3">Student_ID</th>
+                                        <th class="px-4 py-3">Name</th>
+                                        <th class="px-4 py-3">Department</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-borderSubtle">
+                                    <tr class="hover:bg-cardHover/50 transition">
+                                        <td class="px-4 py-2.5 font-mono text-accent">101</td>
+                                        <td class="px-4 py-2.5">Rahim</td>
+                                        <td class="px-4 py-2.5">CSE</td>
+                                    </tr>
+                                    <tr class="hover:bg-cardHover/50 transition">
+                                        <td class="px-4 py-2.5 font-mono text-accent">102</td>
+                                        <td class="px-4 py-2.5">Karim</td>
+                                        <td class="px-4 py-2.5">EEE</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Senior's explanation box -->
+                    <div class="bg-accent/10 border-l-4 border-accent p-4 rounded-r-lg space-y-2">
+                        <div class="flex items-center space-x-2 text-accent font-semibold text-xs">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Senior's Note (সোজা বাংলায়):</span>
+                        </div>
+                        <p class="text-xs text-textMain leading-relaxed">
+                            "এখানে মূল ব্যাপারটা হচ্ছে—আমরা নরমাল লাইফে যেগুলোকে টেবিল, রো আর কলাম বলি, ডাটাবেজ থিওরিতে স্যার ঠিক সেগুলোকে যথাক্রমে <strong>Relation</strong>, <strong>Tuple</strong> এবং <strong>Attribute</strong> বলে ডাকেন!"
+                        </p>
+                    </div>
+
+                    <!-- Domains and Atomicity -->
+                    <div class="space-y-3 pt-2">
+                        <h4 class="text-sm font-semibold text-textMain">Domains & Atomicity</h4>
+                        <ul class="list-disc list-inside text-xs text-textMuted space-y-1.5 pl-2">
+                            <li><strong>Domain:</strong> প্রতিটি attribute এর জন্য ভ্যালুর একটি নির্দিষ্ট এলাউড সেট থাকে (যেমন: BD Phone numbers = 11 digits, Age = 15 to 80 integers)।</li>
+                            <li><strong>Atomicity:</strong> এটমিক মানে হলো ভ্যালু অবশ্যই <em>single এবং indivisible</em> (অবিভাজ্য) হতে হবে। যেমন: ফুল নেমকে First Name ও Last Name এ ভাগ করা যায় যাতে ভ্যালুগুলো এটমিক থাকে।</li>
+                            <li><strong>NULL Value:</strong> যেকোনো ডোমেইনের সদস্য হলো বিশেষ ভ্যালু <code class="bg-darkBg px-1 py-0.5 rounded text-accent font-mono">NULL</code>, যার অর্থ হলো মানটি "unknown" বা অজানা।</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topic 2: Relations are Unordered -->
+            <section id="unordered-relations" class="space-y-6 scroll-mt-24">
+                <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-textMain flex items-center space-x-2">
+                        <span class="text-accent">2.</span>
+                        <span>Relations are Unordered</span>
+                    </h3>
+                    <span class="text-xs font-mono text-textMuted bg-cardBg px-2.5 py-1 rounded-md border border-borderSubtle">Lecture 3.1 • Slide 5</span>
+                </div>
+
+                <div class="bg-cardBg border border-borderSubtle rounded-xl p-6 space-y-3 shadow-sm">
+                    <p class="text-sm text-textMain leading-relaxed">
+                        ডাটাবেজ টেবিলের ক্ষেত্রে <strong>tuples (rows) এর অর্ডার সম্পূর্ণ irrelevant</strong> বা গুরুত্বহীন। টাপলগুলো যেকোনো অর্ডারে স্টোর হতে পারে। আপনি প্রথমে কাকে ইনসার্ট করলেন বা পরে কাকে করলেন তাতে টেবিলের লজিক্যাল মিনিং বদলায় না।
+                    </p>
+                    <div class="bg-darkBg p-3 rounded-lg border border-borderSubtle text-xs text-textMuted flex items-center space-x-2">
+                        <i class="fa-solid fa-circle-info text-accent"></i>
+                        <span>যেমন: instructor টেবিলে রেকর্ডগুলো র‍্যান্ডম অর্ডারে থাকতে পারে, সার্চ করার সময় কোয়েরি অনুযায়ী সাজিয়ে নেওয়া হয়।</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topic 3: Relation Schema & Instance -->
+            <section id="schema-instance" class="space-y-6 scroll-mt-24">
+                <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-textMain flex items-center space-x-2">
+                        <span class="text-accent">3.</span>
+                        <span>Relation Schema & Relation Instance</span>
+                    </h3>
+                    <span class="text-xs font-mono text-textMuted bg-cardBg px-2.5 py-1 rounded-md border border-borderSubtle">Lecture 3.1 • Slide 6</span>
+                </div>
+
+                <div class="bg-cardBg border border-borderSubtle rounded-xl p-6 space-y-4 shadow-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-darkBg p-4 rounded-lg border border-borderSubtle space-y-2">
+                            <h4 class="text-xs font-bold text-accent uppercase tracking-wider">Relation Schema</h4>
+                            <p class="text-xs text-textMuted leading-relaxed">
+                                এটি হলো টেবিলের লজিক্যাল স্ট্রাকচার বা ব্লুপ্রিন্ট। যেমন: <br>
+                                <code class="text-accent font-mono">instructor = (ID, name, dept_name, salary)</code>
+                            </p>
+                        </div>
+                        <div class="bg-darkBg p-4 rounded-lg border border-borderSubtle space-y-2">
+                            <h4 class="text-xs font-bold text-accentIndigo uppercase tracking-wider">Relation Instance</h4>
+                            <p class="text-xs text-textMuted leading-relaxed">
+                                এটি হলো নির্দিষ্ট কোনো মুহূর্তে টেবিলে থাকা আসল ডাটা বা রেকর্ডসমূহ। একে <code class="text-accentIndigo font-mono">r(R)</code> দ্বারা প্রকাশ করা হয়।
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topic 4: Database & Why We Split Information -->
+            <section id="database-structure" class="space-y-6 scroll-mt-24">
+                <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-textMain flex items-center space-x-2">
+                        <span class="text-accent">4.</span>
+                        <span>Database & Why We Split Information into Multiple Relations</span>
+                    </h3>
+                    <span class="text-xs font-mono text-textMuted bg-cardBg px-2.5 py-1 rounded-md border border-borderSubtle">Lecture 3.1 • Slide 7</span>
+                </div>
+
+                <div class="bg-cardBg border border-borderSubtle rounded-xl p-6 space-y-4 shadow-sm">
+                    <p class="text-sm text-textMain leading-relaxed">
+                        একটি ডাটাবেজে একাধিক relation থাকে। পুরো ব্যাংকের ইনফরমেশন একটিমাত্র বিশাল টেবিলে (যেমন: <code class="text-accent font-mono">bank(account_number, balance, customer_name, ...)</code>) না রেখে আলাদা আলাদা টেবিলে ভাগ করা হয় (<code class="text-accent font-mono">account</code>, <code class="text-accent font-mono">depositor</code>, <code class="text-accent font-mono">customer</code>)।
+                    </p>
+
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-semibold text-textMain">একবিশাল টেবিলে রাখলে কি সমস্যা হতো?</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="bg-darkBg p-3 rounded-lg border border-borderSubtle space-y-1">
+                                <span class="text-xs font-bold text-red-400">1. Repetition of Information</span>
+                                <p class="text-xs text-textMuted">একই কাস্টমারের একাধিক অ্যাকাউন্ট থাকলে তার নাম ও ঠিকানা বারবার রিপিট হতো (Redundancy)।</p>
+                            </div>
+                            <div class="bg-darkBg p-3 rounded-lg border border-borderSubuted p-3 rounded-lg border border-borderSubtle space-y-1">
+                                <span class="text-xs font-bold text-yellow-400">2. Need for NULL Values</span>
+                                <p class="text-xs text-textMuted">অ্যাকাউন্ট নেই এমন কাস্টমার যুক্ত করতে গেলে অ্যাকাউন্ট ফিল্ডে জোর করে NULL বসাতে হতো।</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-accent/10 border-l-4 border-accent p-4 rounded-r-lg">
+                        <p class="text-xs text-textMain">
+                            💡 <strong>Normalization Theory:</strong> এই সমস্যাগুলো দূর করে কিভাবে প্রপারলি টেবিল ডিজাইন করতে হয় তা Normalization থিওরি শেখায়।
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topic 5: Key Constraints Overview -->
+            <section id="key-constraints" class="space-y-6 scroll-mt-24">
+                <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-textMain flex items-center space-x-2">
+                        <span class="text-accent">5.</span>
+                        <span>Key Constraints Overview (7 Types of Keys)</span>
+                    </h3>
+                    <span class="text-xs font-mono text-textMuted bg-cardBg px-2.5 py-1 rounded-md border border-borderSubtle">Lecture 3.1 Slide 8 • Ref Slide 3</span>
+                </div>
+
+                <div class="bg-cardBg border border-borderSubtle rounded-xl p-6 space-y-4 shadow-sm">
+                    <p class="text-sm text-textMain leading-relaxed">
+                        একটি <strong>Key</strong> হলো এক বা একাধিক অ্যাট্রিবিউটের সেট যা টেবিলের প্রতিটি রো (tuple) কে ইউনিকলি বা অনন্যভাবে শনাক্ত করতে সাহায্য করে। কী শুধু রেকর্ডই চেনে না, বরং দুটি টেবিলের মধ্যে সম্পর্কও তৈরি করে।
+                    </p>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                        <div class="bg-darkBg p-3 rounded-lg border border-borderSubtle text-center space-y-1">
+                            <span class="text-xs font-bold text-accent">1. Super Key</span>
+                        </div>
+                        <div class="bg-darkBg p-3 rounded-lg border border-borderSubtle text-center space-y-1">
+                            <span class="text-xs font-bold text-accent">2. Candidate Key</span>
+                        </div>
+                        <div class="bg-darkBg p-3 rounded-lg border border-borderSubtle text-center space-y-1">
+                            <span class="text-xs font-bold text-accent">3. Primary Key</span>
+                        </div>
+                        <div class="bg-darkBg p-3 rounded-lg border border-borderSubtle text-center space-y-1">
+                            <span class="text-xs font-bold text-accent">4. Foreign Key</span>
+                        </div>
+                        <div class="bg-darkBg p-3 rounded-lg border border-borderSubtle text-center space-y-1">
+                            <span class="text-xs font-bold text-accentIndigo">5. Secondary Key</span>
+                        </div>
+                        <div class="bg-darkBg p-3 rounded-lg border border-borderSubtle text-center space-y-1">
+                            <span class="text-xs font-bold text-accentIndigo">6. Unique Key</span>
+                        </div>
+                        <div class="bg-darkBg p-3 rounded-lg border border-borderSubtle text-center space-y-1 col-span-2">
+                            <span class="text-xs font-bold text-accentIndigo">7. Composite Key</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topic 6: Super Key -->
+            <section id="super-key" class="space-y-6 scroll-mt-24">
+                <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-textMain flex items-center space-x-2">
+                        <span class="text-accent">6.</span>
+                        <span>Super Key</span>
+                    </h3>
+                    <span class="text-xs font-mono text-textMuted bg-cardBg px-2.5 py-1 rounded-md border border-borderSubtle">Lecture 3.1 Slides 9–10 • Ref Slides 10–15</span>
+                </div>
+
+                <div class="bg-cardBg border border-borderSubtle rounded-xl p-6 space-y-4 shadow-sm">
+                    <p class="text-sm text-textMain leading-relaxed">
+                        একটি টেবিলের এমন যেকোনো কম্বিনেশন বা অ্যাট্রিবিউট সেট যার ভ্যালু দিয়ে টেবিলের প্রতিটি রো কে ইউনিকলি চেনা যায়, তাকে <strong>Super Key</strong> বলে। সহজ কথায়, Super Key হলো Candidate Key এর একটি superset (Candidate key + 1 or more attributes)।
+                    </p>
+
+                    <!-- Student Table Example -->
+                    <div class="space-y-2">
+                        <p class="text-xs font-medium text-textMuted">উদাহরণ টেবিল:</p>
+                        <div class="overflow-x-auto rounded-lg border border-borderSubtle">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-darkBg text-textMuted border-b border-borderSubtle uppercase font-mono">
+                                    <tr>
+                                        <th class="px-4 py-2.5">Student_ID</th>
+                                        <th class="px-4 py-2.5">Student_Enroll</th>
+                                        <th class="px-4 py-2.5">Student_Name</th>
+                                        <th class="px-4 py-2.5">Student_Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-borderSubtle">
+                                    <tr><td class="px-4 py-2 font-mono text-accent">S02</td><td class="px-4 py-2">4545</td><td class="px-4 py-2">Dave</td><td class="px-4 py-2">ddd@gmail.com</td></tr>
+                                    <tr><td class="px-4 py-2 font-mono text-accent">S34</td><td class="px-4 py-2">4541</td><td class="px-4 py-2">Jack</td><td class="px-4 py-2">jjj@gmail.com</td></tr>
+                                    <tr><td class="px-4 py-2 font-mono text-accent">S22</td><td class="px-4 py-2">4555</td><td class="px-4 py-2">Mark</td><td class="px-4 py-2">mmm@gmail.com</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-darkBg p-4 rounded-lg border border-borderSubtle space-y-2">
+                        <span class="text-xs font-bold text-accent uppercase tracking-wider">Possible Super Keys here:</span>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono text-textMuted">
+                            <div>• {Student_ID}</div>
+                            <div>• {Student_Enroll}</div>
+                            <div>• {Student_Email}</div>
+                            <div>• {Student_ID, Student_Enroll}</div>
+                            <div>• {Student_ID, Student_Name}</div>
+                            <div>• {Student_ID, Student_Enroll, Student_Name, Student_Email}</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topic 7: Candidate Key -->
+            <section id="candidate-key" class="space-y-6 scroll-mt-24">
+                <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-textMain flex items-center space-x-2">
+                        <span class="text-accent">7.</span>
+                        <span>Candidate Key</span>
+                    </h3>
+                    <span class="text-xs font-mono text-textMuted bg-cardBg px-2.5 py-1 rounded-md border border-borderSubtle">Lecture 3.1 Slide 11 • Ref Slide 6</span>
+                </div>
+
+                <div class="bg-cardBg border border-borderSubtle rounded-xl p-6 space-y-3 shadow-sm">
+                    <p class="text-sm text-textMain leading-relaxed">
+                        Super Key এর মধ্যে যেগুলোর কোনো অপ্রয়োজনীয় বা অতিরিক্ত অ্যাট্রিবিউট নেই—অর্থাৎ একদম <strong>minimal (minimal super key)</strong>—সেগুলোকে বলা হয় <strong>Candidate Key</strong>। 
+                    </p>
+                    <div class="bg-darkBg p-3 rounded-lg border border-borderSubtle text-xs text-textMuted space-y-1">
+                        <p class="text-accent font-semibold">উপরে উল্লেখিত টেবিলের Candidate Key গুলো হলো:</p>
+                        <p class="font-mono text-textMain">👉 {Student_ID}, {Student_Enroll}, {Student_Email}</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topic 8: Primary Key & SQL -->
+            <section id="primary-key" class="space-y-6 scroll-mt-24">
+                <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-textMain flex items-center space-x-2">
+                        <span class="text-accent">8.</span>
+                        <span>Primary Key & SQL Implementation</span>
+                    </h3>
+                    <span class="text-xs font-mono text-textMuted bg-cardBg px-2.5 py-1 rounded-md border border-borderSubtle">Lecture 3.1 Slide 12 • Ref Slide 7</span>
+                </div>
+
+                <div class="bg-cardBg border border-borderSubtle rounded-xl p-6 space-y-4 shadow-sm">
+                    <p class="text-sm text-textMain leading-relaxed">
+                        একাধিক Candidate Key থেকে সবচেয়ে উপযুক্ত একটি key কে টেবিলে প্রধান শনাক্তকারী হিসেবে সিলেক্ট করা হয়, যাকে বলে <strong>Primary Key</strong>।
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-darkBg p-4 rounded-lg border border-borderSubtle space-y-2">
+                            <h4 class="text-xs font-bold text-accent uppercase tracking-wider">Primary Key Rules</h4>
+                            <ul class="list-disc list-inside text-xs text-textMuted space-y-1">
+                                <li>Must be <strong>UNIQUE</strong> (কোনো ডুপ্লিকেট থাকতে পারবে না).</li>
+                                <li class="text-red-400 font-semibold">Must NOT contain NULL values.</li>
+                                <li>যেকোনো এমন অ্যাট্রিবিউট সিলেক্ট করা উচিত যার মান সচরাচর বদলায় না (যেমন email unique হলেও পরে বদলাতে পারে)।</li>
+                            </ul>
+                        </div>
+                        <div class="bg-darkBg p-4 rounded-lg border border-borderSubtle space-y-2">
+                            <h4 class="text-xs font-bold text-accentIndigo uppercase tracking-wider">Candidate vs Primary</h4>
+                            <p class="text-xs text-textMuted leading-relaxed">
+                                Candidate key তে null থাকতে পারলেও Primary key তে কোনো অবস্থাতেই null থাকতে পারবে না।
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- SQL Code Box with Copy Button -->
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between text-xs text-textMuted bg-darkBg px-4 py-2 rounded-t-lg border border-borderSubtle border-b-0">
+                            <span class="font-mono">SQL CREATE TABLE (Primary Key)</span>
+                            <button onclick="copyCode(this)" class="hover:text-accent transition flex items-center space-x-1">
+                                <i class="fa-regular fa-copy"></i>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre class="bg-darkBg/90 p-4 rounded-b-lg border border-borderSubtle font-mono text-xs text-accent overflow-x-auto"><code>CREATE TABLE Persons (
+    ID int NOT NULL,
+    LastName varchar(255) NOT NULL,
+    FirstName varchar(255),
+    Age int,
+    PRIMARY KEY (ID)
+);</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topic 9: Foreign Key & Relationships -->
+            <section id="foreign-key" class="space-y-6 scroll-mt-24">
+                <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-textMain flex items-center space-x-2">
+                        <span class="text-accent">9.</span>
+                        <span>Foreign Key & Table Relations</span>
+                    </h3>
+                    <span class="text-xs font-mono text-textMuted bg-cardBg px-2.5 py-1 rounded-md border border-borderSubtle">Lecture 3.1 Slides 13, 19–20 • Ref Slides 18–20</span>
+                </div>
+
+                <div class="bg-cardBg border border-borderSubtle rounded-xl p-6 space-y-4 shadow-sm">
+                    <p class="text-sm text-textMain leading-relaxed">
+                        একটি টেবিলের যে অ্যাট্রিবিউট অন্য টেবিলের <strong>Primary Key</strong> কে রেফার করে বা নির্দেশ করে, তাকে <strong>Foreign Key</strong> বলে। এর মাধ্যমে দুটি টেবিলের মধ্যে সম্পর্ক তৈরি হয় (Parent Table & Child Table)।
+                    </p>
+
+                    <div class="bg-darkBg p-4 rounded-lg border border-borderSubtle font-mono text-xs text-textMuted space-y-2">
+                        <p class="text-accent font-bold">SQL Syntax:</p>
+                        <p class="text-textMain">FOREIGN KEY (columnName) REFERENCES tablename(columnName)</p>
+                    </div>
+
+                    <!-- Users & Orders tables example -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <span class="text-xs font-bold text-accent">Users Table (Parent)</span>
+                            <div class="overflow-x-auto rounded-lg border border-borderSubtle">
+                                <table class="w-full text-left text-xs">
+                                    <thead class="bg-darkBg text-textMuted border-b border-borderSubtle font-mono">
+                                        <tr><th class="px-3 py-2">user_id (PK)</th><th class="px-3 py-2">name</th></tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-borderSubtle">
+                                        <tr><td class="px-3 py-2 font-mono text-accent">10</td><td class="px-3 py-2">Sadio</td></tr>
+                                        <tr><td class="px-3 py-2 font-mono text-accent">11</td><td class="px-3 py-2">Mohamed</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="space-y-1.5">
+                            <span class="text-xs font-bold text-accentIndigo">Orders Table (Child)</span>
+                            <div class="overflow-x-auto rounded-lg border border-borderSubtle">
+                                <table class="w-full text-left text-xs">
+                                    <thead class="bg-darkBg text-textMuted border-b border-borderSubtle font-mono">
+                                        <tr><th class="px-3 py-2">order_no</th><th class="px-3 py-2">user_id (FK)</th></tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-borderSubtle">
+                                        <tr><td class="px-3 py-2">93</td><td class="px-3 py-2 font-mono text-accentIndigo">10</td></tr>
+                                        <tr><td class="px-3 py-2">94</td><td class="px-3 py-2 font-mono text-accentIndigo">11</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topic 10: Secondary Key / Alternate Key -->
+            <section id="secondary-key" class="space-y-6 scroll-mt-24">
+                <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-textMain flex items-center space-x-2">
+                        <span class="text-accent">10.</span>
+                        <span>Secondary Key / Alternate Key</span>
+                    </h3>
+                    <span class="text-xs font-mono text-textMuted bg-cardBg px-2.5 py-1 rounded-md border border-borderSubtle">Lecture 3.1 Slide 14</span>
+                </div>
+
+                <div class="bg-cardBg border border-borderSubtle rounded-xl p-6 space-y-3 shadow-sm">
+                    <p class="text-sm text-textMain leading-relaxed">
+                        একটি টেবিলে একাধিক candidate key থাকতে পারে। তার মধ্য থেকে একটিকে প্রাইমারি কি হিসেবে সিলেক্ট করার পর বাকি যে candidate key গুলো থেকে যায়, সেগুলোকে <strong>Secondary Key</strong> বা <strong>Alternate Key</strong> বলে।
+                    </p>
+                    <div class="bg-accent/10 border-l-4 border-accent p-4 rounded-r-lg">
+                        <p class="text-xs text-textMain">
+                            ⚠️ <strong>Note:</strong> Secondary Key কখনোই Foreign Key নয়! এটি মূলত unused candidate key যা দিয়েও স্পেসিফিক রেকর্ড লোকেট করা যায়।
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topic 11: Unique Key -->
+            <section id="unique-key" class="space-y-6 scroll-mt-24">
+                <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-textMain flex items-center space-x-2">
+                        <span class="text-accent">11.</span>
+                        <span>Unique Key</span>
+                    </h3>
+                    <span class="text-xs font-mono text-textMuted bg-cardBg px-2.5 py-1 rounded-md border border-borderSubtle">Lecture 3.1 Slide 15 • Ref Slides 8–9</span>
+                </div>
+
+                <div class="bg-cardBg border border-borderSubtle rounded-xl p-6 space-y-4 shadow-sm">
+                    <p class="text-sm text-textMain leading-relaxed">
+                        কোনো কলামে ডুপ্লিকেট ভ্যালু রোধ করার জন্য <strong>Unique Key</strong> ব্যবহার করা হয়। প্রাইমারি কি এবং ইউনিক কি এর মধ্যে মূল পার্থক্য হলো—প্রাইমারি কি তে কোনো <em>NULL</em> থাকতে পারে না, কিন্তু Unique Key টেবিলে <strong>মাত্র একটি NULL ভ্যালু</strong> এলাউ করে। এছাড়া একটি টেবিলে একাধিক Unique Key থাকতে পারে।
+                    </p>
+
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between text-xs text-textMuted bg-darkBg px-4 py-2 rounded-t-lg border border-borderSubtle border-b-0">
+                            <span class="font-mono">SQL CREATE TABLE (Unique Key)</span>
+                            <button onclick="copyCode(this)" class="hover:text-accent transition flex items-center space-x-1">
+                                <i class="fa-regular fa-copy"></i>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre class="bg-darkBg/90 p-4 rounded-b-lg border border-borderSubtle font-mono text-xs text-accent overflow-x-auto"><code>CREATE TABLE Persons (
+    ID int NOT NULL UNIQUE,
+    LastName varchar(255) NOT NULL,
+    FirstName varchar(255),
+    Age int
+);</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topic 12: Composite Key -->
+            <section id="composite-key" class="space-y-6 scroll-mt-24">
+                <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-textMain flex items-center space-x-2">
+                        <span class="text-accent">12.</span>
+                        <span>Composite Key</span>
+                    </h3>
+                    <span class="text-xs font-mono text-textMuted bg-cardBg px-2.5 py-1 rounded-md border border-borderSubtle">Lecture 3.1 Slide 16</span>
+                </div>
+
+                <div class="bg-cardBg border border-borderSubtle rounded-xl p-6 space-y-4 shadow-sm">
+                    <p class="text-sm text-textMain leading-relaxed">
+                        যখন একটিমাত্র কলাম দিয়ে ইউনিকলি রো শনাক্ত করা যায় না, তখন দুই বা ততোধিক কলামের কম্বিনেশনকে প্রাইমারি কি হিসেবে ব্যবহার করা হয়। একে <strong>Composite Key</strong> বলে।
+                    </p>
+
+                    <div class="space-y-2">
+                        <p class="text-xs font-medium text-textMuted">উদাহরণ: {OrderID, ProductID} একত্রে কম্পোজিট কি</p>
+                        <div class="overflow-x-auto rounded-lg border border-borderSubtle">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-darkBg text-textMuted border-b border-borderSubtle font-mono">
+                                    <tr><th class="px-4 py-2.5">OrderID (Composite)</th><th class="px-4 py-2.5">ProductID (Composite)</th><th class="px-4 py-2.5">Quantity</th></tr>
+                                </thead>
+                                <tbody class="divide-y divide-borderSubtle">
+                                    <tr><td class="px-4 py-2 font-mono text-accent">22324</td><td class="px-4 py-2 font-mono text-accent">99</td><td class="px-4 py-2">4</td></tr>
+                                    <tr><td class="px-4 py-2 font-mono text-accent">11332</td><td class="px-4 py-2 font-mono text-accent">99</td><td class="px-4 py-2">9</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topic 13: Integrity Constraints -->
+            <section id="integrity-constraints" class="space-y-6 scroll-mt-24">
+                <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-textMain flex items-center space-x-2">
+                        <span class="text-accent">13.</span>
+                        <span>Integrity Constraints</span>
+                    </h3>
+                    <span class="text-xs font-mono text-textMuted bg-cardBg px-2.5 py-1 rounded-md border border-borderSubtle">Lecture 3.1 Slides 17–20</span>
+                </div>
+
+                <div class="bg-cardBg border border-borderSubtle rounded-xl p-6 space-y-4 shadow-sm">
+                    <p class="text-sm text-textMain leading-relaxed">
+                        ডাটাবেজে সংরক্ষিত ডাটার সঠিকতা এবং নির্ভুলতা নিশ্চিত করতে <strong>Integrity Constraints</strong> ব্যবহার করা হয়। এগুলো ৪ প্রকার:
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-darkBg p-4 rounded-lg border border-borderSubtle space-y-1">
+                            <h4 class="text-xs font-bold text-accent">1. Domain Constraint</h4>
+                            <p class="text-xs text-textMuted">অ্যাট্রিবিউটের ভ্যালু নির্দিষ্ট ডোমেইন বা ডাটা টাইপের (যেমন integer, string, date) মধ্যে থাকতেই হবে। (যেমন: Age কলামে 문자 'A' দেওয়া যাবে না)।</p>
+                        </div>
+                        <div class="bg-darkBg p-4 rounded-lg border border-borderSubtle space-y-1">
+                            <h4 class="text-xs font-bold text-accent">2. Entity Integrity Constraint</h4>
+                            <p class="text-xs text-textMuted">প্রাইমারি কি এর মান কখনোই <code class="text-accent font-mono">NULL</code> হতে পারবে না। কারণ null হলে রো চেনা সম্ভব নয়।</p>
+                        </div>
+                        <div class="bg-darkBg p-4 rounded-lg border border-borderSubtle space-y-1">
+                            <h4 class="text-xs font-bold text-accent">3. Referential Integrity Constraint</h4>
+                            <p class="text-xs text-textMuted">ফরেইন কি এর ভ্যালু অবশ্যই প্যারেন্ট টেবিলের প্রাইমারি কি তে উপস্থিত থাকতে হবে অথবা <code class="text-accent font-mono">NULL</code> হতে হবে।</p>
+                        </div>
+                        <div class="bg-darkBg p-4 rounded-lg border border-borderSubtle space-y-1">
+                            <h4 class="text-xs font-bold text-accent">4. Key Constraint</h4>
+                            <p class="text-xs text-textMuted">প্রতিটি টেবিলে ইউনিক রেকর্ড আইডেন্টিফিকেশনের জন্য কি রুলস বজায় রাখা।</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topic 14: Key Comparisons & Summary -->
+            <section id="key-comparisons" class="space-y-6 scroll-mt-24">
+                <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-textMain flex items-center space-x-2">
+                        <span class="text-accent">14.</span>
+                        <span>Key Comparisons & Summary</span>
+                    </h3>
+                    <span class="text-xs font-mono text-textMuted bg-cardBg px-2.5 py-1 rounded-md border border-borderSubtle">Lecture 3.1 Slides 16, 21 • Ref Slide 16</span>
+                </div>
+
+                <div class="bg-cardBg border border-borderSubtle rounded-xl p-6 space-y-6 shadow-sm">
+                    <!-- Primary Key vs Unique Key Table -->
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-bold text-textMain uppercase tracking-wider">Primary Key vs Unique Key</h4>
+                        <div class="overflow-x-auto rounded-lg border border-borderSubtle">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-darkBg text-textMuted border-b border-borderSubtle font-mono">
+                                    <tr><th class="px-4 py-2.5">Feature</th><th class="px-4 py-2.5">Primary Key</th><th class="px-4 py-2.5">Unique Key</th></tr>
+                                </thead>
+                                <tbody class="divide-y divide-borderSubtle">
+                                    <tr><td class="px-4 py-2 font-medium">NULL Allowed</td><td class="px-4 py-2 text-red-400">❌ No</td><td class="px-4 py-2 text-emerald-400">✅ Yes (One null)</td></tr>
+                                    <tr><td class="px-4 py-2 font-medium">Count per Table</td><td class="px-4 py-2">Only One</td><td class="px-4 py-2">Multiple</td></tr>
+                                    <tr><td class="px-4 py-2 font-medium">Auto Increment</td><td class="px-4 py-2 text-emerald-400">✅ Yes</td><td class="px-4 py-2 text-red-400">❌ No</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Primary Key vs Foreign Key Table -->
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-bold text-textMain uppercase tracking-wider">Primary Key vs Foreign Key</h4>
+                        <div class="overflow-x-auto rounded-lg border border-borderSubtle">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-darkBg text-textMuted border-b border-borderSubtle font-mono">
+                                    <tr><th class="px-4 py-2.5">Primary Key</th><th class="px-4 py-2.5">Foreign Key</th></tr>
+                                </thead>
+                                <tbody class="divide-y divide-borderSubtle">
+                                    <tr><td class="px-4 py-2">Uniquely identifies a record in its table.</td><td class="px-4 py-2">Links two tables together.</td></tr>
+                                    <tr><td class="px-4 py-2">Cannot contain null values.</td><td class="px-4 py-2">Can contain duplicate & null values.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Revision Section -->
+            <section id="quick-revision" class="bg-gradient-to-br from-accent/10 to-cardBg border border-accent/30 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xl scroll-mt-24">
+                <div class="flex items-center space-x-3 border-b border-borderSubtle pb-4">
+                    <div class="w-10 h-10 rounded-lg bg-accent text-darkBg flex items-center justify-center font-bold text-lg shadow-md">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-textMain">Quick Revision (Exam Cheat Sheet)</h3>
+                        <p class="text-xs text-textMuted">পরীক্ষার আগে একনজরে সবচেয়ে গুরুত্বপূর্ণ কনসেপ্টগুলো দেখে নিন</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div class="bg-darkBg p-4 rounded-xl border border-borderSubtle space-y-2">
+                        <span class="font-bold text-accent uppercase tracking-wider">1. Relation & Terminology</span>
+                        <p class="text-textMuted leading-relaxed">Table = Relation, Row = Tuple, Column = Attribute. Order of tuples is irrelevant.</p>
+                    </div>
+                    <div class="bg-darkBg p-4 rounded-xl border border-borderSubtle space-y-2">
+                        <span class="font-bold text-accent uppercase tracking-wider">2. Super Key vs Candidate Key</span>
+                        <p class="text-textMuted leading-relaxed">Super key হলো যেকোনো ইউনিক কম্বিনেশন (Superset)। আর minimal super key হলো Candidate Key।</p>
+                    </div>
+                    <div class="bg-darkBg p-4 rounded-xl border border-borderSubtle space-y-2">
+                        <span class="font-bold text-accent uppercase tracking-wider">3. Primary Key Rules</span>
+                        <p class="text-textMuted leading-relaxed">Unique + NOT NULL. টেবিলে মাত্র একটিই প্রাইমারি কি থাকতে পারে।</p>
+                    </div>
+                    <div class="bg-darkBg p-4 rounded-xl border border-borderSubtle space-y-2">
+                        <span class="font-bold text-accent uppercase tracking-wider">4. Foreign Key</span>
+                        <p class="text-textMuted leading-relaxed">রেফারেন্স কি যা অন্য টেবিলের Primary Key কে পয়েন্ট করে টেবিলের মধ্যে সম্পর্ক তৈরি করে।</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-cardBg border-t border-borderSubtle py-6 text-center text-xs text-textMuted mt-16">
+        <p>DBMS Lecture Notes: Relational Model • Designed for East West University Students.</p>
+        <p class="mt-1">Instructor: Antu Chowdhury, Dept. of CSE</p>
+    </footer>
+
+    <script>
+        // Mobile Sidebar Toggle
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('hidden');
+        }
+
+        sidebarToggle.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+
+        // Close sidebar on mobile link click
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 1024) {
+                    toggleSidebar();
+                }
+            });
+        });
+
+        // Search Filter Functionality
+        function handleSearch(query) {
+            const searchTerm = query.toLowerCase().trim();
+            const sections = document.querySelectorAll('main > section');
+
+            sections.forEach(section => {
+                if (section.id === 'quick-revision') return;
+                const text = section.innerText.toLowerCase();
+                if (searchTerm === '' || text.includes(searchTerm)) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            handleSearch(e.target.value);
+        });
+
+        document.getElementById('mobileSearchInput').addEventListener('input', (e) => {
+            handleSearch(e.target.value);
+        });
+
+        // Copy Code Function
+        function copyCode(btn) {
+            const pre = btn.parentElement.nextElementSibling;
+            const text = pre.innerText;
+            document.execCommand('copy');
+            
+            // Fallback clipboard method
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> <span class="text-emerald-400">Copied!</span>';
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
