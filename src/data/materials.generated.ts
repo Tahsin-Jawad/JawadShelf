@@ -161,6 +161,15 @@ export const generatedCourses: CourseData[] = [
         "extension": "html",
         "url": "/materials/CSE%20345/Others/ch%205.html",
         "sizeInBytes": 63691
+      },
+      {
+        "id": "LAB3_Pre_Lab_CSE345.pdf",
+        "title": "LAB3 Pre Lab CSE345",
+        "filename": "LAB3_Pre_Lab_CSE345.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20345/Others/LAB3_Pre_Lab_CSE345.pdf",
+        "sizeInBytes": 161815
       }
     ]
   },
