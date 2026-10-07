@@ -195,7 +195,26 @@ export const generatedCourses: CourseData[] = [
     "id": "gen-203",
     "code": "GEN 203",
     "title": "GEN 203",
-    "chapters": [],
+    "chapters": [
+      {
+        "id": "Lecture 1_Environmental Sustainability Intro (updated) (1).pdf",
+        "title": "Lecture 1 Environmental Sustainability Intro (updated) (1)",
+        "filename": "Lecture 1_Environmental Sustainability Intro (updated) (1).pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/GEN%20203/Chapters/Lecture%201_Environmental%20Sustainability%20Intro%20(updated)%20(1).pdf",
+        "sizeInBytes": 3069274
+      },
+      {
+        "id": "Lecture 2 Environmental Pllution-compressed.pdf",
+        "title": "Lecture 2 Environmental Pllution Compressed",
+        "filename": "Lecture 2 Environmental Pllution-compressed.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/GEN%20203/Chapters/Lecture%202%20Environmental%20Pllution-compressed.pdf",
+        "sizeInBytes": 20473433
+      }
+    ],
     "others": []
   },
   {
