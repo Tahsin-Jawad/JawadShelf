@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 4 Master Guide | Correlated Subqueries, Joins & Advanced SQL</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Fira Code -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                            900: '#831843',
+                        },
+                        codebg: '#0f172a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        .highlight-match {
+            background-color: rgba(236, 72, 153, 0.3);
+            border-radius: 2px;
+            padding: 0 2px;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 font-sans antialiased min-h-screen flex flex-col selection:bg-pink-500 selection:text-white">
+
+<!-- Header & Navigation Bar -->
+<header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 shadow-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        
+        <!-- Brand Identity -->
+        <div class="flex items-center gap-3 flex-shrink-0">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-pink-600 via-purple-600 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-pink-500/20">
+                <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-base sm:text-lg text-white leading-tight">Database Systems: Lab 04</h1>
+                <p class="text-xs text-pink-400 font-medium">Correlated Subqueries, Joins & Advanced SQL</p>
+            </div>
+        </div>
+
+        <!-- Working Live Search Bar -->
+        <div class="flex-1 max-w-md relative">
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-pink-400 text-sm"></i>
+                <input type="text" id="quickSearch" oninput="filterContent()" placeholder="Search queries, concepts, joins, formulas..." 
+                       class="w-full bg-slate-800/90 text-xs sm:text-sm text-slate-100 pl-10 pr-9 py-2 rounded-xl border border-slate-700 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition shadow-inner">
+                <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex items-center gap-2 flex-shrink-0">
+            <button onclick="expandAllCards()" class="hidden sm:flex px-3 py-1.5 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition items-center gap-1.5">
+                <i class="fa-solid fa-expand text-pink-400"></i> Expand All
+            </button>
+            <span id="searchStats" class="text-xs px-2.5 py-1 bg-pink-500/10 text-pink-300 rounded-lg border border-pink-500/20 font-mono hidden sm:inline-block">
+                All Topics
+            </span>
+        </div>
+    </div>
+
+    <!-- Category Pills Bar -->
+    <div class="bg-slate-950/80 border-t border-slate-800/60 px-4 sm:px-8 py-2 overflow-x-auto flex items-center gap-2 text-xs scrollbar-none">
+        <span class="text-slate-400 font-semibold mr-1 flex items-center gap-1 flex-shrink-0">
+            <i class="fa-solid fa-filter text-pink-400"></i> Filter:
+        </span>
+        <button onclick="filterCategory('all')" class="cat-pill active-pill px-3 py-1 rounded-full bg-pink-600 text-white font-medium transition flex-shrink-0">All Topics</button>
+        <button onclick="filterCategory('subquery')" class="cat-pill px-3 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition flex-shrink-0">Correlated Subqueries</button>
+        <button onclick="filterCategory('joins')" class="cat-pill px-3 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition flex-shrink-0">Joins Matrix</button>
+        <button onclick="filterCategory('selfjoin')" class="cat-pill px-3 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition flex-shrink-0">Self Join & Managers</button>
+        <button onclick="filterCategory('setops')" class="cat-pill px-3 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition flex-shrink-0">Set Operations</button>
+        <button onclick="filterCategory('pagination')" class="cat-pill px-3 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition flex-shrink-0">Pagination & Execution</button>
+        <button onclick="filterCategory('viva')" class="cat-pill px-3 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition flex-shrink-0">Viva Q&A</button>
+    </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 flex flex-col md:flex-row gap-8 w-full">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-full md:w-64 flex-shrink-0">
+        <div class="sticky top-24 bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl">
+            <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-2 flex items-center justify-between">
+                <span><i class="fa-solid fa-list-check mr-2 text-pink-400"></i> Lab 4 Contents</span>
+            </h2>
+            <nav class="space-y-1 text-xs font-medium" id="tocNav">
+                <a href="#section-subqueries" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition">
+                    <span class="w-2 h-2 rounded-full bg-pink-500"></span> Correlated Subqueries
+                </a>
+                <a href="#section-nth-salary" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition pl-6 text-slate-400">
+                    <i class="fa-solid fa-angle-right"></i> N-th Salary Formulas
+                </a>
+                <a href="#section-joins" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition">
+                    <span class="w-2 h-2 rounded-full bg-purple-500"></span> SQL Joins Matrix
+                </a>
+                <a href="#section-selfjoin" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition">
+                    <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Self Join & Hierarchy
+                </a>
+                <a href="#section-setops" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span> Set Ops & Semi-Joins
+                </a>
+                <a href="#section-execution" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition">
+                    <span class="w-2 h-2 rounded-full bg-cyan-500"></span> Pagination & Pipeline
+                </a>
+                <a href="#section-viva" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Lab 4 Viva Questions
+                </a>
+                <a href="#section-practice" class="flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition">
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span> Practice Tasks
+                </a>
+            </nav>
+
+            <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-400 space-y-2">
+                <div class="flex justify-between"><span>Lab Module:</span> <strong class="text-pink-400">Lab 04 Complete</strong></div>
+                <div class="flex justify-between"><span>Live Search:</span> <strong class="text-emerald-400">Active <i class="fa-solid fa-bolt"></i></strong></div>
+                <div class="flex justify-between"><span>Status:</span> <span class="text-slate-200">Verified & Cleaned</span></div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 space-y-10 min-w-0" id="mainContent">
+
+        <!-- Hero Banner -->
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-pink-950/40 to-slate-900 border border-pink-500/30 p-6 sm:p-8 shadow-2xl">
+            <div class="relative z-10">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="px-3 py-1 bg-pink-500/20 text-pink-300 border border-pink-500/30 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-graduation-cap"></i> CSE Database Systems
+                    </span>
+                    <span class="px-2.5 py-1 bg-slate-800 text-slate-300 border border-slate-700 rounded-full text-xs font-mono">
+                        Lab 04 Dedicated Notebook
+                    </span>
+                </div>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+                    Advanced SQL: Correlated Queries, Joins & Hierarchy
+                </h2>
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-3xl">
+                    ল্যাব ৪-এর প্রতিটি কনসেপ্ট (Correlated Subquery, Joins Matrix, Self Join, Set Operations, Pagination) এখানে ভিজ্যুয়াল টেবিল ডায়াগ্রাম, স্টেপ-বাই-স্টেপ এক্সপ্লেনেশন এবং লাইভ সার্চ ফিল্টার সহ সাজানো হয়েছে।
+                </p>
+            </div>
+            <div class="absolute -right-8 -bottom-8 opacity-10 text-pink-400 text-9xl pointer-events-none">
+                <i class="fa-solid fa-diagram-project"></i>
+            </div>
+        </div>
+
+        <!-- No Search Results Banner -->
+        <div id="noResultsMessage" class="hidden bg-slate-900 border border-amber-500/40 rounded-2xl p-8 text-center space-y-3">
+            <div class="w-12 h-12 rounded-full bg-amber-500/10 text-amber-400 mx-auto flex items-center justify-between justify-center text-xl">
+                <i class="fa-solid fa-magnifying-glass font-bold mx-auto"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-200">No matching search results found</h3>
+            <p class="text-xs text-slate-400">Try searching for keywords like <code class="text-pink-400">INNER JOIN</code>, <code class="text-pink-400">N-th salary</code>, <code class="text-pink-400">EXISTS</code>, or <code class="text-pink-400">LIMIT</code>.</p>
+            <button onclick="clearSearch()" class="px-4 py-2 bg-pink-600 hover:bg-pink-500 text-white text-xs font-semibold rounded-xl transition">
+                Clear Search Filter
+            </button>
+        </div>
+
+        <!-- MODULE 1: CORRELATED SUBQUERIES & N-TH SALARY -->
+        <section id="section-subqueries" class="scroll-mt-24 space-y-6">
+            
+            <div class="flex items-center gap-3">
+                <span class="w-3 h-8 bg-pink-500 rounded-full"></span>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">1. Correlated Subqueries & Logic</h2>
+                    <p class="text-xs text-slate-400">Row-by-row outer query evaluation based on inner subquery execution</p>
+                </div>
+            </div>
+
+            <!-- Card: Correlated Concept -->
+            <div class="searchable-card bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4" data-category="subquery">
+                <div class="flex justify-between items-start flex-wrap gap-2 border-b border-slate-800 pb-4">
+                    <div>
+                        <span class="text-xs font-bold text-pink-400 uppercase tracking-wider">Concept 1.1</span>
+                        <h3 class="text-lg font-bold text-white">What is a Correlated Subquery?</h3>
+                    </div>
+                    <span class="text-xs bg-pink-500/10 text-pink-300 px-3 py-1 rounded-full font-mono border border-pink-500/20">Row-by-Row Execution</span>
+                </div>
+
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    সাধারণ Subquery একবার এক্সিকিউট হয়ে রেজাল্ট দিয়ে দেয়। কিন্তু <strong>Correlated Subquery</strong>-তে ইনার সাবকুয়েরিটি আউটার কুয়েরির <strong>প্রতিটি সারির (Row) জন্য বারবার এক্সিকিউট হয়</strong>।
+                </p>
+
+                <!-- Query 1: Earning more than Dept Average -->
+                <div class="space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200 uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-terminal text-pink-400"></i> Query: Find Employees Earning MORE than their Department's Average Salary
+                    </h4>
+
+                    <div class="bg-codebg rounded-xl p-4 border border-slate-800 font-mono text-xs sm:text-sm relative group">
+                        <button onclick="copyCode(this)" class="absolute right-3 top-3 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700 transition">
+                            <i class="fa-regular fa-copy"></i> Copy
+                        </button>
+<pre><code class="text-slate-200"><span class="text-blue-400 font-bold">SELECT</span> e1.Name, e1.salary, e1.Dept_code
+<span class="text-blue-400 font-bold">FROM</span> employee E1
+<span class="text-blue-400 font-bold">WHERE</span> e1.salary > (
+    <span class="text-blue-400 font-bold">SELECT</span> <span class="text-amber-400 font-bold">AVG</span>(e2.salary)
+    <span class="text-blue-400 font-bold">FROM</span> employee E2
+    <span class="text-pink-400 font-bold">WHERE e1.Dept_code = e2.Dept_code</span> <span class="text-slate-500">-- Correlated Link!</span>
+);</code></pre>
+                    </div>
+
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-2">
+                        <span class="font-bold text-amber-400 block"><i class="fa-solid fa-gears mr-1"></i> How Engine Executes This Row-by-Row:</span>
+                        <ol class="list-decimal list-inside space-y-1 text-slate-400">
+                            <li>আউটার কুয়েরি <code class="text-slate-200">E1</code> প্রথম কর্মীকে ধরে (যেমন: Robin, Dept: HR, Salary: 30,000)।</li>
+                            <li>ইনার কুয়েরি <code class="text-slate-200">E2</code> কেবল <code class="text-pink-400">Dept_code = 'HR'</code> এর কর্মীদের গড় বেতন হিসাব করে (যেমন: 25,000)।</li>
+                            <li>তুলনা করে: 30,000 > 25,000 (True) $\rightarrow$ Robin আউটপুটে জায়গা পায়!</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: N-th Salary Formulas -->
+            <div id="section-nth-salary" class="searchable-card bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6" data-category="subquery">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-pink-400 uppercase tracking-wider">Concept 1.2</span>
+                    <h3 class="text-lg font-bold text-white">General Formulas for N-th Highest & N-th Lowest Salary</h3>
+                    <p class="text-xs text-slate-400">Subquery dynamic counting rule without using hardcoded LIMIT offset</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- N-th Highest Formula Card -->
+                    <div class="bg-slate-950 p-5 rounded-2xl border border-amber-500/30 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-amber-400 uppercase flex items-center gap-1.5">
+                                <i class="fa-solid fa-trophy"></i> N-th Highest Salary Formula
+                            </span>
+                            <span class="text-[10px] bg-amber-500/10 text-amber-300 font-mono px-2 py-0.5 rounded border border-amber-500/30">Formula: N - 1</span>
+                        </div>
+
+                        <div class="bg-codebg p-3.5 rounded-xl border border-slate-800 font-mono text-xs text-slate-200">
+<pre><code><span class="text-blue-400 font-bold">SELECT</span> e1.salary
+<span class="text-blue-400 font-bold">FROM</span> employee E1
+<span class="text-blue-400 font-bold">WHERE</span> <span class="text-amber-400 font-bold">N - 1</span> = (
+    <span class="text-blue-400 font-bold">SELECT</span> <span class="text-amber-400 font-bold">COUNT</span>(<span class="text-blue-400">DISTINCT</span> e2.salary)
+    <span class="text-blue-400 font-bold">FROM</span> employee E2
+    <span class="text-pink-400 font-bold">WHERE e2.salary > e1.salary</span>
+);</code></pre>
+                        </div>
+
+                        <div class="text-xs text-slate-300 bg-slate-900 p-3 rounded-lg border border-slate-800 space-y-1">
+                            <strong class="text-amber-300">📌 ২য় সর্বোচ্চ Salary (2nd Highest):</strong>
+                            <p class="text-slate-400">$N = 2$, তাই $N - 1 = 1$। যে বেতনের চেয়ে বড় ঠিক <strong>১টি</strong> ইউনিক বেতন থাকবে, সেটিই ২য় সর্বোচ্চ বেতন!</p>
+                        </div>
+                    </div>
+
+                    <!-- N-th Lowest Formula Card -->
+                    <div class="bg-slate-950 p-5 rounded-2xl border border-cyan-500/30 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-cyan-400 uppercase flex items-center gap-1.5">
+                                <i class="fa-solid fa-arrow-down-short-wide"></i> N-th Lowest Salary Formula
+                            </span>
+                            <span class="text-[10px] bg-cyan-500/10 text-cyan-300 font-mono px-2 py-0.5 rounded border border-cyan-500/30">Formula: N - 1</span>
+                        </div>
+
+                        <div class="bg-codebg p-3.5 rounded-xl border border-slate-800 font-mono text-xs text-slate-200">
+<pre><code><span class="text-blue-400 font-bold">SELECT</span> e1.salary
+<span class="text-blue-400 font-bold">FROM</span> employee E1
+<span class="text-blue-400 font-bold">WHERE</span> <span class="text-cyan-400 font-bold">N - 1</span> = (
+    <span class="text-blue-400 font-bold">SELECT</span> <span class="text-amber-400 font-bold">COUNT</span>(<span class="text-blue-400">DISTINCT</span> e2.salary)
+    <span class="text-blue-400 font-bold">FROM</span> employee E2
+    <span class="text-pink-400 font-bold">WHERE e2.salary < e1.salary</span>
+);</code></pre>
+                        </div>
+
+                        <div class="text-xs text-slate-300 bg-slate-900 p-3 rounded-lg border border-slate-800 space-y-1">
+                            <strong class="text-cyan-300">📌 ৩য় সর্বনিম্ন Salary (3rd Lowest):</strong>
+                            <p class="text-slate-400">$N = 3$, তাই $N - 1 = 2$। যে বেতনের চেয়ে ছোট ঠিক <strong>২টি</strong> ইউনিক বেতন থাকবে, সেটিই ৩য় সর্বনিম্ন বেতন!</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- MODULE 2: JOINS MATRIX -->
+        <section id="section-joins" class="scroll-mt-24 space-y-6">
+            
+            <div class="flex items-center gap-3">
+                <span class="w-3 h-8 bg-purple-500 rounded-full"></span>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">2. Comprehensive SQL Joins Matrix</h2>
+                    <p class="text-xs text-slate-400">Combining relational tables: Inner, Left, Right, Natural & Full Outer Joins</p>
+                </div>
+            </div>
+
+            <!-- Card: Joins Grid -->
+            <div class="searchable-card bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6" data-category="joins">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <!-- INNER JOIN -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-blue-400 uppercase">1. INNER JOIN (Equi Join)</span>
+                            <span class="text-[10px] bg-blue-500/10 text-blue-300 px-2 py-0.5 rounded font-mono">Matches Only</span>
+                        </div>
+                        <p class="text-xs text-slate-400">উভয় টেবিলে ম্যাচ করা সারিসমূহ প্রদর্শন করে।</p>
+                        <div class="bg-codebg p-3 rounded-lg font-mono text-xs text-slate-200">
+                            <span class="text-blue-400">SELECT</span> * <span class="text-blue-400">FROM</span> Department D<br>
+                            <span class="text-indigo-400 font-bold">INNER JOIN</span> employee E <span class="text-blue-400 font-bold">ON</span> E.dept_code = D.dept_code;
+                        </div>
+                    </div>
+
+                    <!-- NATURAL JOIN -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-emerald-400 uppercase">2. NATURAL JOIN</span>
+                            <span class="text-[10px] bg-emerald-500/10 text-emerald-300 px-2 py-0.5 rounded font-mono">Auto Match Column</span>
+                        </div>
+                        <p class="text-xs text-slate-400">একই কলাম নেমের ওপর ভিত্তি করে স্বয়ংক্রিয় Join ঘটায় (ON লাগে না)।</p>
+                        <div class="bg-codebg p-3 rounded-lg font-mono text-xs text-slate-200">
+                            <span class="text-blue-400">SELECT</span> * <span class="text-blue-400">FROM</span> Department D<br>
+                            <span class="text-emerald-400 font-bold">NATURAL JOIN</span> employee E;
+                        </div>
+                    </div>
+
+                    <!-- LEFT JOIN -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-amber-400 uppercase">3. LEFT OUTER JOIN</span>
+                            <span class="text-[10px] bg-amber-500/10 text-amber-300 px-2 py-0.5 rounded font-mono">All Left + Matched Right</span>
+                        </div>
+                        <p class="text-xs text-slate-400">বাম টেবিলের সব ডাটা থাকবে, ডান টেবিলে অমিল থাকলে NULL দেখাবে।</p>
+                        <div class="bg-codebg p-3 rounded-lg font-mono text-xs text-slate-200">
+                            <span class="text-blue-400">SELECT</span> * <span class="text-blue-400">FROM</span> Department D<br>
+                            <span class="text-amber-400 font-bold">LEFT JOIN</span> employee E <span class="text-blue-400 font-bold">ON</span> E.dept_code = D.dept_code;
+                        </div>
+                    </div>
+
+                    <!-- RIGHT JOIN -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-purple-400 uppercase">4. RIGHT OUTER JOIN</span>
+                            <span class="text-[10px] bg-purple-500/10 text-purple-300 px-2 py-0.5 rounded font-mono">All Right + Matched Left</span>
+                        </div>
+                        <p class="text-xs text-slate-400">ডান টেবিলের সব ডাটা থাকবে, বাম টেবিলে অমিল থাকলে NULL দেখাবে।</p>
+                        <div class="bg-codebg p-3 rounded-lg font-mono text-xs text-slate-200">
+                            <span class="text-blue-400">SELECT</span> * <span class="text-blue-400">FROM</span> Department D<br>
+                            <span class="text-purple-400 font-bold">RIGHT JOIN</span> employee E <span class="text-blue-400 font-bold">ON</span> E.dept_code = D.dept_code;
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- FULL OUTER JOIN Simulated -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-pink-500/30 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-pink-400 uppercase">5. FULL OUTER JOIN (Simulated in MySQL using UNION)</span>
+                        <span class="text-[10px] bg-pink-500/10 text-pink-300 px-2 py-0.5 rounded font-mono">LEFT JOIN ∪ RIGHT JOIN</span>
+                    </div>
+                    <p class="text-xs text-slate-400">MySQL-এ সরাসরি `FULL JOIN` নেই। তাই `LEFT JOIN` এবং `RIGHT JOIN`-কে `UNION` করতে হয়।</p>
+                    <div class="bg-codebg p-3.5 rounded-lg font-mono text-xs text-slate-200">
+<pre><code><span class="text-blue-400 font-bold">SELECT</span> * <span class="text-blue-400 font-bold">FROM</span> Department D <span class="text-indigo-400 font-bold">LEFT JOIN</span> employee E <span class="text-blue-400 font-bold">ON</span> E.dept_code = D.dept_code
+<span class="text-pink-400 font-bold">UNION</span>
+<span class="text-blue-400 font-bold">SELECT</span> * <span class="text-blue-400 font-bold">FROM</span> Department D <span class="text-indigo-400 font-bold">RIGHT JOIN</span> employee E <span class="text-blue-400 font-bold">ON</span> E.dept_code = D.dept_code;</code></pre>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- MODULE 3: SELF JOIN & HIERARCHIES -->
+        <section id="section-selfjoin" class="scroll-mt-24 space-y-6">
+            <div class="flex items-center gap-3">
+                <span class="w-3 h-8 bg-indigo-500 rounded-full"></span>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">3. Self Join & Manager-Employee Hierarchies</h2>
+                    <p class="text-xs text-slate-400">Joining a table to itself using dual table aliases</p>
+                </div>
+            </div>
+
+            <div class="searchable-card bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6" data-category="selfjoin">
+                
+                <!-- Table Creation & Data -->
+                <div>
+                    <h3 class="text-sm font-bold text-indigo-400 mb-2 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-sitemap"></i> 3.1 Schema & Setup for Manager Hierarchy
+                    </h3>
+                    <div class="bg-codebg p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-200">
+<pre><code><span class="text-slate-500">-- Employees Table with Manager ID</span>
+<span class="text-blue-400 font-bold">CREATE TABLE</span> employees (
+    employee_id <span class="text-emerald-400">INT PRIMARY KEY</span>,
+    employee_name <span class="text-emerald-400">VARCHAR(50)</span>,
+    job_title <span class="text-emerald-400">VARCHAR(50)</span>,
+    salary <span class="text-emerald-400">INT</span>,
+    manager_id <span class="text-emerald-400">INT</span>
+);
+
+<span class="text-emerald-400 font-bold">INSERT INTO</span> employees <span class="text-emerald-400">VALUES</span>
+(1, <span class="text-amber-300">'Alice'</span>, <span class="text-amber-300">'CEO'</span>, 150000, NULL),
+(2, <span class="text-amber-300">'Bob'</span>, <span class="text-amber-300">'VP of Engineering'</span>, 110000, 1),
+(3, <span class="text-amber-300">'Charlie'</span>, <span class="text-amber-300">'VP of Marketing'</span>, 100000, 1),
+(4, <span class="text-amber-300">'David'</span>, <span class="text-amber-300">'Software Engineer'</span>, 180000, 2),
+(5, <span class="text-amber-300">'Eve'</span>, <span class="text-amber-300">'DevOps Specialist'</span>, 85000, 2);</code></pre>
+                    </div>
+                </div>
+
+                <!-- Query: Earn More Than Direct Manager -->
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-xs font-bold text-pink-400 uppercase flex items-center gap-2">
+                            <i class="fa-solid fa-user-ninja"></i> Query: Employees Earning MORE than their Direct Manager
+                        </h4>
+                        <span class="text-[10px] bg-pink-500/10 text-pink-300 px-2.5 py-1 rounded font-mono">Self Join Logic</span>
+                    </div>
+
+                    <div class="bg-codebg p-4 rounded-xl border border-slate-800 font-mono text-xs sm:text-sm text-slate-200">
+<pre><code><span class="text-blue-400 font-bold">SELECT</span> 
+    E.employee_name <span class="text-blue-400 font-bold">AS</span> Employee_Name,
+    E.salary <span class="text-blue-400 font-bold">AS</span> Employee_Salary, 
+    M.employee_name <span class="text-blue-400 font-bold">AS</span> Manager_Name, 
+    M.salary <span class="text-blue-400 font-bold">AS</span> Manager_Salary
+<span class="text-blue-400 font-bold">FROM</span> employees E 
+<span class="text-indigo-400 font-bold">INNER JOIN</span> employees M <span class="text-blue-400 font-bold">ON</span> <span class="text-pink-400 font-bold">E.manager_id = M.employee_id</span>
+<span class="text-blue-400 font-bold">WHERE</span> <span class="text-amber-400 font-bold">E.salary > M.salary</span>;</code></pre>
+                    </div>
+
+                    <!-- Output Result Table -->
+                    <div class="overflow-x-auto border border-slate-800 rounded-xl">
+                        <table class="w-full text-left text-xs font-mono">
+                            <thead class="bg-slate-800 text-slate-200">
+                                <tr>
+                                    <th class="p-2.5">Employee_Name</th>
+                                    <th class="p-2.5">Employee_Salary</th>
+                                    <th class="p-2.5">Manager_Name</th>
+                                    <th class="p-2.5">Manager_Salary</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800 text-slate-300">
+                                <tr class="bg-emerald-950/20">
+                                    <td class="p-2.5 text-blue-400 font-bold">David</td>
+                                    <td class="p-2.5 text-emerald-400 font-bold">180,000</td>
+                                    <td class="p-2.5 text-purple-400">Bob</td>
+                                    <td class="p-2.5 text-amber-400">110,000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-[11px] text-slate-400">
+                        💡 <strong>ব্যাখ্যা:</strong> ডেভিড ১৮০,০০০ টাকা আয় করে যা তার ম্যানেজার বব (১১০,০০০ টাকা)-এর চেয়ে বেশি!
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- MODULE 4: SET OPERATIONS & SEMI JOINS -->
+        <section id="section-setops" class="scroll-mt-24 space-y-6">
+            <div class="flex items-center gap-3">
+                <span class="w-3 h-8 bg-amber-500 rounded-full"></span>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">4. Set Operations, Semi-Joins & Anti-Semi Joins</h2>
+                    <p class="text-xs text-slate-400">UNION, INTERSECT, EXCEPT and Subquery Membership checks</p>
+                </div>
+            </div>
+
+            <div class="searchable-card bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6" data-category="setops">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <!-- UNION vs UNION ALL -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+                        <span class="text-xs font-bold text-amber-400 uppercase">UNION vs UNION ALL</span>
+                        <div class="bg-codebg p-3 rounded-lg font-mono text-xs space-y-2 text-slate-200">
+                            <p><span class="text-slate-500">// UNION (Removes duplicates)</span><br>
+                            <span class="text-blue-400">SELECT</span> customerid <span class="text-blue-400">FROM</span> customers<br>
+                            <span class="text-amber-400 font-bold">UNION</span><br>
+                            <span class="text-blue-400">SELECT</span> customerid <span class="text-blue-400">FROM</span> orders;</p>
+
+                            <p><span class="text-slate-500">// UNION ALL (Keeps duplicates, faster)</span><br>
+                            <span class="text-blue-400">SELECT</span> customerid <span class="text-blue-400">FROM</span> customers<br>
+                            <span class="text-amber-400 font-bold">UNION ALL</span><br>
+                            <span class="text-blue-400">SELECT</span> customerid <span class="text-blue-400">FROM</span> orders;</p>
+                        </div>
+                    </div>
+
+                    <!-- INTERSECT & EXCEPT -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+                        <span class="text-xs font-bold text-purple-400 uppercase">INTERSECT & EXCEPT</span>
+                        <div class="bg-codebg p-3 rounded-lg font-mono text-xs space-y-2 text-slate-200">
+                            <p><span class="text-slate-500">// INTERSECT (Both tables)</span><br>
+                            <span class="text-blue-400">SELECT</span> customerid <span class="text-blue-400">FROM</span> customers<br>
+                            <span class="text-purple-400 font-bold">INTERSECT</span><br>
+                            <span class="text-blue-400">SELECT</span> customerid <span class="text-blue-400">FROM</span> orders;</p>
+
+                            <p><span class="text-slate-500">// EXCEPT / MINUS (In 1st, NOT in 2nd)</span><br>
+                            <span class="text-blue-400">SELECT</span> customerid <span class="text-blue-400">FROM</span> customers<br>
+                            <span class="text-rose-400 font-bold">EXCEPT</span><br>
+                            <span class="text-blue-400">SELECT</span> customerid <span class="text-blue-400">FROM</span> orders;</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Semi Join vs Anti Semi Join -->
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
+                    <span class="text-xs font-bold text-cyan-400 uppercase">Semi Join vs Anti-Semi Join</span>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
+                        <div class="bg-codebg p-3.5 rounded-xl border border-slate-800">
+                            <span class="text-emerald-400 font-bold">// Semi Join (IN / EXISTS)</span>
+                            <p class="text-slate-300 mt-2">
+                                <span class="text-blue-400">SELECT</span> * <span class="text-blue-400">FROM</span> customers<br>
+                                <span class="text-blue-400">WHERE</span> customerid <span class="text-emerald-400 font-bold">IN</span> (<br>
+                                &nbsp;&nbsp;<span class="text-blue-400">SELECT</span> customerid <span class="text-blue-400">FROM</span> orders<br>
+                                );
+                            </p>
+                            <span class="text-[10px] text-slate-500 block mt-2">যেসব কাস্টমার অন্তত ১টি অর্ডার করেছে</span>
+                        </div>
+
+                        <div class="bg-codebg p-3.5 rounded-xl border border-slate-800">
+                            <span class="text-rose-400 font-bold">// Anti Semi Join (NOT IN / NOT EXISTS)</span>
+                            <p class="text-slate-300 mt-2">
+                                <span class="text-blue-400">SELECT</span> customername <span class="text-blue-400">FROM</span> customers<br>
+                                <span class="text-blue-400">WHERE</span> customerid <span class="text-rose-400 font-bold">NOT IN</span> (<br>
+                                &nbsp;&nbsp;<span class="text-blue-400">SELECT</span> customerid <span class="text-blue-400">FROM</span> orders<br>
+                                );
+                            </p>
+                            <span class="text-[10px] text-slate-500 block mt-2">যেসব কাস্টমার কখনোই কোনো অর্ডার করেনি</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- MODULE 5: PAGINATION & EXECUTION ORDER -->
+        <section id="section-execution" class="scroll-mt-24 space-y-6">
+            <div class="flex items-center gap-3">
+                <span class="w-3 h-8 bg-cyan-500 rounded-full"></span>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">5. Pagination, LIMIT & Execution Pipeline</h2>
+                    <p class="text-xs text-slate-400">Standard syntax clause sequence vs internal logical database execution order</p>
+                </div>
+            </div>
+
+            <div class="searchable-card bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6" data-category="pagination">
+                
+                <!-- Written vs Execution Pipeline -->
+                <div class="space-y-4">
+                    
+                    <!-- Written Order -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                        <span class="text-xs font-bold text-pink-400 uppercase block">1. Written SQL Syntax Clause Sequence (যেভাবে কোড লিখি):</span>
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-mono font-bold">
+                            <span class="px-2.5 py-1 bg-slate-800 text-blue-400 rounded">1. SELECT</span>
+                            <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                            <span class="px-2.5 py-1 bg-slate-800 text-indigo-400 rounded">2. FROM</span>
+                            <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                            <span class="px-2.5 py-1 bg-slate-800 text-purple-400 rounded">3. WHERE</span>
+                            <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                            <span class="px-2.5 py-1 bg-slate-800 text-amber-400 rounded">4. GROUP BY</span>
+                            <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                            <span class="px-2.5 py-1 bg-slate-800 text-rose-400 rounded">5. HAVING</span>
+                            <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                            <span class="px-2.5 py-1 bg-slate-800 text-cyan-400 rounded">6. ORDER BY</span>
+                            <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                            <span class="px-2.5 py-1 bg-slate-800 text-emerald-400 rounded">7. LIMIT</span>
+                        </div>
+                    </div>
+
+                    <!-- Logical Execution Order -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-cyan-500/30 space-y-2">
+                        <span class="text-xs font-bold text-cyan-400 uppercase block">2. Internal Logical Execution Order (ডাটাবেজ ইঞ্জিন যেভাবে প্রসেস করে):</span>
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-mono font-bold">
+                            <span class="px-2.5 py-1 bg-cyan-950 border border-cyan-500/40 text-cyan-300 rounded">1. FROM / JOIN</span>
+                            <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                            <span class="px-2.5 py-1 bg-cyan-950 border border-cyan-500/40 text-cyan-300 rounded">2. WHERE</span>
+                            <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                            <span class="px-2.5 py-1 bg-cyan-950 border border-cyan-500/40 text-cyan-300 rounded">3. GROUP BY</span>
+                            <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                            <span class="px-2.5 py-1 bg-cyan-950 border border-cyan-500/40 text-cyan-300 rounded">4. HAVING</span>
+                            <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                            <span class="px-2.5 py-1 bg-cyan-950 border border-cyan-500/40 text-emerald-400 rounded">5. SELECT</span>
+                            <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                            <span class="px-2.5 py-1 bg-cyan-950 border border-cyan-500/40 text-cyan-300 rounded">6. ORDER BY</span>
+                            <i class="fa-solid fa-arrow-right text-slate-600"></i>
+                            <span class="px-2.5 py-1 bg-cyan-950 border border-cyan-500/40 text-cyan-300 rounded">7. LIMIT</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Pagination Rules -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
+                    <div class="bg-codebg p-3 rounded-xl border border-slate-800">
+                        <span class="text-blue-400 font-bold">// Top 1 Record</span>
+                        <p class="text-slate-200 mt-1"><span class="text-blue-400">SELECT</span> * <span class="text-blue-400">FROM</span> employees <span class="text-amber-400 font-bold">LIMIT 1</span>;</p>
+                    </div>
+
+                    <div class="bg-codebg p-3 rounded-xl border border-slate-800">
+                        <span class="text-blue-400 font-bold">// Offset Pagination (Skip 3, get 1)</span>
+                        <p class="text-slate-200 mt-1"><span class="text-blue-400">SELECT</span> * <span class="text-blue-400">FROM</span> employees <span class="text-amber-400 font-bold">LIMIT 3, 1</span>;</p>
+                    </div>
+
+                    <div class="bg-codebg p-3 rounded-xl border border-slate-800">
+                        <span class="text-blue-400 font-bold">// Highest Salary using Order & Limit</span>
+                        <p class="text-slate-200 mt-1"><span class="text-blue-400">SELECT</span> * <span class="text-blue-400">FROM</span> employees <span class="text-purple-400">ORDER BY</span> salary <span class="text-purple-400">DESC</span> <span class="text-amber-400 font-bold">LIMIT 1</span>;</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- MODULE 6: LAB 4 VIVA QUESTIONS -->
+        <section id="section-viva" class="scroll-mt-24 space-y-6">
+            <div class="flex items-center gap-3">
+                <span class="w-3 h-8 bg-emerald-500 rounded-full"></span>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">6. Lab 4 Viva Questions & Answers</h2>
+                    <p class="text-xs text-slate-400">Interactive flashcards for Lab exam oral tests</p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                
+                <!-- Q1 -->
+                <div class="searchable-card bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-2" data-category="viva">
+                    <div class="flex justify-between items-center cursor-pointer" onclick="toggleAnswer('viva1')">
+                        <h3 class="text-xs sm:text-sm font-bold text-slate-200 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-mono">Q1</span>
+                            What is the difference between a normal subquery and a correlated subquery?
+                        </h3>
+                        <i id="viva1-icon" class="fa-solid fa-chevron-down text-slate-500 text-xs transition"></i>
+                    </div>
+                    <div id="viva1" class="hidden pt-3 border-t border-slate-800 text-xs text-slate-300 leading-relaxed">
+                        স্বাভাবিক Subquery কেবল একবার এক্সিকিউট হয়ে আউটার কুয়েরিতে ডাটা পাস করে। কিন্তু Correlated Subquery-তে আউটার কুয়েরির প্রতিটি Row এর জন্য ইনার সাবকুয়েরিটি বারবার এক্সিকিউট হয়।
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="searchable-card bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-2" data-category="viva">
+                    <div class="flex justify-between items-center cursor-pointer" onclick="toggleAnswer('viva2')">
+                        <h3 class="text-xs sm:text-sm font-bold text-slate-200 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-mono">Q2</span>
+                            Why doesn't MySQL directly support FULL OUTER JOIN? How do we write it?
+                        </h3>
+                        <i id="viva2-icon" class="fa-solid fa-chevron-down text-slate-500 text-xs transition"></i>
+                    </div>
+                    <div id="viva2" class="hidden pt-3 border-t border-slate-800 text-xs text-slate-300 leading-relaxed">
+                        MySQL-এর ইন্টারনাল ইঞ্জিনে `FULL OUTER JOIN` কিওয়ার্ডের ডিরেক্ট সাপোর্ট নেই। তাই আমরা `LEFT JOIN` এবং `RIGHT JOIN` এর ফলাফলের সাথে `UNION` ব্যবহার করে FULL JOIN এর আউটপুট তৈরি করি।
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="searchable-card bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-2" data-category="viva">
+                    <div class="flex justify-between items-center cursor-pointer" onclick="toggleAnswer('viva3')">
+                        <h3 class="text-xs sm:text-sm font-bold text-slate-200 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-mono">Q3</span>
+                            What is a Self Join and when is it required?
+                        </h3>
+                        <i id="viva3-icon" class="fa-solid fa-chevron-down text-slate-500 text-xs transition"></i>
+                    </div>
+                    <div id="viva3" class="hidden pt-3 border-t border-slate-800 text-xs text-slate-300 leading-relaxed">
+                        যখন একটি টেবিল নিজের কলামগুলোর সাথে তুলনা করার জন্য নিজের সাথে নিজেই Join করে, তাকে Self Join বলে। উদাহরণস্বরূপ: Employee-Manager Hierarchy বের করতে, একই টেবিলে কাস্টমারদের মধ্যে তুলনা করতে ইত্যাদি।
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="searchable-card bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-2" data-category="viva">
+                    <div class="flex justify-between items-center cursor-pointer" onclick="toggleAnswer('viva4')">
+                        <h3 class="text-xs sm:text-sm font-bold text-slate-200 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-mono">Q4</span>
+                            What is the difference between UNION and UNION ALL?
+                        </h3>
+                        <i id="viva4-icon" class="fa-solid fa-chevron-down text-slate-500 text-xs transition"></i>
+                    </div>
+                    <div id="viva4" class="hidden pt-3 border-t border-slate-800 text-xs text-slate-300 leading-relaxed">
+                        `UNION` দুইটি রেজাল্ট সেটের মধ্যে ডুপ্লিকেট সারিগুলো বাদ দিয়ে কেবল ইউনিক সারিগুলো দেখায়। আর `UNION ALL` কোনো ডুপ্লিকেট বাদ দেয় না এবং সর্টিং ছাড়া দ্রুত ডাটা কম্বাইন করে।
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- MODULE 7: SELF PRACTICE TASKS -->
+        <section id="section-practice" class="scroll-mt-24 space-y-6">
+            <div class="flex items-center gap-3">
+                <span class="w-3 h-8 bg-rose-500 rounded-full"></span>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">7. Self Practice Tasks for Lab Exam</h2>
+                    <p class="text-xs text-slate-400">Test your Lab 4 query concepts</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <!-- Task 1 -->
+                <div class="searchable-card bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-3" data-category="practice">
+                    <span class="text-[10px] bg-rose-500/10 text-rose-300 font-mono px-2 py-0.5 rounded border border-rose-500/20">Task 1: Subquery</span>
+                    <h3 class="text-xs sm:text-sm font-bold text-slate-200">
+                        Write a query to find the 4th highest salary using Correlated Subquery.
+                    </h3>
+                    <div class="bg-codebg p-3 rounded-lg font-mono text-xs text-slate-300">
+                        <span class="text-slate-500">// Hint: Set N = 4 in formula (N-1 = 3)</span>
+                    </div>
+                    <button onclick="toggleAnswer('prac1')" class="text-xs text-pink-400 font-semibold hover:underline">
+                        Show Solution
+                    </button>
+                    <div id="prac1" class="hidden pt-2 border-t border-slate-800 font-mono text-xs text-emerald-400">
+                        SELECT e1.salary FROM employee E1 WHERE 3 = (SELECT COUNT(DISTINCT e2.salary) FROM employee E2 WHERE e2.salary > e1.salary);
+                    </div>
+                </div>
+
+                <!-- Task 2 -->
+                <div class="searchable-card bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-3" data-category="practice">
+                    <span class="text-[10px] bg-purple-500/10 text-purple-300 font-mono px-2 py-0.5 rounded border border-purple-500/20">Task 2: Joins</span>
+                    <h3 class="text-xs sm:text-sm font-bold text-slate-200">
+                        Find departments that have NO employees assigned to them.
+                    </h3>
+                    <div class="bg-codebg p-3 rounded-lg font-mono text-xs text-slate-300">
+                        <span class="text-slate-500">// Hint: Use LEFT JOIN and WHERE emp_id IS NULL</span>
+                    </div>
+                    <button onclick="toggleAnswer('prac2')" class="text-xs text-pink-400 font-semibold hover:underline">
+                        Show Solution
+                    </button>
+                    <div id="prac2" class="hidden pt-2 border-t border-slate-800 font-mono text-xs text-emerald-400">
+                        SELECT D.dept_name FROM Department D LEFT JOIN employee E ON D.dept_code = E.dept_code WHERE E.emp_id IS NULL;
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- Copy Toast Notification -->
+<div id="copyToast" class="fixed bottom-6 right-6 bg-pink-600 text-white text-xs px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 transform translate-y-20 opacity-0 transition duration-300 pointer-events-none z-50">
+    <i class="fa-solid fa-circle-check text-sm"></i>
+    <span>SQL query copied to clipboard!</span>
+</div>
+
+<!-- JavaScript Logic -->
+<script>
+    // 1. Working Live Search Engine
+    function filterContent() {
+        const query = document.getElementById('quickSearch').value.toLowerCase().trim();
+        const clearBtn = document.getElementById('clearSearchBtn');
+        const cards = document.querySelectorAll('.searchable-card');
+        let visibleCount = 0;
+
+        if (query.length > 0) {
+            clearBtn.classList.remove('hidden');
+        } else {
+            clearBtn.classList.add('hidden');
+        }
+
+        cards.forEach(card => {
+            const cardText = card.textContent.toLowerCase();
+            if (cardText.includes(query)) {
+                card.classList.remove('hidden');
+                visibleCount++;
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        const noResults = document.getElementById('noResultsMessage');
+        const searchStats = document.getElementById('searchStats');
+
+        if (visibleCount === 0 && query !== '') {
+            noResults.classList.remove('hidden');
+            searchStats.innerText = '0 Results';
+        } else {
+            noResults.classList.add('hidden');
+            searchStats.innerText = query ? `${visibleCount} Found` : 'All Topics';
+        }
+    }
+
+    // Clear Search Input
+    function clearSearch() {
+        const searchInput = document.getElementById('quickSearch');
+        searchInput.value = '';
+        filterContent();
+        filterCategory('all');
+    }
+
+    // 2. Category Filter Pills
+    function filterCategory(cat) {
+        // Reset Search Input
+        document.getElementById('quickSearch').value = '';
+        document.getElementById('clearSearchBtn').classList.add('hidden');
+        document.getElementById('noResultsMessage').classList.add('hidden');
+
+        // Update active pill button UI
+        document.querySelectorAll('.cat-pill').forEach(btn => {
+            btn.classList.remove('bg-pink-600', 'text-white');
+            btn.classList.add('bg-slate-800', 'text-slate-300');
+        });
+        event.target.classList.remove('bg-slate-800', 'text-slate-300');
+        event.target.classList.add('bg-pink-600', 'text-white');
+
+        const cards = document.querySelectorAll('.searchable-card');
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const cardCat = card.getAttribute('data-category');
+            if (cat === 'all' || cardCat === cat) {
+                card.classList.remove('hidden');
+                visibleCount++;
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('searchStats').innerText = `${visibleCount} Items`;
+    }
+
+    // 3. Copy Code Function with Toast Notification
+    function copyCode(button) {
+        const pre = button.parentElement.querySelector('code');
+        const textToCopy = pre.innerText;
+
+        const tempInput = document.createElement('textarea');
+        tempInput.value = textToCopy;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+
+        // Show Toast
+        const toast = document.getElementById('copyToast');
+        toast.classList.remove('translate-y-20', 'opacity-0');
+        
+        setTimeout(() => {
+            toast.classList.add('translate-y-20', 'opacity-0');
+        }, 2200);
+    }
+
+    // 4. Toggle Accordions / Flashcards
+    function toggleAnswer(id) {
+        const target = document.getElementById(id);
+        const icon = document.getElementById(id + '-icon');
+
+        if (target.classList.contains('hidden')) {
+            target.classList.remove('hidden');
+            if (icon) icon.classList.add('rotate-180');
+        } else {
+            target.classList.add('hidden');
+            if (icon) icon.classList.remove('rotate-180');
+        }
+    }
+
+    // Expand all card answers
+    function expandAllCards() {
+        const hiddenDivs = document.querySelectorAll('[id^="viva"], [id^="prac"]');
+        hiddenDivs.forEach(el => {
+            el.classList.remove('hidden');
+        });
+    }
+</script>
+
+</body>
+</html>
