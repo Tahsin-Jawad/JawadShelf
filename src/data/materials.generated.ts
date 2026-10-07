@@ -116,12 +116,12 @@ export const generatedCourses: CourseData[] = [
     "title": "CSE 345",
     "chapters": [
       {
-        "id": "ch 1-2.pdf",
+        "id": "ch-1-2.pdf",
         "title": "Ch 1 2",
-        "filename": "ch 1-2.pdf",
+        "filename": "ch-1-2.pdf",
         "type": "PDF",
         "extension": "pdf",
-        "url": "/materials/CSE%20345/Chapters/ch%201-2.pdf",
+        "url": "/materials/CSE%20345/Chapters/ch-1-2.pdf",
         "sizeInBytes": 6884301
       },
       {
@@ -134,13 +134,22 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 12014109
       },
       {
-        "id": "ch 5.pdf",
+        "id": "ch-5.pdf",
         "title": "Ch 5",
-        "filename": "ch 5.pdf",
+        "filename": "ch-5.pdf",
         "type": "PDF",
         "extension": "pdf",
-        "url": "/materials/CSE%20345/Chapters/ch%205.pdf",
+        "url": "/materials/CSE%20345/Chapters/ch-5.pdf",
         "sizeInBytes": 5841231
+      },
+      {
+        "id": "ch-6-7.pdf",
+        "title": "Ch 6 7",
+        "filename": "ch-6-7.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20345/Chapters/ch-6-7.pdf",
+        "sizeInBytes": 8658104
       }
     ],
     "others": [
@@ -181,6 +190,13 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 161815
       }
     ]
+  },
+  {
+    "id": "gen-203",
+    "code": "GEN 203",
+    "title": "GEN 203",
+    "chapters": [],
+    "others": []
   },
   {
     "id": "gen-209",
