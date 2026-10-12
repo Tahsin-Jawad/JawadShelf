@@ -239,6 +239,15 @@ export const generatedCourses: CourseData[] = [
         "extension": "pdf",
         "url": "/materials/GEN%20209/Chapters/1.%20Social%20Psychology%20Intro.pdf",
         "sizeInBytes": 1173091
+      },
+      {
+        "id": "Chapter2-social-psychology-robert-baron.pdf",
+        "title": "Chapter2 Social Psychology Robert Baron",
+        "filename": "Chapter2-social-psychology-robert-baron.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/GEN%20209/Chapters/Chapter2-social-psychology-robert-baron.pdf",
+        "sizeInBytes": 1555608
       }
     ],
     "others": []
