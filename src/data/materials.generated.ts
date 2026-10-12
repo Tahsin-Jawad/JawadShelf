@@ -82,6 +82,15 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 63849
       },
       {
+        "id": "Ch 4 Details Overview.html",
+        "title": "Ch 4 Details Overview",
+        "filename": "Ch 4 Details Overview.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/CSE%20302/Others/Ch%204%20Details%20Overview.html",
+        "sizeInBytes": 190609
+      },
+      {
         "id": "LAB 1-2-3.html",
         "title": "LAB 1 2 3",
         "filename": "LAB 1-2-3.html",

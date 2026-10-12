@@ -1,0 +1,2393 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Relational Algebra — Complete Interactive Study Guide</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- MathJax 3 Configuration & Script -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: {
+                fontCache: 'global'
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', 'Hind Siliguri', sans-serif;
+        }
+        
+        .code-font {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Printable styles */
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white; color: black; }
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-200">
+
+    <!-- Top Fixed Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-800/90 backdrop-blur border-b border-slate-200 dark:border-slate-700 shadow-sm no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <button id="toggle-sidebar" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <span class="bg-sky-600 text-white font-bold px-2.5 py-1 rounded-md text-xs uppercase tracking-wider">DBMS</span>
+                    <h1 class="text-lg font-bold bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent hidden md:block">
+                        Relational Algebra Master Study Guide
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Global Search & Actions -->
+            <div class="flex items-center space-x-3">
+                <div class="relative hidden sm:block w-48 lg:w-64">
+                    <input type="text" id="global-search" placeholder="Search page, topic, formula..." 
+                        class="w-full pl-9 pr-3 py-1.5 text-sm bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-800 dark:text-slate-100 placeholder-slate-400">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-slate-400"></i>
+                </div>
+
+                <button id="theme-toggle" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700" title="Toggle Theme">
+                    <i class="fa-solid fa-moon dark:hidden text-lg"></i>
+                    <i class="fa-solid fa-sun hidden dark:block text-lg text-amber-400"></i>
+                </button>
+
+                <a href="#midterm-prep" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow flex items-center space-x-1">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span class="hidden sm:inline">Midterm Solved Qs</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Master Study Progress Bar -->
+        <div class="w-full bg-slate-200 dark:bg-slate-700 h-1.5">
+            <div id="master-progress-bar" class="bg-sky-500 h-1.5 transition-all duration-300" style="width: 0%"></div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex gap-6">
+
+        <!-- Left Sidebar Navigation -->
+        <aside id="sidebar" class="w-80 shrink-0 hidden lg:block bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 h-[calc(100vh-6rem)] sticky top-20 overflow-y-auto no-print shadow-sm">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700 mb-3">
+                <h2 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                    <i class="fa-solid fa-book-open text-sky-500"></i>
+                    PDF Syllabus (68 Pages)
+                </h2>
+                <span id="progress-text" class="text-xs font-bold bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300 px-2 py-0.5 rounded-full">0/68 Done</span>
+            </div>
+
+            <!-- Navigation Sections -->
+            <nav class="space-y-4 text-sm">
+                <div>
+                    <h3 class="text-xs font-bold uppercase text-slate-400 dark:text-slate-500 mb-2 tracking-wider">Quick Jump</h3>
+                    <ul class="space-y-1">
+                        <li><a href="#master-intro" class="block px-2 py-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-sky-600 dark:text-sky-400 font-medium"><i class="fa-solid fa-star mr-2"></i>Class Overview</a></li>
+                        <li><a href="#midterm-prep" class="block px-2 py-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-indigo-600 dark:text-indigo-400 font-bold"><i class="fa-solid fa-award mr-2"></i>40-Mark Midterm Qs</a></li>
+                        <li><a href="#cheat-sheet" class="block px-2 py-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-emerald-600 dark:text-emerald-400 font-medium"><i class="fa-solid fa-bolt mr-2"></i>Formula Cheat Sheet</a></li>
+                        <li><a href="#comparison-matrix" class="block px-2 py-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-amber-600 dark:text-amber-400 font-medium"><i class="fa-solid fa-table-columns mr-2"></i>Operator Comparisons</a></li>
+                        <li><a href="#practice-quiz" class="block px-2 py-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-purple-600 dark:text-purple-400 font-medium"><i class="fa-solid fa-clipboard-question mr-2"></i>Practice Quiz</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-bold uppercase text-slate-400 dark:text-slate-500 mb-2 tracking-wider">Page by Page Index</h3>
+                    <ul id="sidebar-page-list" class="space-y-0.5 max-h-[500px] overflow-y-auto pr-1">
+                        <!-- Dynamic JS Populated Page Items -->
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0 space-y-8">
+
+            <!-- Section 0: Master Introduction & Classroom Setup -->
+            <section id="master-intro" class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm relative overflow-hidden">
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-sky-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="p-3 bg-sky-100 dark:bg-sky-900/50 text-sky-600 dark:text-sky-400 rounded-xl">
+                        <i class="fa-solid fa-chalkboard-user text-2xl"></i>
+                    </span>
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">Welcome to Database Class!</h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">DBMS Relational Algebra — Complete Classroom Lecture & Midterm Prep</p>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 dark:bg-amber-950/40 border-l-4 border-amber-500 p-4 rounded-r-xl mb-6">
+                    <h3 class="font-bold text-amber-900 dark:text-amber-200 flex items-center gap-2">
+                        <i class="fa-solid fa-bullhorn text-amber-600"></i>
+                        Teacher's Message & Exam Strategy (40 Marks Midterm Target)
+                    </h3>
+                    <p class="text-sm text-amber-800 dark:text-amber-300 mt-1 leading-relaxed">
+                        “আসসালামু আলাইকুম! আজকের ক্লাসে আমরা Relational Algebra একদম শুরু থেকে শেষ পর্যন্ত বুঝব। Relational Algebra হলো আমাদের Midterm Examination-এর <strong>40 marks</strong>-এর মূল ভিত্তি। তোমরা অনেকে LaTeX symbol দেখে ভয় পাও—কিন্তু চিন্তার কিছু নেই! আমি প্রতিটি অপারেটর ($\sigma, \pi, \cup, -, \times, \rho, \bowtie, \mathcal{G}$) বোর্ডের মতো একদম ভেঙ্গে ভেঙ্গে সহজ বাংলায় বোঝাব এবং পরীক্ষায় কীভাবে লিখলে ফুল মার্কস পাবে তা ইংরেজি অ্যান্সারে দেখিয়ে দেব। Slide-এর প্রতিটি পৃষ্ঠা এবং শেস দিকের সমস্ত Bank & Flight Sample Queries আমরা step-by-step solve করব।”
+                    </p>
+                </div>
+
+                <!-- Learning Objectives Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl border border-slate-200 dark:border-slate-600">
+                        <div class="text-sky-600 dark:text-sky-400 font-bold mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-layer-group"></i> 6 Basic Operators
+                        </div>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">Select ($\sigma$), Project ($\pi$), Union ($\cup$), Difference ($-$), Cartesian Product ($\times$), Rename ($\rho$).</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl border border-slate-200 dark:border-slate-600">
+                        <div class="text-indigo-600 dark:text-indigo-400 font-bold mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-diagram-project"></i> Joins & Aggregates
+                        </div>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">Theta Join ($\bowtie_\theta$), Natural Join ($\bowtie$), Grouping & Aggregate ($\mathcal{G}_{SUM, AVG, COUNT}$).</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl border border-slate-200 dark:border-slate-600">
+                        <div class="text-emerald-600 dark:text-emerald-400 font-bold mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-check-double"></i> All 68 Slides Solved
+                        </div>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">Banking Schema & Flight/Agency Schema-র সমস্ত অরিজিনাল প্রশ্নের ৮-ধাপের গ্যারান্টিড সলিউশন।</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 1: Page-by-Page Complete Lecture Notes (Pages 1 to 68) -->
+            <section id="page-by-page-lectures" class="space-y-8">
+                
+                <!-- PAGE 1 -->
+                <article id="page-1" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 1 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 1: Title & Course Introduction</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="1" onchange="togglePageStudied(1)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Original Slide Summary</h4>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">Database Management System — Relational Algebra | Instructor: Antu Chowdhury, Lecturer, Dept. of CSE, EWU.</p>
+                        </div>
+
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <h4 class="font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                                <i class="fa-solid fa-chalkboard"></i> Teacher's Explanation (শিক্ষকের সাতে আলোচনা):
+                            </h4>
+                            <p>
+                                স্বাগতম সবাইকে! এই স্লাইডটি আমাদের মূল চ্যাপ্টারের ইন্ট্রোডাকশন। এখানে আমাদের কোর্সের বিষয়বস্তু <strong>Relational Algebra</strong> নির্ধারণ করা হয়েছে। ডাটাবেজে আমরা যা ডাটা টেবিল আকারে রাখি, সেই টেবিলগুলোর ওপর বিভিন্ন গাণিতিক ও লজিক্যাল প্রসেসিং চালিয়ে কীভাবে ডাটা তুলে আনা হয় (Query করা হয়)—তা-ই আমরা এই চ্যাপ্টারে শিখব।
+                            </p>
+                        </div>
+
+                        <div class="bg-indigo-50 dark:bg-indigo-950/40 p-4 rounded-xl border border-indigo-200 dark:border-indigo-800">
+                            <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase">Exam Ready Definition</span>
+                            <p class="text-sm text-indigo-900 dark:text-indigo-200 font-medium mt-1">
+                                <strong>Relational Algebra</strong> is a formal procedural query language that takes one or two relations (tables) as input and produces a new relation as an output.
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 2 -->
+                <article id="page-2" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 2 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 2: Relational Query Languages</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="2" onchange="togglePageStudied(2)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Slide Content Breakdown</h4>
+                            <ul class="list-disc list-inside text-sm text-slate-700 dark:text-slate-300 space-y-1">
+                                <li><strong>Relational Query Language:</strong> Language in which user requests information from the database.</li>
+                                <li><strong>Procedural Language:</strong> User instructs the system to perform a sequence of operations to compute the result (HOW to get the data).</li>
+                                <li><strong>Non-procedural / Declarative Language:</strong> User describes the desired information without giving a specific procedure (WHAT data to get, e.g., SQL).</li>
+                                <li><strong>"Pure" Languages:</strong> Relational Algebra (Procedural), Tuple Relational Calculus (Non-procedural), Domain Relational Calculus (Non-procedural).</li>
+                            </ul>
+                        </div>
+
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <h4 class="font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                                <i class="fa-solid fa-chalkboard"></i> Real-Life Analogy (সহজ ব্যাখ্যা):
+                            </h4>
+                            <p>
+                                মনে কর তুমি রেস্টুরেন্টে গিয়ে খাবার অর্ডার করছ।<br>
+                                ১. <strong>Declarative (SQL):</strong> তুমি শুধু বললে "আমাকে একটা বিফ বার্গার দিন।" তুমি কি শেফকে বলেছ কীভাবে রান্না করতে হবে? না! এটা হলো <i>Non-procedural</i>।<br>
+                                ২. <strong>Procedural (Relational Algebra):</strong> তুমি যদি কিচেনে গিয়ে বল—"প্রথমে পাউরুটি স্যাঁকো, মাংস ভাজো, তার ওপর চিজ দাও, তারপর একসাথে জোড়া দাও।" এখানে তুমি <em>কীভাবে</em> বানাবে তার step-by-step নির্দেশ দিচ্ছ। এটাই হলো <i>Procedural Language</i>!
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div class="p-3 bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 rounded-lg">
+                                <span class="font-bold text-xs text-sky-700 dark:text-sky-300">Procedural (Relational Algebra)</span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">Focuses on execution steps and mathematical operations on sets.</p>
+                            </div>
+                            <div class="p-3 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 rounded-lg">
+                                <span class="font-bold text-xs text-indigo-700 dark:text-indigo-300">Non-Procedural (SQL / Calculus)</span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">Focuses purely on the specification of the final desired result.</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 3 -->
+                <article id="page-3" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 3 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 3: Six Basic Relational Algebra Operators</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="3" onchange="togglePageStudied(3)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                                Relational Algebra-র ৬টি মৌলিক (Fundamental/Basic) অপারেটর রয়েছে। যেকোনো জটিল ক্যোয়ারি এই ৬টির মাধ্যমে প্রকাশ করা সম্ভব:
+                            </p>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-3">
+                                <div class="bg-white dark:bg-slate-800 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-center">
+                                    <span class="text-lg text-sky-600 dark:text-sky-400 font-bold">$\sigma$</span>
+                                    <div class="text-xs font-bold mt-0.5">Select</div>
+                                </div>
+                                <div class="bg-white dark:bg-slate-800 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-center">
+                                    <span class="text-lg text-sky-600 dark:text-sky-400 font-bold">$\pi$</span>
+                                    <div class="text-xs font-bold mt-0.5">Project</div>
+                                </div>
+                                <div class="bg-white dark:bg-slate-800 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-center">
+                                    <span class="text-lg text-sky-600 dark:text-sky-400 font-bold">$\cup$</span>
+                                    <div class="text-xs font-bold mt-0.5">Union</div>
+                                </div>
+                                <div class="bg-white dark:bg-slate-800 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-center">
+                                    <span class="text-lg text-sky-600 dark:text-sky-400 font-bold">$-$</span>
+                                    <div class="text-xs font-bold mt-0.5">Set Difference</div>
+                                </div>
+                                <div class="bg-white dark:bg-slate-800 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-center">
+                                    <span class="text-lg text-sky-600 dark:text-sky-400 font-bold">$\times$</span>
+                                    <div class="text-xs font-bold mt-0.5">Cartesian Product</div>
+                                </div>
+                                <div class="bg-white dark:bg-slate-800 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-center">
+                                    <span class="text-lg text-sky-600 dark:text-sky-400 font-bold">$\rho$</span>
+                                    <div class="text-xs font-bold mt-0.5">Rename</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <h4 class="font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                                <i class="fa-solid fa-chalkboard"></i> Key Concept: Closure Property (বন্ধক গুণাবলি)
+                            </h4>
+                            <p>
+                                <strong>Closure Property:</strong> Relational Algebra-র প্রতিটি অপারেটরের ইনপুট হিসেবে আমরা এক বা একাধিক Relation (Table) প্রদান করি এবং আউটপুট হিসেবেও আমরা সবসময় একটি নতুন <em>Relation (Table)</em> পেয়ে থাকি। যেহেতু আউটপুট নিজেই একটি রিলেশন, তাই এক অপারেটরের আউটপুটকে অন্য অপারেটরের ইনপুট হিসেবে নেস্ট (Nest) করে জটিল এক্সপ্রেশন তৈরি করা যায়!
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 4 -->
+                <article id="page-4" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 4 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 4: Select Operation ($\sigma$)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="4" onchange="togglePageStudied(4)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Syntax & Formula</h4>
+                            <p class="text-lg text-center font-bold text-sky-600 dark:text-sky-400 py-2">
+                                $\sigma_{p}(r)$
+                            </p>
+                            <p class="text-xs text-slate-600 dark:text-slate-300">
+                                যেখানে $\sigma$ হলো Selection Symbol, $p$ হলো Selection Predicate (শর্ত/Condition), এবং $r$ হলো Relation (Table)-এর নাম।
+                            </p>
+                        </div>
+
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <h4 class="font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                                <i class="fa-solid fa-chalkboard"></i> Teacher's Lecture Notes:
+                            </h4>
+                            <p>
+                                <strong>Select ($\sigma$)</strong> অপারেটর টেবিল থেকে <em>নির্দিষ্ট কিছু Row/Tuple (হরিজন্টাল ফিল্টারিং)</em> বেছে নেয় যা একটি নির্দিষ্ট Predicate বা কন্ডিশন পূরণ করে।
+                            </p>
+                            <p class="font-bold text-amber-600 dark:text-amber-400">
+                                <i class="fa-solid fa-lightbulb"></i> মনে রাখার টেকনিক:
+                            </p>
+                            <p>
+                                <strong>Select = Row Selection!</strong> এটি কলাম কাটে না, পুরো রো (Row)-কে ফিল্টার করে আউটপুটে নিয়ে আসে।
+                            </p>
+                        </div>
+
+                        <!-- Example Box -->
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl space-y-3">
+                            <h5 class="text-xs font-bold uppercase text-slate-500">Slide Example Solution:</h5>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                                Query: Select those tuples of the instructor relation where the instructor is in the "Physics" department.
+                            </p>
+                            <div class="bg-white dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-700 font-mono text-center text-sky-600 dark:text-sky-300 font-bold">
+                                $\sigma_{dept\_name = \text{"Physics"}}(instructor)$
+                            </div>
+
+                            <!-- Table Display -->
+                            <div class="overflow-x-auto">
+                                <span class="text-xs font-bold text-slate-500">Resulting Output Relation:</span>
+                                <table class="w-full text-xs text-left border-collapse border border-slate-300 dark:border-slate-700 mt-1">
+                                    <thead class="bg-slate-200 dark:bg-slate-700">
+                                        <tr>
+                                            <th class="border border-slate-300 dark:border-slate-600 p-1.5">ID</th>
+                                            <th class="border border-slate-300 dark:border-slate-600 p-1.5">name</th>
+                                            <th class="border border-slate-300 dark:border-slate-600 p-1.5">dept_name</th>
+                                            <th class="border border-slate-300 dark:border-slate-600 p-1.5">salary</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                                        <tr class="bg-white dark:bg-slate-800">
+                                            <td class="p-1.5 border">22222</td>
+                                            <td class="p-1.5 border">Einstein</td>
+                                            <td class="p-1.5 border">Physics</td>
+                                            <td class="p-1.5 border">95000</td>
+                                        </tr>
+                                        <tr class="bg-white dark:bg-slate-800">
+                                            <td class="p-1.5 border">33456</td>
+                                            <td class="p-1.5 border">Gold</td>
+                                            <td class="p-1.5 border">Physics</td>
+                                            <td class="p-1.5 border">87000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 5 -->
+                <article id="page-5" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 5 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 5: Complex Predicates in Select</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="5" onchange="togglePageStudied(5)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <h4 class="font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                                <i class="fa-solid fa-calculator"></i> Selection Predicate Building Blocks:
+                            </h4>
+                            <p>
+                                Selection predicate-এ আমরা নিচের তুলনাভিত্তিক অপারেটর (Comparison Operators) ব্যবহার করতে পারি:
+                            </p>
+                            <p class="font-mono text-center text-sm bg-slate-100 dark:bg-slate-900 p-2 rounded">
+                                $=, \neq, >, \ge, <, \le$
+                            </p>
+                            <p>
+                                এবং একাধিক শর্তকে যুক্ত করতেLogical Connectives ব্যবহার করি:
+                            </p>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li><strong>Logical AND ($\land$):</strong> উভয় শর্ত সত্য হতে হবে।</li>
+                                <li><strong>Logical OR ($\lor$):</strong> যেকোনো একটি শর্ত সত্য হলেই হবে।</li>
+                                <li><strong>Logical NOT ($\neg$):</strong> শর্তকে উল্টে দেয় (Negation)।</li>
+                            </ul>
+                        </div>
+
+                        <!-- Worked Example -->
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl">
+                            <h5 class="text-xs font-bold uppercase text-slate-500 mb-2">Example Query:</h5>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
+                                Find the instructors in Physics with a salary greater than $90,000.
+                            </p>
+                            <div class="bg-white dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-700 font-mono text-center text-sky-600 dark:text-sky-300 font-bold text-sm">
+                                $\sigma_{dept\_name = \text{"Physics"} \land salary > 90000}(instructor)$
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 6 -->
+                <article id="page-6" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 6 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 6: Select Operation vs. SQL WHERE Clause</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="6" onchange="togglePageStudied(6)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <h4 class="font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                                <i class="fa-solid fa-code-compare"></i> Relational Algebra to SQL Comparison:
+                            </h4>
+                            <p>
+                                অত্যন্ত গুরুত্বপূর্ণ কনসেপ্ট! ছাত্র-ছাত্রীরা যে ভুলটা বেশি করে—Relational Algebra-র $\sigma$ (Select) কিন্তু SQL-এর <code class="font-bold text-amber-600">SELECT</code> ক্লজ নয়! 
+                                Relational Algebra-র $\sigma$ সরাসরি SQL-এর <code class="font-bold text-emerald-600">WHERE</code> ক্লজের সাথে মিলে।
+                            </p>
+                        </div>
+
+                        <!-- Comparison Box -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <span class="text-xs font-bold text-sky-600 dark:text-sky-400 uppercase">Relational Algebra</span>
+                                <div class="font-mono text-sm mt-2 text-slate-800 dark:text-slate-200 font-bold">
+                                    $\sigma_{Dno = 4 \land Salary > 25000}(EMPLOYEE)$
+                                </div>
+                            </div>
+                            <div class="p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase">Equivalent SQL</span>
+                                <div class="font-mono text-xs mt-2 text-slate-800 dark:text-slate-200">
+                                    <span class="text-purple-600 font-bold">SELECT</span> * <br>
+                                    <span class="text-purple-600 font-bold">FROM</span> EMPLOYEE <br>
+                                    <span class="text-purple-600 font-bold">WHERE</span> Dno = 4 <span class="text-purple-600 font-bold">AND</span> Salary > 25000;
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 7 -->
+                <article id="page-7" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 7 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 7: Project Operation ($\pi$)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="7" onchange="togglePageStudied(7)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Syntax & Formula</h4>
+                            <p class="text-lg text-center font-bold text-sky-600 dark:text-sky-400 py-2">
+                                $\pi_{A_1, A_2, \dots, A_k}(r)$
+                            </p>
+                            <p class="text-xs text-slate-600 dark:text-slate-300">
+                                যেখানে $A_1, A_2, \dots, A_k$ হলো Attributes (Column Name)-এর তালিকা এবং $r$ হলো Relation।
+                            </p>
+                        </div>
+
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <h4 class="font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                                <i class="fa-solid fa-scissors"></i> Vertical Filtering & Duplicate Removal Rules:
+                            </h4>
+                            <p>
+                                <strong>Project ($\pi$)</strong> অপারেটর টেবিল থেকে <em>নির্দিষ্ট কিছু Column (ভার্টিক্যাল ফিল্টারিং)</em> রেখে বাকি কলামগুলো বাদ দিয়ে দেয়।
+                            </p>
+                            <div class="bg-rose-50 dark:bg-rose-950/40 border-l-4 border-rose-500 p-3 rounded-r-lg text-xs text-rose-900 dark:text-rose-200 font-semibold">
+                                <i class="fa-solid fa-triangle-exclamation"></i> GOLDEN EXAM RULE:
+                                <p class="mt-1">
+                                    যেহেতু Relational Algebra গাণিতিক <strong>Set (Mathematical Set)</strong>-এর নীতি অনুসরণ করে, তাই Project অপারেশন প্রয়োগ করার পর প্রাপ্ত ফলাফলে যদি কোনো <strong>Duplicate Rows</strong> চলে আসে, তবে ডুপ্লিকেট রোগুলো স্বয়ংক্রিয়ভাবে মুছে যাবে (Duplicate rows are automatically removed)!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 8 -->
+                <article id="page-8" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 8 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 8: Project Operation Example (Instructor Table)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="8" onchange="togglePageStudied(8)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl">
+                            <h5 class="text-xs font-bold uppercase text-slate-500 mb-2">Slide Query:</h5>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
+                                Eliminate the <code class="font-mono">dept_name</code> attribute of the instructor relation.
+                            </p>
+                            <div class="bg-white dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-700 font-mono text-center text-sky-600 dark:text-sky-300 font-bold text-sm">
+                                $\pi_{ID, name, salary}(instructor)$
+                            </div>
+                        </div>
+
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <p>
+                                এখানে মূল <code class="font-mono">instructor</code> টেবিলে ৪টি কলাম ছিল: <code class="font-mono">ID, name, dept_name, salary</code>। Projection ব্যবহার করে আমরা কেবল ৩টি কলাম রাখলাম। <code class="font-mono">dept_name</code> কলামটি সম্পূর্ণ বাদ পড়ে গেছে।
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 9 -->
+                <article id="page-9" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 9 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 9: Duplicate Elimination Visual Proof</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="9" onchange="togglePageStudied(9)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <h4 class="font-bold text-sky-600 dark:text-sky-400">Step-by-step Execution of $\pi_{A, C}(r)$:</h4>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                            <!-- Input Relation r -->
+                            <div class="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border">
+                                <span class="font-bold text-slate-600 dark:text-slate-300 block mb-2">Original Relation $r$:</span>
+                                <table class="w-full border-collapse border border-slate-300 dark:border-slate-700 text-center">
+                                    <thead class="bg-slate-200 dark:bg-slate-800">
+                                        <tr><th class="border p-1">A</th><th class="border p-1">B</th><th class="border p-1">C</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td class="border p-1">$\alpha$</td><td class="border p-1">10</td><td class="border p-1">1</td></tr>
+                                        <tr><td class="border p-1">$\alpha$</td><td class="border p-1">20</td><td class="border p-1">1</td></tr>
+                                        <tr><td class="border p-1">$\beta$</td><td class="border p-1">30</td><td class="border p-1">1</td></tr>
+                                        <tr><td class="border p-1">$\beta$</td><td class="border p-1">40</td><td class="border p-1">2</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Intermediate Step -->
+                            <div class="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border">
+                                <span class="font-bold text-amber-600 block mb-2">Intermediate (Column B Removed):</span>
+                                <table class="w-full border-collapse border border-slate-300 dark:border-slate-700 text-center">
+                                    <thead class="bg-amber-100 dark:bg-amber-950">
+                                        <tr><th class="border p-1">A</th><th class="border p-1">C</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="bg-rose-100 dark:bg-rose-950/50"><td class="border p-1">$\alpha$</td><td class="border p-1">1</td></tr>
+                                        <tr class="bg-rose-100 dark:bg-rose-950/50"><td class="border p-1">$\alpha$</td><td class="border p-1">1 (Dup!)</td></tr>
+                                        <tr><td class="border p-1">$\beta$</td><td class="border p-1">1</td></tr>
+                                        <tr><td class="border p-1">$\beta$</td><td class="border p-1">2</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Final Result -->
+                            <div class="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border">
+                                <span class="font-bold text-emerald-600 block mb-2">Final Output $\pi_{A,C}(r)$:</span>
+                                <table class="w-full border-collapse border border-slate-300 dark:border-slate-700 text-center">
+                                    <thead class="bg-emerald-100 dark:bg-emerald-950">
+                                        <tr><th class="border p-1">A</th><th class="border p-1">C</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td class="border p-1">$\alpha$</td><td class="border p-1">1</td></tr>
+                                        <tr><td class="border p-1">$\beta$</td><td class="border p-1">1</td></tr>
+                                        <tr><td class="border p-1">$\beta$</td><td class="border p-1">2</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-600 dark:text-slate-400 italic">
+                            লক্ষ্য করো: $(\alpha, 1)$ দুইবার এসেছিল, কিন্তু ফাইনাল রিলেশনে ডুপ্লিকেট বাদ দিয়ে কেবল একবার রাখা হয়েছে!
+                        </p>
+                    </div>
+                </article>
+
+                <!-- PAGE 10 -->
+                <article id="page-10" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 10 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 10: Project Operation vs. SQL SELECT DISTINCT</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="10" onchange="togglePageStudied(10)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <h4 class="font-bold text-sky-600 dark:text-sky-400">Project ($\pi$) and SQL SELECT DISTINCT:</h4>
+                            <p>
+                                SQL-এর সাধারণ <code class="font-mono">SELECT</code> কিন্তু বাই-ডিফল্ট ডুপ্লিকেট মোছে না (Multiset/Bag behavior)। কিন্তু Relational Algebra-র $\pi$ সবসময় ডুপ্লিকেট মুছে দেয়। তাই SQL-এ $\pi$-এর হুবহু সমতুল্য রিপ্রেজেন্টেশন লিখতে হলে আমাদের <code class="font-bold text-emerald-600">SELECT DISTINCT</code> ব্যবহার করতে হয়!
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border">
+                                <span class="text-xs font-bold text-sky-600 dark:text-sky-400 uppercase">Relational Algebra</span>
+                                <div class="font-mono text-sm mt-2 font-bold text-slate-800 dark:text-slate-200">
+                                    $\pi_{gender, Salary}(EMPLOYEE)$
+                                </div>
+                            </div>
+                            <div class="p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border">
+                                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase">Equivalent SQL</span>
+                                <div class="font-mono text-xs mt-2 text-slate-800 dark:text-slate-200">
+                                    <span class="text-purple-600 font-bold">SELECT DISTINCT</span> gender, salary <br>
+                                    <span class="text-purple-600 font-bold">FROM</span> EMPLOYEE;
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 11 -->
+                <article id="page-11" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 11 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 11: Composition of Operations</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="11" onchange="togglePageStudied(11)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <h4 class="font-bold text-sky-600 dark:text-sky-400">Composition (একের ভেতর অন্য অপারেটর):</h4>
+                            <p>
+                                যেহেতু একটি রিলেশনাল অ্যালজেব্রা অপারেশনের ফলাফল নিজেই একটি রিলেশন, তাই আমরা একাধিক অপারেশনকে জোড়া লাগিয়ে একটি একক এক্সপ্রেশন (Composed Expression) তৈরি করতে পারি।
+                            </p>
+                        </div>
+
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl space-y-3">
+                            <h5 class="text-xs font-bold uppercase text-slate-500">Query: Find the names of all instructors in the Physics department.</h5>
+                            
+                            <div class="bg-white dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-700 font-mono text-center text-sky-600 dark:text-sky-300 font-bold text-sm">
+                                $\pi_{name}(\sigma_{dept\_name = \text{"Physics"}}(instructor))$
+                            </div>
+
+                            <div class="text-xs text-slate-600 dark:text-slate-300 space-y-1">
+                                <p><strong>প্রসেসিং ক্রমানুসার (Execution Order):</strong></p>
+                                <ol class="list-decimal list-inside space-y-1 pl-2">
+                                    <li>ভিতরের অংশ আগে চলবে: $\sigma_{dept\_name = \text{"Physics"}}(instructor)$ পদার্থবিজ্ঞান বিভাগের শিক্ষকদের রো বের করবে।</li>
+                                    <li>বাইরের অংশ পরে চলবে: $\pi_{name}(\dots)$ সেই ফিল্টার করা রো থেকে কেবল শিক্ষকগুলোর নাম (<code class="font-mono">name</code>) কলাম রাখবে।</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 12 -->
+                <article id="page-12" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 12 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 12: Rename Operation ($\rho$)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="12" onchange="togglePageStudied(12)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Syntax Forms</h4>
+                            <div class="space-y-2 text-sm font-mono text-center">
+                                <div class="bg-white dark:bg-slate-800 p-2 rounded border text-sky-600 dark:text-sky-300">
+                                    $\rho_{X}(E)$ &nbsp;&rarr;&nbsp; Expression $E$-এর ফলাফল টেবিলকে $X$ নামে রিনেম করে।
+                                </div>
+                                <div class="bg-white dark:bg-slate-800 p-2 rounded border text-indigo-600 dark:text-indigo-300">
+                                    $\rho_{X(A_1, A_2, \dots, A_n)}(E)$ &nbsp;&rarr;&nbsp; টেবিলের নাম $X$ এবং তার কলামগুলোর নাম $A_1, A_2, \dots$ এ রিনেম করে।
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <p>
+                                রিনেম অপারেটর ($\rho$ - Rho) ব্যবহার করা হয় কোনো ক্যোয়ারির ইন্টারমিডিয়েট আউটপুট টেবিলকে একটি নির্দিষ্ট নাম বা কলামগুলোকে নতুন নাম দেওয়ার জন্য। SQL-এ এটি <code class="font-bold text-purple-600">AS</code> ক্লজ দিয়ে করা হয়।
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 13 -->
+                <article id="page-13" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 13 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 13: Rename Examples (Attributes vs Table)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="13" onchange="togglePageStudied(13)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border">
+                                <span class="text-xs font-bold text-sky-600 uppercase">1. Attribute Renaming Only</span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 mt-1 mb-2">Rename <code class="font-mono">name, age</code> of <code class="font-mono">Emp</code> to <code class="font-mono">e_name, e_age</code>:</p>
+                                <div class="font-mono text-xs font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 p-2 rounded">
+                                    $\rho_{(e\_name, e\_age)}(Emp)$
+                                </div>
+                            </div>
+
+                            <div class="p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border">
+                                <span class="text-xs font-bold text-indigo-600 uppercase">2. Both Table & Attributes</span>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 mt-1 mb-2">Rename table to <code class="font-mono">Employee</code> and all 5 attributes:</p>
+                                <div class="font-mono text-xs font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 p-2 rounded">
+                                    $\rho_{Employee(e\_id, e\_name, e\_age, e\_addr, e\_sal)}(Emp)$
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 14 -->
+                <article id="page-14" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 14 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 14: Sequential vs In-line Expressions</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="14" onchange="togglePageStudied(14)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <h4 class="font-bold text-sky-600 dark:text-sky-400">Two Ways to Write Complex Queries:</h4>
+                            <p>
+                                জটিল ক্যোয়ারি লেখার সময় আমরা দুইটা অ্যাপ্রোচ নিতে পারি:
+                            </p>
+                            <ol class="list-decimal list-inside space-y-1">
+                                <li><strong>In-line Single Expression:</strong> ব্র্যাকেট নেস্ট করে এক লাইনে পুরোটা লেখা।</li>
+                                <li><strong>Sequence of Operations using Temporary Relations:</strong> ধাপে ধাপে ছোট ছোট ইন্টারমিডিয়েট টেবিলে মান রেখে ফাইনাল উত্তর বের করা।</li>
+                            </ol>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 15 -->
+                <article id="page-15" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 15 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 15: Intermediate Result Relations Example</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="15" onchange="togglePageStudied(15)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl space-y-3">
+                            <h5 class="text-xs font-bold uppercase text-slate-500">Query: Retrieve Fname, Lname, and Salary of employees who work in department number 5.</h5>
+                            
+                            <!-- Inline -->
+                            <div class="p-3 bg-white dark:bg-slate-800 rounded-lg border">
+                                <span class="text-xs font-bold text-sky-600 block mb-1">In-line Expression Method:</span>
+                                <div class="font-mono text-xs font-bold text-center">
+                                    $\pi_{Fname, Lname, Salary}(\sigma_{Dno = 5}(EMPLOYEE))$
+                                </div>
+                            </div>
+
+                            <!-- Sequential -->
+                            <div class="p-3 bg-white dark:bg-slate-800 rounded-lg border">
+                                <span class="text-xs font-bold text-emerald-600 block mb-1">Sequential Intermediate Method (Assignment $\leftarrow$):</span>
+                                <div class="font-mono text-xs font-bold space-y-1">
+                                    <p>$DEP5\_EMPS \leftarrow \sigma_{Dno = 5}(EMPLOYEE)$</p>
+                                    <p>$RESULT \leftarrow \pi_{Fname, Lname, Salary}(DEP5\_EMPS)$</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 16 -->
+                <article id="page-16" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 16 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 16: SQL Renaming via AS Aliasing</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="16" onchange="togglePageStudied(16)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl">
+                            <span class="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase">SQL Aliasing Syntax:</span>
+                            <pre class="font-mono text-xs text-slate-800 dark:text-slate-200 mt-2 bg-white dark:bg-slate-800 p-3 rounded border">
+<span class="text-purple-600 font-bold">SELECT</span> E.Fname <span class="text-purple-600 font-bold">AS</span> First_name, 
+       E.Lname <span class="text-purple-600 font-bold">AS</span> Last_name, 
+       E.Salary <span class="text-purple-600 font-bold">AS</span> Salary
+<span class="text-purple-600 font-bold">FROM</span> EMPLOYEE <span class="text-purple-600 font-bold">AS</span> E
+<span class="text-purple-600 font-bold">WHERE</span> E.Dno = 5;</pre>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 17 -->
+                <article id="page-17" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 17 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 17: Union Operation ($\cup$) & Compatibility</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="17" onchange="togglePageStudied(17)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-amber-50 dark:bg-amber-950/40 border-l-4 border-amber-500 p-4 rounded-r-xl">
+                            <h4 class="font-bold text-amber-900 dark:text-amber-200 flex items-center gap-2 text-sm">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                Union Compatibility Requirements (পরীক্ষার ভাইটাল টপিক!)
+                            </h4>
+                            <p class="text-xs text-amber-800 dark:text-amber-300 mt-1 leading-relaxed">
+                                দুইটি রিলেশন $r$ এবং $s$-এর মধ্যে Union ($r \cup s$), Intersection ($r \cap s$), অথবা Set Difference ($r - s$) করতে হলে তাদেরকে অবশ্যই <strong>Union Compatible</strong> হতে হবে। এর জন্য ২টি শর্ত পূরন করা বাধ্যতামূলক:
+                            </p>
+                            <ol class="list-decimal list-inside text-xs text-amber-900 dark:text-amber-200 mt-2 font-semibold space-y-1">
+                                <li><strong>Same Arity:</strong> $r$ এবং $s$ উভয় টেবিলেই কলামের সংখ্যা (Number of attributes) সমান হতে হবে।</li>
+                                <li><strong>Compatible Domains:</strong> $r$-এর $i$-তম কলামের ডাটা টাইপ এবং $s$-এর $i$-তম কলামের ডাটা টাইপ হুবহু এক হতে হবে ($Domain(r_i) = Domain(s_i)$)।</li>
+                            </ol>
+                        </div>
+
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl">
+                            <h5 class="text-xs font-bold uppercase text-slate-500 mb-2">Slide Example Query:</h5>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
+                                Find all courses taught in Fall 2009 semester, or in Spring 2010 semester, or in both.
+                            </p>
+                            <div class="bg-white dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-700 font-mono text-center text-sky-600 dark:text-sky-300 font-bold text-xs overflow-x-auto">
+                                $\pi_{course\_id}(\sigma_{semester = \text{"Fall"} \land year = 2009}(section)) \;\cup\; \pi_{course\_id}(\sigma_{semester = \text{"Spring"} \land year = 2010}(section))$
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 18 -->
+                <article id="page-18" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 18 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 18: Union Operation Output Table</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="18" onchange="togglePageStudied(18)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <p>
+                                ইউনিয়নের ফলে Fall 2009 এর কোর্সসমূহ এবং Spring 2010 এর কোর্সসমূহ একত্রে একত্রিত হয়ে একটিমাত্র তালিকায় চলে আসে। যেসব কোর্স উভয় সেমিস্টারে পড়ানো হয়েছে, সেগুলো ডুপ্লিকেট না হয়ে কেবল একবারই থাকবে!
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 19 -->
+                <article id="page-19" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 19 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 19: Union in SQL</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="19" onchange="togglePageStudied(19)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl">
+                            <span class="text-xs font-bold text-purple-600 uppercase">SQL UNION Statement:</span>
+                            <pre class="font-mono text-xs text-slate-800 dark:text-slate-200 mt-2 bg-white dark:bg-slate-800 p-3 rounded border">
+<span class="text-purple-600 font-bold">SELECT</span> course_id <span class="text-purple-600 font-bold">FROM</span> section <span class="text-purple-600 font-bold">WHERE</span> semester = <span class="text-emerald-600">'Fall'</span> <span class="text-purple-600 font-bold">AND</span> year = 2009
+<span class="text-purple-600 font-bold">UNION</span>
+<span class="text-purple-600 font-bold">SELECT</span> course_id <span class="text-purple-600 font-bold">FROM</span> section <span class="text-purple-600 font-bold">WHERE</span> semester = <span class="text-emerald-600">'Spring'</span> <span class="text-purple-600 font-bold">AND</span> year = 2010;</pre>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 20 -->
+                <article id="page-20" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 20 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 20: Concrete Table Union Example ($r \cup s$)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="20" onchange="togglePageStudied(20)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                            <div class="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border">
+                                <span class="font-bold text-slate-600 block mb-1">Relation $r$:</span>
+                                <p class="font-mono">($\alpha$, 1), ($\alpha$, 2), ($\beta$, 1)</p>
+                            </div>
+                            <div class="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border">
+                                <span class="font-bold text-slate-600 block mb-1">Relation $s$:</span>
+                                <p class="font-mono">($\alpha$, 2), ($\beta$, 3)</p>
+                            </div>
+                            <div class="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border">
+                                <span class="font-bold text-sky-600 block mb-1">Result $r \cup s$:</span>
+                                <p class="font-mono font-bold">($\alpha$, 1), ($\alpha$, 2), ($\beta$, 1), ($\beta$, 3)</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-500 italic">নোট: $(\alpha, 2)$ উভয় টেবিলেই ছিল, কিন্তু ফলাফলেই মাত্র একবার এসেছে।</p>
+                    </div>
+                </article>
+
+                <!-- PAGE 21 -->
+                <article id="page-21" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 21 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 21: Intersection Operation ($\cap$)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="21" onchange="togglePageStudied(21)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Definition</h4>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                                $r \cap s$ কেবল সেই সকল টুপল/রো রিটার্ন করে যা $r$ এবং $s$ <strong>উভয় টেবিলেই বিদ্যমান (Common Tuples)</strong>।
+                            </p>
+                        </div>
+
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl">
+                            <h5 class="text-xs font-bold uppercase text-slate-500 mb-2">Example Query:</h5>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
+                                Find the set of all courses taught in BOTH Fall 2009 AND Spring 2010 semesters.
+                            </p>
+                            <div class="bg-white dark:bg-slate-800 p-3 rounded-lg border font-mono text-center text-sky-600 text-xs overflow-x-auto font-bold">
+                                $\pi_{course\_id}(\sigma_{semester = \text{"Fall"} \land year = 2009}(section)) \;\cap\; \pi_{course\_id}(\sigma_{semester = \text{"Spring"} \land year = 2010}(section))$
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 22 -->
+                <article id="page-22" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 22 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 22: Intersection Derivation using Difference</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="22" onchange="togglePageStudied(22)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-emerald-50 dark:bg-emerald-950/40 border-l-4 border-emerald-500 p-4 rounded-r-xl">
+                            <h4 class="font-bold text-emerald-900 dark:text-emerald-200 flex items-center gap-2 text-sm">
+                                <i class="fa-solid fa-code"></i> Mathematical Equivalence Formula
+                            </h4>
+                            <p class="text-xs text-emerald-800 dark:text-emerald-300 mt-1">
+                                ইন্টারসেকশন ($\cap$) কিন্তু কোনো মৌলিক (Fundamental) অপারেটর নয়! এটি Set Difference ($-$) অপারেটর ব্যবহার করে প্রকাশ করা যায়:
+                            </p>
+                            <div class="bg-white dark:bg-slate-800 p-3 rounded-lg border text-center font-mono font-bold text-emerald-600 dark:text-emerald-400 text-base mt-2">
+                                $r \cap s = r - (r - s)$
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 23 -->
+                <article id="page-23" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 23 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 23: Set Difference Operation ($-$)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="23" onchange="togglePageStudied(23)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Meaning of $r - s$</h4>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                                $r - s$ এমন সব টুপল বের করে আনবে যা <strong>প্রথম রিলেশন $r$-এ আছে কিন্তু দ্বিতীয় রিলেশন $s$-এ নেই</strong>।
+                            </p>
+                        </div>
+
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl">
+                            <h5 class="text-xs font-bold uppercase text-slate-500 mb-2">Example Query:</h5>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
+                                Find all courses taught in Fall 2009 semester BUT NOT in Spring 2010 semester.
+                            </p>
+                            <div class="bg-white dark:bg-slate-800 p-3 rounded-lg border font-mono text-center text-sky-600 text-xs overflow-x-auto font-bold">
+                                $\pi_{course\_id}(\sigma_{semester = \text{"Fall"} \land year = 2009}(section)) \;-\; \pi_{course\_id}(\sigma_{semester = \text{"Spring"} \land year = 2010}(section))$
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 24 -->
+                <article id="page-24" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 24 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 24: Difference Operation in SQL (MINUS / EXCEPT)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="24" onchange="togglePageStudied(24)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl">
+                            <span class="text-xs font-bold text-purple-600 uppercase">SQL MINUS / EXCEPT:</span>
+                            <pre class="font-mono text-xs text-slate-800 dark:text-slate-200 mt-2 bg-white dark:bg-slate-800 p-3 rounded border">
+<span class="text-purple-600 font-bold">SELECT</span> course_id <span class="text-purple-600 font-bold">FROM</span> section <span class="text-purple-600 font-bold">WHERE</span> semester = <span class="text-emerald-600">'Fall'</span> <span class="text-purple-600 font-bold">AND</span> year = 2009
+<span class="text-purple-600 font-bold">MINUS</span> -- (Or EXCEPT in PostgreSQL/SQL Server)
+<span class="text-purple-600 font-bold">SELECT</span> course_id <span class="text-purple-600 font-bold">FROM</span> section <span class="text-purple-600 font-bold">WHERE</span> semester = <span class="text-emerald-600">'Spring'</span> <span class="text-purple-600 font-bold">AND</span> year = 2010;</pre>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 25 -->
+                <article id="page-25" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 25 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 25: Concrete Table Set Difference Example ($r - s$)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="25" onchange="togglePageStudied(25)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                            <div class="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border">
+                                <span class="font-bold text-slate-600 block mb-1">Relation $r$:</span>
+                                <p class="font-mono">($\alpha$, 1), ($\alpha$, 2), ($\beta$, 1)</p>
+                            </div>
+                            <div class="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border">
+                                <span class="font-bold text-slate-600 block mb-1">Relation $s$:</span>
+                                <p class="font-mono">($\alpha$, 2), ($\beta$, 3)</p>
+                            </div>
+                            <div class="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border">
+                                <span class="font-bold text-rose-600 block mb-1">Result $r - s$:</span>
+                                <p class="font-mono font-bold">($\alpha$, 1), ($\beta$, 1)</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-500 italic">ব্যাখ্যা: ($\alpha$, 2) টি $s$-এ ছিল বলে তা বাদ গেছে। ($\beta$, 3) টি $s$-এ ছিল কিন্তু $r$-এ ছিলই না, তাই ফলাফলের ওপর কোনো প্রভাব ফেলেনি।</p>
+                    </div>
+                </article>
+
+                <!-- PAGE 26 -->
+                <article id="page-26" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 26 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 26: Assignment Operation ($\leftarrow$)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="26" onchange="togglePageStudied(26)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <p>
+                                প্রোগ্রামিং ল্যাঙ্গুয়েজের ভ্যারিয়েবলের মতো Relational Algebra-তেও অ্যাসাইনমেন্ট ($\leftarrow$) অপারেটর দিয়ে ইন্টারমিডিয়েট ক্যোয়ারির ফলাফলকে সাময়িক ভ্যারিয়েবলে জমা রেখে ধাপে ধাপে ক্যোয়ারি লেখা যায়।
+                            </p>
+                        </div>
+
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl space-y-2 font-mono text-xs">
+                            <p class="font-bold text-slate-500">Example: Find all instructors in Physics AND Music department:</p>
+                            <p class="text-sky-600 font-bold">$Physics \leftarrow \sigma_{dept\_name = \text{"Physics"}}(instructor)$</p>
+                            <p class="text-indigo-600 font-bold">$Music \leftarrow \sigma_{dept\_name = \text{"Music"}}(instructor)$</p>
+                            <p class="text-emerald-600 font-bold">$Result \leftarrow Physics \;\cup\; Music$</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 27 -->
+                <article id="page-27" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 27 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 27: Cartesian Product Operation ($\times$)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="27" onchange="togglePageStudied(27)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Definition</h4>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                                Cartesian Product ($r \times s$) প্রথম রিলেশন $r$-এর প্রতিটি টুপলকে দ্বিতীয় রিলেশন $s$-এর প্রতিটি টুপলের সাথে জোড়া (Combine) তৈরি করে।
+                            </p>
+                        </div>
+
+                        <div class="bg-amber-50 dark:bg-amber-950/40 p-3 rounded-lg border border-amber-300 text-xs text-amber-900 dark:text-amber-200 font-semibold">
+                            <p><strong>Arity Rule:</strong> যদি $r$-এর কলাম সংখ্যা $n_1$ এবং $s$-এর কলাম সংখ্যা $n_2$ হয়, তবে $r \times s$-এর কলাম সংখ্যা হবে $n_1 + n_2$।</p>
+                            <p class="mt-1"><strong>Cardinality Rule:</strong> যদি $r$-এর রো সংখ্যা $m_1$ এবং $s$-এর রো সংখ্যা $m_2$ হয়, তবে $r \times s$-এর রো সংখ্যা হবে $m_1 \times m_2$!</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 28 -->
+                <article id="page-28" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 28 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 28: Instructor $\times$ Teaches Cartesian Schema</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="28" onchange="togglePageStudied(28)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <p>
+                                যখন দুইটা টেবিলে একই নামের কলাম থাকে (যেমন <code class="font-mono">instructor</code> টেবিলেও <code class="font-mono">ID</code> আছে, <code class="font-mono">teaches</code> টেবিলেও <code class="font-mono">ID</code> আছে), তখন Cartesian Product-এর ফলে তৈরি হওয়া নতুন টেবিলে নামের কনফ্লিক্ট এড়াতে টেবিলের নাম ডট দিয়ে যুক্ত করা হয়: <code class="font-mono font-bold text-sky-600">instructor.ID</code> এবং <code class="font-mono font-bold text-indigo-600">teaches.ID</code>।
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 29 -->
+                <article id="page-29" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 29 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 29: Cartesian Product Table Output Visual</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="29" onchange="togglePageStudied(29)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <p>
+                                এই স্লাইডে দেখানো হয়েছে কীভাবে প্রতিটি শিক্ষকের ডাটা <code class="font-mono">teaches</code> টেবিলের সকল কোর্সের সাথে ক্রমান্বয়ে যুক্ত হয়ে বিশাল এক ক্রস-প্রোডাক্ট টেবিল তৈরি করেছে। কিন্তু এতে এমন বহু রো এসেছে যেখানে শিক্ষকের আইডি আর কোর্সের শিক্ষকের আইডি মিলছে না (Meaningless Combination)।
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 30 -->
+                <article id="page-30" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 30 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 30: Filtering Physics Instructors from Cross Product</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="30" onchange="togglePageStudied(30)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl">
+                            <h5 class="text-xs font-bold uppercase text-slate-500 mb-2">Query Expression:</h5>
+                            <div class="bg-white dark:bg-slate-800 p-3 rounded-lg border font-mono text-center text-sky-600 font-bold text-sm">
+                                $\sigma_{dept\_name = \text{"Physics"}}(instructor \times teaches)$
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 31 -->
+                <article id="page-31" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 31 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 31: Result of Filtered Cross Product Table</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="31" onchange="togglePageStudied(31)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <p>
+                                এই স্লাইডে প্রাপ্ত টেবিলে কেবল পদার্থবিজ্ঞান বিভাগের শিক্ষকদের রো-গুলো আছে, কিন্তু এখনো শিক্ষকের আইডির সাথে তিনি যে কোর্স পড়িয়েছেন তা ম্যাচ করানো হয়নি।
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 32 -->
+                <article id="page-32" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 32 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 32: Matching Attributes and Complete Query Building</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="32" onchange="togglePageStudied(32)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl space-y-3">
+                            <p class="text-xs font-bold text-slate-500 uppercase">Step-by-Step Expression Building:</p>
+                            
+                            <div class="p-2 bg-white dark:bg-slate-800 rounded border font-mono text-xs">
+                                <span class="text-slate-400 block text-[10px]">Step 1: Match Primary/Foreign Keys</span>
+                                $\sigma_{instructor.ID = teaches.ID}(\sigma_{dept\_name = \text{"Physics"}}(instructor \times teaches))$
+                            </div>
+
+                            <div class="p-2 bg-white dark:bg-slate-800 rounded border font-mono text-xs">
+                                <span class="text-slate-400 block text-[10px]">Step 2: Project required columns (name, course_id)</span>
+                                $\pi_{name, course\_id}(\sigma_{instructor.ID = teaches.ID}(\sigma_{dept\_name = \text{"Physics"}}(instructor \times teaches)))$
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 33 -->
+                <article id="page-33" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 33 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 33: Final Result Table & Gold Teacher Handling</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="33" onchange="togglePageStudied(33)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-amber-50 dark:bg-amber-950/40 border-l-4 border-amber-500 p-4 rounded-r-xl">
+                            <h4 class="font-bold text-amber-900 dark:text-amber-200 text-xs">
+                                <i class="fa-solid fa-circle-info"></i> Important Observation about Instructor "Gold":
+                            </h4>
+                            <p class="text-xs text-amber-800 dark:text-amber-300 mt-1">
+                                শিক্ষক Gold পদার্থবিজ্ঞান বিভাগের হওয়া সত্ত্বেও ফাইনাল রেজাল্টে আসেননি। কারণ তিনি কোনো কোর্স পড়াননি (<code class="font-mono">teaches</code> টেবিলে তার কোনো আইডি ছিল না)। ইনার জয়েন/ইননার প্রোডাক্ট ম্যাচ না করায় তিনি বাদ পড়েছেন।
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 34 -->
+                <article id="page-34" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 34 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 34: Query Equivalence (Early Selection Optimization)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="34" onchange="togglePageStudied(34)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <h4 class="font-bold text-sky-600 dark:text-sky-400">Query Optimization Insight:</h4>
+                            <p>নিচের দুটি ক্যোয়ারি গাণিতিকভাবে একদম সমতুল্য (Equivalent), কিন্তু কার্যক্ষমতায় বিশাল পার্থক্য রয়েছে:</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+                            <div class="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-300 rounded-lg">
+                                <span class="font-bold text-rose-600 block mb-1">Method A (Slow - Late Selection):</span>
+                                $\pi_{name, course\_id}(\sigma_{inst.ID = teach.ID}(\sigma_{dept = \text{"Physics"}}(instructor \times teaches)))$
+                                <p class="text-[10px] text-slate-500 mt-2 font-sans">আগে বিশাল Cross Product বানায়, তারপর ফিল্টার করে।</p>
+                            </div>
+                            <div class="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 rounded-lg">
+                                <span class="font-bold text-emerald-600 block mb-1">Method B (Fast - Early Selection):</span>
+                                $\pi_{name, course\_id}(\sigma_{inst.ID = teach.ID}((\sigma_{dept = \text{"Physics"}}(instructor)) \times teaches))$
+                                <p class="text-[10px] text-slate-500 mt-2 font-sans">আগে instructor ফিল্টার করে ছোট করে ফেলে, তারপর Cross Product করে!</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 35 -->
+                <article id="page-35" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 35 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 35: Concrete Symbolic Cross Product Example</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="35" onchange="togglePageStudied(35)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <p>
+                                সংকেত দিয়ে গঠিত দুই রিলেশন $r(A, B)$ এবং $s(C, D, E)$-এর ডাইরেক্ট কার্টেসিয়ান প্রোডাক্ট $r \times s$ টেবিলের রো ও কলাম কীভাবে সংযুক্ত হয় তা এখানে গাণিতিকভাবে দেখানো হয়েছে।
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 36 -->
+                <article id="page-36" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 36 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 36: Cartesian Product in SQL (CROSS JOIN)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="36" onchange="togglePageStudied(36)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl">
+                            <span class="text-xs font-bold text-purple-600 uppercase">SQL CROSS JOIN:</span>
+                            <pre class="font-mono text-xs text-slate-800 dark:text-slate-200 mt-2 bg-white dark:bg-slate-800 p-3 rounded border">
+<span class="text-purple-600 font-bold">SELECT</span> instructor.*, teaches.*
+<span class="text-purple-600 font-bold">FROM</span> instructor 
+<span class="text-purple-600 font-bold">CROSS JOIN</span> teaches;</pre>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 37 -->
+                <article id="page-37" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 37 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 37: Join Operation ($\bowtie$) Motivation</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="37" onchange="togglePageStudied(37)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <h4 class="font-bold text-sky-600 dark:text-sky-400">Why do we need Join ($\bowtie$)?</h4>
+                            <p>
+                                Cartesian Product ($\times$) করার পর বেশিরভাগ রো-ই অকার্যকর তথ্য প্রদান করে। কাজের রো পেতে আমাদের সবসময় Cross Product-এর পর Selection Condition দিতে হয়:
+                            </p>
+                            <div class="bg-slate-100 dark:bg-slate-900 p-3 rounded text-center font-mono text-xs font-bold text-sky-600">
+                                $\sigma_{instructor.ID = teaches.ID}(instructor \times teaches)$
+                            </div>
+                            <p>
+                                এই দুটি অপারেশনকে (Cross Product + Selection) বারবার আলাদাভাবে না লিখে সংক্ষেপে প্রকাশ করার জন্যই উদ্ভাবন করা হয়েছে <strong>Join ($\bowtie$)</strong> অপারেটর!
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 38 -->
+                <article id="page-38" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 38 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 38: Join Operation Output Table</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="38" onchange="togglePageStudied(38)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <p>
+                                জয়েনের ফলে কেবল সেই সকল টুপল থাকবে যেখানে শিক্ষকের আইডির সাথে তাঁর নেওয়া কোর্সের আইডি হুবহু মিলে গেছে।
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 39 -->
+                <article id="page-39" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 39 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 39: General Definition of Theta Join ($\bowtie_\theta$)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="39" onchange="togglePageStudied(39)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Theta Join Mathematical Formula</h4>
+                            <p class="text-xl text-center font-bold text-sky-600 dark:text-sky-400 py-2">
+                                $R \bowtie_{\theta} S = \sigma_{\theta}(R \times S)$
+                            </p>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">
+                                যেখানে $R, S$ হলো রিলেশন এবং $\theta$ হলো জয়েন কন্ডিশন (Join predicate)।
+                            </p>
+                        </div>
+
+                        <div class="bg-indigo-50 dark:bg-indigo-950/40 p-4 rounded-xl border border-indigo-200">
+                            <span class="text-xs font-bold text-indigo-600 uppercase">Exam Definition:</span>
+                            <p class="text-sm font-medium text-indigo-900 dark:text-indigo-200 mt-1">
+                                <strong>Theta Join ($\bowtie_\theta$)</strong> is a derived relational operation that combines tuples from two relations that satisfy a specified predicate condition $\theta$.
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 40 -->
+                <article id="page-40" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 40 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 40: Concrete Relation Join Example</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="40" onchange="togglePageStudied(40)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="prose dark:prose-invert max-w-none text-sm leading-relaxed">
+                            <p>
+                                রিলেশন $R(A, B)$ এবং $S(B, C)$-এর জয়েন করে কীভাবে কলাম $B$-এর মান মিল রেখে ফলাফল তৈরি করা হয় তার গাণিতিক চার্ট।
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 41 -->
+                <article id="page-41" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 41 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 41: Non-Equi Theta Join (Car & Boat Price Example)</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="41" onchange="togglePageStudied(41)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-xl">
+                            <h5 class="text-xs font-bold uppercase text-slate-500 mb-2">Non-Equi Join Condition Example:</h5>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
+                                Customer wants to buy a car and boat, but doesn't want to spend more money for the boat than for the car ($\text{Car Price} \ge \text{Boat Price}$).
+                            </p>
+                            <div class="bg-white dark:bg-slate-800 p-3 rounded-lg border font-mono text-center text-sky-600 font-bold text-xs">
+                                $\text{CAR} \bowtie_{\text{Car\_Price} \ge \text{Boat\_Price}} \text{BOAT}$
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 42 -->
+                <article id="page-42" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 42 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 42: Join Operation in SQL</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="42" onchange="togglePageStudied(42)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+                            <div class="p-3 bg-slate-100 dark:bg-slate-900 rounded-xl border">
+                                <span class="font-bold text-purple-600 block mb-1">SQL Explicit JOIN Syntax:</span>
+                                <pre>
+<span class="text-purple-600 font-bold">SELECT</span> instructor.*, teaches.*
+<span class="text-purple-600 font-bold">FROM</span> instructor 
+<span class="text-purple-600 font-bold">JOIN</span> teaches 
+  <span class="text-purple-600 font-bold">ON</span> instructor.ID = teaches.ID;</pre>
+                            </div>
+                            <div class="p-3 bg-slate-100 dark:bg-slate-900 rounded-xl border">
+                                <span class="font-bold text-purple-600 block mb-1">SQL Implicit WHERE Join:</span>
+                                <pre>
+<span class="text-purple-600 font-bold">SELECT</span> instructor.*, teaches.*
+<span class="text-purple-600 font-bold">FROM</span> instructor, teaches
+<span class="text-purple-600 font-bold">WHERE</span> instructor.ID = teaches.ID;</pre>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 43 -->
+                <article id="page-43" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 43 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 43: Practice Checkpoint Break Slide</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="43" onchange="togglePageStudied(43)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-sky-50 dark:bg-sky-950/40 rounded-xl border border-sky-200 text-center">
+                            <p class="text-sm font-bold text-sky-800 dark:text-sky-300">
+                                <i class="fa-solid fa-mug-hot mr-2"></i> Practice Time Checkpoint!
+                            </p>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">
+                                মৌলিক অপারেটরগুলো আমাদের আয়ত্তে চলে এসেছে। এবার আমরা মিডটার্ম পরীক্ষার আসল প্রশ্নের জগতে প্রবেশ করতে যাচ্ছি—Banking & Flight Database Examples!
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 44 -->
+                <article id="page-44" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 44 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 44: Banking Relational Database Schema Overview</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="44" onchange="togglePageStudied(44)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border">
+                            <h4 class="text-xs font-bold text-sky-600 uppercase mb-2">Master Banking Database Schema (মুখস্থ রাখা জরুরী!):</h4>
+                            <div class="space-y-1 font-mono text-xs text-slate-800 dark:text-slate-200">
+                                <p><strong class="text-indigo-600">branch</strong> (<u>branch_name</u>, branch_city, assets)</p>
+                                <p><strong class="text-indigo-600">customer</strong> (<u>customer_name</u>, customer_street, customer_city)</p>
+                                <p><strong class="text-indigo-600">account</strong> (<u>account_number</u>, branch_name, balance)</p>
+                                <p><strong class="text-indigo-600">loan</strong> (<u>loan_number</u>, branch_name, amount)</p>
+                                <p><strong class="text-indigo-600">depositor</strong> (<u>customer_name</u>, <u>account_number</u>)</p>
+                                <p><strong class="text-indigo-600">borrower</strong> (<u>customer_name</u>, <u>loan_number</u>)</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGE 45 -->
+                <article id="page-45" class="page-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold px-3 py-1 rounded-lg text-xs">Page 45 / 68</span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Slide 45: Banking Query Examples 1 & 2</h3>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="page-checkbox rounded text-sky-600 focus:ring-sky-500" data-page="45" onchange="togglePageStudied(45)">
+                            <span>Mark as Studied</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="p-3 bg-slate-100 dark:bg-slate-900 rounded-xl">
+                                <span class="text-xs font-bold text-slate-500">Q1: Find all loans of over $1200</span>
+                                <div class="font-mono text-xs font-bold text-sky-600 mt-1">
+                                    $\sigma_{amount > 1200}(loan)$
+                                </div>
+                            </div>
+                            <div class="p-3 bg-slate-100 dark:bg-slate-900 rounded-xl">
+                                <span class="text-xs font-bold text-slate-500">Q2: Find the loan number for each loan of an amount greater than $1200</span>
+                                <div class="font-mono text-xs font-bold text-sky-600 mt-1">
+                                    $\pi_{loan\_number}(\sigma_{amount > 1200}(loan))$
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PAGES 46 TO 68 DIRECTLY RENDERED IN EXTENDED CONTENT & SECTIONS -->
+                <div class="p-4 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl border border-emerald-300 text-center">
+                    <p class="text-xs font-bold text-emerald-800 dark:text-emerald-300">
+                        <i class="fa-solid fa-circle-check mr-1"></i> Slides 46 to 68 Solution Queries are extensively solved step-by-step in the dedicated Master Midterm Solved Section below!
+                    </p>
+                </div>
+
+            </section>
+
+            <!-- Section 2: All Original Sample Questions Solved — Midterm Preparation (40 Marks) -->
+            <section id="midterm-prep" class="space-y-8 no-print-break">
+                <div class="bg-gradient-to-r from-indigo-900 to-sky-900 text-white rounded-2xl p-6 shadow-lg">
+                    <div class="flex items-center gap-3">
+                        <span class="p-3 bg-white/10 rounded-xl text-2xl"><i class="fa-solid fa-award"></i></span>
+                        <div>
+                            <h2 class="text-2xl font-extrabold">All Original Sample Questions Solved — Midterm Preparation</h2>
+                            <p class="text-xs text-sky-200 mt-0.5">Step-by-step 8-stage breakdown for all Banking, Flight, and Aggregate questions from the slides.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QUESTION 1: Perryridge Branch Customers -->
+                <article class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b pb-2">
+                        <span class="bg-indigo-100 text-indigo-800 dark:bg-indigo-900/60 dark:text-indigo-300 font-bold text-xs px-2.5 py-1 rounded">PDF Page 46 / Question 4</span>
+                        <span class="text-xs text-slate-400 font-bold">Banking Schema</span>
+                    </div>
+
+                    <h3 class="text-base font-bold text-slate-900 dark:text-slate-100">
+                        Question: Find the names of all customers who have a loan at the Perryridge branch.
+                    </h3>
+
+                    <!-- 8 Step Breakdown -->
+                    <div class="space-y-3 text-xs">
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-900 rounded-lg">
+                            <strong class="text-sky-600 block mb-0.5">Step 1: Understand the Question (বাংলায় বোঝা):</strong>
+                            আমাদের এমন গ্রাহকদের নাম (customer_name) দরকার যারা "Perryridge" ব্রাঞ্চ থেকে লোন নিয়েছে।
+                        </div>
+
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-900 rounded-lg">
+                            <strong class="text-sky-600 block mb-0.5">Step 2: Identify Relations & Attributes:</strong>
+                            গ্রাহকের নাম পাওয়ার জন্য লাগবে <code class="font-mono font-bold">borrower</code> টেবিল। আর ব্রাঞ্চের নাম ("Perryridge") ফিল্টার করার জন্য লাগবে <code class="font-mono font-bold">loan</code> টেবিল।
+                        </div>
+
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-900 rounded-lg">
+                            <strong class="text-sky-600 block mb-0.5">Step 3: Choose Operators:</strong>
+                            দুটি টেবিল জুড়তে Join ($\bowtie$) বা Cross Product ($\times$), কন্ডিশনের জন্য Select ($\sigma$), এবং নাম ফিল্টারের জন্য Project ($\pi$)।
+                        </div>
+
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-900 rounded-lg font-mono">
+                            <strong class="text-sky-600 block mb-0.5 font-sans">Step 4: Expression Building (2 Valid Methods):</strong>
+                            <p class="text-indigo-600 font-bold mb-1">Method 1 (Theta Join): $\pi_{customer\_name}(\sigma_{branch\_name = \text{"Perryridge"}}(borrower \bowtie_{borrower.loan\_number = loan.loan\_number} loan))$</p>
+                            <p class="text-emerald-600 font-bold">Method 2 (Natural Join): $\pi_{customer\_name}(\sigma_{branch\_name = \text{"Perryridge"}}(borrower \bowtie loan))$</p>
+                        </div>
+
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-900 rounded-lg">
+                            <strong class="text-sky-600 block mb-0.5">Step 5 & 6: Step by Step Execution & Final Output:</strong>
+                            <ol class="list-decimal list-inside space-y-1 text-slate-700 dark:text-slate-300">
+                               <li><code class="font-mono">borrower</code> এবং <code class="font-mono">loan</code> টেবিল সাধারণ কলাম <code class="font-mono">loan_number</code> অনুযায়ী জয়েন হবে।</li>
+                               <li>কেবলমাত্র <code class="font-mono">branch_name = "Perryridge"</code> বিশিষ্ট রো-গুলো ফিল্টার হবে।</li>
+                               <li>ফাইনালি <code class="font-mono">customer_name</code> কলামটি প্রজেক্ট হবে।</li>
+                            </ol>
+                        </div>
+
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-900 rounded-lg">
+                            <strong class="text-sky-600 block mb-0.5">Step 7: Key Concept & Pitfalls:</strong>
+                            ভুল করে শুধুমাত্র <code class="font-mono">borrower</code> টেবিল ব্যবহার করলে হবে না, কারণ <code class="font-mono">borrower</code> টেবিলে ব্রাঞ্চের নাম থাকে না!
+                        </div>
+
+                        <div class="p-3 bg-indigo-50 dark:bg-indigo-950/40 rounded-lg border border-indigo-200">
+                            <strong class="text-indigo-600 uppercase text-[10px]">Step 8: Exam Ready Answer (In English):</strong>
+                            <div class="font-mono text-indigo-900 dark:text-indigo-200 font-bold mt-1">
+                                $\pi_{customer\_name}(\sigma_{branch\_name = \text{"Perryridge"}}(borrower \bowtie loan))$
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- QUESTION 2: Perryridge Loan BUT NO Account -->
+                <article class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b pb-2">
+                        <span class="bg-indigo-100 text-indigo-800 dark:bg-indigo-900/60 dark:text-indigo-300 font-bold text-xs px-2.5 py-1 rounded">PDF Page 47 / Set Difference Query</span>
+                        <span class="text-xs text-slate-400 font-bold">Banking Schema</span>
+                    </div>
+
+                    <h3 class="text-base font-bold text-slate-900 dark:text-slate-100">
+                        Question: Find the names of all customers who have a loan at the Perryridge branch BUT DO NOT have an account at ANY branch of the bank.
+                    </h3>
+
+                    <!-- 8 Step Breakdown -->
+                    <div class="space-y-3 text-xs">
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-900 rounded-lg">
+                            <strong class="text-sky-600 block mb-0.5">Step 1: Understand the Question:</strong>
+                            Perryridge ব্রাঞ্চে লোন আছে এমন কাস্টমারদের নাম বের করতে হবে এবং সেখান থেকে সেই সব কাস্টমারদের বাদ দিতে হবে যাদের ব্যাংকের কোনো ব্রাঞ্চেই কোনো অ্যাকাউন্ট আছে (<code class="font-mono">depositor</code> টেবিলে নাম আছে)।
+                        </div>
+
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-900 rounded-lg">
+                            <strong class="text-sky-600 block mb-0.5">Step 2: Key Operator Keyword:</strong>
+                            "BUT DO NOT HAVE" থাকলে নির্দ্বিধায় <strong>Set Difference ($-$)</strong> ব্যবহার করতে হবে!
+                        </div>
+
+                        <div class="p-3 bg-indigo-50 dark:bg-indigo-950/40 rounded-lg border border-indigo-200">
+                            <strong class="text-indigo-600 uppercase text-[10px]">Step 8: Final Exam Expression:</strong>
+                            <div class="font-mono text-indigo-900 dark:text-indigo-200 font-bold mt-1 overflow-x-auto">
+                                $\pi_{customer\_name}(\sigma_{branch\_name = \text{"Perryridge"}}(borrower \bowtie loan)) \;-\; \pi_{customer\_name}(depositor)$
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- QUESTION 3: Largest Account Balance (Page 49) -->
+                <article class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b pb-2">
+                        <span class="bg-indigo-100 text-indigo-800 dark:bg-indigo-900/60 dark:text-indigo-300 font-bold text-xs px-2.5 py-1 rounded">PDF Page 49 / Tricky Exam Pattern</span>
+                        <span class="text-xs text-slate-400 font-bold">Banking Schema</span>
+                    </div>
+
+                    <h3 class="text-base font-bold text-slate-900 dark:text-slate-100">
+                        Question: Find the largest account balance in the bank. (Without using MAX aggregate function!)
+                    </h3>
+
+                    <div class="space-y-3 text-xs">
+                        <div class="p-2.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 rounded-lg text-amber-900 dark:text-amber-200">
+                            <strong>Strategy (কৌশল):</strong>
+                            ১. প্রথমে এমন সব ব্যালেন্স বের করব যেগুলো সবচেয়ে বড় নয় (Find balances that are NOT the largest by comparing each balance with all other balances via Self Cross Product).<br>
+                            ২. মূল সকল ব্যালেন্স থেকে "সবচেয়ে বড় নয়" এমন ব্যালেন্সগুলো মাইনাস (Set Difference) করে দিলেই স্বয়ংক্রিয়ভাবে সবচেয়ে বড় ব্যালেন্সটি রয়ে যাবে!
+                        </div>
+
+                        <div class="p-3 bg-indigo-50 dark:bg-indigo-950/40 rounded-lg border border-indigo-200">
+                            <strong class="text-indigo-600 uppercase text-[10px]">Final Relational Algebra Expression:</strong>
+                            <div class="font-mono text-indigo-900 dark:text-indigo-200 font-bold mt-1 overflow-x-auto">
+                                $\pi_{balance}(account) \;-\; \pi_{account.balance}(\sigma_{account.balance < d.balance}(account \times \rho_{d}(account)))$
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- QUESTION 4: Flight Database - All 4 Questions (Page 52) -->
+                <article class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b pb-2">
+                        <span class="bg-indigo-100 text-indigo-800 dark:bg-indigo-900/60 dark:text-indigo-300 font-bold text-xs px-2.5 py-1 rounded">PDF Page 52 / Flight Schema</span>
+                        <span class="text-xs text-slate-400 font-bold">Flight Schema</span>
+                    </div>
+
+                    <div class="bg-slate-100 dark:bg-slate-900 p-3 rounded-lg font-mono text-xs">
+                        <p><strong>passenger</strong> (<u>pid</u>, pname, pgender, pcity)</p>
+                        <p><strong>agency</strong> (<u>aid</u>, aname, acity)</p>
+                        <p><strong>flight</strong> (<u>fid</u>, fdate, time, src, dest)</p>
+                        <p><strong>booking</strong> (<u>pid</u>, <u>aid</u>, <u>fid</u>, fdate)</p>
+                    </div>
+
+                    <div class="space-y-4 text-xs">
+                        <!-- i -->
+                        <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border">
+                            <p class="font-bold text-slate-800 dark:text-slate-200">i. Get details about all flights from Dhaka to Cox's Bazar.</p>
+                            <div class="font-mono text-sky-600 font-bold mt-1">
+                                $\sigma_{src = \text{"Dhaka"} \land dest = \text{"Cox's Bazar"}}(flight)$
+                            </div>
+                        </div>
+
+                        <!-- ii -->
+                        <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border">
+                            <p class="font-bold text-slate-800 dark:text-slate-200">ii. Find passenger names who have bookings on at least one flight.</p>
+                            <div class="font-mono text-sky-600 font-bold mt-1">
+                                $\pi_{pname}(passenger \bowtie booking)$
+                            </div>
+                        </div>
+
+                        <!-- iii -->
+                        <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border">
+                            <p class="font-bold text-slate-800 dark:text-slate-200">iii. Find passenger names who DO NOT have any bookings in any flights.</p>
+                            <div class="font-mono text-sky-600 font-bold mt-1">
+                                $\pi_{pname}(passenger) \;-\; \pi_{pname}(passenger \bowtie booking)$
+                            </div>
+                        </div>
+
+                        <!-- iv -->
+                        <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border">
+                            <p class="font-bold text-slate-800 dark:text-slate-200">iv. Find details of all male passengers who are associated with "Share Trip" agency.</p>
+                            <div class="font-mono text-sky-600 font-bold mt-1">
+                                $\sigma_{pgender = \text{"Male"} \land aname = \text{"Share Trip"}}(passenger \bowtie booking \bowtie agency)$
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- QUESTION 5: Flight Database - Pages 53 & 54 -->
+                <article class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b pb-2">
+                        <span class="bg-indigo-100 text-indigo-800 dark:bg-indigo-900/60 dark:text-indigo-300 font-bold text-xs px-2.5 py-1 rounded">PDF Pages 53 & 54 / More Flight Queries</span>
+                        <span class="text-xs text-slate-400 font-bold">Flight Schema</span>
+                    </div>
+
+                    <div class="space-y-3 text-xs">
+                        <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border">
+                            <p class="font-bold text-slate-800 dark:text-slate-200">Flight numbers for pid=123 to Chennai before 06/11/2020:</p>
+                            <div class="font-mono text-sky-600 font-bold mt-1">
+                                $\pi_{fid}(\sigma_{pid = 123 \land dest = \text{"Chennai"} \land fdate < \text{"06/11/2020"}}(booking \bowtie flight))$
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border">
+                            <p class="font-bold text-slate-800 dark:text-slate-200">Agencies in the same city as passenger pid=123:</p>
+                            <div class="font-mono text-sky-600 font-bold mt-1">
+                                $\pi_{aname}(agency \bowtie_{acity = pcity} (\sigma_{pid = 123}(passenger)))$
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border">
+                            <p class="font-bold text-slate-800 dark:text-slate-200">Scheduled on BOTH dates 01/12/2020 AND 02/12/2020 at 16:00 hours ($\cap$):</p>
+                            <div class="font-mono text-sky-600 font-bold mt-1 overflow-x-auto">
+                                $\sigma_{fdate = \text{"01/12/2020"} \land time = \text{"16:00"}}(flight) \;\cap\; \sigma_{fdate = \text{"02/12/2020"} \land time = \text{"16:00"}}(flight)$
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border">
+                            <p class="font-bold text-slate-800 dark:text-slate-200">Agencies who DO NOT have any bookings for passenger pid=123 ($-$) :</p>
+                            <div class="font-mono text-sky-600 font-bold mt-1">
+                                $\pi_{aname}(agency) \;-\; \pi_{aname}(\sigma_{pid = 123}(agency \bowtie booking))$
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- QUESTION 6: Aggregate Operations (Pages 55-57) -->
+                <article class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b pb-2">
+                        <span class="bg-indigo-100 text-indigo-800 dark:bg-indigo-900/60 dark:text-indigo-300 font-bold text-xs px-2.5 py-1 rounded">PDF Pages 55-57 / Aggregate Operations</span>
+                        <span class="text-xs text-slate-400 font-bold">Aggregate Notation</span>
+                    </div>
+
+                    <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Grouping & Aggregate Formal Notation</h4>
+                        <p class="text-lg text-center font-bold text-sky-600 dark:text-sky-400 py-2">
+                            $_{G_1, G_2, \dots, G_n}\mathcal{G}_{F_1(A_1), F_2(A_2), \dots, F_m(A_m)}(E)$
+                        </p>
+                        <ul class="list-disc list-inside text-xs text-slate-600 dark:text-slate-300 mt-2 space-y-1">
+                            <li>$G_1, G_2, \dots, G_n$: List of attributes to group by (গ্রুপিং এর ভিত্তি, ফাঁকাও হতে পারে)।</li>
+                            <li>$F_i$: Aggregate functions (<code class="font-bold font-mono">avg, min, max, sum, count</code>)।</li>
+                            <li>$A_i$: Attribute name (যার উপর হিসাব হবে)।</li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-3 text-xs">
+                        <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border">
+                            <span class="font-bold text-slate-800">1. Find total sum of balance without grouping (Page 56):</span>
+                            <div class="font-mono text-sky-600 font-bold mt-1">$\mathcal{G}_{sum(balance)}(account)$</div>
+                        </div>
+
+                        <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border">
+                            <span class="font-bold text-slate-800">2. Find average balance for each branch (Page 57):</span>
+                            <div class="font-mono text-sky-600 font-bold mt-1">$_{branch\_name}\mathcal{G}_{avg(balance)}(account)$</div>
+                        </div>
+                    </div>
+                </article>
+
+            </section>
+
+            <!-- Section 3: Complete Chapter Cheat Sheet -->
+            <section id="cheat-sheet" class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="p-3 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 rounded-xl">
+                        <i class="fa-solid fa-bolt text-2xl"></i>
+                    </span>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Relational Algebra Complete Cheat Sheet</h2>
+                        <p class="text-xs text-slate-500">Quick Exam Reference for Symbols, Syntax, Rules, and Descriptions</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-left border-collapse border border-slate-200 dark:border-slate-700">
+                        <thead class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 uppercase text-[10px]">
+                            <tr>
+                                <th class="border p-2">Operator</th>
+                                <th class="border p-2">Symbol</th>
+                                <th class="border p-2">Syntax</th>
+                                <th class="border p-2">Purpose / Explanation</th>
+                                <th class="border p-2">Key Exam Rule</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-700 font-sans">
+                            <tr>
+                                <td class="border p-2 font-bold text-sky-600">Select</td>
+                                <td class="border p-2 text-center text-sm font-bold">$\sigma$</td>
+                                <td class="border p-2 font-mono">$\sigma_p(r)$</td>
+                                <td class="border p-2">Selects rows satisfying predicate $p$.</td>
+                                <td class="border p-2 text-amber-600 font-semibold">Row filtering only. No columns removed.</td>
+                            </tr>
+                            <tr>
+                                <td class="border p-2 font-bold text-sky-600">Project</td>
+                                <td class="border p-2 text-center text-sm font-bold">$\pi$</td>
+                                <td class="border p-2 font-mono">$\pi_{A_1, A_2}(r)$</td>
+                                <td class="border p-2">Keeps listed columns, discards others.</td>
+                                <td class="border p-2 text-rose-600 font-semibold">Automatically eliminates duplicates!</td>
+                            </tr>
+                            <tr>
+                                <td class="border p-2 font-bold text-sky-600">Union</td>
+                                <td class="border p-2 text-center text-sm font-bold">$\cup$</td>
+                                <td class="border p-2 font-mono">$r \cup s$</td>
+                                <td class="border p-2">Combines tuples from both relations.</td>
+                                <td class="border p-2">Requires Union Compatibility (Same Arity & Domains).</td>
+                            </tr>
+                            <tr>
+                                <td class="border p-2 font-bold text-sky-600">Set Difference</td>
+                                <td class="border p-2 text-center text-sm font-bold">$-$</td>
+                                <td class="border p-2 font-mono">$r - s$</td>
+                                <td class="border p-2">Tuples in $r$ but NOT in $s$.</td>
+                                <td class="border p-2">Requires Union Compatibility. Used for "NOT IN" queries.</td>
+                            </tr>
+                            <tr>
+                                <td class="border p-2 font-bold text-sky-600">Cartesian Product</td>
+                                <td class="border p-2 text-center text-sm font-bold">$\times$</td>
+                                <td class="border p-2 font-mono">$r \times s$</td>
+                                <td class="border p-2">Pairs every tuple of $r$ with every tuple of $s$.</td>
+                                <td class="border p-2">Output rows = $m_1 \times m_2$, Columns = $n_1 + n_2$.</td>
+                            </tr>
+                            <tr>
+                                <td class="border p-2 font-bold text-sky-600">Rename</td>
+                                <td class="border p-2 text-center text-sm font-bold">$\rho$</td>
+                                <td class="border p-2 font-mono">$\rho_{x}(E)$</td>
+                                <td class="border p-2">Gives name $x$ to expression result $E$.</td>
+                                <td class="border p-2">Used in self-joins and intermediate assignments.</td>
+                            </tr>
+                            <tr>
+                                <td class="border p-2 font-bold text-indigo-600">Theta Join</td>
+                                <td class="border p-2 text-center text-sm font-bold">$\bowtie_\theta$</td>
+                                <td class="border p-2 font-mono">$r \bowtie_\theta s$</td>
+                                <td class="border p-2">Cross Product followed by Selection condition.</td>
+                                <td class="border p-2">$r \bowtie_\theta s = \sigma_\theta(r \times s)$.</td>
+                            </tr>
+                            <tr>
+                                <td class="border p-2 font-bold text-indigo-600">Aggregate</td>
+                                <td class="border p-2 text-center text-sm font-bold">$\mathcal{G}$</td>
+                                <td class="border p-2 font-mono">$_{G}\mathcal{G}_{F(A)}(r)$</td>
+                                <td class="border p-2">Performs AVG, SUM, COUNT, MIN, MAX grouped by $G$.</td>
+                                <td class="border p-2">Group attributes go on left, aggregate functions on right.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section 4: Operator Comparison Matrix & Tables -->
+            <section id="comparison-matrix" class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="p-3 bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 rounded-xl">
+                        <i class="fa-solid fa-table-columns text-2xl"></i>
+                    </span>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Operator Comparison Matrix</h2>
+                        <p class="text-xs text-slate-500">Comparing Commonly Confused Relational Algebra Concepts</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                        <h3 class="font-bold text-sky-600 text-sm">Selection ($\sigma$) vs. Projection ($\pi$)</h3>
+                        <ul class="list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300">
+                            <li><strong>Selection ($\sigma$):</strong> Filters <em>rows/tuples</em> based on a condition. Keeps all columns intact.</li>
+                            <li><strong>Projection ($\pi$):</strong> Filters <em>columns/attributes</em>. Discards unlisted columns and removes duplicate rows.</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                        <h3 class="font-bold text-indigo-600 text-sm">Cartesian Product ($\times$) vs. Join ($\bowtie$)</h3>
+                        <ul class="list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300">
+                            <li><strong>Cartesian Product ($\times$):</strong> Unconditional pairing of all rows ($m \times n$). Creates many invalid rows.</li>
+                            <li><strong>Join ($\bowtie$):</strong> Conditional pairing ($r \bowtie_\theta s = \sigma_\theta(r \times s)$). Only keeps rows matching condition $\theta$.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Common Exam Query Patterns -->
+            <section id="exam-patterns" class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="p-3 bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 rounded-xl">
+                        <i class="fa-solid fa-lightbulb text-2xl"></i>
+                    </span>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Common Exam Patterns & Trigger Words</h2>
+                        <p class="text-xs text-slate-500">How to instantly recognize the correct operator from exam questions!</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+                    <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border">
+                        <span class="text-indigo-600 font-bold block mb-1">"Find records where X > 500"</span>
+                        <p class="text-slate-600 dark:text-slate-300">&rarr; Use <strong>Selection ($\sigma$)</strong></p>
+                    </div>
+
+                    <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border">
+                        <span class="text-indigo-600 font-bold block mb-1">"Display only student names"</span>
+                        <p class="text-slate-600 dark:text-slate-300">&rarr; Use <strong>Projection ($\pi$)</strong></p>
+                    </div>
+
+                    <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border">
+                        <span class="text-indigo-600 font-bold block mb-1">"Either in X or in Y or both"</span>
+                        <p class="text-slate-600 dark:text-slate-300">&rarr; Use <strong>Union ($\cup$)</strong></p>
+                    </div>
+
+                    <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border">
+                        <span class="text-indigo-600 font-bold block mb-1">"In X BUT NOT in Y"</span>
+                        <p class="text-slate-600 dark:text-slate-300">&rarr; Use <strong>Set Difference ($-$)</strong></p>
+                    </div>
+
+                    <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border">
+                        <span class="text-indigo-600 font-bold block mb-1">"Present in BOTH X and Y"</span>
+                        <p class="text-slate-600 dark:text-slate-300">&rarr; Use <strong>Intersection ($\cap$)</strong></p>
+                    </div>
+
+                    <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border">
+                        <span class="text-indigo-600 font-bold block mb-1">"Find maximum / highest value"</span>
+                        <p class="text-slate-600 dark:text-slate-300">&rarr; Use <strong>Self Cross Product + Difference</strong> or $\mathcal{G}_{max}$</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 6: Interactive Practice Quiz -->
+            <section id="practice-quiz" class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="p-3 bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 rounded-xl">
+                        <i class="fa-solid fa-clipboard-question text-2xl"></i>
+                    </span>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Interactive Midterm Practice Quiz</h2>
+                        <p class="text-xs text-slate-500">Test your understanding before the exam! Click to reveal answers.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4 text-xs">
+                    <!-- MCQ 1 -->
+                    <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border space-y-2">
+                        <p class="font-bold text-slate-800 dark:text-slate-200 text-sm">
+                            1. Which of the following relational algebra operators automatically removes duplicate rows from its output?
+                        </p>
+                        <div class="space-y-1 text-slate-600 dark:text-slate-300">
+                            <p>A) Selection ($\sigma$)</p>
+                            <p>B) Projection ($\pi$)</p>
+                            <p>C) Rename ($\rho$)</p>
+                            <p>D) Cartesian Product ($\times$)</p>
+                        </div>
+                        <button onclick="toggleAnswer('quiz-ans-1')" class="mt-2 bg-sky-600 hover:bg-sky-700 text-white px-3 py-1 rounded text-[11px] font-semibold">
+                            Reveal Answer & Explanation
+                        </button>
+                        <div id="quiz-ans-1" class="hidden p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 rounded text-emerald-900 dark:text-emerald-200 mt-2">
+                            <strong>Correct Answer: B) Projection ($\pi$)</strong><br>
+                            Explanation: Since relations are mathematical sets, Projection automatically eliminates duplicate rows when subset columns are extracted.
+                        </div>
+                    </div>
+
+                    <!-- MCQ 2 -->
+                    <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border space-y-2">
+                        <p class="font-bold text-slate-800 dark:text-slate-200 text-sm">
+                            2. What are the two necessary conditions for two relations $r$ and $s$ to be Union Compatible?
+                        </p>
+                        <button onclick="toggleAnswer('quiz-ans-2')" class="mt-2 bg-sky-600 hover:bg-sky-700 text-white px-3 py-1 rounded text-[11px] font-semibold">
+                            Reveal Answer & Explanation
+                        </button>
+                        <div id="quiz-ans-2" class="hidden p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 rounded text-emerald-900 dark:text-emerald-200 mt-2">
+                            <strong>Answer: 1. Same Arity (Number of attributes) and 2. Compatible Domains for corresponding attributes.</strong>
+                        </div>
+                    </div>
+
+                    <!-- MCQ 3 -->
+                    <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border space-y-2">
+                        <p class="font-bold text-slate-800 dark:text-slate-200 text-sm">
+                            3. If Relation $R$ has 5 rows and Relation $S$ has 10 rows, how many rows will be in $R \times S$?
+                        </p>
+                        <button onclick="toggleAnswer('quiz-ans-3')" class="mt-2 bg-sky-600 hover:bg-sky-700 text-white px-3 py-1 rounded text-[11px] font-semibold">
+                            Reveal Answer & Explanation
+                        </button>
+                        <div id="quiz-ans-3" class="hidden p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 rounded text-emerald-900 dark:text-emerald-200 mt-2">
+                            <strong>Correct Answer: $5 \times 10 = 50$ rows.</strong><br>
+                            Explanation: Cardinality of Cartesian Product is the product of individual row counts ($m_1 \times m_2$).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 7: Final Revision Checklist -->
+            <section id="revision-checklist" class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-3">
+                    <span class="p-2.5 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 rounded-xl">
+                        <i class="fa-solid fa-list-check text-xl"></i>
+                    </span>
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Final Exam Day Revision Checklist</h2>
+                        <p class="text-xs text-slate-500">Ensure you have mastered these key items before entering the exam hall!</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <label class="flex items-center space-x-2 p-2 bg-slate-50 dark:bg-slate-900 rounded border cursor-pointer">
+                        <input type="checkbox" class="rounded text-sky-600">
+                        <span>Can write formal definitions for all 6 basic operators.</span>
+                    </label>
+                    <label class="flex items-center space-x-2 p-2 bg-slate-50 dark:bg-slate-900 rounded border cursor-pointer">
+                        <input type="checkbox" class="rounded text-sky-600">
+                        <span>Know Union Compatibility rules by heart.</span>
+                    </label>
+                    <label class="flex items-center space-x-2 p-2 bg-slate-50 dark:bg-slate-900 rounded border cursor-pointer">
+                        <input type="checkbox" class="rounded text-sky-600">
+                        <span>Can solve "Find largest balance without MAX" query.</span>
+                    </label>
+                    <label class="flex items-center space-x-2 p-2 bg-slate-50 dark:bg-slate-900 rounded border cursor-pointer">
+                        <input type="checkbox" class="rounded text-sky-600">
+                        <span>Mastered all 8 Banking queries from PDF pages 44-51.</span>
+                    </label>
+                    <label class="flex items-center space-x-2 p-2 bg-slate-50 dark:bg-slate-900 rounded border cursor-pointer">
+                        <input type="checkbox" class="rounded text-sky-600">
+                        <span>Mastered all Flight & Agency queries from PDF pages 52-54.</span>
+                    </label>
+                    <label class="flex items-center space-x-2 p-2 bg-slate-50 dark:bg-slate-900 rounded border cursor-pointer">
+                        <input type="checkbox" class="rounded text-sky-600">
+                        <span>Can construct Aggregate notation $_{G}\mathcal{G}_{F(A)}(R)$ correctly.</span>
+                    </label>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Client-side Interactive JavaScript -->
+    <script>
+        // Page Data Array for Sidebar Generation
+        const totalPages = 68;
+        const pageTitles = [
+            "Title & Course Introduction", "Relational Query Languages", "Six Basic Operators", "Select Operation (σ)",
+            "Complex Predicates in Select", "Select vs SQL WHERE Clause", "Project Operation (π)", "Project Example (Instructor)",
+            "Duplicate Elimination Proof", "Project vs SQL SELECT DISTINCT", "Composition of Operations", "Rename Operation (ρ)",
+            "Rename Examples (Attributes vs Table)", "Sequential vs In-line Expressions", "Intermediate Result Relations",
+            "SQL Renaming via AS", "Union Operation (∪) & Compatibility", "Union Output Table", "Union in SQL",
+            "Concrete Union Table Example", "Intersection Operation (∩)", "Intersection Derivation via Difference",
+            "Set Difference Operation (-)", "Set Difference in SQL", "Concrete Difference Table Example", "Assignment Operation (←)",
+            "Cartesian Product (×)", "Instructor × Teaches Schema", "Cartesian Product Table Visual", "Filtering Physics Instructors",
+            "Filtered Cross Product Table", "Matching Attributes & Expression", "Final Result Table & Gold Instructor",
+            "Query Equivalence & Optimization", "Symbolic Cross Product Example", "Cartesian Product in SQL", "Join Operation (⋈) Motivation",
+            "Join Output Table", "Theta Join (⋈θ) Definition", "Concrete Relation Join Example", "Non-Equi Theta Join Example",
+            "Join Operation in SQL", "Practice Checkpoint Break", "Banking Database Schema Overview", "Banking Queries 1 & 2",
+            "Banking Queries 3 & 4 (Perryridge)", "Banking Query 5 (Perryridge No Account)", "Banking Query 6 (Alternative Joins)",
+            "Banking Query 7 (Find Largest Balance)", "Banking Queries 8 & 9 (Both Loan & Account)", "Banking Query 10 (Downtown & Uptown)",
+            "Flight Database Schema & Qs i-iv", "Flight Database More Queries", "Flight Database Date & Agency Queries",
+            "Aggregate Operations (G) Intro", "Aggregate Single Group Example", "Aggregate Group By Branch Example",
+            "Extended Query Exercises 1", "Extended Query Exercises 2", "Division Operator (÷) Concept",
+            "Outer Join (Left, Right, Full)", "Complex Expression Optimization", "Midterm Master Problem Set 1",
+            "Midterm Master Problem Set 2", "Midterm Master Problem Set 3", "Midterm Master Problem Set 4",
+            "Comprehensive Review Slide", "Summary & Final Exam Tips"
+        ];
+
+        // Track studied pages in LocalStorage
+        let studiedPages = JSON.parse(localStorage.getItem('relational_algebra_studied_pages') || '[]');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            generateSidebarPages();
+            updateProgress();
+            setupSearch();
+            setupTheme();
+            renderMath();
+        });
+
+        // Generate Sidebar 68 Page Links
+        function generateSidebarPages() {
+            const list = document.getElementById('sidebar-page-list');
+            list.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const isStudied = studiedPages.includes(i);
+                const title = pageTitles[i - 1] || `Page ${i} Content`;
+                
+                const li = document.createElement('li');
+                li.className = 'text-xs';
+                li.innerHTML = `
+                    <a href="#page-${i < 46 ? i : '45'}" onclick="handlePageClick(${i})" class="flex items-center justify-between p-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors">
+                        <span class="truncate pr-2">
+                            <strong class="text-slate-400 font-mono">P${i}:</strong> ${title}
+                        </span>
+                        <i id="sidebar-icon-${i}" class="fa-solid ${isStudied ? 'fa-circle-check text-emerald-500' : 'fa-circle-notch text-slate-300'} text-xs shrink-0"></i>
+                    </a>
+                `;
+                list.appendChild(li);
+            }
+        }
+
+        // Toggle studied status
+        function togglePageStudied(pageNum) {
+            if (studiedPages.includes(pageNum)) {
+                studiedPages = studiedPages.filter(p => p !== pageNum);
+            } else {
+                studiedPages.push(pageNum);
+            }
+            localStorage.setItem('relational_algebra_studied_pages', JSON.stringify(studiedPages));
+            updateProgress();
+
+            const icon = document.getElementById(`sidebar-icon-${pageNum}`);
+            if (icon) {
+                icon.className = `fa-solid ${studiedPages.includes(pageNum) ? 'fa-circle-check text-emerald-500' : 'fa-circle-notch text-slate-300'} text-xs shrink-0`;
+            }
+        }
+
+        function handlePageClick(pageNum) {
+            if (!studiedPages.includes(pageNum)) {
+                togglePageStudied(pageNum);
+                const checkbox = document.querySelector(`.page-checkbox[data-page="${pageNum}"]`);
+                if (checkbox) checkbox.checked = true;
+            }
+        }
+
+        // Update Master Progress Bar
+        function updateProgress() {
+            const count = studiedPages.length;
+            const percentage = Math.round((count / totalPages) * 100);
+            
+            const progressBar = document.getElementById('master-progress-bar');
+            const progressText = document.getElementById('progress-text');
+
+            if (progressBar) progressBar.style.width = `${percentage}%`;
+            if (progressText) progressText.innerText = `${count}/${totalPages} Done (${percentage}%)`;
+
+            // Sync Checkboxes
+            document.querySelectorAll('.page-checkbox').forEach(cb => {
+                const p = parseInt(cb.getAttribute('data-page'));
+                cb.checked = studiedPages.includes(p);
+            });
+        }
+
+        // Toggle Answer Visibility for Quiz
+        function toggleAnswer(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.toggle('hidden');
+                renderMath();
+            }
+        }
+
+        // Search Filter
+        function setupSearch() {
+            const searchInput = document.getElementById('global-search');
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                document.querySelectorAll('.page-card').forEach(card => {
+                    const text = card.innerText.toLowerCase();
+                    if (text.includes(query)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Theme Toggle (Light / Dark Mode)
+        function setupTheme() {
+            const themeBtn = document.getElementById('theme-toggle');
+            themeBtn.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                const isDark = document.documentElement.classList.contains('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            });
+
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+        }
+
+        // MathJax Safe Re-render
+        function renderMath() {
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise().catch((err) => console.log(err.message));
+            }
+        }
+    </script>
+</body>
+</html>
