@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEN203 Quiz Prep - Environmental Sustainability (EWU)</title>
+    <style>
+        :root {
+            --primary: #1b5e20;
+            --primary-light: #4caf50;
+            --primary-dark: #0d3b10;
+            --accent: #ff9800;
+            --accent-dark: #e65100;
+            --bg-body: #f4f7f5;
+            --bg-card: #ffffff;
+            --text-main: #2c3e50;
+            --text-muted: #607d8b;
+            --border-color: #cfd8dc;
+            --correct-bg: #e8f5e9;
+            --correct-border: #2e7d32;
+            --wrong-bg: #ffebee;
+            --wrong-border: #c62828;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Layout Structure */
+        #sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--primary-dark);
+            color: white;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            overflow-y: auto;
+            z-index: 100;
+            transition: transform 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+        }
+
+        #main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 20px 30px 60px 30px;
+            max-width: 1100px;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Mobile Header & Toggle */
+        .mobile-header {
+            display: none;
+            background: var(--primary-dark);
+            color: white;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 101;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-btn {
+            background: var(--primary-light);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Sidebar Styling */
+        .sidebar-header {
+            padding: 20px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.1rem;
+            color: #a5d6a7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.25rem;
+            line-height: 1.3;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 10px 0;
+        }
+
+        .nav-item {
+            padding: 12px 18px;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            transition: all 0.2s;
+            font-size: 0.92rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-left-color: var(--primary-light);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-left-color: var(--accent);
+            font-weight: 600;
+        }
+
+        .nav-item .badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+        }
+
+        /* Overall Progress Bar */
+        .progress-container {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .progress-label {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            color: #c8e6c9;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Content Area Cards & Components */
+        .topic-card {
+            display: none;
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .topic-card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .topic-header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .topic-header h2 {
+            color: var(--primary-dark);
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+        }
+
+        .topic-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Custom Box Types */
+        .def-box {
+            background: #eefbe8;
+            border-left: 5px solid var(--primary-light);
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .def-box h4 {
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .trap-box {
+            background: #fff8e1;
+            border-left: 5px solid var(--accent);
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .trap-box h4 {
+            color: var(--accent-dark);
+            margin-bottom: 5px;
+        }
+
+        .bangla-explain {
+            background: #f0f4f8;
+            border-left: 5px solid #0288d1;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.98rem;
+        }
+
+        .bangla-explain strong {
+            color: #0277bd;
+        }
+
+        /* Bullet Points & Tables */
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        th {
+            background-color: #f1f8e9;
+            color: var(--primary-dark);
+        }
+
+        /* Mini Quizzes & Practice Tests */
+        .quiz-container {
+            margin-top: 30px;
+            background: #fafafa;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .quiz-title {
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .question-block {
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 18px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .options-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .option-item {
+            margin-bottom: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .option-label:hover {
+            background: #f5f5f5;
+        }
+
+        .option-label input {
+            margin-right: 12px;
+        }
+
+        .btn {
+            background: var(--primary-dark);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: var(--primary);
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background: var(--accent-dark);
+        }
+
+        .explanation-box {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 15px;
+            border-radius: 5px;
+            font-size: 0.92rem;
+        }
+
+        .explanation-box.show {
+            display: block;
+        }
+
+        .explanation-box.correct {
+            background: var(--correct-bg);
+            border: 1px solid var(--correct-border);
+            color: #1b5e20;
+        }
+
+        .explanation-box.wrong {
+            background: var(--wrong-bg);
+            border: 1px solid var(--wrong-border);
+            color: #b71c1c;
+        }
+
+        /* Short Answer Styling */
+        .sa-input {
+            width: 100%;
+            height: 90px;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+
+        .model-answer {
+            display: none;
+            background: #e3f2fd;
+            border-left: 4px solid #1976d2;
+            padding: 12px 15px;
+            margin-top: 10px;
+            border-radius: 0 5px 5px 0;
+            font-size: 0.93rem;
+        }
+
+        .model-answer.show {
+            display: block;
+        }
+
+        /* Score Dashboard */
+        .score-dashboard {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 25px;
+            display: none;
+        }
+
+        .score-dashboard.active {
+            display: block;
+        }
+
+        .score-num {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #a5d6a7;
+            margin: 10px 0;
+        }
+
+        /* Navigation Button Container */
+        .page-nav-btns {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 850px) {
+            #sidebar {
+                transform: translateX(-100%);
+            }
+            #sidebar.open {
+                transform: translateX(0);
+            }
+            #main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+            .mobile-header {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Mobile Navigation TopBar -->
+    <div class="mobile-header">
+        <div>
+            <strong style="font-size: 1.1rem;">GEN203 Prep</strong>
+            <span style="font-size: 0.8rem; display: block; opacity: 0.8;">EWU Environmental Sustainability</span>
+        </div>
+        <button class="toggle-btn" onclick="toggleSidebar()">☰ Menu</button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <h2>EWU Quiz Prep</h2>
+            <h1>GEN203 Lecture Hub</h1>
+        </div>
+        <ul class="nav-list">
+            <li class="nav-item active" onclick="showTopic(0)">
+                <span>1. RMG & DBL Case</span>
+                <span class="badge">Slide 1-5</span>
+            </li>
+            <li class="nav-item" onclick="showTopic(1)">
+                <span>2. 3 Circles & Definition</span>
+                <span class="badge">Slide 6-9</span>
+            </li>
+            <li class="nav-item" onclick="showTopic(2)">
+                <span>3. Natural Capital & Services</span>
+                <span class="badge">Slide 10-13</span>
+            </li>
+            <li class="nav-item" onclick="showTopic(3)">
+                <span>4. Tragedy of Commons</span>
+                <span class="badge">Slide 14-16</span>
+            </li>
+            <li class="nav-item" onclick="showTopic(4)">
+                <span>5. 3 Principles of Sustainability</span>
+                <span class="badge">Slide 17-19</span>
+            </li>
+            <li class="nav-item" onclick="showTopic(5)">
+                <span>6. Footprint & Overshoot 2026</span>
+                <span class="badge">Slide 20-22</span>
+            </li>
+            <li class="nav-item" onclick="showTopic(6)">
+                <span>7. IPAT Model & Cases</span>
+                <span class="badge">Slide 23-25</span>
+            </li>
+            <li class="nav-item" onclick="showTopic(7)">
+                <span>8. 5 Causes & Worldviews</span>
+                <span class="badge">Slide 26-28</span>
+            </li>
+            <li class="nav-item" onclick="showTopic(8)">
+                <span>9. Revolutions & IR 4.0</span>
+                <span class="badge">Slide 29-32</span>
+            </li>
+            <li class="nav-item" onclick="showTopic(9)">
+                <span>10. Final Practice Test (25 Qs)</span>
+                <span class="badge" style="background:var(--accent);">Exam</span>
+            </li>
+            <li class="nav-item" onclick="showTopic(10)">
+                <span>11. Short Answer Practice</span>
+                <span class="badge">Written</span>
+            </li>
+            <li class="nav-item" onclick="showTopic(11)">
+                <span>12. Quick Revision Sheet</span>
+                <span class="badge">Summary</span>
+            </li>
+        </ul>
+        <div class="progress-container">
+            <div class="progress-label">
+                <span>Course Completion</span>
+                <span id="progress-text">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Container -->
+    <main id="main-content">
+
+        <!-- TOPIC 1 -->
+        <article class="topic-card active" id="topic-0">
+            <div class="topic-header">
+                <h2>Topic 1: Opening Case Study – RMG Industry & DBL Group</h2>
+                <p>Slides 1–5 | Economic Driver vs. Environmental Bill & DBL's Cleaner Production</p>
+            </div>
+
+            <div class="def-box">
+                <h4>📌 Bangladesh RMG Industry Core Figures</h4>
+                <p>The Readymade Garments (RMG) sector is Bangladesh's economic powerhouse, generating over <strong>$39.3 billion</strong> in exports in FY2024–25 (approx. <strong>81% of total national exports</strong>) and directly employing nearly <strong>4 million workers</strong> (mostly women).</p>
+            </div>
+
+            <div class="trap-box">
+                <h4>⚠️ The Environmental Bill (Quiz Trap!)</h4>
+                <p>Standard wet processing in conventional factories uses <strong>~300 litres of water per kg of fabric</strong> (international best practice is under 50L). The RMG sector extracts over <strong>1,500 billion litres of groundwater annually</strong>, causing Dhaka's groundwater table to drop by <strong>2 to 3 metres each year</strong> while discharging untreated toxic effluent into the Turag and Buriganga rivers.</p>
+            </div>
+
+            <div class="bangla-explain">
+                <strong>💡 Bangla-English Summary:</strong> 
+                আরএমজি (RMG) সেক্টর বাংলাদেশের অর্থনীতির মূল চালিকাশক্তি হলেও এর পরিবেশগত ক্ষতি অত্যন্ত বেশি। সাধারণ ডায়িং কারখানায় ১ কেজি কাপড়ের জন্য প্রায় ৩০০ লিটার পানি লাগে, যা ভূগর্ভস্থ পানির স্তর প্রতি বছর ২-৩ মিটার নামিয়ে দিচ্ছে। DBL Group এই সমস্যা দূর করতে 'Cleaner Production' প্রযুক্তি ব্যবহার করে পানি ব্যবহার ৩০০L থেকে কমিয়ে মাত্র <strong>৬০L</strong>-এ নামিয়ে এনেছে এবং বিদ্যুৎ খরচ <strong>২৫%</strong> কমিয়েছে।
+            </div>
+
+            <h3>DBL Group (Hamza Textiles) Solution & ROI:</h3>
+            <ul>
+                <li>Invested <strong>$500,000</strong> in water and energy recovery systems.</li>
+                <li>Saved over <strong>$2.2 million annually</strong> in water, energy, and chemical costs.</li>
+                <li><strong>Payback Period:</strong> Less than <strong>3 months</strong>! Proven that environmental sustainability boosts economic profits.</li>
+            </ul>
+
+            <!-- Mini Quiz 1 -->
+            <div class="quiz-container">
+                <div class="quiz-title">🧪 Quick Self-Check: Topic 1</div>
+                <div class="question-block">
+                    <p class="question-text">Q1: What is the average annual drop in Dhaka's groundwater table caused by industrial extraction?</p>
+                    <ul class="options-list">
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq1" value="a"> A) 0.5 to 1 metre</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq1" value="b"> B) 2 to 3 metres</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq1" value="c"> C) 5 to 7 metres</label></li>
+                    </ul>
+                    <button class="btn" onclick="checkMiniQuiz('mq1', 'b', 'mq1-exp', 'Correct! Dhaka\'s water table drops 2–3 meters yearly due to excessive RMG groundwater extraction.', 'Incorrect. Slides specifically state a 2 to 3 metre annual drop.')">Submit Answer</button>
+                    <div id="mq1-exp" class="explanation-box"></div>
+                </div>
+            </div>
+
+            <div class="page-nav-btns">
+                <button class="btn" disabled>← Previous</button>
+                <button class="btn btn-accent" onclick="nextTopic(0)">Next: 3 Circles & Definition →</button>
+            </div>
+        </article>
+
+        <!-- TOPIC 2 -->
+        <article class="topic-card" id="topic-1">
+            <div class="topic-header">
+                <h2>Topic 2: Defining Sustainability & The 3 Circles</h2>
+                <p>Slides 6–9 | Brundtland Commission & The 3 Intersecting Pillars</p>
+            </div>
+
+            <div class="def-box">
+                <h4>📌 Definition of Sustainability (Brundtland Report, 1987)</h4>
+                <p><em>"Meeting the needs of the present without compromising the ability of future generations to meet their own needs."</em></p>
+            </div>
+
+            <h3>The Three Pillars (The 3 Circles Model)</h3>
+            <p>Sustainability exists ONLY at the central intersection where all three spheres balance:</p>
+            <ol>
+                <li><strong>Environmental Viability:</strong> Ecosystem integrity, biodiversity, and clean resource flow.</li>
+                <li><strong>Economic Prosperity:</strong> Financial stability, employment, and sustainable industrial growth.</li>
+                <li><strong>Social Equity:</strong> Fair labor standards, public health, human rights, and community welfare.</li>
+            </ol>
+
+            <div class="trap-box">
+                <h4>⚠️ Quiz Trap: Overlaps vs True Sustainability</h4>
+                <ul>
+                    <li><strong>Economic + Social = Equitable</strong> (but damages nature)</li>
+                    <li><strong>Social + Environmental = Bearable</strong> (but economically unsustainable)</li>
+                    <li><strong>Economic + Environmental = Viable</strong> (but neglects social justice and human rights)</li>
+                    <li><strong>Center Intersect = SUSTAINABLE</strong></li>
+                </ul>
+            </div>
+
+            <div class="bangla-explain">
+                <strong>💡 Bangla-English Summary:</strong>
+                Sustainability হলো এমন এক ভারসাম্য যেখানে পরিবেশ (Environment), সমাজ (Society), এবং অর্থনীতি (Economy)—এই তিনটি উপাদান একসঙ্গে মিলে যায়। কেবল টাকা উপার্জন করা এবং গাছ রোপণ করা যথেষ্ট নয়; শ্রমিকদের অধিকার ও সামাজিক ন্যায়বিচারও নিশ্চিত করতে হবে।
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-title">🧪 Quick Self-Check: Topic 2</div>
+                <div class="question-block">
+                    <p class="question-text">Q2: According to the 3 Circles Model, what is achieved when Economic and Social needs are met without Environmental protection?</p>
+                    <ul class="options-list">
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq2" value="a"> A) Viable</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq2" value="b"> B) Equitable</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq2" value="c"> C) Sustainable</label></li>
+                    </ul>
+                    <button class="btn" onclick="checkMiniQuiz('mq2', 'b', 'mq2-exp', 'Correct! Economic + Social = Equitable. It lacks environmental protection.', 'Incorrect. Economic + Social without environmental considerations yields Equitable.')">Submit Answer</button>
+                    <div id="mq2-exp" class="explanation-box"></div>
+                </div>
+            </div>
+
+            <div class="page-nav-btns">
+                <button class="btn" onclick="prevTopic(1)">← Previous</button>
+                <button class="btn btn-accent" onclick="nextTopic(1)">Next: Natural Capital & Services →</button>
+            </div>
+        </article>
+
+        <!-- TOPIC 3 -->
+        <article class="topic-card" id="topic-2">
+            <div class="topic-header">
+                <h2>Topic 3: Natural Capital & Ecosystem Services</h2>
+                <p>Slides 10–13 | Core Equation, Resource Types & 4 Categories of Ecosystem Services</p>
+            </div>
+
+            <div class="def-box">
+                <h4>📌 The Core Equation of Natural Capital</h4>
+                <p style="font-size: 1.2rem; text-align: center; font-weight: bold; color: var(--primary-dark);">
+                    Natural Capital = Natural Resources + Ecosystem Services
+                </p>
+            </div>
+
+            <h3>1. Natural Resources Breakdown</h3>
+            <ul>
+                <li><strong>Inexhaustible:</strong> Solar energy, wind power, tidal flows (will not run out on human timescales).</li>
+                <li><strong>Renewable:</strong> Forests, freshwater, fertile soil, wildlife (replenish naturally within hours to decades if not overused).</li>
+                <li><strong>Non-renewable:</strong> Coal, crude oil, metallic minerals, groundwater in deep aquifers (take millions of years to form).</li>
+            </ul>
+
+            <h3>2. Four Categories of Ecosystem Services</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Function</th>
+                        <th>Key Examples</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Provisioning</strong></td>
+                        <td>Material/energy outputs from ecosystems</td>
+                        <td>Food, timber, fresh water, medicinal plants</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Regulating</strong></td>
+                        <td>Natural regulation of ecosystem processes</td>
+                        <td>Climate control, flood regulation, water purification, pest control</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cultural</strong></td>
+                        <td>Non-material human benefits</td>
+                        <td>Ecotourism, spiritual value, aesthetic beauty, recreation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Supporting</strong></td>
+                        <td>Underlying processes required for all other services</td>
+                        <td>Photosynthesis, nutrient cycling, soil formation</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="bangla-explain">
+                <strong>💡 Bangla-English Summary:</strong>
+                ন্যাচারাল ক্যাপিটাল হচ্ছে প্রকৃতির মোট সম্পদ ও সেবা। গাছ বা কয়লা হলো 'Resource', আর বাতাস পরিষ্কার রাখা বা Pollination (পরাগায়ন) হলো 'Ecosystem Service'। Supporting Services (যেমন সালোকসংশ্লেষণ) হলো বাকি তিনটার মূল ভিত্তি।
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-title">🧪 Quick Self-Check: Topic 3</div>
+                <div class="question-block">
+                    <p class="question-text">Q3: Water purification and flood regulation belong to which category of ecosystem services?</p>
+                    <ul class="options-list">
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq3" value="a"> A) Provisioning Services</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq3" value="b"> B) Regulating Services</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq3" value="c"> C) Supporting Services</label></li>
+                    </ul>
+                    <button class="btn" onclick="checkMiniQuiz('mq3', 'b', 'mq3-exp', 'Correct! Water purification regulates environmental stability, making it a Regulating Service.', 'Incorrect. Water purification falls under Regulating Services.')">Submit Answer</button>
+                    <div id="mq3-exp" class="explanation-box"></div>
+                </div>
+            </div>
+
+            <div class="page-nav-btns">
+                <button class="btn" onclick="prevTopic(2)">← Previous</button>
+                <button class="btn btn-accent" onclick="nextTopic(2)">Next: Tragedy of Commons →</button>
+            </div>
+        </article>
+
+        <!-- TOPIC 4 -->
+        <article class="topic-card" id="topic-3">
+            <div class="topic-header">
+                <h2>Topic 4: Tragedy of the Commons</h2>
+                <p>Slides 14–16 | Open-Access Resources, Over-exploitation & Solutions</p>
+            </div>
+
+            <div class="def-box">
+                <h4>📌 Definition (Garrett Hardin, 1968)</h4>
+                <p>The economic and environmental phenomenon where individuals acting independently in their own self-interest deplete or degrade a shared, open-access resource, leading to long-term collective ruin.</p>
+            </div>
+
+            <h3>Key Features of the Commons:</h3>
+            <ul>
+                <li><strong>Open-Access / Shared:</strong> No single entity owns the resource (e.g., oceans, atmosphere, groundwater, public pastures).</li>
+                <li><strong>Individual Logic:</strong> <em>"If I take one more fish or add one more cow, I get 100% of the benefit, while the environmental cost is shared among everyone."</em></li>
+                <li><strong>Result:</strong> Environmental collapse and resource exhaustion.</li>
+            </ul>
+
+            <div class="trap-box">
+                <h4>⚠️ Real-World Bangladesh Examples</h4>
+                <ul>
+                    <li>Overfishing in the Bay of Bengal (decline of Hilsa stocks).</li>
+                    <li>Unregulated extraction of deep aquifer groundwater by textile factories in Gazipur and Savar.</li>
+                    <li>Pollution of rivers (Turag, Buriganga) by factories dumping untreated wastewater.</li>
+                </ul>
+            </div>
+
+            <h3>Three Primary Solutions to Avoid Collapse:</h3>
+            <ol>
+                <li><strong>Private Ownership:</strong> Dividing commons into private lots (gives owners incentive to protect).</li>
+                <li><strong>Government Regulation:</strong> Enforcing strict quotas, permits, and discharge penalties.</li>
+                <li><strong>Community Governance (Elinor Ostrom model):</strong> Local cooperative agreements and shared user rules.</li>
+            </ol>
+
+            <div class="quiz-container">
+                <div class="quiz-title">🧪 Quick Self-Check: Topic 4</div>
+                <div class="question-block">
+                    <p class="question-text">Q4: What is the primary cause of the Tragedy of the Commons?</p>
+                    <ul class="options-list">
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq4" value="a"> A) Strict government environmental enforcement</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq4" value="b"> B) Short-term individual self-interest prioritizing personal gain over collective resource limits</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq4" value="c"> C) Efficient recycling in industrial zones</label></li>
+                    </ul>
+                    <button class="btn" onclick="checkMiniQuiz('mq4', 'b', 'mq4-exp', 'Correct! Short-term personal gain without regulation destroys open-access commons.', 'Incorrect. Individual short-term gain drives the commons tragedy.')">Submit Answer</button>
+                    <div id="mq4-exp" class="explanation-box"></div>
+                </div>
+            </div>
+
+            <div class="page-nav-btns">
+                <button class="btn" onclick="prevTopic(3)">← Previous</button>
+                <button class="btn btn-accent" onclick="nextTopic(3)">Next: 3 Principles of Sustainability →</button>
+            </div>
+        </article>
+
+        <!-- TOPIC 5 -->
+        <article class="topic-card" id="topic-4">
+            <div class="topic-header">
+                <h2>Topic 5: Three Scientific Principles of Sustainability</h2>
+                <p>Slides 17–19 | Solar Energy, Biodiversity & Nutrient Cycling</p>
+            </div>
+
+            <p>Lessons from Nature: Planet Earth has sustained life for 3.8 billion years by relying on three fundamental natural principles:</p>
+
+            <div class="def-box">
+                <h4>1. Solar Energy Reliance</h4>
+                <p>The sun provides thermal energy and powers photosynthesis, which drives nutrient production and fuels all food webs and climate patterns on Earth.</p>
+            </div>
+
+            <div class="def-box">
+                <h4>2. Biodiversity (Biological Diversity)</h4>
+                <p>The variety of genes, species, ecosystems, and ecological processes. Biodiversity provides natural population control, climate adaptability, and ecological resilience against disease or stress.</p>
+            </div>
+
+            <div class="def-box">
+                <h4>3. Nutrient Cycling (Chemical Cycling)</h4>
+                <p>The continuous movement of essential chemicals (carbon, nitrogen, phosphorus, water) from the non-living environment (soil, air, water) into living organisms and back again. <strong>In nature, waste = food!</strong></p>
+            </div>
+
+            <div class="bangla-explain">
+                <strong>💡 Bangla-English Summary:</strong>
+                প্রকৃতি ৩.৮ বিলিয়ন বছর ধরে নিজেকে টিকিয়ে রেখেছে ৩টি নিয়মে:
+                ১. সূর্য থেকে প্রয়োজনীয় সব শক্তি নেওয়া।
+                ২. জীববৈচিত্র্য বা Biodiversity বজায় রাখা।
+                ৩. Nutrient Cycling (প্রকৃতিতে কোনো বর্জ্য বা Waste বলতে কিছু নেই, এক প্রাণীর বর্জ্য অন্য প্রাণীর খাদ্য বা সার হিসেবে পুনর্ব্যবহৃত হয়)।
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-title">🧪 Quick Self-Check: Topic 5</div>
+                <div class="question-block">
+                    <p class="question-text">Q5: Which principle states that in nature, waste from one organism becomes nutrients for another?</p>
+                    <ul class="options-list">
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq5" value="a"> A) Full-cost pricing</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq5" value="b"> B) Nutrient Cycling</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq5" value="c"> C) Biodiversity Loss</label></li>
+                    </ul>
+                    <button class="btn" onclick="checkMiniQuiz('mq5', 'b', 'mq5-exp', 'Correct! Chemical/Nutrient Cycling ensures zero waste in pristine ecosystems.', 'Incorrect. Nutrient cycling describes how waste becomes food in nature.')">Submit Answer</button>
+                    <div id="mq5-exp" class="explanation-box"></div>
+                </div>
+            </div>
+
+            <div class="page-nav-btns">
+                <button class="btn" onclick="prevTopic(4)">← Previous</button>
+                <button class="btn btn-accent" onclick="nextTopic(4)">Next: Footprint & Overshoot Day →</button>
+            </div>
+        </article>
+
+        <!-- TOPIC 6 -->
+        <article class="topic-card" id="topic-5">
+            <div class="topic-header">
+                <h2>Topic 6: Ecological Footprint & Earth Overshoot Day 2026</h2>
+                <p>Slides 20–22 | Biocapacity, Demand vs Supply & Earth Equivalents</p>
+            </div>
+
+            <div class="def-box">
+                <h4>📌 Key Concepts & Units</h4>
+                <ul>
+                    <li><strong>Ecological Footprint:</strong> The measure of biologically productive land and water area required to supply a population with the renewable resources it consumes and to absorb its wastes (carbon emissions). Measured in <strong>Global Hectares (gha)</strong>.</li>
+                    <li><strong>Biocapacity:</strong> The capacity of ecosystems to generate an ongoing supply of renewable resources and absorb human wastes.</li>
+                    <li><strong>Ecological Deficit:</strong> Occurs when a population's Footprint exceeds available local/global Biocapacity (Footprint > Biocapacity).</li>
+                </ul>
+            </div>
+
+            <div class="trap-box">
+                <h4>⚠️ Global Footprint Stats & Earth Overshoot Day 2026</h4>
+                <p>Globally, humanity currently consumes resources at a rate that requires <strong>1.75 Earths</strong> annually. In high-consumption nations like the US, it requires over 5 Earths!</p>
+                <p><strong>Earth Overshoot Day:</strong> The calculated calendar date on which humanity's resource consumption for the year exceeds Earth’s capacity to regenerate those resources in that year. (In 2026, Overshoot Day falls around late July / early August, meaning humanity lives on ecological debt for the remainder of the year).</p>
+            </div>
+
+            <div class="bangla-explain">
+                <strong>💡 Bangla-English Summary:</strong>
+                Ecological Footprint দিয়ে মাপা হয় আমরা পরিবেশ থেকে কতটুকু নিচ্ছি এবং কতটুকু বর্জ্য ছাড়ছি। আমরা বর্তমানে প্রতি বছর ১টি পৃথিবীর জায়গায় <strong>১.৭৫টি পৃথিবী (1.75 Earths)</strong> পরিমাণ রিসোর্স খরচ করে ফেলছি! 'Earth Overshoot Day' মানে বছরের যে তারিখে পৃথিবীর বার্ষিক জোগান শেষ হয়ে যায় এবং আমরা ভবিষ্যতের সম্পদ চুরি করে বাঁচি।
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-title">🧪 Quick Self-Check: Topic 6</div>
+                <div class="question-block">
+                    <p class="question-text">Q6: What happens when a nation's Ecological Footprint is greater than its Biocapacity?</p>
+                    <ul class="options-list">
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq6" value="a"> A) It runs an Ecological Credit</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq6" value="b"> B) It achieves Sustainable Balance</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq6" value="c"> C) It operates in an Ecological Deficit</label></li>
+                    </ul>
+                    <button class="btn" onclick="checkMiniQuiz('mq6', 'c', 'mq6-exp', 'Correct! Footprint > Biocapacity results in an Ecological Deficit.', 'Incorrect. When demand exceeds biological capacity, an ecological deficit occurs.')">Submit Answer</button>
+                    <div id="mq6-exp" class="explanation-box"></div>
+                </div>
+            </div>
+
+            <div class="page-nav-btns">
+                <button class="btn" onclick="prevTopic(5)">← Previous</button>
+                <button class="btn btn-accent" onclick="nextTopic(5)">Next: IPAT Model & Cases →</button>
+            </div>
+        </article>
+
+        <!-- TOPIC 7 -->
+        <article class="topic-card" id="topic-6">
+            <div class="topic-header">
+                <h2>Topic 7: The IPAT Model & Comparative Case Analysis</h2>
+                <p>Slides 23–25 | Environmental Impact Formula & Developed vs Developing Nations</p>
+            </div>
+
+            <div class="def-box">
+                <h4>📌 The IPAT Formula (Ehrlich & Holdren)</h4>
+                <p style="font-size: 1.4rem; text-align: center; font-weight: bold; color: var(--primary-dark);">
+                    I = P × A × T
+                </p>
+                <ul>
+                    <li><strong>I = Environmental Impact</strong> (Total degradation and resource use)</li>
+                    <li><strong>P = Population size</strong> (Number of people)</li>
+                    <li><strong>A = Affluence per person</strong> (Consumption level / GDP per capita)</li>
+                    <li><strong>T = Technology</strong> (Environmental impact of technologies used to deliver goods)</li>
+                </ul>
+            </div>
+
+            <div class="trap-box">
+                <h4>⚠️ Dual Nature of Technology (T factor)</h4>
+                <p>Technology can INCREASE impact (e.g., coal plants, gas-guzzling cars) OR DECREASE impact (e.g., solar power, EV cars, energy-efficient LED light bulbs).</p>
+            </div>
+
+            <h3>Comparative Case: Developing vs. Developed Nations</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Factor</th>
+                        <th>Developing Nations (e.g., Bangladesh, Uganda)</th>
+                        <th>Developed Nations (e.g., USA, UAE)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Population (P)</strong></td>
+                        <td><strong>HIGH</strong> (Rapid growth drives impact)</td>
+                        <td>LOW / Stable</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Affluence (A)</strong></td>
+                        <td>LOW (Low resource use per person)</td>
+                        <td><strong>EXTREMELY HIGH</strong> (High consumption drives impact)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Primary Driver of 'I'</strong></td>
+                        <td>Overpopulation & basic survival pressure</td>
+                        <td>Overconsumption & high affluence</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="quiz-container">
+                <div class="quiz-title">🧪 Quick Self-Check: Topic 7</div>
+                <div class="question-block">
+                    <p class="question-text">Q7: In developed wealthy nations like the United States, what is the primary driver of environmental impact in the IPAT model?</p>
+                    <ul class="options-list">
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq7" value="a"> A) Rapid population growth (P)</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq7" value="b"> B) High resource consumption and affluence (A)</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq7" value="c"> C) Absence of advanced technology</label></li>
+                    </ul>
+                    <button class="btn" onclick="checkMiniQuiz('mq7', 'b', 'mq7-exp', 'Correct! Developed nations drive impact through high Affluence (A) per capita.', 'Incorrect. In wealthy nations, Affluence (consumption per person) is the main factor.')">Submit Answer</button>
+                    <div id="mq7-exp" class="explanation-box"></div>
+                </div>
+            </div>
+
+            <div class="page-nav-btns">
+                <button class="btn" onclick="prevTopic(6)">← Previous</button>
+                <button class="btn btn-accent" onclick="nextTopic(6)">Next: 5 Root Causes & Worldviews →</button>
+            </div>
+        </article>
+
+        <!-- TOPIC 8 -->
+        <article class="topic-card" id="topic-7">
+            <div class="topic-header">
+                <h2>Topic 8: 5 Root Causes & Environmental Worldviews</h2>
+                <p>Slides 26–28 | Environmental Drivers & Human Ethics</p>
+            </div>
+
+            <h3>The 5 Primary Root Causes of Environmental Problems:</h3>
+            <ol>
+                <li><strong>Population Growth:</strong> Exponential rise in human numbers demanding basic food, land, and water.</li>
+                <li><strong>Wasteful and Unsustainable Resource Use (Affluence):</strong> High-consumption lifestyles leading to massive pollution and ecological footprint.</li>
+                <li><strong>Poverty:</strong> Forces impoverished populations to degrade local ecosystems (deforestation, soil depletion) simply for immediate survival.</li>
+                <li><strong>Omission of Environmental Costs in Market Prices:</strong> Goods do not reflect natural damage (e.g., gasoline prices do not include health costs from air pollution or carbon damage).</li>
+                <li><strong>Increasing Isolation from Nature:</strong> Urbanization disconnects people from ecological realities.</li>
+            </ol>
+
+            <div class="def-box">
+                <h4>📌 Three Environmental Worldviews</h4>
+                <ul>
+                    <li><strong>Planetary Management (Human-Centered / Anthropocentric):</strong> Humans are separate from and in charge of nature. Nature exists solely to satisfy human needs and economic growth.</li>
+                    <li><strong>Stewardship (Human-Responsible):</strong> Humans have an ethical responsibility to manage Earth caring for nature and future generations.</li>
+                    <li><strong>Environmental Wisdom (Earth-Centered / Ecocentric):</strong> Humans are part of and dependent on nature. Nature exists for all species, not just humans.</li>
+                </ul>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-title">🧪 Quick Self-Check: Topic 8</div>
+                <div class="question-block">
+                    <p class="question-text">Q8: Which worldview believes that humans are part of nature and that nature exists for all living species?</p>
+                    <ul class="options-list">
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq8" value="a"> A) Planetary Management</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq8" value="b"> B) Environmental Wisdom</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq8" value="c"> C) Free Market Exploitation</label></li>
+                    </ul>
+                    <button class="btn" onclick="checkMiniQuiz('mq8', 'b', 'mq8-exp', 'Correct! Environmental Wisdom sees humans as connected members of nature.', 'Incorrect. Environmental Wisdom is the earth-centered worldview.')">Submit Answer</button>
+                    <div id="mq8-exp" class="explanation-box"></div>
+                </div>
+            </div>
+
+            <div class="page-nav-btns">
+                <button class="btn" onclick="prevTopic(7)">← Previous</button>
+                <button class="btn btn-accent" onclick="nextTopic(7)">Next: Revolutions & IR 4.0 →</button>
+            </div>
+        </article>
+
+        <!-- TOPIC 9 -->
+        <article class="topic-card" id="topic-8">
+            <div class="topic-header">
+                <h2>Topic 9: Historical Revolutions & IR 4.0 AI Data Centers</h2>
+                <p>Slides 29–32 | Cultural Transformations & The Modern Tech Footprint</p>
+            </div>
+
+            <h3>Three Major Cultural Revolutions in Human History:</h3>
+            <ol>
+                <li><strong>Agricultural Revolution (~10,000–12,000 years ago):</strong> Shift from hunter-gatherers to settled farming. Increased food supply but started forest clearing and land degradation.</li>
+                <li><strong>Industrial-Medical Revolution (~275 years ago):</strong> Shift to fossil fuels, factory production, mass urban migration, and longer life spans. Massively increased resource extraction and pollution.</li>
+                <li><strong>Information-Globalization Revolution (~50 years ago):</strong> Rapid computing, internet, and global supply networks. Enabled environmental monitoring but accelerated worldwide trade and resource consumption.</li>
+            </ol>
+
+            <div class="trap-box">
+                <h4>⚠️ 4th Industrial Revolution (IR 4.0) & AI Data Centers</h4>
+                <p>While AI and Cloud computing promise smart green solutions, AI data centers demand immense resources:</p>
+                <ul>
+                    <li>A ChatGPT query consumes up to <strong>10x more power</strong> than a standard Google web search.</li>
+                    <li>Global data centers require <strong>billions of gallons of water</strong> for cooling systems.</li>
+                    <li>Generates millions of tons of electronic waste (e-waste) annually.</li>
+                </ul>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-title">🧪 Quick Self-Check: Topic 9</div>
+                <div class="question-block">
+                    <p class="question-text">Q9: Approximately how much more electricity does an AI ChatGPT query use compared to a standard Google search?</p>
+                    <ul class="options-list">
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq9" value="a"> A) Same amount</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq9" value="b"> B) About 2x more</label></li>
+                        <li class="option-item"><label class="option-label"><input type="radio" name="mq9" value="c"> C) Up to 10x more</label></li>
+                    </ul>
+                    <button class="btn" onclick="checkMiniQuiz('mq9', 'c', 'mq9-exp', 'Correct! AI queries consume up to 10x more power due to complex neural net computations.', 'Incorrect. Modern generative AI queries consume roughly 10 times more energy.')">Submit Answer</button>
+                    <div id="mq9-exp" class="explanation-box"></div>
+                </div>
+            </div>
+
+            <div class="page-nav-btns">
+                <button class="btn" onclick="prevTopic(8)">← Previous</button>
+                <button class="btn btn-accent" onclick="nextTopic(8)">Next: Final Practice Exam →</button>
+            </div>
+        </article>
+
+        <!-- TOPIC 10: FINAL PRACTICE EXAM -->
+        <article class="topic-card" id="topic-9">
+            <div class="topic-header">
+                <h2>Topic 10: Comprehensive Final Practice Exam</h2>
+                <p>25 MCQs & True/False Questions covering all 32 lecture slides</p>
+            </div>
+
+            <div class="score-dashboard" id="score-dashboard">
+                <h3>Exam Completed!</h3>
+                <div class="score-num" id="score-num">0 / 25</div>
+                <p id="score-feedback">Your score will appear here.</p>
+                <button class="btn btn-accent" style="margin-top:15px;" onclick="resetExam()">Retake Exam</button>
+            </div>
+
+            <form id="exam-form">
+                <div id="exam-questions-container">
+                    <!-- Dynamically or statically injected via JS -->
+                </div>
+                <button type="button" class="btn btn-accent" style="width:100%; padding:15px; font-size:1.1rem; margin-top:20px;" onclick="gradeExam()">Submit Exam & Show Full Explanations</button>
+            </form>
+
+            <div class="page-nav-btns">
+                <button class="btn" onclick="prevTopic(9)">← Previous</button>
+                <button class="btn btn-accent" onclick="nextTopic(9)">Next: Short Answer Practice →</button>
+            </div>
+        </article>
+
+        <!-- TOPIC 11: SHORT ANSWER PRACTICE -->
+        <article class="topic-card" id="topic-10">
+            <div class="topic-header">
+                <h2>Topic 11: Short-Answer Practice Section</h2>
+                <p>Type your answer in easy English, then click to reveal model answers for self-grading</p>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">SAQ 1: Define Natural Capital and state its primary components.</p>
+                <textarea class="sa-input" placeholder="Type your answer here..."></textarea>
+                <button class="btn" onclick="toggleModelAnswer('saq1')">Show / Hide Model Answer</button>
+                <div id="saq1" class="model-answer">
+                    <strong>Model Answer:</strong> Natural Capital is the world's stock of natural assets that support life and economies. Formula: <em>Natural Capital = Natural Resources + Ecosystem Services</em>.
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">SAQ 2: Explain how DBL Group achieved both environmental and financial savings in garment production.</p>
+                <textarea class="sa-input" placeholder="Type your answer here..."></textarea>
+                <button class="btn" onclick="toggleModelAnswer('saq2')">Show / Hide Model Answer</button>
+                <div id="saq2" class="model-answer">
+                    <strong>Model Answer:</strong> DBL Group adopted cleaner production methods, cutting water use from 300L to 60L per kg of fabric and reducing energy by 25%. A $500k investment saved $2.2M annually, paying for itself in under 3 months.
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">SAQ 3: Differentiate between Provisioning and Regulating Ecosystem Services with examples.</p>
+                <textarea class="sa-input" placeholder="Type your answer here..."></textarea>
+                <button class="btn" onclick="toggleModelAnswer('saq3')">Show / Hide Model Answer</button>
+                <div id="saq3" class="model-answer">
+                    <strong>Model Answer:</strong> Provisioning services provide physical resources like food, fresh water, and timber. Regulating services control environmental conditions like climate regulation, air purification, and flood control.
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">SAQ 4: What is the IPAT model? Briefly define each component.</p>
+                <textarea class="sa-input" placeholder="Type your answer here..."></textarea>
+                <button class="btn" onclick="toggleModelAnswer('saq4')">Show / Hide Model Answer</button>
+                <div id="saq4" class="model-answer">
+                    <strong>Model Answer:</strong> The IPAT model calculates total Environmental Impact (I) as a product of Population size (P), Affluence per capita (A), and Technology impact (T) [Formula: I = P * A * T].
+                </div>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">SAQ 5: Describe the "Tragedy of the Commons" and give two real-world examples in Bangladesh.</p>
+                <textarea class="sa-input" placeholder="Type your answer here..."></textarea>
+                <button class="btn" onclick="toggleModelAnswer('saq5')">Show / Hide Model Answer</button>
+                <div id="saq5" class="model-answer">
+                    <strong>Model Answer:</strong> The Tragedy of the Commons occurs when individuals overuse shared open-access resources for personal gain, causing total depletion. Examples in BD: Groundwater over-extraction in Dhaka/Gazipur and river pollution in the Buriganga.
+                </div>
+            </div>
+
+            <div class="page-nav-btns">
+                <button class="btn" onclick="prevTopic(10)">← Previous</button>
+                <button class="btn btn-accent" onclick="nextTopic(10)">Next: Quick Revision Sheet →</button>
+            </div>
+        </article>
+
+        <!-- TOPIC 12: REVISION SHEET -->
+        <article class="topic-card" id="topic-11">
+            <div class="topic-header">
+                <h2>Topic 12: Ultimate Quick Revision Sheet</h2>
+                <p>Consolidated cheat sheet for rapid pre-exam review</p>
+            </div>
+
+            <h3>🔑 Core Equations & Key Formulas</h3>
+            <div class="def-box">
+                <ul>
+                    <li><strong>Natural Capital:</strong> Natural Capital = Natural Resources + Ecosystem Services</li>
+                    <li><strong>IPAT Impact Equation:</strong> Impact (I) = Population (P) × Affluence (A) × Technology (T)</li>
+                    <li><strong>Ecological State:</strong> Footprint > Biocapacity = Ecological Deficit</li>
+                </ul>
+            </div>
+
+            <h3>⚡ Top 10 Quiz Traps & True/False Facts</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Statement / Concept</th>
+                        <th>Status / Fact</th>
+                        <th>Quick Clarification</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>DBL Group water usage reduction</td>
+                        <td><strong>300L ➔ 60L</strong></td>
+                        <td>Reduced by 80%, saving $2.2M annually</td>
+                    </tr>
+                    <tr>
+                        <td>Dhaka groundwater table decline</td>
+                        <td><strong>2 to 3 metres/year</strong></td>
+                        <td>Caused by 1,500B liters of RMG extraction</td>
+                    </tr>
+                    <tr>
+                        <td>RMG Export share in Bangladesh</td>
+                        <td><strong>~81% of total exports</strong></td>
+                        <td>$39.3 Billion annually</td>
+                    </tr>
+                    <tr>
+                        <td>Is technology always negative in IPAT?</td>
+                        <td><strong>FALSE</strong></td>
+                        <td>Technology (T) can reduce impact if green/clean</td>
+                    </tr>
+                    <tr>
+                        <td>Photosynthesis ecosystem service type</td>
+                        <td><strong>Supporting Service</strong></td>
+                        <td>Underpins all other ecosystem services</td>
+                    </tr>
+                    <tr>
+                        <td>Current Global Ecological Footprint</td>
+                        <td><strong>1.75 Earths</strong></td>
+                        <td>Humanity consumes 75% more than biocapacity</td>
+                    </tr>
+                    <tr>
+                        <td>Main driver of impact in rich nations</td>
+                        <td><strong>Affluence (A)</strong></td>
+                        <td>High consumption per capita drives degradation</td>
+                    </tr>
+                    <tr>
+                        <td>Tragedy of the Commons applies to...</td>
+                        <td><strong>Open-Access Shared Resources</strong></td>
+                        <td>Does NOT apply to strictly managed private land</td>
+                    </tr>
+                    <tr>
+                        <td>ChatGPT query energy consumption</td>
+                        <td><strong>10x standard web search</strong></td>
+                        <td>High computing power requirements</td>
+                    </tr>
+                    <tr>
+                        <td>Ecological Wisdom Worldview</td>
+                        <td><strong>Earth-Centered</strong></td>
+                        <td>Humans are part of and dependent on nature</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="bangla-explain">
+                <strong>💡 Final Exam Tip:</strong>
+                পরীক্ষায় MCQs এবং SAQ দেওয়ার সময় DBL Group-এর ডাটা (300L vs 60L, 2-3m groundwater drop) এবং IPAT ফরমুলার বিস্তারিত সংজ্ঞাসহ উত্তর লিখলে ফুল মার্কস নিশ্চিত করা সম্ভব!
+            </div>
+
+            <div class="page-nav-btns">
+                <button class="btn" onclick="prevTopic(11)">← Previous</button>
+                <button class="btn btn-accent" onclick="showTopic(9)">Take Final Exam Again →</button>
+            </div>
+        </article>
+
+    </main>
+
+    <script>
+        const examQuestions = [
+            {
+                q: "1. What is the approximate contribution of the RMG sector to Bangladesh's total national exports in FY2024–25?",
+                options: ["A) 45%", "B) 60%", "C) 81%", "D) 95%"],
+                ans: "C",
+                exp: "Correct! The RMG sector accounts for roughly 81% ($39.3 billion) of Bangladesh's total export revenue.",
+                bng: "ব্যাখ্যা: আরএমজি খাত বাংলাদেশের মোট রপ্তানির প্রায় ৮১% অর্জনে অবদান রাখে।"
+            },
+            {
+                q: "2. Standard baseline wet processing of 1 kg of fabric in Bangladesh RMG mills uses how much water?",
+                options: ["A) 50 litres", "B) 120 litres", "C) 300 litres", "D) 1,500 litres"],
+                ans: "C",
+                exp: "Correct! Standard mills use ~300 liters per kg, compared to international best practice (<50L).",
+                bng: "ব্যাখ্যা: সাধারণ কারখানায় ১ কেজি কাপড় ডায়িং করতে ৩০০ লিটার পানি লাগে।"
+            },
+            {
+                q: "3. DBL Group successfully reduced their wet processing water consumption per kg of fabric to:",
+                options: ["A) 10 litres", "B) 60 litres", "C) 150 litres", "D) 250 litres"],
+                ans: "B",
+                exp: "Correct! DBL Group slashed water consumption from 300L down to 60L per kg.",
+                bng: "ব্যাখ্যা: ডিবিএল গ্রুপ পানি ব্যবহারের পরিমাণ ৩০০ লিটার থেকে কমিয়ে ৬০ লিটারে নামিয়ে এনেছে।"
+            },
+            {
+                q: "4. What was the payback period for DBL Group's $500,000 cleaner production investment?",
+                options: ["A) Under 3 months", "B) 2 years", "C) 5 years", "D) 10 years"],
+                ans: "A",
+                exp: "Correct! Energy and water cost savings repaid the initial $500,000 investment in less than 3 months.",
+                bng: "ব্যাখ্যা: ডিবিএল গ্রুপের বিনিয়োগটি ৩ মাসেরও কম সময়ে উসূল (payback) হয়ে গিয়েছিল।"
+            },
+            {
+                q: "5. Sustainable development was defined by the Brundtland Commission in which year?",
+                options: ["A) 1972", "B) 1987", "C) 1997", "D) 2015"],
+                ans: "B",
+                exp: "Correct! The famous definition was published in the Brundtland Report in 1987.",
+                bng: "ব্যাখ্যা: ১৯৮৭ সালে ব্রুন্ডল্যান্ড কমিশন টেকসই উন্নয়নের ক্লাসিক সংজ্ঞা প্রদান করে।"
+            },
+            {
+                q: "6. In the 3 Circles model of sustainability, the intersection of Social and Economic spheres yields:",
+                options: ["A) Viable", "B) Bearable", "C) Equitable", "D) Sustainable"],
+                ans: "C",
+                exp: "Correct! Social + Economic = Equitable (fair society and business, but missing environmental care).",
+                bng: "ব্যাখ্যা: সমাজ এবং অর্থনীতির যৌথ মিলনক্ষেত্রকে 'Equitable' বা ন্যায়সংগত বলা হয়।"
+            },
+            {
+                q: "7. Which of the following is the correct equation for Natural Capital?",
+                options: [
+                    "A) Natural Capital = Renewable Energy + Fossil Fuels",
+                    "B) Natural Capital = Natural Resources + Ecosystem Services",
+                    "C) Natural Capital = Biocapacity × Ecological Footprint",
+                    "D) Natural Capital = Population × Technology"
+                ],
+                ans: "B",
+                exp: "Correct! Natural Capital equals the sum of Natural Resources and Ecosystem Services.",
+                bng: "ব্যাখ্যা: ন্যাচারাল ক্যাপিটাল = প্রাকৃতিক সম্পদ (Resources) + ইকোসিস্টেম সার্ভিস (Services)।"
+            },
+            {
+                q: "8. Solar energy, wind, and tides are classified as what type of natural resource?",
+                options: ["A) Non-renewable", "B) Renewable", "C) Inexhaustible", "D) Ecosystem services"],
+                ans: "C",
+                exp: "Correct! Solar energy and wind are inexhaustible resources that cannot be depleted on human timescales.",
+                bng: "ব্যাখ্যা: সূর্যরশ্মি ও বায়ুপ্রবাহ হলো Inexhaustible বা অক্ষয় সম্পদ।"
+            },
+            {
+                q: "9. Water purification, pest control, and flood regulation fall under which category of ecosystem services?",
+                options: ["A) Provisioning", "B) Regulating", "C) Cultural", "D) Supporting"],
+                ans: "B",
+                exp: "Correct! Regulating services maintain ecological stability and balances.",
+                bng: "ব্যাখ্যা: পানি শোধন ও বন্যা নিয়ন্ত্রণ হলো Regulating (নিয়ন্ত্রণকারী) সার্ভিস।"
+            },
+            {
+                q: "10. Photosynthesis and soil formation belong to which ecosystem service category?",
+                options: ["A) Provisioning", "B) Regulating", "C) Cultural", "D) Supporting"],
+                ans: "D",
+                exp: "Correct! Supporting services underpin all other ecosystem services.",
+                bng: "ব্যাখ্যা: সালোকসংশ্লেষণ ও মাটি গঠন হলো Supporting (সহায়ক) সার্ভিস।"
+            },
+            {
+                q: "11. The concept 'Tragedy of the Commons' was popularized by Garrett Hardin in:",
+                options: ["A) 1950", "B) 1968", "C) 1987", "D) 2001"],
+                ans: "B",
+                exp: "Correct! Garrett Hardin published 'The Tragedy of the Commons' in 1968.",
+                bng: "ব্যাখ্যা: ১৯৬৮ সালে গ্যারেট হার্ডিন 'Tragedy of the Commons' ধারণাটি প্রকাশ করেন।"
+            },
+            {
+                q: "12. Which of the following is an example of an open-access 'Commons'?",
+                options: ["A) A fenced private dairy farm", "B) Deep aquifers & open ocean fisheries", "C) A commercial shopping mall", "D) A private garment factory"],
+                ans: "B",
+                exp: "Correct! Open ocean fisheries and deep aquifers are shared, open-access resources.",
+                bng: "ব্যাখ্যা: উন্মুক্ত সমুদ্র এবং ভূগর্ভস্থ পানি হলো শেয়ার্ড 'কমন্স' সম্পদ।"
+            },
+            {
+                q: "13. Which of the following is NOT one of the 3 scientific principles of sustainability?",
+                options: ["A) Reliance on Solar Energy", "B) Biodiversity", "C) Continuous Economic Expansion", "D) Chemical/Nutrient Cycling"],
+                ans: "C",
+                exp: "Correct! Endless economic expansion is NOT a natural scientific principle.",
+                bng: "ব্যাখ্যা: নিরবচ্ছিন্ন অর্থনৈতিক বৃদ্ধি প্রকৃতির ৩টি মূল বৈজ্ঞানিক নীতির অন্তর্ভুক্ত নয়।"
+            },
+            {
+                q: "14. Ecological Footprint is measured in which unit?",
+                options: ["A) Kilograms of Carbon", "B) Global Hectares (gha)", "C) Litres per capita", "D) Megawatts per hour"],
+                ans: "B",
+                exp: "Correct! Ecological Footprint and Biocapacity are measured in Global Hectares (gha).",
+                bng: "ব্যাখ্যা: ইকোলজিক্যাল ফুটপ্রিন্ট গ্লোবাল হেক্টর (gha) এককে মাপা হয়।"
+            },
+            {
+                q: "15. Currently, humanity's total global footprint requires approximately how many Earths?",
+                options: ["A) 0.8 Earths", "B) 1.0 Earth", "C) 1.75 Earths", "D) 5.0 Earths"],
+                ans: "C",
+                exp: "Correct! Globally, humanity uses ecological resources 75% faster than Earth can regenerate (1.75 Earths).",
+                bng: "ব্যাখ্যা: বর্তমানে বিশ্বজুড়ে মানবজাতি বছরে ১.৭৫টি পৃথিবীর সমান রিসোর্স ব্যবহার করছে।"
+            },
+            {
+                q: "16. An Ecological Deficit occurs when:",
+                options: ["A) Biocapacity > Footprint", "B) Footprint > Biocapacity", "C) Population drops to zero", "D) Technology reaches 100% efficiency"],
+                ans: "B",
+                exp: "Correct! When Footprint exceeds Biocapacity, a region or nation enters Ecological Deficit.",
+                bng: "ব্যাখ্যা: যখন চাহিদা (Footprint) প্রকৃতির জোগান (Biocapacity)-কে ছাড়িয়ে যায়, তখন ডিফিসিট দেখা দেয়।"
+            },
+            {
+                q: "17. In the IPAT equation (I = P × A × T), what does 'A' stand for?",
+                options: ["A) Agricultural footprint", "B) Atmosphere", "C) Affluence (consumption per person)", "D) Assessment score"],
+                ans: "C",
+                exp: "Correct! 'A' stands for Affluence, reflecting wealth and per capita consumption level.",
+                bng: "ব্যাখ্যা: IPAT সমীকরণে 'A' মানে Affluence বা মাথাপিছু ভোগের পরিমাণ।"
+            },
+            {
+                q: "18. In developing nations like Bangladesh, which IPAT factor is usually the primary driver of environmental impact?",
+                options: ["A) Affluence (A)", "B) Population size (P)", "C) Technology (T)", "D) Space travel"],
+                ans: "B",
+                exp: "Correct! In developing nations, large population size (P) drives impact for basic survival.",
+                bng: "ব্যাখ্যা: উন্নয়নশীল দেশে জনসংখ্যা (P)-র অতিরিক্ত বৃদ্ধিই মূল পরিবেশগত চাপ সৃষ্টি করে।"
+            },
+            {
+                q: "19. True or False: Technology (T) in the IPAT model ALWAYS increases total environmental impact.",
+                options: ["A) True", "B) False"],
+                ans: "B",
+                exp: "Correct! False. Green technologies (like solar panels and energy recovery) decrease 'I'.",
+                bng: "ব্যাখ্যা: মিথ্যা। পরিবেশবান্ধব প্রযুক্তি ব্যবহার করলে Impact বা ক্ষতি কমানো সম্ভব।"
+            },
+            {
+                q: "20. Which of the following is NOT one of the 5 primary root causes of environmental problems?",
+                options: ["A) Poverty", "B) Excluding environmental costs from market prices", "C) Reliance on renewable solar power", "D) Increasing isolation from nature"],
+                ans: "C",
+                exp: "Correct! Solar power is a solution, not a root cause of environmental problems.",
+                bng: "ব্যাখ্যা: সৌরশক্তি ব্যবহার করা কোনো পরিবেশগত সমস্যার মূল কারণ নয়।"
+            },
+            {
+                q: "21. The Planetary Management worldview is described as:",
+                options: ["A) Earth-centered", "B) Human-centered (Anthropocentric)", "C) Ecosystem-centered", "D) Species-equal"],
+                ans: "B",
+                exp: "Correct! Planetary Management views humans as separate from and in total control of nature.",
+                bng: "ব্যাখ্যা: Planetary Management হলো একটি মানব-কেন্দ্রিক বা Anthropocentric দৃষ্টিভঙ্গি।"
+            },
+            {
+                q: "22. The Agricultural Revolution occurred approximately how many years ago?",
+                options: ["A) 275 years ago", "B) 1,000 years ago", "C) 10,000 to 12,000 years ago", "D) 100,000 years ago"],
+                ans: "C",
+                exp: "Correct! The shift from hunting-gathering to farming occurred ~10,000–12,000 years ago.",
+                bng: "ব্যাখ্যা: কৃষি বিপ্লব প্রায় ১০,০০০ থেকে ১২,০০০ বছর পূর্বে শুরু হয়েছিল।"
+            },
+            {
+                q: "23. The Industrial-Medical Revolution began approximately how many years ago?",
+                options: ["A) 50 years ago", "B) 275 years ago", "C) 2,000 years ago", "D) 5,000 years ago"],
+                ans: "B",
+                exp: "Correct! The industrial revolution began ~275 years ago with fossil fuel combustion.",
+                bng: "ব্যাখ্যা: শিল্প বিপ্লব প্রায় ২৭৫ বছর আগে জীবাশ্ম জ্বালানি ব্যবহারের মাধ্যমে শুরু হয়।"
+            },
+            {
+                q: "24. An AI ChatGPT search query consumes approximately how much power relative to a standard web search?",
+                options: ["A) 10% less", "B) Exactly the same", "C) 2x more", "D) Up to 10x more"],
+                ans: "D",
+                exp: "Correct! AI queries consume up to 10 times more electricity than traditional search queries.",
+                bng: "ব্যাখ্যা: এআই কুয়েরি সাধারণ গুগল সার্চের চেয়ে প্রায় ১০ গুণ বেশি বিদ্যুৎ খরচ করে।"
+            },
+            {
+                q: "25. The principle 'In nature, waste equals food' refers to:",
+                options: ["A) Full-cost pricing", "B) Chemical / Nutrient Cycling", "C) Biocapacity depletion", "D) Anthropocentric stewardship"],
+                ans: "B",
+                exp: "Correct! Nutrient cycling ensures all outputs are recycled back into living systems as nutrients.",
+                bng: "ব্যাখ্যা: নিউট্রিয়েন্ট সাইক্লিং-এর মাধ্যমে প্রকৃতির এক প্রাণীর বর্জ্য অন্য প্রাণীর খাদ্য হিসেবে ব্যবহৃত হয়।"
+            }
+        ];
+
+        function initApp() {
+            renderExam();
+            updateProgress(0);
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        function showTopic(index) {
+            const topics = document.querySelectorAll('.topic-card');
+            const navItems = document.querySelectorAll('.nav-item');
+
+            topics.forEach((card, idx) => {
+                if (idx === index) {
+                    card.classList.add('active');
+                } else {
+                    card.classList.remove('active');
+                }
+            });
+
+            navItems.forEach((item, idx) => {
+                if (idx === index) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+
+            updateProgress(index);
+
+            // Close mobile sidebar if open
+            document.getElementById('sidebar').classList.remove('open');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextTopic(currentIndex) {
+            showTopic(currentIndex + 1);
+        }
+
+        function prevTopic(currentIndex) {
+            showTopic(currentIndex - 1);
+        }
+
+        function updateProgress(topicIndex) {
+            const totalTopics = 12;
+            const percentage = Math.round(((topicIndex + 1) / totalTopics) * 100);
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            document.getElementById('progress-text').innerText = percentage + '%';
+        }
+
+        function checkMiniQuiz(qName, correctVal, expId, correctMsg, wrongMsg) {
+            const selected = document.querySelector(`input[name="${qName}"]:checked`);
+            const expBox = document.getElementById(expId);
+
+            if (!selected) {
+                alert('Please select an option before submitting!');
+                return;
+            }
+
+            expBox.classList.add('show');
+            if (selected.value === correctVal) {
+                expBox.className = 'explanation-box show correct';
+                expBox.innerHTML = `<strong>✓ Correct!</strong> ${correctMsg}`;
+            } else {
+                expBox.className = 'explanation-box show wrong';
+                expBox.innerHTML = `<strong>✗ Incorrect.</strong> ${wrongMsg}`;
+            }
+        }
+
+        function renderExam() {
+            const container = document.getElementById('exam-questions-container');
+            let html = '';
+
+            examQuestions.forEach((qObj, index) => {
+                html += `
+                    <div class="question-block" id="eq-block-${index}">
+                        <p class="question-text">${qObj.q}</p>
+                        <ul class="options-list">
+                `;
+
+                qObj.options.forEach((opt, optIdx) => {
+                    const optLetter = opt.charAt(0);
+                    html += `
+                        <li class="option-item">
+                            <label class="option-label">
+                                <input type="radio" name="eq_${index}" value="${optLetter}"> ${opt}
+                            </label>
+                        </li>
+                    `;
+                });
+
+                html += `
+                        </ul>
+                        <div id="eq-exp-${index}" class="explanation-box"></div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function gradeExam() {
+            let score = 0;
+
+            examQuestions.forEach((qObj, index) => {
+                const selected = document.querySelector(`input[name="eq_${index}"]:checked`);
+                const expBox = document.getElementById(`eq-exp-${index}`);
+                expBox.classList.add('show');
+
+                if (selected && selected.value === qObj.ans) {
+                    score++;
+                    expBox.className = 'explanation-box show correct';
+                    expBox.innerHTML = `<strong>✓ Correct!</strong> ${qObj.exp}<br><em>${qObj.bng}</em>`;
+                } else {
+                    expBox.className = 'explanation-box show wrong';
+                    expBox.innerHTML = `<strong>✗ Incorrect. Correct Answer: ${qObj.ans}</strong><br>${qObj.exp}<br><em>${qObj.bng}</em>`;
+                }
+            });
+
+            // Display Score Dashboard
+            const dashboard = document.getElementById('score-dashboard');
+            const scoreNum = document.getElementById('score-num');
+            const scoreFeedback = document.getElementById('score-feedback');
+
+            dashboard.classList.add('active');
+            scoreNum.innerText = `${score} / 25`;
+
+            const percentage = (score / 25) * 100;
+            if (percentage >= 80) {
+                scoreFeedback.innerText = "🌟 Outstanding Performance! You are fully prepared to ace the GEN203 Exam!";
+            } else if (percentage >= 60) {
+                scoreFeedback.innerText = "👍 Good Job! Review the missed questions and Bangla explanations to boost your score.";
+            } else {
+                scoreFeedback.innerText = "📚 Keep practicing! Re-read topics 1 to 9 and take the test again.";
+            }
+
+            window.scrollTo({ top: dashboard.offsetTop - 20, behavior: 'smooth' });
+        }
+
+        function resetExam() {
+            document.getElementById('exam-form').reset();
+            document.getElementById('score-dashboard').classList.remove('active');
+            
+            examQuestions.forEach((_, index) => {
+                const expBox = document.getElementById(`eq-exp-${index}`);
+                expBox.className = 'explanation-box';
+                expBox.innerHTML = '';
+            });
+
+            window.scrollTo({ top: document.getElementById('topic-9').offsetTop - 20, behavior: 'smooth' });
+        }
+
+        function toggleModelAnswer(id) {
+            const answerBox = document.getElementById(id);
+            answerBox.classList.toggle('show');
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>

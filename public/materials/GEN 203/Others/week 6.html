@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEN203 Exam Prep - Week 6: Environmental Pollution | EWU</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Noto Sans Bengali -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        accent: {
+                            500: '#10b981',
+                            600: '#059669',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans Bengali', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #93c5fd; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 font-sans min-h-screen flex flex-col antialiased">
+
+    <!-- Sticky Header -->
+    <header class="sticky top-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo & Course Name -->
+                <div class="flex items-center gap-3">
+                    <div class="bg-gradient-to-tr from-sky-600 to-teal-500 text-white p-2.5 rounded-xl shadow-md">
+                        <i class="fa-solid me-0 fa-leaf text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="font-extrabold text-lg text-slate-900 dark:text-white leading-tight">GEN203 Exam Portal</div>
+                        <div class="text-xs font-medium text-sky-600 dark:text-sky-400">Week 6: Environmental Pollution • EWU</div>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center gap-1 lg:gap-2 text-sm font-semibold">
+                    <button onclick="switchTab('overview')" id="nav-overview" class="nav-btn px-3 py-2 rounded-lg text-sky-600 bg-sky-50 dark:bg-slate-800 dark:text-sky-400 transition-all">Overview</button>
+                    <button onclick="switchTab('modules')" id="nav-modules" class="nav-btn px-3 py-2 rounded-lg text-slate-600 hover:text-sky-600 dark:text-slate-300 dark:hover:text-sky-400 transition-all">Study Modules</button>
+                    <button onclick="switchTab('quick-revision')" id="nav-quick-revision" class="nav-btn px-3 py-2 rounded-lg text-slate-600 hover:text-sky-600 dark:text-slate-300 dark:hover:text-sky-400 transition-all">Quick Revision</button>
+                    <button onclick="switchTab('short-qa')" id="nav-short-qa" class="nav-btn px-3 py-2 rounded-lg text-slate-600 hover:text-sky-600 dark:text-slate-300 dark:hover:text-sky-400 transition-all">Short Q&A</button>
+                    <button onclick="switchTab('final-quiz')" id="nav-final-quiz" class="nav-btn px-3 py-2 rounded-lg text-slate-600 hover:text-sky-600 dark:text-slate-300 dark:hover:text-sky-400 transition-all">Final Practice Test</button>
+                </nav>
+
+                <!-- Actions: Progress & Mobile Menu -->
+                <div class="flex items-center gap-3">
+                    <div class="hidden sm:flex flex-col items-end">
+                        <span class="text-xs text-slate-500 dark:text-slate-400">Course Progress</span>
+                        <div class="w-28 bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden mt-1">
+                            <div id="overall-progress" class="bg-teal-500 h-full w-0 transition-all duration-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all" title="Toggle Theme">
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i class="fa-solid fa-sun hidden dark:inline"></i>
+                    </button>
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchTab('overview'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md font-medium text-slate-700 dark:text-slate-200 hover:bg-sky-50 dark:hover:bg-slate-800">Overview & Syllabus</button>
+            <button onclick="switchTab('modules'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md font-medium text-slate-700 dark:text-slate-200 hover:bg-sky-50 dark:hover:bg-slate-800">Study Modules</button>
+            <button onclick="switchTab('quick-revision'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md font-medium text-slate-700 dark:text-slate-200 hover:bg-sky-50 dark:hover:bg-slate-800">Quick Revision Sheet</button>
+            <button onclick="switchTab('short-qa'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md font-medium text-slate-700 dark:text-slate-200 hover:bg-sky-50 dark:hover:bg-slate-800">Short Q&A Practice</button>
+            <button onclick="switchTab('final-quiz'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md font-medium text-slate-700 dark:text-slate-200 hover:bg-sky-50 dark:hover:bg-slate-800">Final Practice Test (25 Qs)</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- TAB 1: OVERVIEW -->
+        <div id="tab-overview" class="tab-content active space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-sky-900 via-indigo-900 to-slate-900 text-white p-6 sm:p-10 shadow-xl">
+                <div class="relative z-10 max-w-3xl space-y-4">
+                    <span class="inline-block bg-sky-500/20 text-sky-300 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full border border-sky-400/30">East West University • Course Review</span>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight">GEN203: Week 6 Exam Prep</h1>
+                    <p class="text-sky-100 text-base sm:text-lg font-light leading-relaxed">
+                        Environmental Pollution: Basic Terminologies, Types of Pollution, Air & Water Pollutants, AQI Scale, Smog, Acid Rain & Health Impacts.
+                    </p>
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <button onclick="switchTab('modules')" class="bg-teal-500 hover:bg-teal-600 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:shadow-teal-500/30 transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-book-open"></i> Start Learning Modules
+                        </button>
+                        <button onclick="switchTab('final-quiz')" class="bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3 rounded-xl backdrop-blur border border-white/20 transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-pen-to-square"></i> Jump to Practice Test
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructor & Course Information Card -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-sky-100 dark:bg-sky-900/50 text-sky-600 dark:text-sky-300 flex items-center gap-0 justify-center text-xl font-bold">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400 uppercase font-semibold">Course Faculty</div>
+                        <div class="font-bold text-slate-900 dark:text-white">Ekhtekharul Islam & Apu Nazrul</div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400">Ekhtekharul.islam@ewubd.edu</div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-teal-100 dark:bg-teal-900/50 text-teal-600 dark:text-teal-300 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400 uppercase font-semibold">Learning Objective</div>
+                        <div class="font-bold text-slate-900 dark:text-white">Master Pollution Concepts</div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400">Identify sources, mechanisms & health consequences</div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400 uppercase font-semibold">Exam Target</div>
+                        <div class="font-bold text-slate-900 dark:text-white">100% Preparation</div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400">25 Interactive Practice Questions + Short Q&A</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Topics Grid -->
+            <div class="space-y-4">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-sky-600"></i> Syllabus Coverage Roadmap
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div onclick="switchTab('modules'); scrollToModule('mod-1');" class="cursor-pointer bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-sky-500 dark:hover:border-sky-500 hover:shadow-md transition-all group">
+                        <span class="text-xs font-extrabold text-sky-600 dark:text-sky-400 uppercase">Module 1</span>
+                        <h3 class="font-bold text-slate-900 dark:text-white group-hover:text-sky-600 transition-colors mt-1">Basic Concepts & Pollution Types</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">Definitions, pollutants, persistence, 7 pollution types including Visual & Noise.</p>
+                    </div>
+
+                    <div onclick="switchTab('modules'); scrollToModule('mod-2');" class="cursor-pointer bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-sky-500 dark:hover:border-sky-500 hover:shadow-md transition-all group">
+                        <span class="text-xs font-extrabold text-sky-600 dark:text-sky-400 uppercase">Module 2</span>
+                        <h3 class="font-bold text-slate-900 dark:text-white group-hover:text-sky-600 transition-colors mt-1">Atmosphere & Air Pollution</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">Atmosphere layers, gas composition, primary vs secondary, indoor vs outdoor.</p>
+                    </div>
+
+                    <div onclick="switchTab('modules'); scrollToModule('mod-3');" class="cursor-pointer bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-sky-500 dark:hover:border-sky-500 hover:shadow-md transition-all group">
+                        <span class="text-xs font-extrabold text-sky-600 dark:text-sky-400 uppercase">Module 3</span>
+                        <h3 class="font-bold text-slate-900 dark:text-white group-hover:text-sky-600 transition-colors mt-1">Major Air Pollutants & AQI</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">PM2.5/PM10, CO, NOx, SO2, Ozone, AQI index ranges & economic impacts.</p>
+                    </div>
+
+                    <div onclick="switchTab('modules'); scrollToModule('mod-4');" class="cursor-pointer bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-sky-500 dark:hover:border-sky-500 hover:shadow-md transition-all group">
+                        <span class="text-xs font-extrabold text-sky-600 dark:text-sky-400 uppercase">Module 4</span>
+                        <h3 class="font-bold text-slate-900 dark:text-white group-hover:text-sky-600 transition-colors mt-1">Phenomena, Water & Solutions</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">Smog, Acid Rain, Point/Nonpoint water sources, Belkuchi case study & actions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: STUDY MODULES -->
+        <div id="tab-modules" class="tab-content space-y-12">
+            
+            <!-- Quick Module Index Selector -->
+            <div class="sticky top-20 z-40 bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur p-3 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-wrap gap-2 items-center justify-between shadow-sm">
+                <span class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase px-2"><i class="fa-solid fa-bookmark me-1"></i> Jump to Module:</span>
+                <div class="flex flex-wrap gap-2 text-xs">
+                    <button onclick="scrollToModule('mod-1')" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-700 font-semibold text-slate-700 dark:text-slate-200 hover:bg-sky-500 hover:text-white transition-all">1. Basic Terms & Types</button>
+                    <button onclick="scrollToModule('mod-2')" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-700 font-semibold text-slate-700 dark:text-slate-200 hover:bg-sky-500 hover:text-white transition-all">2. Air Pollution Basics</button>
+                    <button onclick="scrollToModule('mod-3')" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-700 font-semibold text-slate-700 dark:text-slate-200 hover:bg-sky-500 hover:text-white transition-all">3. Pollutants & AQI</button>
+                    <button onclick="scrollToModule('mod-4')" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-700 font-semibold text-slate-700 dark:text-slate-200 hover:bg-sky-500 hover:text-white transition-all">4. Water & Phenomena</button>
+                </div>
+            </div>
+
+            <!-- MODULE 1 -->
+            <section id="mod-1" class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400">Module 1</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">Environmental Pollution: Basic Terminologies & Types</h2>
+                </div>
+
+                <!-- Content Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Key Terms -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                            <i class="fa-solid fa-book"></i> Core Definitions (মূল সংজ্ঞাসমূহ)
+                        </h3>
+                        <div class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
+                            <div>
+                                <span class="font-bold text-slate-900 dark:text-white">Environmental Pollution:</span>
+                                <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
+                                    Undesirable changes in the natural environment that have a harmful effect on plants, animals, and humans. (প্রাকৃতিক পরিবেশের ক্ষতিকর পরিবর্তন যা জীবজগতের ক্ষতি সাধন করে)।
+                                </p>
+                            </div>
+                            <hr class="border-slate-200 dark:border-slate-800">
+                            <div>
+                                <span class="font-bold text-slate-900 dark:text-white">Pollutant (দূষক):</span>
+                                <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
+                                    Any substance causing nuisance, harmful effects, or uneasiness to organisms. They can be naturally occurring substances or energies, but become contaminants when in excess of natural levels.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Persistence Box -->
+                        <div class="p-4 bg-amber-50 dark:bg-amber-950/30 rounded-2xl border border-amber-200 dark:border-amber-800/50">
+                            <h4 class="font-bold text-amber-900 dark:text-amber-300 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-hourglass-half"></i> Persistence & Decomposition (স্থায়িত্ব ও পচন)
+                            </h4>
+                            <p class="text-xs text-amber-800 dark:text-amber-300/90 mt-2 leading-relaxed">
+                                • <strong>Rapidly Decomposed Pollutants:</strong> Removed quickly by natural processes (e.g., vegetable waste).<br>
+                                • <strong>Persistent Pollutants:</strong> Take decades or centuries to decompose and are very difficult to remove once released. <em>Examples: DDT, plastics, heavy metals, nuclear waste.</em>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Types of Pollution -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                            <i class="fa-solid fa-layer-group"></i> 7 Major Types of Pollution (দূষণের ৭টি ধরন)
+                        </h3>
+                        <div class="grid grid-cols-2 gap-3 text-xs font-semibold">
+                            <div class="p-3 bg-sky-50 dark:bg-slate-900 rounded-xl border border-sky-100 dark:border-slate-700">1. Air Pollution (বায়ু দূষণ)</div>
+                            <div class="p-3 bg-sky-50 dark:bg-slate-900 rounded-xl border border-sky-100 dark:border-slate-700">2. Water Pollution (পানি দূষণ)</div>
+                            <div class="p-3 bg-sky-50 dark:bg-slate-900 rounded-xl border border-sky-100 dark:border-slate-700">3. Land Pollution (মাটি দূষণ)</div>
+                            <div class="p-3 bg-sky-50 dark:bg-slate-900 rounded-xl border border-sky-100 dark:border-slate-700">4. Noise Pollution (শব্দ দূষণ)</div>
+                            <div class="p-3 bg-sky-50 dark:bg-slate-900 rounded-xl border border-sky-100 dark:border-slate-700">5. Thermal Pollution (তাপীয় দূষণ)</div>
+                            <div class="p-3 bg-sky-50 dark:bg-slate-900 rounded-xl border border-sky-100 dark:border-slate-700">6. Light Pollution (আলোর দূষণ)</div>
+                            <div class="p-3 bg-sky-50 dark:bg-slate-900 rounded-xl border border-sky-100 dark:border-slate-700 col-span-2">7. Visual Pollution (দৃশ্যমান দূষণ)</div>
+                        </div>
+
+                        <!-- Special Slides Highlights -->
+                        <div class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2 text-xs">
+                            <p><strong>Noise Pollution:</strong> Sound propagation with harmful impact. Slide highlights viral awareness banners from Dhaka: <span class="italic text-rose-600 font-bold">"হর্ন হুদাই বাজায় ভুদাই" (#ToxicCities)</span>.</p>
+                            <p><strong>Thermal Pollution:</strong> Degradation of water quality by any process changing ambient water temperature (e.g., power plant cooling discharge).</p>
+                            <p><strong>Light (Photo) Pollution:</strong> Presence of anthropogenic artificial light in night environment.</p>
+                            <p><strong>Visual Pollution:</strong> Impairs one's ability to enjoy a vista or view (e.g., billboards, cluttered wires). Quote by Hundertwasser: <em>"Visual pollution is more poisonous... because it kills the soul."</em></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 1 Mini Quiz -->
+                <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+                    <div class="bg-sky-50 dark:bg-slate-900/80 p-5 rounded-2xl border border-sky-200 dark:border-slate-700">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-sky-700 dark:text-sky-300"><i class="fa-solid fa-circle-question me-1"></i> Module 1 Quick Check</span>
+                            <span class="text-xs text-slate-500">Instant Check</span>
+                        </div>
+                        <p class="font-bold text-sm text-slate-900 dark:text-white mb-3">Which of the following is classified as a persistent pollutant that takes decades to decompose?</p>
+                        <div class="space-y-2 text-xs">
+                            <button onclick="checkMiniQuiz(this, false, 'Vegetable waste decomposes rapidly through natural decay.')" class="w-full text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">A. Vegetable peel waste</button>
+                            <button onclick="checkMiniQuiz(this, true, 'Correct! DDT, plastics, heavy metals, and nuclear waste are classic persistent pollutants.')" class="w-full text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">B. DDT and Heavy Metals</button>
+                            <button onclick="checkMiniQuiz(this, false, 'Dissolved oxygen is a parameter, not a persistent chemical pollutant.')" class="w-full text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">C. Natural dissolved oxygen</button>
+                        </div>
+                        <div class="mini-explanation hidden mt-3 p-3 text-xs rounded-xl font-medium"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MODULE 2 -->
+            <section id="mod-2" class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400">Module 2</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">Atmosphere Structure & Air Pollution Categories</h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Composition & Atmosphere -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                            <i class="fa-solid fa-cloud"></i> Atmosphere Composition & Layers
+                        </h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-300">
+                            The atmosphere reaches over <strong>560 km (348 miles)</strong> above Earth's surface. It moderates temperature, protects from radiation, and supports life.
+                        </p>
+                        
+                        <!-- Gas Composition Table -->
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700">
+                            <table class="w-full text-xs text-left">
+                                <thead class="bg-slate-100 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 uppercase font-bold">
+                                    <tr>
+                                        <th class="p-3">Gas Name</th>
+                                        <th class="p-3">Percentage</th>
+                                        <th class="p-3">Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                                    <tr><td class="p-3 font-bold">Nitrogen (N₂)</td><td class="p-3 text-sky-600 font-bold">78%</td><td class="p-3">Abundant inert gas</td></tr>
+                                    <tr><td class="p-3 font-bold">Oxygen (O₂)</td><td class="p-3 text-emerald-600 font-bold">21%</td><td class="p-3">Vital for respiration</td></tr>
+                                    <tr><td class="p-3 font-bold">Argon (Ar)</td><td class="p-3">~0.9%</td><td class="p-3">Noble gas</td></tr>
+                                    <tr><td class="p-3 font-bold">Carbon Dioxide (CO₂)</td><td class="p-3 text-rose-600 font-bold">0.04%</td><td class="p-3">Key greenhouse gas</td></tr>
+                                    <tr><td class="p-3 font-bold">Trace Gases</td><td class="p-3">&lt; 0.1%</td><td class="p-3">CO, CH₄, Ne, Kr, Water Vapor</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="p-3 bg-amber-50 dark:bg-amber-900/20 text-xs rounded-xl border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300">
+                            <strong>Conceptual Question from Slide 15:</strong> <em>"What if atmosphere becomes 100% Oxygen?"</em> Earth would experience uncontrollable fires/combustion and toxic oxidative damage to cells!
+                        </div>
+                    </div>
+
+                    <!-- Primary vs Secondary & Indoor vs Outdoor -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                            <i class="fa-solid fa-arrows-split-up-and-left"></i> Pollutant Classification
+                        </h3>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            <div class="p-4 bg-sky-50 dark:bg-slate-900 rounded-2xl border border-sky-100 dark:border-slate-700">
+                                <h4 class="font-bold text-sky-700 dark:text-sky-300 text-sm mb-1">Primary Pollutants</h4>
+                                <p class="text-slate-600 dark:text-slate-300">Emitted <strong>directly</strong> into the atmosphere from sources.<br><em>Examples: CO, CO₂, SO₂, NO, NO₂, hydrocarbons, SPM.</em></p>
+                            </div>
+
+                            <div class="p-4 bg-indigo-50 dark:bg-slate-900 rounded-2xl border border-indigo-100 dark:border-slate-700">
+                                <h4 class="font-bold text-indigo-700 dark:text-indigo-300 text-sm mb-1">Secondary Pollutants</h4>
+                                <p class="text-slate-600 dark:text-slate-300">Formed when primary pollutants <strong>react</strong> with air components or sunlight.<br><em>Examples: SO₃, H₂SO₄, HNO₃, O₃, PANs.</em></p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2 text-xs">
+                            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Indoor vs Outdoor Air Pollution</h4>
+                            <p>• <strong>Indoor:</strong> Tobacco smoke, biomass stoves, kerosene lamps, off-gassing from furniture, paints, mold.</p>
+                            <p>• <strong>Outdoor:</strong> Vehicle emissions, industrial smoke stacks, brick kilns, crop burning.</p>
+                            <p>• <strong>Wind Dispersion Rule:</strong> <em>"Dilution is the solution to pollution"</em> - High wind speeds spread out pollutants over larger areas lowering local concentration; low wind leads to localized stagnated pollution pockets.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 2 Quick Check -->
+                <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+                    <div class="bg-sky-50 dark:bg-slate-900/80 p-5 rounded-2xl border border-sky-200 dark:border-slate-700">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-sky-700 dark:text-sky-300"><i class="fa-solid fa-circle-question me-1"></i> Module 2 Quick Check</span>
+                        </div>
+                        <p class="font-bold text-sm text-slate-900 dark:text-white mb-3">Sulfuric Acid (H₂SO₄) formed in the atmosphere is an example of what type of pollutant?</p>
+                        <div class="space-y-2 text-xs">
+                            <button onclick="checkMiniQuiz(this, false, 'SO2 emitted directly from factory stacks is primary, but H2SO4 forms after chemical reaction in air.')" class="w-full text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">A. Primary Pollutant</button>
+                            <button onclick="checkMiniQuiz(this, true, 'Correct! H2SO4 is formed when primary SO2 reacts with water vapor in the atmosphere.')" class="w-full text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">B. Secondary Pollutant</button>
+                        </div>
+                        <div class="mini-explanation hidden mt-3 p-3 text-xs rounded-xl font-medium"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MODULE 3 -->
+            <section id="mod-3" class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400">Module 3</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">Major Air Pollutants & Air Quality Index (AQI)</h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Major Pollutants Overview -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                            <i class="fa-solid fa-smog"></i> Major Air Pollutants Summary
+                        </h3>
+
+                        <!-- Particulate Matter Focus -->
+                        <div class="p-4 bg-sky-50 dark:bg-slate-900 rounded-2xl border border-sky-200 dark:border-slate-700 space-y-2">
+                            <h4 class="font-bold text-sky-900 dark:text-sky-300 text-sm">Particulate Matter (PM) Categories:</h4>
+                            <ul class="text-xs space-y-1.5 text-slate-700 dark:text-slate-300">
+                                <li>• <strong>PM10 (&lt; 10 µm):</strong> Inhalable coarse particles (street dust, road construction). Causes respiratory ailments & pulmonary function decline.</li>
+                                <li>• <strong>PM2.5 (&lt; 2.5 µm):</strong> Fine particles (combustion, smoke, haze). Enters deep lungs; increases lung cancer risk.</li>
+                                <li>• <strong>PM0.1 (&lt; 0.1 µm):</strong> Ultrafine particles (diesel soot). Enters bloodstream; high risk of heart attacks.</li>
+                            </ul>
+                        </div>
+
+                        <div class="space-y-2 text-xs">
+                            <div class="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <strong>Carbon Monoxide (CO):</strong> Colorless, odorless highly toxic gas from <em>incomplete combustion</em>.
+                            </div>
+                            <div class="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <strong>Carbon Dioxide (CO₂):</strong> 93% tropospheric CO₂ from natural carbon cycle; 7% from human activity (fossil fuel combustion).
+                            </div>
+                            <div class="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <strong>Nitrogen Oxides (NOx):</strong> NO forms in high-temp auto engines. NO₂ forms HNO₃ (nitric acid).
+                            </div>
+                            <div class="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <strong>Sulfur Dioxide (SO₂):</strong> 1/3 natural, 2/3 human (coal burning, smelting). Forms H₂SO₄.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AQI Breakdown Table & Economic Impact -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                            <i class="fa-solid fa-gauge-high"></i> Air Quality Index (AQI) Scale (0-500)
+                        </h3>
+
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700">
+                            <table class="w-full text-xs text-left">
+                                <thead class="bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-100 font-bold">
+                                    <tr>
+                                        <th class="p-2">AQI Range</th>
+                                        <th class="p-2">Category</th>
+                                        <th class="p-2">Color</th>
+                                        <th class="p-2">Health Significance</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 dark:divide-slate-700 font-medium">
+                                    <tr class="bg-emerald-100/60 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200"><td class="p-2 font-bold">0 - 50</td><td class="p-2">Good</td><td class="p-2">Green</td><td class="p-2">Little or no risk</td></tr>
+                                    <tr class="bg-yellow-100/60 dark:bg-yellow-950/40 text-yellow-900 dark:text-yellow-200"><td class="p-2 font-bold">51 - 100</td><td class="p-2">Moderate</td><td class="p-2">Yellow</td><td class="p-2">Acceptable; concern for unusually sensitive</td></tr>
+                                    <tr class="bg-orange-100/60 dark:bg-orange-950/40 text-orange-900 dark:text-orange-200"><td class="p-2 font-bold">101 - 150</td><td class="p-2">Unhealthy for Sensitive</td><td class="p-2">Orange</td><td class="p-2">Sensitive groups (asthma/kids/elderly) affected</td></tr>
+                                    <tr class="bg-rose-100/60 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200"><td class="p-2 font-bold">151 - 200</td><td class="p-2">Unhealthy</td><td class="p-2">Red</td><td class="p-2">Everyone begins to experience health effects</td></tr>
+                                    <tr class="bg-purple-100/60 dark:bg-purple-950/40 text-purple-900 dark:text-purple-200"><td class="p-2 font-bold">201 - 300</td><td class="p-2">Very Unhealthy</td><td class="p-2">Purple</td><td class="p-2">Health warning: emergency conditions</td></tr>
+                                    <tr class="bg-amber-950 text-amber-200"><td class="p-2 font-bold">301 - 500</td><td class="p-2">Hazardous</td><td class="p-2">Maroon</td><td class="p-2">Serious health alert; avoid outdoor exertion</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Bangladesh Statistics Box -->
+                        <div class="p-4 bg-rose-50 dark:bg-rose-950/30 rounded-2xl border border-rose-200 dark:border-rose-800 text-xs space-y-2">
+                            <h4 class="font-bold text-rose-900 dark:text-rose-300 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-chart-line"></i> Bangladesh Air Pollution Facts (Slide 11 & 39)
+                            </h4>
+                            <p class="text-rose-800 dark:text-rose-300">
+                                • Bangladesh loses <strong>$14 Billion / year</strong> ($38.3 Million per day) due to air pollution.<br>
+                                • <strong>96,000 Bangladeshi children</strong> under 5 died in 2018 due to PM2.5 pollution.<br>
+                                • Worldwide: 4.5 million premature deaths/year from air pollution; $8 Billion lost every day.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 3 Quick Check -->
+                <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+                    <div class="bg-sky-50 dark:bg-slate-900/80 p-5 rounded-2xl border border-sky-200 dark:border-slate-700">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-sky-700 dark:text-sky-300"><i class="fa-solid fa-circle-question me-1"></i> Module 3 Quick Check</span>
+                        </div>
+                        <p class="font-bold text-sm text-slate-900 dark:text-white mb-3">An AQI value of 175 falls under which category and color code?</p>
+                        <div class="space-y-2 text-xs">
+                            <button onclick="checkMiniQuiz(this, false, '101-150 is Orange (Unhealthy for Sensitive Groups).')" class="w-full text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">A. Moderate (Yellow)</button>
+                            <button onclick="checkMiniQuiz(this, true, 'Correct! 151-200 is Unhealthy (Red), meaning everyone may experience health effects.')" class="w-full text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">B. Unhealthy (Red)</button>
+                            <button onclick="checkMiniQuiz(this, false, '201-300 is Very Unhealthy (Purple).')" class="w-full text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">C. Very Unhealthy (Purple)</button>
+                        </div>
+                        <div class="mini-explanation hidden mt-3 p-3 text-xs rounded-xl font-medium"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MODULE 4 -->
+            <section id="mod-4" class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400">Module 4</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">Environmental Phenomena, Water Pollution & Solutions</h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Key Phenomena -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-sun-rain"></i> Atmospheric Phenomena
+                        </h3>
+
+                        <div class="space-y-3 text-xs">
+                            <div class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700">
+                                <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1">Photochemical Smog</h4>
+                                <p class="text-slate-600 dark:text-slate-300">
+                                    Formed when <strong>NOx + VOCs + Sunlight</strong> react, creating ground-level Ozone (O₃), PANs, and aldehydes. Creates a reddish-brown haze above cities, more common in sunny/dry summer climates.
+                                </p>
+                            </div>
+
+                            <div class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700">
+                                <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1">Acid Deposition (Acid Rain)</h4>
+                                <p class="text-slate-600 dark:text-slate-300">
+                                    SO₂ and NOx react in air to form <strong>H₂SO₄ (sulfuric acid)</strong> and <strong>HNO₃ (nitric acid)</strong>. Causes soil acidification, leaches soil nutrients, damages leaves/bark, and releases toxic metal ions into lakes.
+                                </p>
+                            </div>
+
+                            <div class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700">
+                                <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1">Temperature Inversion</h4>
+                                <p class="text-slate-600 dark:text-slate-300">
+                                    Occurs when a warm layer of air lies above a cooler layer near ground. Traps pollutants underneath (common in mountain valleys or cities bounded by mountains and ocean).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Water Pollution & Solutions -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                            <i class="fa-solid fa-droplet"></i> Water Pollution & Action Solutions
+                        </h3>
+
+                        <!-- Point vs Nonpoint -->
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div class="p-3 bg-teal-50 dark:bg-slate-900 rounded-xl border border-teal-200 dark:border-slate-700">
+                                <span class="font-bold text-teal-800 dark:text-teal-300 text-sm">Point Sources:</span>
+                                <p class="mt-1">Discharged from specific, identifiable locations (e.g., pipe from factory, sewage treatment plant).</p>
+                            </div>
+                            <div class="p-3 bg-teal-50 dark:bg-slate-900 rounded-xl border border-teal-200 dark:border-slate-700">
+                                <span class="font-bold text-teal-800 dark:text-teal-300 text-sm">Nonpoint Sources:</span>
+                                <p class="mt-1">Broad, diffuse areas (e.g., agricultural runoff, urban street runoff, acid rain recharge).</p>
+                            </div>
+                        </div>
+
+                        <!-- Sirajganj Case Study -->
+                        <div class="p-3 bg-amber-50 dark:bg-amber-950/30 rounded-xl border border-amber-200 dark:border-amber-800 text-xs text-amber-900 dark:text-amber-300">
+                            <strong>Local Case Study (Slide 56):</strong> Sirajganj Belkuchi tubewell water contamination due to textile waste infiltrating underground aquifer layer.
+                        </div>
+
+                        <!-- Major Water Pollutants Table -->
+                        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
+                            <table class="w-full text-left">
+                                <thead class="bg-slate-100 dark:bg-slate-700 font-bold">
+                                    <tr>
+                                        <th class="p-2">Type</th>
+                                        <th class="p-2">Examples</th>
+                                        <th class="p-2">Major Source</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                                    <tr><td class="p-2 font-bold">Pathogens</td><td class="p-2">Bacteria, viruses</td><td class="p-2">Human/animal wastes</td></tr>
+                                    <tr><td class="p-2 font-bold">Oxygen-Demanding</td><td class="p-2">Animal waste, debris</td><td class="p-2">Sewage, paper mills</td></tr>
+                                    <tr><td class="p-2 font-bold">Plant Nutrients</td><td class="p-2">Nitrates, Phosphates</td><td class="p-2">Fertilizers, sewage</td></tr>
+                                    <tr><td class="p-2 font-bold">Sediments</td><td class="p-2">Soil, silt</td><td class="p-2">Land erosion, farms</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Personal Solutions -->
+                        <div class="p-3 bg-sky-50 dark:bg-slate-900 rounded-xl border border-sky-200 dark:border-slate-700 text-xs space-y-1">
+                            <span class="font-bold text-sky-800 dark:text-sky-300">Individual & Social Solutions:</span>
+                            <p>Carpooling, public transport (e.g., Vietnam public bus), bike-friendly urban design (Copenhagen), energy efficiency, clean cookstoves.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 4 Quick Check -->
+                <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+                    <div class="bg-sky-50 dark:bg-slate-900/80 p-5 rounded-2xl border border-sky-200 dark:border-slate-700">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-sky-700 dark:text-sky-300"><i class="fa-solid fa-circle-question me-1"></i> Module 4 Quick Check</span>
+                        </div>
+                        <p class="font-bold text-sm text-slate-900 dark:text-white mb-3">Which atmospheric condition is required to form Photochemical Smog?</p>
+                        <div class="space-y-2 text-xs">
+                            <button onclick="checkMiniQuiz(this, false, 'Acid rain requires water vapor, but photochemical smog needs solar radiation.')" class="w-full text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">A. Heavy rain and freezing temperatures</button>
+                            <button onclick="checkMiniQuiz(this, true, 'Correct! Reaction between NOx, VOCs, and Sunlight (solar radiation) produces photochemical smog.')" class="w-full text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">B. Nitrogen oxides, VOCs, and Sunlight</button>
+                        </div>
+                        <div class="mini-explanation hidden mt-3 p-3 text-xs rounded-xl font-medium"></div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- TAB 3: QUICK REVISION SHEET -->
+        <div id="tab-quick-revision" class="tab-content space-y-6">
+            <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">Exam Cheat-Sheet</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">Ultimate Quick Revision Sheet</h2>
+                    </div>
+                    <button onclick="window.print()" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-print"></i> Print Sheet
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                    <!-- Key Facts Box -->
+                    <div class="p-5 bg-sky-50 dark:bg-slate-900 rounded-2xl border border-sky-200 dark:border-slate-700 space-y-3">
+                        <h3 class="font-bold text-sky-900 dark:text-sky-300 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-key"></i> Key Numbers & Data to Memorize
+                        </h3>
+                        <ul class="space-y-2 text-slate-700 dark:text-slate-300">
+                            <li>• <strong>Atmosphere Height:</strong> 560 km (348 miles).</li>
+                            <li>• <strong>Atmosphere Gases:</strong> 78% N₂, 21% O₂, 0.9% Ar, 0.04% CO₂.</li>
+                            <li>• <strong>CO₂ Troposphere Origin:</strong> 93% natural carbon cycle, 7% human (fossil fuels).</li>
+                            <li>• <strong>SO₂ Troposphere Origin:</strong> 1/3 natural, 2/3 human activities.</li>
+                            <li>• <strong>Bangladesh Losses:</strong> $14B/year ($38.3M/day); 96,000 child deaths under 5 in 2018 (PM2.5).</li>
+                            <li>• <strong>AQI Cleanliness Range:</strong> 0 (good) to 500 (hazardous).</li>
+                        </ul>
+                    </div>
+
+                    <!-- True/False Traps Box -->
+                    <div class="p-5 bg-amber-50 dark:bg-amber-950/30 rounded-2xl border border-amber-200 dark:border-amber-800 space-y-3">
+                        <h3 class="font-bold text-amber-900 dark:text-amber-300 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Common Exam Traps (True/False)
+                        </h3>
+                        <ul class="space-y-2 text-amber-900 dark:text-amber-200">
+                            <li>• <strong>TRAP:</strong> CO₂ is regulated as a toxic air pollutant under Clean Air Act. <br><span class="text-rose-600 font-bold">FALSE!</span> Slide 30 explicitly notes it is not regulated as a pollutant under Clean Air Act.</li>
+                            <li>• <strong>TRAP:</strong> Low winds dilute pollution better than high winds. <br><span class="text-rose-600 font-bold">FALSE!</span> High winds spread and dilute pollutants over larger areas.</li>
+                            <li>• <strong>TRAP:</strong> Ground-level Ozone is a primary pollutant directly emitted from exhausts. <br><span class="text-rose-600 font-bold">FALSE!</span> Ozone is a secondary pollutant formed via sunlight reactions.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Formulated Summary Table -->
+                <div class="p-5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3 text-xs">
+                    <h3 class="font-bold text-slate-900 dark:text-white text-sm">Primary vs Secondary Pollutant Matrix</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <span class="font-bold text-sky-600">Primary (Emitted Directly):</span>
+                            <p class="text-slate-600 dark:text-slate-400 mt-1">CO, CO₂, SO₂, NO, NO₂, Hydrocarbons (Methane CH₄, Benzene C₆H₆), Dust/Particulates (PM10, PM2.5), Chlorine gas (Cl₂), Lead (Pb).</p>
+                        </div>
+                        <div>
+                            <span class="font-bold text-indigo-600">Secondary (Formed in Atmosphere):</span>
+                            <p class="text-slate-600 dark:text-slate-400 mt-1">Sulfur trioxide (SO₃), Sulfuric acid (H₂SO₄), Nitric acid (HNO₃), Ozone (O₃), PANs (Peroxyacyl nitrates), Sulfate & Nitrate salts.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: SHORT Q&A PRACTICE -->
+        <div id="tab-short-qa" class="tab-content space-y-6">
+            <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Written Exam Prep</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">Short-Answer Practice Questions</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Click on any question to expand the instructor's standard model answer.</p>
+                </div>
+
+                <!-- Accordion Q&A List -->
+                <div class="space-y-3 text-sm">
+                    <!-- Q1 -->
+                    <div class="border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+                        <button onclick="toggleAccordion('qa-1')" class="w-full text-left p-4 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold text-slate-900 dark:text-white flex items-center justify-between">
+                            <span>Q1: Define Environmental Pollution and Pollutant with examples.</span>
+                            <i id="icon-qa-1" class="fa-solid fa-chevron-down text-xs transition-transform"></i>
+                        </button>
+                        <div id="qa-1" class="hidden p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                            <strong>Model Answer:</strong> Environmental pollution is an effect caused by undesirable changes in the natural environment that have harmful impacts on plants, animals, and humans. A pollutant is any substance or energy causing nuisance, harm, or uneasiness to organisms when present in excess of natural levels. Examples include persistent pollutants like DDT, plastics, and heavy metals.
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+                        <button onclick="toggleAccordion('qa-2')" class="w-full text-left p-4 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold text-slate-900 dark:text-white flex items-center justify-between">
+                            <span>Q2: What is the difference between Primary and Secondary Air Pollutants? Give examples.</span>
+                            <i id="icon-qa-2" class="fa-solid fa-chevron-down text-xs transition-transform"></i>
+                        </button>
+                        <div id="qa-2" class="hidden p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                            <strong>Model Answer:</strong> Primary air pollutants are harmful substances emitted directly into the atmosphere from natural or human sources (e.g., CO, SO₂, NO₂, PM10). Secondary air pollutants are formed in the atmosphere when primary pollutants undergo chemical reactions with normal air components or sunlight (e.g., H₂SO₄, HNO₃, ground-level O₃).
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+                        <button onclick="toggleAccordion('qa-3')" class="w-full text-left p-4 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold text-slate-900 dark:text-white flex items-center justify-between">
+                            <span>Q3: Differentiate between PM10, PM2.5, and PM0.1 in terms of size and health effects.</span>
+                            <i id="icon-qa-3" class="fa-solid fa-chevron-down text-xs transition-transform"></i>
+                        </button>
+                        <div id="qa-3" class="hidden p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                            <strong>Model Answer:</strong> PM10 (&lt; 10 µm) are coarse particles causing upper respiratory ailments. PM2.5 (&lt; 2.5 µm) are fine particles that penetrate deep into lungs causing pulmonary dysfunction and increased lung cancer risk. PM0.1 (&lt; 0.1 µm) are ultrafine particles (like diesel soot) that pass through lungs into blood vessels, significantly increasing heart attack risks.
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+                        <button onclick="toggleAccordion('qa-4')" class="w-full text-left p-4 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold text-slate-900 dark:text-white flex items-center justify-between">
+                            <span>Q4: Explain how Photochemical Smog is formed and its major effects.</span>
+                            <i id="icon-qa-4" class="fa-solid fa-chevron-down text-xs transition-transform"></i>
+                        </button>
+                        <div id="qa-4" class="hidden p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                            <strong>Model Answer:</strong> Photochemical smog is a reddish-brown haze formed when Nitrogen Oxides (NOx) and Volatile Organic Compounds (VOCs) react under solar radiation (sunlight) to form Ozone (O₃), PANs, and aldehydes. It occurs in warm, sunny, dry urban climates with high traffic and causes severe respiratory diseases like asthma, bronchitis, and pneumonia.
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+                        <button onclick="toggleAccordion('qa-5')" class="w-full text-left p-4 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold text-slate-900 dark:text-white flex items-center justify-between">
+                            <span>Q5: Compare Point Sources vs Nonpoint Sources of Water Pollution with examples.</span>
+                            <i id="icon-qa-5" class="fa-solid fa-chevron-down text-xs transition-transform"></i>
+                        </button>
+                        <div id="qa-5" class="hidden p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                            <strong>Model Answer:</strong> Point sources discharge pollutants at specific, easily identifiable locations (e.g., industrial discharge pipes, municipal sewage treatment plants). Nonpoint sources are broad, diffuse areas where rainfall or snowmelt washes pollutants into water bodies (e.g., agricultural fertilizer runoff, urban street runoff, acid rain recharge).
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: FINAL PRACTICE TEST -->
+        <div id="tab-final-quiz" class="tab-content space-y-6">
+            <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <!-- Quiz Header -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">Final Self-Assessment</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">GEN203 Week 6 Comprehensive Exam</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">25 Multiple Choice & True/False Questions • Standard Midterm/Final Format</p>
+                    </div>
+                    <div id="quiz-score-badge" class="hidden px-5 py-3 rounded-2xl bg-sky-500 text-white font-black text-center shadow-md">
+                        <div class="text-xs font-medium uppercase opacity-80">Your Score</div>
+                        <div id="quiz-score-text" class="text-xl">0 / 25</div>
+                    </div>
+                </div>
+
+                <!-- Questions Form Container -->
+                <form id="final-quiz-form" onsubmit="submitFinalQuiz(event)" class="space-y-6">
+                    <div id="quiz-questions-list" class="space-y-6">
+                        <!-- Questions will be injected dynamically via JS -->
+                    </div>
+
+                    <!-- Submit & Reset Controls -->
+                    <div class="pt-6 border-t border-slate-200 dark:border-slate-700 flex flex-wrap items-center gap-4">
+                        <button type="submit" id="submit-quiz-btn" class="px-8 py-3.5 bg-teal-500 hover:bg-teal-600 text-white font-bold rounded-2xl shadow-lg transition-all text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> Submit Exam Answers
+                        </button>
+                        <button type="button" onclick="resetFinalQuiz()" class="px-6 py-3.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-bold rounded-2xl transition-all text-sm">
+                            <i class="fa-solid fa-rotate-right"></i> Reset Test
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 dark:text-slate-400 space-y-2">
+            <p>GEN203: Ecological System and Environment • East West University (EWU)</p>
+            <p>Based on Course Lecture Slides: Week 6 Environmental Pollution by Ekhtekharul Islam & Apu Nazrul</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Data structure for 25 Comprehensive Quiz Questions
+        const quizData = [
+            {
+                q: "1. What is the definition of Environmental Pollution according to GEN203 slides?",
+                options: [
+                    "A natural cycle that balances ecosystem oxygen levels",
+                    "Undesirable changes in natural environment having harmful effects on plants, animals, and humans",
+                    "The intentional harvesting of raw minerals from forest areas",
+                    "Any natural variation in seasonal temperature"
+                ],
+                correct: 1,
+                explanation: "Slide 3 defines Environmental Pollution as an effect caused by undesirable changes in the natural environment with harmful effects on living organisms."
+            },
+            {
+                q: "2. Which of the following is classified as a persistent pollutant that takes decades to decompose?",
+                options: [
+                    "Vegetable peel waste",
+                    "Plastics, DDT, heavy metals, and nuclear waste",
+                    "Fallen leaf litter",
+                    "Naturally occurring water vapor"
+                ],
+                correct: 1,
+                explanation: "Slide 3 notes that DDT, plastics, heavy metals, and nuclear waste take decades to decompose and are very difficult to remove."
+            },
+            {
+                q: "3. What is the standard percentage of Nitrogen (N₂) in Earth's atmosphere?",
+                options: [
+                    "21%",
+                    "78%",
+                    "0.04%",
+                    "0.9%"
+                ],
+                correct: 1,
+                explanation: "Slide 14 specifies Earth's atmosphere consists of 78% Nitrogen (N2), 21% Oxygen (O2), ~0.9% Argon, and 0.04% Carbon Dioxide."
+            },
+            {
+                q: "4. True or False: Carbon Dioxide (CO₂) is regulated as a toxic pollutant under the U.S. Clean Air Act according to Slide 30.",
+                options: [
+                    "True",
+                    "False"
+                ],
+                correct: 1,
+                explanation: "Slide 30 explicitly notes that Carbon Dioxide (CO2) is NOT regulated as a pollutant under the U.S. Clean Air Act."
+            },
+            {
+                q: "5. What percentage of tropospheric Carbon Dioxide (CO₂) originates from human activities?",
+                options: [
+                    "93%",
+                    "50%",
+                    "7%",
+                    "21%"
+                ],
+                correct: 2,
+                explanation: "Slide 30 specifies 93% of tropospheric CO2 occurs as a result of natural carbon cycle, while 7% occurs from human activities (fossil fuel burning)."
+            },
+            {
+                q: "6. Which pollutant is formed when primary pollutants react chemically with air components or sunlight?",
+                options: [
+                    "Primary Pollutant",
+                    "Secondary Pollutant",
+                    "Natural Inert Gas",
+                    "Point Source Effluent"
+                ],
+                correct: 1,
+                explanation: "Slide 16 defines Secondary Pollutants as harmful substances formed in atmosphere when primary pollutants react with other air substances."
+            },
+            {
+                q: "7. Sulfuric Acid (H₂SO₄) and Nitric Acid (HNO₃) in rain are categorized as:",
+                options: [
+                    "Primary Pollutants",
+                    "Secondary Pollutants",
+                    "Geothermal emissions",
+                    "Inert compounds"
+                ],
+                correct: 1,
+                explanation: "Slide 17 and Slide 26 classify H2SO4 and HNO3 as secondary pollutants formed from SO2 and NOx."
+            },
+            {
+                q: "8. Particulate matter with diameter less than 2.5 micrometers (< 2.5 µm) is classified as:",
+                options: [
+                    "Inhalable coarse particles",
+                    "Fine particles (PM2.5)",
+                    "Fine beach sand",
+                    "Heavy soil dust"
+                ],
+                correct: 1,
+                explanation: "Slide 28 defines PM2.5 as fine particles with diameter 2.5 micrometers and smaller."
+            },
+            {
+                q: "9. Which size of particulate matter enters the bloodstream directly and increases heart attack risks?",
+                options: [
+                    "PM10 coarse particles",
+                    "Beach sand particles",
+                    "PM0.1 ultra fine particles",
+                    "Pollen grains"
+                ],
+                correct: 2,
+                explanation: "Slide 29 explicitly notes that ultra fine particles (< 0.1 µm / PM0.1) like diesel soot increase risk of heart attacks."
+            },
+            {
+                q: "10. How does high wind speed affect air pollution concentration over a localized city?",
+                options: [
+                    "High wind traps pollutants and increases toxicity",
+                    "High wind spreads pollutants over larger areas, lowering local concentration",
+                    "High wind converts primary pollutants to pure oxygen",
+                    "High wind has zero impact on atmospheric pollutants"
+                ],
+                correct: 1,
+                explanation: "Slide 24 ('Dilution is solution to pollution') states high wind spreads body of polluted air over larger areas, lowering local pollutant concentration."
+            },
+            {
+                q: "11. What is the AQI numerical range for the 'Unhealthy for Sensitive Groups' category?",
+                options: [
+                    "0 - 50",
+                    "51 - 100",
+                    "101 - 150",
+                    "151 - 200"
+                ],
+                correct: 2,
+                explanation: "Slide 36 indicates AQI 101-150 corresponds to 'Unhealthy for Sensitive Groups' (Color: Orange)."
+            },
+            {
+                q: "12. An AQI reading of 250 falls under which category and color code?",
+                options: [
+                    "Unhealthy (Red)",
+                    "Very Unhealthy (Purple)",
+                    "Hazardous (Maroon)",
+                    "Good (Green)"
+                ],
+                correct: 1,
+                explanation: "Slide 36 specifies AQI range 201 - 300 is 'Very Unhealthy' with Purple color code."
+            },
+            {
+                q: "13. How much economic loss does Bangladesh suffer annually due to air pollution?",
+                options: [
+                    "$1.5 Million",
+                    "$500 Million",
+                    "$14 Billion per year ($38.3 Million/day)",
+                    "$100 Billion"
+                ],
+                correct: 2,
+                explanation: "Slides 11 & 39 report Bangladesh loses $14 Billion a year ($38.3 Million lost per day) to air pollution."
+            },
+            {
+                q: "14. How many child deaths under age 5 were reported in Bangladesh in 2018 due to PM2.5 air pollution?",
+                options: [
+                    "1,000",
+                    "12,000",
+                    "96,000",
+                    "500,000"
+                ],
+                correct: 2,
+                explanation: "Slide 11 and Slide 39 state an estimated 96,000 Bangladeshi children died before 5th birthday in 2018 from PM2.5."
+            },
+            {
+                q: "15. Photochemical smog is formed primarily by the reaction of which components?",
+                options: [
+                    "SO2 + Water vapor + Cold fog",
+                    "Nitrogen oxides (NOx) + VOCs + Sunlight",
+                    "Carbon monoxide + Methane + Rain",
+                    "Lead particles + Radon gas"
+                ],
+                correct: 1,
+                explanation: "Slide 40 shows Photochemical smog forms when nitrogen oxides and volatile organic compounds (VOCs) react under sunlight."
+            },
+            {
+                q: "16. Why is Photochemical Smog more common during summer season?",
+                options: [
+                    "Summer has higher solar radiation (sunlight)",
+                    "Vehicular traffic quadruples in summer",
+                    "Plants produce more sulfur oxides in summer",
+                    "Rainfall reaches its peak in summer"
+                ],
+                correct: 0,
+                explanation: "Slide 40 notes photochemical smog tends to occur more often in summer because sunlight is at its highest intensity."
+            },
+            {
+                q: "17. Thermal Pollution is best defined as:",
+                options: [
+                    "Increase in atmospheric greenhouse gases",
+                    "Degradation of water quality by changing ambient water temperature",
+                    "Noise created by heat generators",
+                    "Soil degradation caused by solar radiation"
+                ],
+                correct: 1,
+                explanation: "Slide 6 defines thermal pollution as the degradation of water quality by any process that changes ambient water temperature."
+            },
+            {
+                q: "18. What is Visual Pollution according to Slide 8?",
+                options: [
+                    "Radiation emitted from television screens",
+                    "An aesthetic issue impairing one's ability to enjoy a vista or view",
+                    "Smog preventing optical telescope operations",
+                    "Light leakage into astronomical observatories"
+                ],
+                correct: 1,
+                explanation: "Slide 8 defines visual pollution as an aesthetic issue impacting one's ability to enjoy a view/vista (e.g., billboards, wire chaos)."
+            },
+            {
+                q: "19. Temperature Inversion traps air pollutants because:",
+                options: [
+                    "A layer of warm air sits above a cooler air layer, preventing upward dispersion",
+                    "High speed gale winds compress pollution into ground surface",
+                    "Sunlight completely vanishes from atmospheric layers",
+                    "Rain droplets dissolve into pure nitrogen gas"
+                ],
+                correct: 0,
+                explanation: "Slide 44 illustrates temperature inversions occur when a warm air mass descending or sitting above traps cool polluted air underneath."
+            },
+            {
+                q: "20. Agricultural fertilizer runoff washed into rivers by rain is an example of:",
+                options: [
+                    "Point source pollution",
+                    "Nonpoint source pollution",
+                    "Thermal inversion discharge",
+                    "Nuclear waste seepage"
+                ],
+                correct: 1,
+                explanation: "Slide 52 and Slide 55 classify diffuse agricultural fertilizer runoff as nonpoint source pollution."
+            },
+            {
+                q: "21. Factory drain pipe discharging industrial chemical waste directly into a river is an example of:",
+                options: [
+                    "Point source pollution",
+                    "Nonpoint source pollution",
+                    "Atmospheric deposition",
+                    "Visual smog"
+                ],
+                correct: 0,
+                explanation: "Slide 52 and Slide 55 identify specific identifiable discharge pipes as point source pollution."
+            },
+            {
+                q: "22. The groundwater contamination in Sirajganj Belkuchi (Slide 56) was primarily caused by:",
+                options: [
+                    "Pesticide spraying on rice fields",
+                    "Textile/handloom factory waste seeping into underground aquifer levels",
+                    "Nuclear radioactive fallout",
+                    "Volcanic ash precipitation"
+                ],
+                correct: 1,
+                explanation: "Slide 56 details how textile/handloom factory waste in Belkuchi, Sirajganj infiltrated underground water aquifers."
+            },
+            {
+                q: "23. Which water pollutant type depletes dissolved oxygen (DO) needed by aquatic species?",
+                options: [
+                    "Pathogens (Bacteria)",
+                    "Oxygen-demanding wastes (Biodegradable organic waste/sewage)",
+                    "Sediments and silt",
+                    "Inorganic heavy metal compounds"
+                ],
+                correct: 1,
+                explanation: "Slide 57 Table 20-1 states oxygen-demanding wastes (sewage, animal waste) deplete dissolved oxygen needed by aquatic species."
+            },
+            {
+                q: "24. Excessive plant nutrients (Nitrates & Phosphates) in water bodies lead to:",
+                options: [
+                    "Eutrophication and excessive growth of algae",
+                    "Immediate drop in water temperature",
+                    "Reduction in soil erosion",
+                    "Formation of photochemical smog"
+                ],
+                correct: 0,
+                explanation: "Slide 57 lists plant nutrients (nitrates & phosphates) as causing excessive growth of algae (eutrophication) in aquatic systems."
+            },
+            {
+                q: "25. Which city was cited in Slide 50 as a global benchmark for being a 'Bike Friendly City'?",
+                options: [
+                    "Dhaka",
+                    "New Delhi",
+                    "Copenhagen",
+                    "San Francisco"
+                ],
+                correct: 2,
+                explanation: "Slide 50 highlights Copenhagen as a model 'Bike Friendly City' to reduce urban vehicular emissions."
+            }
+        ];
+
+        // State management
+        let currentTab = 'overview';
+        let solvedMiniQuizzes = new Set();
+
+        // Initialize application on page load
+        window.onload = function() {
+            renderFinalQuizQuestions();
+            updateProgressBar();
+        };
+
+        // Switch active tab
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('text-sky-600', 'bg-sky-50', 'dark:bg-slate-800', 'dark:text-sky-400');
+                el.classList.add('text-slate-600', 'dark:text-slate-300');
+            });
+
+            const activeTabEl = document.getElementById(`tab-${tabId}`);
+            if (activeTabEl) activeTabEl.classList.add('active');
+
+            const activeNavEl = document.getElementById(`nav-${tabId}`);
+            if (activeNavEl) {
+                activeNavEl.classList.add('text-sky-600', 'bg-sky-50', 'dark:bg-slate-800', 'dark:text-sky-400');
+                activeNavEl.classList.remove('text-slate-600', 'dark:text-slate-300');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            updateProgressBar();
+        }
+
+        // Scroll to specific module
+        function scrollToModule(modId) {
+            const el = document.getElementById(modId);
+            if (el) {
+                const yOffset = -90;
+                const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+        }
+
+        // Toggle Dark Mode
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        // Toggle Mobile Navigation Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Check Module Mini Quiz
+        function checkMiniQuiz(btnEl, isCorrect, explanationText) {
+            const container = btnEl.closest('.bg-sky-50, .dark\\:bg-slate-900\\/80');
+            const expDiv = container.querySelector('.mini-explanation');
+
+            // Reset sibling styles
+            container.querySelectorAll('button').forEach(b => {
+                b.classList.remove('bg-emerald-100', 'border-emerald-500', 'bg-rose-100', 'border-rose-500', 'text-emerald-900', 'text-rose-900');
+            });
+
+            expDiv.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-rose-100', 'text-rose-900', 'dark:bg-emerald-950/60', 'dark:text-emerald-200', 'dark:bg-rose-950/60', 'dark:text-rose-200');
+
+            if (isCorrect) {
+                btnEl.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900');
+                expDiv.classList.add('bg-emerald-100', 'text-emerald-900', 'dark:bg-emerald-950/60', 'dark:text-emerald-200');
+                expDiv.innerHTML = `<i class="fa-solid fa-circle-check me-1 text-emerald-600"></i> ${explanationText}`;
+                solvedMiniQuizzes.add(container.id || Math.random());
+            } else {
+                btnEl.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-900');
+                expDiv.classList.add('bg-rose-100', 'text-rose-900', 'dark:bg-rose-950/60', 'dark:text-rose-200');
+                expDiv.innerHTML = `<i class="fa-solid fa-circle-xmark me-1 text-rose-600"></i> ${explanationText}`;
+            }
+            updateProgressBar();
+        }
+
+        // Toggle Accordion Q&A
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById(`icon-${id}`);
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+
+        // Render Final Practice Test Questions
+        function renderFinalQuizQuestions() {
+            const listEl = document.getElementById('quiz-questions-list');
+            listEl.innerHTML = '';
+
+            quizData.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.className = "p-5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3";
+                
+                let optionsHTML = q.options.map((opt, optIdx) => `
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition-all text-xs font-medium text-slate-800 dark:text-slate-200">
+                        <input type="radio" name="q_${idx}" value="${optIdx}" class="mt-0.5 text-teal-600 focus:ring-teal-500">
+                        <span>${opt}</span>
+                    </label>
+                `).join('');
+
+                card.innerHTML = `
+                    <div class="font-bold text-sm text-slate-900 dark:text-white">${q.q}</div>
+                    <div class="space-y-2">${optionsHTML}</div>
+                    <div id="q_exp_${idx}" class="hidden p-3 text-xs rounded-xl font-medium mt-2"></div>
+                `;
+                listEl.appendChild(card);
+            });
+        }
+
+        // Submit Final Practice Test
+        function submitFinalQuiz(e) {
+            e.preventDefault();
+            let score = 0;
+
+            quizData.forEach((q, idx) => {
+                const selected = document.querySelector(`input[name="q_${idx}"]:checked`);
+                const expDiv = document.getElementById(`q_exp_${idx}`);
+                expDiv.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-rose-100', 'text-rose-900', 'dark:bg-emerald-950/60', 'dark:text-emerald-200', 'dark:bg-rose-950/60', 'dark:text-rose-200');
+
+                if (selected) {
+                    const val = parseInt(selected.value);
+                    if (val === q.correct) {
+                        score++;
+                        expDiv.classList.add('bg-emerald-100', 'text-emerald-900', 'dark:bg-emerald-950/60', 'dark:text-emerald-200');
+                        expDiv.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 me-1"></i> <strong>Correct!</strong> ${q.explanation}`;
+                    } else {
+                        expDiv.classList.add('bg-rose-100', 'text-rose-900', 'dark:bg-rose-950/60', 'dark:text-rose-200');
+                        expDiv.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 me-1"></i> <strong>Incorrect.</strong> Correct Answer: <em>${q.options[q.correct]}</em>.<br>${q.explanation}`;
+                    }
+                } else {
+                    expDiv.classList.add('bg-rose-100', 'text-rose-900', 'dark:bg-rose-950/60', 'dark:text-rose-200');
+                    expDiv.innerHTML = `<i class="fa-solid fa-circle-exclamation me-1"></i> <strong>Unanswered.</strong> Correct Answer: <em>${q.options[q.correct]}</em>.<br>${q.explanation}`;
+                }
+            });
+
+            // Show Score Badge
+            const badge = document.getElementById('quiz-score-badge');
+            const scoreText = document.getElementById('quiz-score-text');
+            badge.classList.remove('hidden');
+            scoreText.textContent = `${score} / ${quizData.length}`;
+
+            // Smooth scroll to top of score badge
+            badge.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            updateProgressBar(true);
+        }
+
+        // Reset Final Quiz
+        function resetFinalQuiz() {
+            document.getElementById('final-quiz-form').reset();
+            quizData.forEach((_, idx) => {
+                const expDiv = document.getElementById(`q_exp_${idx}`);
+                expDiv.classList.add('hidden');
+            });
+            document.getElementById('quiz-score-badge').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Global Progress Bar Updater
+        function updateProgressBar(quizCompleted = false) {
+            let progress = 20; // default base viewing progress
+            if (currentTab === 'modules') progress = 40;
+            if (currentTab === 'quick-revision') progress = 60;
+            if (currentTab === 'short-qa') progress = 75;
+            if (currentTab === 'final-quiz') progress = 85;
+            if (quizCompleted) progress = 100;
+
+            const progressBar = document.getElementById('overall-progress');
+            if (progressBar) progressBar.style.width = `${progress}%`;
+        }
+    </script>
+</body>
+</html>

@@ -206,6 +206,15 @@ export const generatedCourses: CourseData[] = [
     "title": "GEN 203",
     "chapters": [
       {
+        "id": "Guest Lecture.pdf",
+        "title": "Guest Lecture",
+        "filename": "Guest Lecture.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/GEN%20203/Chapters/Guest%20Lecture.pdf",
+        "sizeInBytes": 13924690
+      },
+      {
         "id": "Lecture 1_Environmental Sustainability Intro (updated) (1).pdf",
         "title": "Lecture 1 Environmental Sustainability Intro (updated) (1)",
         "filename": "Lecture 1_Environmental Sustainability Intro (updated) (1).pdf",
@@ -224,7 +233,35 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 20473433
       }
     ],
-    "others": []
+    "others": [
+      {
+        "id": "Guest Lecture.html",
+        "title": "Guest Lecture",
+        "filename": "Guest Lecture.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/GEN%20203/Others/Guest%20Lecture.html",
+        "sizeInBytes": 48919
+      },
+      {
+        "id": "Week 2.html",
+        "title": "Week 2",
+        "filename": "Week 2.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/GEN%20203/Others/Week%202.html",
+        "sizeInBytes": 82668
+      },
+      {
+        "id": "week 6.html",
+        "title": "Week 6",
+        "filename": "week 6.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/GEN%20203/Others/week%206.html",
+        "sizeInBytes": 89729
+      }
+    ]
   },
   {
     "id": "gen-209",

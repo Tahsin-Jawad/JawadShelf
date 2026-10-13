@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEN203 Exam Prep: Plastic Pollution & Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .tab-btn.active { background-color: #0284c7; color: white; border-color: #0284c7; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <header class="bg-gradient-to-r from-slate-900 via-sky-900 to-blue-900 text-white shadow-md py-6 px-4 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-2xl md:text-3xl font-bold mb-2">GEN203 Exam Prep: Plastic Pollution & Solutions</h1>
+            <p class="text-sky-200 text-sm md:text-base">Comprehensive Interactive Study Guide (EWU Lecture Slides)</p>
+        </div>
+    </header>
+
+    <main class="max-w-4xl w-full mx-auto px-4 py-6 flex-grow">
+        <div class="mb-6">
+            <div class="flex justify-between text-xs font-semibold text-slate-500 mb-1">
+                <span>Overall Study Progress</span>
+                <span id="progressText">0%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                <div id="progressBar" class="bg-emerald-500 h-2.5 w-0 transition-all duration-300"></div>
+            </div>
+        </div>
+
+        <nav class="flex flex-wrap gap-2 justify-center mb-6 bg-slate-200 p-2 rounded-xl" id="navTabs">
+            <button onclick="switchTab(0)" class="tab-btn active px-3 py-2 text-xs md:text-sm font-semibold rounded-lg bg-white text-slate-600 shadow-sm transition">1. Basics & SUPs</button>
+            <button onclick="switchTab(1)" class="tab-btn px-3 py-2 text-xs md:text-sm font-semibold rounded-lg bg-white text-slate-600 shadow-sm transition">2. Policies & Laws</button>
+            <button onclick="switchTab(2)" class="tab-btn px-3 py-2 text-xs md:text-sm font-semibold rounded-lg bg-white text-slate-600 shadow-sm transition">3. Microplastics & Health</button>
+            <button onclick="switchTab(3)" class="tab-btn px-3 py-2 text-xs md:text-sm font-semibold rounded-lg bg-white text-slate-600 shadow-sm transition">4. Climate & Crisis</button>
+            <button onclick="switchTab(4)" class="tab-btn px-3 py-2 text-xs md:text-sm font-semibold rounded-lg bg-white text-slate-600 shadow-sm transition">5. Systems & Solutions</button>
+            <button onclick="switchTab(5)" class="tab-btn px-3 py-2 text-xs md:text-sm font-semibold rounded-lg bg-white text-slate-600 shadow-sm transition">6. Short Answer Practice</button>
+            <button onclick="switchTab(6)" class="tab-btn px-3 py-2 text-xs md:text-sm font-semibold rounded-lg bg-white text-slate-600 shadow-sm transition">7. Quick Revision Sheet</button>
+            <button onclick="switchTab(7)" class="tab-btn px-3 py-2 text-xs md:text-sm font-semibold rounded-lg bg-white text-slate-600 shadow-sm transition">8. Final Exam Simulator</button>
+        </nav>
+
+        <section id="section-0" class="section-content active bg-white p-6 rounded-2xl shadow-sm border border-slate-200 fade-in">
+            <h2 class="text-xl md:text-2xl font-bold text-sky-900 mb-4 pb-2 border-b border-slate-200">Module 1: What is Plastic & Single-Use Plastics (SUPs)</h2>
+            
+            <div class="bg-sky-50 border-l-4 border-sky-500 p-4 rounded-r-lg mb-6 text-sm md:text-base">
+                <strong>Key Definition:</strong> 
+                <ul class="list-disc pl-5 mt-2 space-y-1">
+                    <li><strong>Plastic:</strong> Materials composed of large chain-like molecules called <em>polymers</em>, shaped easily under heat/pressure.</li>
+                    <li><strong>Polymers:</strong> Repeated smaller units known as <em>monomers</em>.</li>
+                </ul>
+            </div>
+
+            <h3 class="font-semibold text-lg text-sky-800 mb-2">Global Production & Single-Use Plastics (SUPs)</h3>
+            <ul class="list-disc pl-5 space-y-2 mb-6">
+                <li><strong>Global Production:</strong> Reached <strong>360 million metric tonnes</strong> (2018 data), with ~50% being single-use plastics (SUPs).</li>
+                <li><strong>Dominant Application:</strong> <strong>Packaging</strong> is the primary sector for plastic utilization.</li>
+                <li><strong>SUP Definition:</strong> Fossil-fuel-based items utilized briefly (minutes) and discarded immediately.</li>
+            </ul>
+
+            <h3 class="font-semibold text-lg text-sky-800 mb-2">Key Plastic Types Reference</h3>
+            <div class="overflow-x-auto mb-6">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700">
+                            <th class="p-2.5 border border-slate-200">Acronym</th>
+                            <th class="p-2.5 border border-slate-200">Full Name</th>
+                            <th class="p-2.5 border border-slate-200">Common Uses</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="p-2.5 border border-slate-200 font-semibold">PET</td><td class="p-2.5 border border-slate-200">Polyethylene terephthalate</td><td class="p-2.5 border border-slate-200">Water & soft drink bottles</td></tr>
+                        <tr><td class="p-2.5 border border-slate-200 font-semibold">HDPE</td><td class="p-2.5 border border-slate-200">High-density polyethylene</td><td class="p-2.5 border border-slate-200">Detergent bottles, milk jugs</td></tr>
+                        <tr><td class="p-2.5 border border-slate-200 font-semibold">PVC</td><td class="p-2.5 border border-slate-200">Polyvinyl chloride</td><td class="p-2.5 border border-slate-200">Pipes, cable insulation</td></tr>
+                        <tr><td class="p-2.5 border border-slate-200 font-semibold">LDPE</td><td class="p-2.5 border border-slate-200">Low-density polyethylene</td><td class="p-2.5 border border-slate-200">Carrier bags, flexible film</td></tr>
+                        <tr><td class="p-2.5 border border-slate-200 font-semibold">PP</td><td class="p-2.5 border border-slate-200">Polypropylene</td><td class="p-2.5 border border-slate-200">Food containers, bottle caps</td></tr>
+                        <tr><td class="p-2.5 border border-slate-200 font-semibold">PS</td><td class="p-2.5 border border-slate-200">Polystyrene / Expanded PS</td><td class="p-2.5 border border-slate-200">Disposable cutlery, foam trays</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="font-semibold text-lg text-sky-800 mb-2">17 Identified SUP Items in Bangladesh (MOEF&CC, Aug 2024)</h3>
+            <p class="text-sm text-slate-600 mb-3">Ministry of Environment identified 17 items under Solid Waste Management Rules:</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <div>1. Straws</div>
+                <div>10. Thin plastic fast-food wrappers</div>
+                <div>2. Stirrers</div>
+                <div>11. Plastic invitation cards / lamination</div>
+                <div>3. One-time cutlery (cups, plates, spoons)</div>
+                <div>12. Thin covers on cigarette packs/tissue rolls</div>
+                <div>4. Balloon/ice-cream sticks</div>
+                <div>13. PE / PP single-use shopping/carry bags</div>
+                <div>5. Plastic banners</div>
+                <div>14. Melamine foam cleaning sponges</div>
+                <div>6. Plastic film on posters</div>
+                <div>15. Single-use product packaging</div>
+                <div>7. Sachets and pouches</div>
+                <div>16. Cigarette filters</div>
+                <div>8. Candy/chocolate wrappers</div>
+                <div>17. Plastic bottles and caps</div>
+                <div>9. Styrofoam food packaging</div>
+            </div>
+
+            <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-lg mb-6 text-sm">
+                💡 <strong>Easy Bangla-Explain:</strong> পলিমার দিয়ে প্লাস্টিক তৈরি হয়। ২০২৪ সালের আগস্টে বাংলাদেশ সরকার ১৭টি ক্ষতিকর সিঙ্গেল ইউজ প্লাস্টিক (SUP) চিহ্নিত করেছে যা খুব দ্রুত বর্জ্য হিসেবে পরিবেশে ছড়ায়।
+            </div>
+
+            <!-- Quiz 1 -->
+            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 mt-6">
+                <h4 class="font-bold text-slate-800 mb-3">Module 1 Practice Check</h4>
+                <p class="text-sm font-medium mb-3">What percentage of global plastic production in 2018 was estimated to be single-use plastics?</p>
+                <div class="space-y-2 text-sm" id="quiz-opts-1">
+                    <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100"><input type="radio" name="m1" value="A"> A) Around 10%</label>
+                    <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100"><input type="radio" name="m1" value="B"> B) Around 50%</label>
+                    <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100"><input type="radio" name="m1" value="C"> C) Exactly 95%</label>
+                </div>
+                <button onclick="checkInlineQuiz(1, 'B')" class="mt-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs px-4 py-2 rounded-lg transition">Submit Answer</button>
+                <div id="quiz-feedback-1" class="mt-2 text-sm font-semibold"></div>
+            </div>
+
+            <div class="flex justify-between mt-8 pt-4 border-t border-slate-200">
+                <button class="px-4 py-2 bg-slate-200 text-slate-400 font-semibold rounded-lg cursor-not-allowed" disabled>Previous</button>
+                <button onclick="switchTab(1)" class="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-lg transition">Next: Policies & Laws</button>
+            </div>
+        </section>
+
+        <section id="section-1" class="section-content hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-200 fade-in">
+            <h2 class="text-xl md:text-2xl font-bold text-sky-900 mb-4 pb-2 border-b border-slate-200">Module 2: Bangladesh Policies, Laws & Phase-Out Regulations</h2>
+            
+            <div class="bg-sky-50 border-l-4 border-sky-500 p-4 rounded-r-lg mb-6 text-sm md:text-base">
+                <strong>Policy Timeline & Framework:</strong>
+                <ul class="list-disc pl-5 mt-2 space-y-1">
+                    <li><strong>2002:</strong> Polythene shopping bag ban implemented in Bangladesh (pioneering legislation globally).</li>
+                    <li><strong>2021:</strong> National Action Plan targeting 50% recycling by 2025 and 30% reduction in plastic generation by 2030.</li>
+                    <li><strong>August 28, 2024:</strong> MOEF&CC notification identifying 17 SUP categories.</li>
+                    <li><strong>April 09, 2025 Notification:</strong> Official ban issued by the government under presidential orders, prohibiting production, import, marketing, and use of <strong>Straws, Stirrers, and Cotton Buds</strong> starting <strong>June 01, 2025</strong>.</li>
+                </ul>
+            </div>
+
+            <h3 class="font-semibold text-lg text-sky-800 mb-2">Key Enforcement Authorities</h3>
+            <p class="text-sm text-slate-600 mb-4">Orders are executed via the Department of Environment (DoE), Cabinet Division, and relevant ministries with immediate legal backing.</p>
+
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg mb-6 text-sm">
+                ⚠️ <strong>Quiz Trap:</strong> Do not confuse the full list of 17 identified SUP items with the first phase banned items. The very first banned items effective June 2025 are strictly <strong>Straws, Stirrers, and Cotton Buds</strong>.
+            </div>
+
+            <!-- Quiz 2 -->
+            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 mt-6">
+                <h4 class="font-bold text-slate-800 mb-3">Module 2 Practice Check</h4>
+                <p class="text-sm font-medium mb-3">Which three items were banned in the first phase effective June 1, 2025?</p>
+                <div class="space-y-2 text-sm" id="quiz-opts-2">
+                    <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100"><input type="radio" name="m2" value="A"> A) Water bottles, plastic bags, banners</label>
+                    <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100"><input type="radio" name="m2" value="B"> B) Straws, Stirrers, and Cotton Buds</label>
+                    <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100"><input type="radio" name="m2" value="C"> C) Cups, plates, plastic spoons</label>
+                </div>
+                <button onclick="checkInlineQuiz(2, 'B')" class="mt-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs px-4 py-2 rounded-lg transition">Submit Answer</button>
+                <div id="quiz-feedback-2" class="mt-2 text-sm font-semibold"></div>
+            </div>
+
+            <div class="flex justify-between mt-8 pt-4 border-t border-slate-200">
+                <button onclick="switchTab(0)" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg transition">Previous</button>
+                <button onclick="switchTab(2)" class="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-lg transition">Next: Microplastics & Health</button>
+            </div>
+        </section>
+
+        <section id="section-2" class="section-content hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-200 fade-in">
+            <h2 class="text-xl md:text-2xl font-bold text-sky-900 mb-4 pb-2 border-b border-slate-200">Module 3: Microplastics, Atmospheric Warming & Health Impacts</h2>
+            
+            <div class="bg-sky-50 border-l-4 border-sky-500 p-4 rounded-r-lg mb-6 text-sm">
+                <strong>Atmospheric Warming & Light Absorption (Liu & Fu, 2026):</strong>
+                <ul class="list-disc pl-5 mt-2 space-y-1">
+                    <li>Colored plastics absorb sunlight <strong>~75 times more</strong> than new, colorless plastic particles.</li>
+                    <li>White plastics yellow due to atmospheric aging, escalating their light-absorption capacities.</li>
+                </ul>
+            </div>
+
+            <h3 class="font-semibold text-lg text-sky-800 mb-2">Plant Phytotoxicity (Zhu et al., 2026)</h3>
+            <ul class="list-disc pl-5 space-y-2 mb-6 text-sm">
+                <li><strong>Foliar (Leaf) Exposure:</strong> Airborne nanoplastics settle on leaves and damage chloroplasts. Photosynthesis rates drop dramatically by <strong>85–89%</strong>.</li>
+                <li><strong>Root Exposure:</strong> Lowers ATP production (energy) by 22–24%. Nanoplastics were <em>not detected</em> inside rice grains in soil tests.</li>
+            </ul>
+
+            <h3 class="font-semibold text-lg text-sky-800 mb-2">Human Organ Exposure & Cellular Damage (Lamoree et al., Nat Med 2025)</h3>
+            <div class="overflow-x-auto mb-6">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700">
+                            <th class="p-2.5 border border-slate-200">Organ</th>
+                            <th class="p-2.5 border border-slate-200">Cellular / Physiological Impacts</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="p-2.5 border border-slate-200 font-semibold">Brain</td><td class="p-2.5 border border-slate-200">Oxidative stress, blood-brain barrier disruption, neural gene alterations</td></tr>
+                        <tr><td class="p-2.5 border border-slate-200 font-semibold">Lung</td><td class="p-2.5 border border-slate-200">DNA damage, cell death, lipid bilayer disruption</td></tr>
+                        <tr><td class="p-2.5 border border-slate-200 font-semibold">Liver</td><td class="p-2.5 border border-slate-200">Elevated liver enzymes (AST/ALT), cellular necrosis</td></tr>
+                        <tr><td class="p-2.5 border border-slate-200 font-semibold">Placenta</td><td class="p-2.5 border border-slate-200">Impaired trophoblast migration, embryonic DNA damage</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-lg mb-6 text-sm">
+                💡 <strong>Easy Bangla-Explain:</strong> রঙিন মাইক্রোপ্লাস্টিক বায়ুমণ্ডলে তাপ বাড়ায়। গাছের পাতায় জমলে সালোকসংশ্লেষণ মারাত্মকভাবে কমে যায়, এবং মানুষের রক্ত, মস্তিষ্ক, ফুসফুস ও প্লাসেন্টায় জমা হয়ে কোষে অক্সিডেটিভ স্ট্রেস সৃষ্টি করে।
+            </div>
+
+            <!-- Quiz 3 -->
+            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 mt-6">
+                <h4 class="font-bold text-slate-800 mb-3">Module 3 Practice Check</h4>
+                <p class="text-sm font-medium mb-3">How much more sunlight do colored plastics absorb compared to new, colorless plastics?</p>
+                <div class="space-y-2 text-sm" id="quiz-opts-3">
+                    <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100"><input type="radio" name="m3" value="A"> A) 5 times</label>
+                    <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100"><input type="radio" name="m3" value="B"> B) About 75 times</label>
+                    <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100"><input type="radio" name="m3" value="C"> C) 500 times</label>
+                </div>
+                <button onclick="checkInlineQuiz(3, 'B')" class="mt-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs px-4 py-2 rounded-lg transition">Submit Answer</button>
+                <div id="quiz-feedback-3" class="mt-2 text-sm font-semibold"></div>
+            </div>
+
+            <div class="flex justify-between mt-8 pt-4 border-t border-slate-200">
+                <button onclick="switchTab(1)" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg transition">Previous</button>
+                <button onclick="switchTab(3)" class="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-lg transition">Next: Climate & Crisis</button>
+            </div>
+        </section>
+
+        <section id="section-3" class="section-content hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-200 fade-in">
+            <h2 class="text-xl md:text-2xl font-bold text-sky-900 mb-4 pb-2 border-b border-slate-200">Module 4: Climate Change & Plastics Interlinkages</h2>
+            
+            <div class="bg-sky-50 border-l-4 border-sky-500 p-4 rounded-r-lg mb-6 text-sm">
+                <strong>Life Cycle Emissions:</strong>
+                <ul class="list-disc pl-5 mt-2 space-y-1">
+                    <li><strong>Extraction & Refining:</strong> Plastics start as fossil fuels (oil and gas), consuming vast energy and emitting greenhouse gases.</li>
+                    <li><strong>Manufacturing:</strong> Polymer polymerization and molding release substantial CO2.</li>
+                    <li><strong>Disposal & Incineration:</strong> Burning plastic waste releases carbon dioxide, toxic dioxins, and furans. Unmanaged dumping in landfills emits methane.</li>
+                </ul>
+            </div>
+
+            <h3 class="font-semibold text-lg text-sky-800 mb-2">Ocean Carbon Pump Disruption</h3>
+            <p class="text-sm text-slate-600 mb-4">Microplastics ingestion by zooplankton inhibits their ability to consume phytoplankton, reducing biological carbon sequestration in oceans.</p>
+
+            <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-lg mb-6 text-sm">
+                💡 <strong>Easy Bangla-Explain:</strong> প্লাস্টিকের জন্ম জীবাশ্ম জ্বালানি থেকে। এর উৎপাদন, ব্যবহার এবং পোড়ানোর প্রতিটি ধাপে গ্রিনহাউস গ্যাস নির্গত হয় যা জলবায়ু পরিবর্তনকে ত্বরান্বিত করে।
+            </div>
+
+            <!-- Quiz 4 -->
+            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 mt-6">
+                <h4 class="font-bold text-slate-800 mb-3">Module 4 Practice Check</h4>
+                <p class="text-sm font-medium mb-3">What is the primary origin of raw materials used to manufacture traditional plastics?</p>
+                <div class="space-y-2 text-sm" id="quiz-opts-4">
+                    <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100"><input type="radio" name="m4" value="A"> A) Plant cellulose only</label>
+                    <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100"><input type="radio" name="m4" value="B"> B) Fossil fuels (oil and gas)</label>
+                    <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100"><input type="radio" name="m4" value="C"> C) Recycled ocean minerals</label>
+                </div>
+                <button onclick="checkInlineQuiz(4, 'B')" class="mt-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs px-4 py-2 rounded-lg transition">Submit Answer</button>
+                <div id="quiz-feedback-4" class="mt-2 text-sm font-semibold"></div>
+            </div>
+
+            <div class="flex justify-between mt-8 pt-4 border-t border-slate-200">
+                <button onclick="switchTab(2)" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg transition">Previous</button>
+                <button onclick="switchTab(4)" class="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-lg transition">Next: Systems & Solutions</button>
+            </div>
+        </section>
+
+        <section id="section-4" class="section-content hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-200 fade-in">
+            <h2 class="text-xl md:text-2xl font-bold text-sky-900 mb-4 pb-2 border-b border-slate-200">Module 5: Systems & Practical Solutions (Cox's Bazar Case Study)</h2>
+            
+            <div class="bg-sky-50 border-l-4 border-sky-500 p-4 rounded-r-lg mb-6 text-sm">
+                <strong>The Cox's Bazar Challenge & UNDP/DoE Interventions:</strong>
+                <ul class="list-disc pl-5 mt-2 space-y-1">
+                    <li><strong>Tourism Pressure:</strong> Millions of annual visitors generate massive volumes of single-use plastic bottles, packets, and food containers.</li>
+                    <li><strong>Rohingya Refugee Influx:</strong> Accelerated waste generation in camps exceeding local municipal management capacities.</li>
+                    <li><strong>Circular Economy Approach:</strong> Promoting source reduction, segregation at source, community recycling initiatives, and alternative jute/cloth bags.</li>
+                </ul>
+            </div>
+
+            <h3 class="font-semibold text-lg text-sky-800 mb-2">Key Framework Solutions</h3>
+            <ul class="list-disc pl-5 space-y-2 mb-6 text-sm">
+                <li><strong>Extended Producer Responsibility (EPR):</strong> Mandating manufacturers to take back packaging waste.</li>
+                <li><strong>Public-Private Partnerships (PPP):</strong> Collaborating with local hotels, restaurants, and NGOs to establish collection booths.</li>
+                <li><strong>Behavioral Change Communication (BCC):</strong> Awareness campaigns in schools and tourist hubs.</li>
+            </ul>
+
+            <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-lg mb-6 text-sm">
+                💡 <strong>Easy Bangla-Explain:</strong> কক্সবাজারে পর্যটক ও রোহিঙ্গা ক্যাম্পের কারণে প্রচুর প্লাস্টিক বর্জ্য জমে। এর সমাধানে সোর্স রিডাকশন, রিসাইক্লিং, এবং EPR (Extended Producer Responsibility) মডেল বাস্তবায়নের উপর জোর দেওয়া হয়েছে।
+            </div>
+
+            <!-- Quiz 5 -->
+            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 mt-6">
+                <h4 class="font-bold text-slate-800 mb-3">Module 5 Practice Check</h4>
+                <p class="text-sm font-medium mb-3">What does EPR stand for in waste management systems?</p>
+                <div class="space-y-2 text-sm" id="quiz-opts-5">
+                    <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100"><input type="radio" name="m5" value="A"> A) Environmental Pollution Reduction</label>
+                    <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100"><input type="radio" name="m5" value="B"> B) Extended Producer Responsibility</label>
+                    <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100"><input type="radio" name="m5" value="C"> C) Ecological Plastic Recycling</label>
+                </div>
+                <button onclick="checkInlineQuiz(5, 'B')" class="mt-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs px-4 py-2 rounded-lg transition">Submit Answer</button>
+                <div id="quiz-feedback-5" class="mt-2 text-sm font-semibold"></div>
+            </div>
+
+            <div class="flex justify-between mt-8 pt-4 border-t border-slate-200">
+                <button onclick="switchTab(3)" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg transition">Previous</button>
+                <button onclick="switchTab(5)" class="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-lg transition">Next: Short Answers</button>
+            </div>
+        </section>
+
+        <section id="section-5" class="section-content hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-200 fade-in">
+            <h2 class="text-xl md:text-2xl font-bold text-sky-900 mb-4 pb-2 border-b border-slate-200">Module 6: Short Answer Practice Questions</h2>
+            <p class="text-sm text-slate-600 mb-6">Write down your answers or think through them, then click "Reveal Model Answer" to check your understanding.</p>
+
+            <div class="space-y-6">
+                <!-- Q1 -->
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                    <p class="font-semibold text-sm mb-2">1. What is the difference between polymers and monomers in plastic manufacturing?</p>
+                    <textarea class="w-full p-3 text-sm border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 mb-2" rows="3" placeholder="Type your answer here..."></textarea>
+                    <button onclick="toggleModelAnswer('sa-1')" class="text-xs bg-slate-800 hover:bg-slate-900 text-white px-3 py-1.5 rounded font-semibold transition">Reveal Model Answer</button>
+                    <div id="sa-1" class="hidden mt-3 p-3 bg-amber-50 border-l-4 border-amber-500 text-xs text-slate-700 rounded-r-lg">
+                        <strong>Model Answer:</strong> Monomers are small, simple repeating molecules (building blocks), whereas polymers are large chain-like macro-molecules formed by chemically bonding numerous monomers together.
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                    <p class="font-semibold text-sm mb-2">2. Explain why colored and aged plastics absorb significantly more sunlight than new plastics.</p>
+                    <textarea class="w-full p-3 text-sm border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 mb-2" rows="3" placeholder="Type your answer here..."></textarea>
+                    <button onclick="toggleModelAnswer('sa-2')" class="text-xs bg-slate-800 hover:bg-slate-900 text-white px-3 py-1.5 rounded font-semibold transition">Reveal Model Answer</button>
+                    <div id="sa-2" class="hidden mt-3 p-3 bg-amber-50 border-l-4 border-amber-500 text-xs text-slate-700 rounded-r-lg">
+                        <strong>Model Answer:</strong> According to recent research (Liu & Fu, 2026), colored microplastics absorb sunlight ~75 times more intensely due to pigments, and white plastics yellow over time due to atmospheric oxidation and UV aging, which enhances light absorption and atmospheric warming.
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                    <p class="font-semibold text-sm mb-2">3. What are the key objectives of Bangladesh's April 2025 single-use plastic ban notification?</p>
+                    <textarea class="w-full p-3 text-sm border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 mb-2" rows="3" placeholder="Type your answer here..."></textarea>
+                    <button onclick="toggleModelAnswer('sa-3')" class="text-xs bg-slate-800 hover:bg-slate-900 text-white px-3 py-1.5 rounded font-semibold transition">Reveal Model Answer</button>
+                    <div id="sa-3" class="hidden mt-3 p-3 bg-amber-50 border-l-4 border-amber-500 text-xs text-slate-700 rounded-r-lg">
+                        <strong>Model Answer:</strong> The notification strictly prohibits the production, import, marketing, sale, display, and use of the first phase items (Straws, Stirrers, and Cotton Buds) starting June 1, 2025, to curb rampant single-use plastic pollution under the Solid Waste Management Rules.
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-8 pt-4 border-t border-slate-200">
+                <button onclick="switchTab(4)" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg transition">Previous</button>
+                <button onclick="switchTab(6)" class="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-lg transition">Next: Quick Revision Sheet</button>
+            </div>
+        </section>
+
+        <section id="section-6" class="section-content hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-200 fade-in">
+            <h2 class="text-xl md:text-2xl font-bold text-sky-900 mb-4 pb-2 border-b border-slate-200">Module 7: Quick Revision Sheet</h2>
+            <p class="text-sm text-slate-600 mb-6">High-yield bullet points for last-minute exam review.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-6">
+                <div class="p-4 bg-sky-50 rounded-xl border border-sky-100">
+                    <h3 class="font-bold text-sky-900 mb-2">Key Facts & Statistics</h3>
+                    <ul class="list-disc pl-4 space-y-1 text-slate-700">
+                        <li>360M metric tonnes global production (2018).</li>
+                        <li>17 SUP categories identified in Bangladesh (Aug 2024).</li>
+                        <li>First phase ban (June 2025): Straw, Stirrer, Cotton Bud.</li>
+                        <li>Colored microplastics absorb ~75x more sunlight.</li>
+                    </ul>
+                </div>
+                <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                    <h3 class="font-bold text-emerald-900 mb-2">Common Exam Traps</h3>
+                    <ul class="list-disc pl-4 space-y-1 text-slate-700">
+                        <li>Don't confuse LDPE (bags) with HDPE (milk jugs/detergent).</li>
+                        <li>First phase ban is 3 items, not all 17 items.</li>
+                        <li>Nanoplastics from soil were <em>not detected</em> inside rice grains, unlike leaf exposure impacts.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-8 pt-4 border-t border-slate-200">
+                <button onclick="switchTab(5)" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg transition">Previous</button>
+                <button onclick="switchTab(7)" class="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-lg transition">Next: Exam Simulator</button>
+            </div>
+        </section>
+
+        <section id="section-7" class="section-content hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-200 fade-in">
+            <h2 class="text-xl md:text-2xl font-bold text-sky-900 mb-2">Module 8: Final Exam 25-Question MCQ Simulator</h2>
+            <p class="text-sm text-slate-600 mb-6">Test your mastery across all lecture modules. Answers remain hidden until you click "Submit Final Exam".</p>
+
+            <div id="examContainer" class="space-y-6">
+                <!-- Dynamically populated by JS -->
+            </div>
+
+            <div class="mt-8 text-center">
+                <button onclick="submitExam()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-3 rounded-xl shadow-md transition text-base">Submit Final Exam</button>
+            </div>
+
+            <div id="examResults" class="hidden mt-6 p-6 bg-slate-100 rounded-2xl text-center">
+                <h3 class="text-xl font-bold text-slate-800 mb-2" id="examScoreTitle"></h3>
+                <p class="text-sm text-slate-600 mb-4" id="examScoreDesc"></p>
+                <button onclick="resetExam()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold px-6 py-2.5 rounded-lg text-sm transition">Retake Exam</button>
+            </div>
+
+            <div class="flex justify-start mt-8 pt-4 border-t border-slate-200">
+                <button onclick="switchTab(6)" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg transition">Previous</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-6 text-center text-xs mt-12">
+        <p>GEN203 Exam Prep Interactive Study Guide • East West University</p>
+    </footer>
+
+    <script>
+        // Tab switching logic
+        function switchTab(index) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('.section-content');
+            
+            tabs.forEach((tab, i) => {
+                if (i === index) {
+                    tab.classList.add('active', 'bg-sky-600', 'text-white');
+                    tab.classList.remove('bg-white', 'text-slate-600');
+                } else {
+                    tab.classList.remove('active', 'bg-sky-600', 'text-white');
+                    tab.classList.add('bg-white', 'text-slate-600');
+                }
+            });
+
+            sections.forEach((sec, i) => {
+                if (i === index) {
+                    sec.classList.remove('hidden');
+                    sec.classList.add('block');
+                } else {
+                    sec.classList.remove('block');
+                    sec.classList.add('hidden');
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            updateProgress(index);
+        }
+
+        function updateProgress(currentIndex) {
+            const progress = ((currentIndex + 1) / 8) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressBar').style.backgroundColor = progress === 100 ? '#10b981' : '#0284c7';
+            document.getElementById('progressText').innerText = Math.round(progress) + '%';
+        }
+
+        // Inline quiz checking
+        function checkInlineQuiz(qNum, correctOption) {
+            const selected = document.querySelector(`input[name="m${qNum}"]:checked`);
+            const feedback = document.getElementById(`quiz-feedback-${qNum}`);
+            
+            if (!selected) {
+                feedback.innerText = "Please select an option first!";
+                feedback.className = "mt-2 text-sm font-semibold text-amber-600";
+                return;
+            }
+
+            if (selected.value === correctOption) {
+                feedback.innerText = "Correct! Darun hoyeche! 🎉";
+                feedback.className = "mt-2 text-sm font-semibold text-emerald-600";
+            } else {
+                feedback.innerText = `Incorrect. The correct answer is (${correctOption}). Review the slide notes above!`;
+                feedback.className = "mt-2 text-sm font-semibold text-rose-600";
+            }
+        }
+
+        // Short answer model toggle
+        function toggleModelAnswer(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // 25 Exam Questions Data
+        const examQuestions = [
+            { q: "What is the primary chemical building block of plastics?", options: ["A) Monomers forming polymers", "B) Cellulose and starch exclusively", "C) Heavy metals and silicates"], answer: 0, expl: "Plastics consist of large polymers built from repeating monomer units." },
+            { q: "Global plastic production in 2018 reached approximately how many million metric tonnes?", options: ["A) 120 million", "B) 360 million", "C) 850 million"], answer: 1, expl: "Global plastic production reached 360 million metric tonnes in 2018." },
+            { q: "What is the dominant end-use sector for plastics globally?", options: ["A) Automotive construction", "B) Packaging", "C) Electronics housings"], answer: 1, expl: "Packaging constitutes the largest share of plastic use globally." },
+            { q: "Which polymer is commonly used for making soft drink and water bottles?", options: ["A) LDPE", "B) PET", "C) PVC"], answer: 1, expl: "PET (Polyethylene terephthalate) is standard for beverage bottles." },
+            { q: "Which polymer is widely used for detergent bottles and milk jugs?", options: ["A) HDPE", "B) Polystyrene", "C) Nylon"], answer: 0, expl: "HDPE (High-density polyethylene) is rigid and used for jugs." },
+            { q: "How many Single-Use Plastic (SUP) items were identified by MOEF&CC in August 2024?", options: ["A) 5 items", "B) 10 items", "C) 17 items"], answer: 2, expl: "The government identified 17 specific SUP items in August 2024." },
+            { q: "When was polythene shopping bags first banned in Bangladesh?", options: ["A) 1995", "B) 2002", "C) 2021"], answer: 1, expl: "Bangladesh pioneered polythene shopping bag bans in 2002." },
+            { q: "Which three items were banned in the first phase effective June 1, 2025?", options: ["A) Straws, Stirrers, Cotton Buds", "B) Water bottles, Shopping bags, Banners", "C) Plastic cups, Spoons, Plates"], answer: 0, expl: "Straws, stirrers, and cotton buds formed the first phase ban." },
+            { q: "Colored microplastics absorb sunlight how much more than new, colorless plastics?", options: ["A) 5 times", "B) About 75 times", "C) 200 times"], answer: 1, expl: "Colored plastics absorb ~75 times more sunlight, enhancing warming." },
+            { q: "What happens to white plastics over time in the atmosphere?", options: ["A) They turn transparent", "B) They yellow due to UV aging and absorb more light", "C) They biodegrade entirely into water"], answer: 1, expl: "Atmospheric aging yellows white plastics, increasing light absorption." },
+            { q: "What was the modeled microplastic concentration in Shanghai air in recent studies?", options: ["A) 4.18 particles/m³", "B) 500 particles/m³", "C) 0.01 particles/m³"], answer: 0, expl: "Studies modeled up to 4.18 microplastic particles per cubic meter." },
+            { q: "How did foliar (leaf) nanoplastic exposure affect rice plants?", options: ["A) Increased grain yield by 50%", "B) Reduced photosynthesis rates by 85–89%", "C) Had zero measurable impact"], answer: 1, expl: "Leaf exposure severely crippled photosynthesis by 85–89%." },
+            { q: "Were nanoplastics detected inside rice grains in soil-based root exposure tests?", options: ["A) Yes, in high concentrations", "B) No, not detected", "C) Only in organic brown rice"], answer: 1, expl: "Root tests showed nanoplastics were not detected inside rice grains." },
+            { q: "Which human organ showed significant oxidative stress and blood-brain barrier disruption?", options: ["A) Brain", "B) Femur bone", "C) Fingernails"], answer: 0, expl: "Brain tissue exhibited oxidative stress and BBB disruption." },
+            { q: "What cellular impact was observed in human lung cells exposed to microplastics?", options: ["A) Enhanced cell division", "B) DNA damage, cell death, and lipid bilayer disruption", "C) Increased oxygen consumption"], answer: 1, expl: "Lung cells suffered DNA damage and cell death." },
+            { q: "What liver enzymes were elevated due to microplastic exposure in toxicological studies?", options: ["A) AST and ALT", "B) Amylase and Lipase", "C) Insulin"], answer: 0, expl: "AST and ALT liver enzymes were elevated." },
+            { q: "What is the primary raw material source for traditional synthetic plastics?", options: ["A) Fossil fuels (oil and gas)", "B) Harvested ocean seaweed", "C) Recycled cotton"], answer: 0, expl: "Plastics are synthesized primarily from fossil fuels." },
+            { q: "How does microplastic ingestion impact zooplankton in oceans?", options: ["A) Enhances their lifespan", "B) Inhibits phytoplankton consumption and carbon pump efficiency", "C) Has no ecological consequence"], answer: 1, expl: "It disrupts the biological carbon pump by altering feeding." },
+            { q: "What does EPR stand for in modern waste management?", options: ["A) Extended Producer Responsibility", "B) Ecological Plastic Reduction", "C) Environmental Pollution Rate"], answer: 0, expl: "EPR stands for Extended Producer Responsibility." },
+            { q: "Which organization has been heavily involved in Cox's Bazar plastic waste management?", options: ["A) UNDP & Department of Environment", "B) International Space Agency", "C) World Chess Federation"], answer: 0, expl: "UNDP and DoE lead initiatives in Cox's Bazar." },
+            { q: "What is LDPE primarily used for?", options: ["A) Flexible films and carrier bags", "B) Automotive engine blocks", "C) Heavy water pipes"], answer: 0, expl: "LDPE is used for flexible films and shopping bags." },
+            { q: "Which plastic type is commonly used for disposable cutlery and foam packaging?", options: ["A) Polystyrene (PS)", "B) PET", "C) HDPE"], answer: 0, expl: "Polystyrene (PS) is common in disposable cutlery and foam." },
+            { q: "What is Behavioral Change Communication (BCC) aimed at?", options: ["A) Increasing plastic manufacturing speed", "B) Raising public awareness and shifting waste habits", "C) Banning tourism permanently"], answer: 1, expl: "BCC targets public mindset and habits regarding waste." },
+            { q: "Which ministry issued the Single-Use Plastic notifications in Bangladesh?", options: ["A) Ministry of Environment, Forest and Climate Change", "B) Ministry of Shipping", "C) Ministry of Cultural Affairs"], answer: 0, expl: "MOEF&CC manages environmental regulations." },
+            { q: "What is the ultimate goal of circular economy models for plastics?", options: ["A) Dumping everything into deep oceans", "B) Designing out waste, keeping materials in use, and recycling", "C) Burning all plastics for electricity"], answer: 1, expl: "Circular economy focuses on eliminating waste and circulating materials." }
+        ];
+
+        function buildExam() {
+            const container = document.getElementById('examContainer');
+            let html = '';
+            examQuestions.forEach((item, idx) => {
+                html += `
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl" id="question-box-${idx}">
+                        <p class="font-semibold text-sm mb-3">Q${idx + 1}. ${item.q}</p>
+                        <div class="space-y-2 text-sm">
+                `;
+                item.options.forEach((opt, oIdx) => {
+                    html += `
+                        <label class="block p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100">
+                            <input type="radio" name="exam_q_${idx}" value="${oIdx}"> ${opt}
+                        </label>
+                    `;
+                });
+                html += `
+                        </div>
+                        <div id="exam-feedback-${idx}" class="hidden mt-2 text-xs font-semibold p-2 rounded"></div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function submitExam() {
+            let score = 0;
+            examQuestions.forEach((item, idx) => {
+                const selected = document.querySelector(`input[name="exam_q_${idx}"]:checked`);
+                const feedbackEl = document.getElementById(`exam-feedback-${idx}`);
+                feedbackEl.classList.remove('hidden');
+
+                if (selected && parseInt(selected.value) === item.answer) {
+                    score++;
+                    feedbackEl.innerText = "✓ Correct! " + item.expl;
+                    feedbackEl.className = "mt-2 text-xs font-semibold p-2 rounded bg-emerald-100 text-emerald-800";
+                } else {
+                    const correctText = item.options[item.answer];
+                    feedbackEl.innerText = `✗ Incorrect. Correct answer: ${correctText}. Explanation: ${item.expl}`;
+                    feedbackEl.className = "mt-2 text-xs font-semibold p-2 rounded bg-rose-100 text-rose-800";
+                }
+            });
+
+            const resultsDiv = document.getElementById('examResults');
+            resultsDiv.classList.remove('hidden');
+            document.getElementById('examScoreTitle').innerText = `Your Score: ${score} / 25 (${Math.round((score/25)*100)}%)`;
+            
+            let remark = "Excellent preparation! You are ready for the GEN203 exam!";
+            if (score < 18) remark = "Good effort! Review the module slides and try again.";
+            document.getElementById('examScoreDesc').innerText = remark;
+
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetExam() {
+            const radios = document.querySelectorAll('#examContainer input[type="radio"]');
+            radios.forEach(r => r.checked = false);
+            
+            for(let i=0; i<25; i++) {
+                const fb = document.getElementById(`exam-feedback-${i}`);
+                if(fb) fb.classList.add('hidden');
+            }
+
+            document.getElementById('examResults').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize exam on load
+        window.onload = function() {
+            buildExam();
+            updateProgress(0);
+        };
+    </script>
+</body>
+</html>
