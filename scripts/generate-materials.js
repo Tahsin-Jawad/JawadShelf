@@ -83,7 +83,6 @@ function buildMaterialsData() {
       const courseCode = dir.name;
       const coursePath = path.join(MATERIALS_DIR, courseCode);
 
-      // Sub-folder discovery (case-insensitive)
       const subEntries = fs.readdirSync(coursePath, { withFileTypes: true });
       let chaptersPath = '';
       let othersPath = '';
@@ -99,10 +98,10 @@ function buildMaterialsData() {
       }
 
       const chapters = chaptersPath
-        ? scanFolder(chaptersPath, `/materials/${encodeURIComponent(courseCode)}/Chapters`)
+        ? scanFolder(chaptersPath, `/materials/${encodeURIComponent(courseCode)}/${path.basename(chaptersPath)}`)
         : [];
       const others = othersPath
-        ? scanFolder(othersPath, `/materials/${encodeURIComponent(courseCode)}/Others`)
+        ? scanFolder(othersPath, `/materials/${encodeURIComponent(courseCode)}/${path.basename(othersPath)}`)
         : [];
 
       courses.push({
