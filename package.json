@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "generate": "node --input-type=module scripts/generate-materials.js",
+    "generate": "node scripts/generate-materials.js",
     "dev": "npm run generate && vite",
     "build": "npm run generate && tsc -b && vite build",
     "lint": "eslint .",
