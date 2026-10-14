@@ -204,7 +204,35 @@ export const generatedCourses: CourseData[] = [
     "id": "gen-203",
     "code": "GEN 203",
     "title": "GEN 203",
-    "chapters": [],
+    "chapters": [
+      {
+        "id": "Guest Lecture.pdf",
+        "title": "Guest Lecture",
+        "filename": "Guest Lecture.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/GEN%20203/Chapters/Guest%20Lecture.pdf",
+        "sizeInBytes": 13924690
+      },
+      {
+        "id": "Week 2 Lecture 1_Environmental Sustainability Intro (updated) (1).pdf",
+        "title": "Week 2 Lecture 1 Environmental Sustainability Intro (updated) (1)",
+        "filename": "Week 2 Lecture 1_Environmental Sustainability Intro (updated) (1).pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/GEN%20203/Chapters/Week%202%20Lecture%201_Environmental%20Sustainability%20Intro%20(updated)%20(1).pdf",
+        "sizeInBytes": 3069274
+      },
+      {
+        "id": "Week 6 Environmental Pllution-compressed.pdf",
+        "title": "Week 6 Environmental Pllution Compressed",
+        "filename": "Week 6 Environmental Pllution-compressed.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/GEN%20203/Chapters/Week%206%20Environmental%20Pllution-compressed.pdf",
+        "sizeInBytes": 20473433
+      }
+    ],
     "others": [
       {
         "id": "Guest Lecture.html",
@@ -214,6 +242,15 @@ export const generatedCourses: CourseData[] = [
         "extension": "html",
         "url": "/materials/GEN%20203/Others/Guest%20Lecture.html",
         "sizeInBytes": 48919
+      },
+      {
+        "id": "QUIZ1 PREP.html",
+        "title": "QUIZ1 PREP",
+        "filename": "QUIZ1 PREP.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/GEN%20203/Others/QUIZ1%20PREP.html",
+        "sizeInBytes": 68477
       },
       {
         "id": "Week 2.html",

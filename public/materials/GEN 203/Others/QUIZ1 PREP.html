@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>GEN203 Exam Night Guide</title>
+<style>
+:root{--bg:#f7f8fa;--card:#fff;--tx:#1d2330;--mu:#5b6475;--ac:#0f766e;--bd:#e2e6ec;--kp:#e8f5f3;--df:#eaf0ff;--wr:#fff4e0;--ex:#fdeaf3;--hl:#fff3a8}
+@media(prefers-color-scheme:dark){:root{--bg:#12161c;--card:#1b212a;--tx:#e8ecf1;--mu:#9aa5b5;--ac:#2dd4bf;--bd:#2d3643;--kp:#14302d;--df:#1a2540;--wr:#3a2e15;--ex:#3b1d2d;--hl:#5a4d00}}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,"Noto Sans Bengali","Kalpurush",sans-serif;background:var(--bg);color:var(--tx);line-height:1.75;padding-top:env(safe-area-inset-top)}
+#bar{position:fixed;top:0;left:0;height:4px;background:var(--ac);width:0;z-index:99}
+nav{position:fixed;left:0;top:0;bottom:0;width:260px;overflow:auto;background:var(--card);border-right:1px solid var(--bd);padding:14px;z-index:50}
+nav h3{margin:14px 0 4px;font-size:14px;color:var(--ac)}nav a{display:block;padding:3px 8px;color:var(--tx);text-decoration:none;font-size:13px;border-radius:6px}nav a:hover,nav a.on{background:var(--kp)}
+main{margin-left:260px;max-width:960px;padding:20px}
+#mb{display:none;position:fixed;right:12px;top:12px;z-index:60;background:var(--ac);color:#fff;border:0;border-radius:8px;padding:8px 12px}
+h1{font-size:28px}h2.sec{margin-top:40px;padding:12px 16px;background:var(--ac);color:#fff;border-radius:10px}
+details.t{background:var(--card);border:1px solid var(--bd);border-radius:12px;margin:12px 0}
+details.t>summary{cursor:pointer;padding:12px 16px;font-weight:700;font-size:17px}
+.in{padding:0 18px 16px}.box{padding:10px 14px;border-radius:8px;margin:10px 0;border-left:5px solid}
+.kp{background:var(--kp);border-color:var(--ac)}.df{background:var(--df);border-color:#3b6bff}.wr{background:var(--wr);border-color:#e59a00}.ex{background:var(--ex);border-color:#d6336c}
+.box b.l{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+table{border-collapse:collapse;width:100%;margin:10px 0;display:block;overflow-x:auto}td,th{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--kp)}
+mark{background:var(--hl);color:inherit;padding:0 3px}
+.q{border:1px solid var(--bd);border-radius:8px;padding:8px 12px;margin:8px 0}.q button{background:var(--ac);color:#fff;border:0;border-radius:6px;padding:3px 10px;cursor:pointer}.q .a{display:none;margin-top:6px;color:var(--mu)}.q.s .a{display:block}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.ctl button{padding:6px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer}
+#top{position:fixed;right:14px;bottom:14px;background:var(--ac);color:#fff;border:0;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer}
+label.ck{display:block;padding:3px 0}
+@media(max-width:860px){nav{transform:translateX(-100%);transition:.2s}nav.o{transform:none}main{margin-left:0;padding:14px}#mb{display:block}}
+@media print{nav,#mb,#top,#bar,.ctl{display:none}main{margin:0;max-width:none}details>*{display:block!important}.q .a{display:block}}
+</style></head><body>
+<div id="bar"></div><button id="mb" onclick="document.querySelector('nav').classList.toggle('o')">☰ মেনু</button>
+<nav id="nav"></nav>
+<main>
+<h1>📚 GEN203 — Exam Night Preparation Guide</h1>
+<p>ক্রম: <b>Week 2 → Week 6 → Guest Lecture (সবচেয়ে গুরুত্বপূর্ণ) → Final Revision</b>। <span class="box ex" style="display:inline-block;padding:2px 8px;margin:0"><b>গোলাপি বক্স</b></span> = PDF-এর বাইরের অতিরিক্ত তথ্য (সাধারণ জ্ঞান; PDF-এ নেই)।</p>
+<div class="ctl"><button onclick="tog(true)">সব খুলুন</button><button onclick="tog(false)">সব বন্ধ করুন</button><button onclick="window.print()">🖨️ Print</button></div>
+<div id="app"></div></main>
+<button id="top" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+const K=(x)=>({k:'kp',l:'Key Points',h:x}),D=(x)=>({k:'df',l:'Important Definition',h:x}),W=(x)=>({k:'wr',l:'সতর্কতা / পরীক্ষায় আসতে পারে',h:x}),X=(x)=>({k:'ex',l:'অতিরিক্ত (PDF-বহির্ভূত)',h:x});
+const SEC=[
+{id:'w2',title:'📗 Week 2 — Environmental Problems, Their Causes & Sustainability',topics:[
+{t:'1. Opening Case — Bangladesh (RMG সাফল্য বনাম মূল্য)',b:`<p>একই দেশ, একই কারখানা — দুটি সত্য একসাথে। এটাই প্রশ্ন: <i>"এটা কি উন্নয়ন?"</i></p>
+<table><tr><th>সাফল্য (Success Story)</th><th>মূল্য (The Bill)</th></tr>
+<tr><td>FY2024–25: <mark>$39.3 billion</mark> গার্মেন্ট রপ্তানি = দেশের মোট রপ্তানির প্রায় <mark>81%</mark><br>প্রায় 4 million শ্রমিক, অধিকাংশ নারী (BGMEA)<br>287 LEED-certified green factory, 124টি Platinum — বিশ্বে সর্বোচ্চ (May 2026)</td>
+<td>Wet processing-এ প্রতি kg কাপড়ে ~<mark>300 লিটার</mark> পানি (আন্তর্জাতিক best practice-এর প্রায় 6 গুণ)<br>বছরে প্রায় 1,500 billion লিটার ভূগর্ভস্থ পানি উত্তোলন<br>ঢাকার পানির স্তর প্রতি বছর 2–3 মিটার নামছে<br>রঙিন বর্জ্য এখনো তুরাগ ও বুড়িগঙ্গায় পড়ছে</td></tr></table>
+<p><b>Gazipur Decision Exercise:</b> ইউরোপীয় ক্রেতা সবচেয়ে বড় অর্ডার দিচ্ছে, শর্ত — 20% কম দাম। Option 1: এখনই নিন (300 L/kg, অপরিশোধিত বর্জ্য খালে)। Option 2: আগে ETP ও water recycling বসান (খরচ, ক্রেতা ভিয়েতনামে চলে যেতে পারে)। 3,000 চাকরি নির্ভর; খাল চার গ্রাম পেরিয়ে তুরাগে যায়।</p>
+<p><b>Reveal — DBL Group (Hamza Textiles):</b> সমাধান বেছে নিল। ফল: পানি <mark>300 → 60 L/kg</mark>; বিদ্যুৎ <mark>−25%</mark>; বিনিয়োগ $80k → সঞ্চয় $500k <i>প্রতি বছর</i>; যন্ত্র <mark>3 মাসের কম</mark> সময়ে খরচ তুলে ফেলে।</p>`,
+ bx:[K('Sustainability ≠ growth-এর বিপরীত; এটাই টেকসই growth।<br>Clean option সস্তা হয় যদি full-cost pricing হয়।'),W('Slide-এর শেষ কথা: "Sustainability is not the opposite of growth. It is the only version of growth that can keep going."')],
+ sq:[['Hamza Textiles কী অর্জন করেছিল?','Water use fell from 300 to 60 L/kg, electricity fell 25%, and the investment paid back in under three months.']],
+ tf:[['Bangladesh RMG ~81% export দেয়।',1],['Hamza-র যন্ত্রের payback ছিল 3 বছর।',0,'Under 3 months.']]},
+{t:'2. Sustainable Society ও Natural Capital',b:`<p>Slide-এ ছাত্রদের নিজের 10-শব্দের সংজ্ঞা লিখতে বলা হয়েছে এবং vote: কোনটা সবচেয়ে জরুরি — Air, Water, Waste, Climate?</p>
+<p><b>Three circles:</b> Environment + Economy + Society — তিনটির <mark>overlap = Sustainability</mark>।</p>
+<p><b>Natural Capital = Natural Resources + Ecosystem Services</b> (Fig 1.3)। এটা জীবন ও মানুষের অর্থনীতিকে টিকিয়ে রাখে।</p>
+<table><tr><th>Natural Resources</th><th>উদাহরণ</th></tr><tr><td>Inexhaustible (অফুরন্ত)</td><td>Solar energy</td></tr><tr><td>Renewable</td><td>forests, water, fish, soil (sunlight, crops, livestock, wind, trees)</td></tr><tr><td>Nonrenewable</td><td>oil, gas, coal, metals (fossil fuels, minerals, nuclear fuels, sand, topsoil)</td></tr></table>
+<p>Renewable = মানুষের ব্যবহারের হারের সমান গতিতে প্রাকৃতিকভাবে ফিরে আসে। Nonrenewable = সীমিত পরিমাণ বা ভূতাত্ত্বিক সময়ে পূরণ হয়।</p>
+<table><tr><th>Ecosystem Service</th><th>অর্থ ও উদাহরণ</th></tr><tr><td>Provisioning</td><td>প্রকৃতি থেকে পণ্য — খাদ্য, কাঠ, ওষুধ, মিঠা পানি</td></tr><tr><td>Regulating</td><td>পরিবেশ নিয়ন্ত্রণ — air quality, climate, পানি পরিশোধন, waste treatment, pest control, pollination, extreme events moderation</td></tr><tr><td>Cultural</td><td>অ-বস্তুগত সুবিধা — recreation/tourism, সৌন্দর্য, ধর্মীয় মূল্য, মানসিক-শারীরিক স্বাস্থ্য, শিক্ষা</td></tr><tr><td>Supporting</td><td>অন্য সব সেবার ভিত্তি — photosynthesis, nutrient cycling, soil formation</td></tr></table>
+<p><b>3-ধাপ চিত্র:</b> (1) Natural Capital → (2) Human Degradation (renewable-এর অতিব্যবহার, pollution & waste, forest conversion, persistent plastics ও chemicals → ecosystem নষ্ট) → (3) Solutions (ecosystem রক্ষা, sustainable yield-এর মধ্যে ব্যবহার, pollution কমানো, শিক্ষা ও সম্মিলিত কাজ)।</p>`,
+ bx:[D('<b>Sustainable society:</b> "Meets the needs of the present without compromising the ability of future generations to meet their own needs."<br><b>Natural capital:</b> The natural resources and ecosystem services that support life and economies.<br><b>Ecosystem services:</b> Benefits that nature provides to people, e.g. clean air, water purification, pollination.'),K('Ecosystem service 4 প্রকার: Provisioning, Regulating, Cultural, Supporting।'),X('Memory trick: <b>"PRCS"</b> — <b>P</b>roducts, <b>R</b>egulate, <b>C</b>ulture, <b>S</b>upport।')],
+ sq:[['Define natural capital.','Natural capital consists of natural resources and ecosystem services that support life and human economies.'],['Name the four types of ecosystem services.','Provisioning, regulating, cultural and supporting.']],
+ tf:[['Solar energy is a nonrenewable resource.',0,'It is inexhaustible.'],['Photosynthesis is a supporting service.',1]]},
+{t:'3. Tragedy of the Commons',b:`<p>Commons = সবার মালিকানাধীন / open-access শেয়ার্ড সম্পদ: নদী, বন, বায়ু, স্রোত, মাছের ভাণ্ডার, ভূগর্ভস্থ পানি।</p>
+<p><b>4 ধাপ:</b> (1) Shared resource (সবার জন্য চারণভূমি) → (2) Individual incentive (প্রত্যেকে আরও গরু যোগ করে, "more for me") → (3) Overuse (ভিড় ও ক্ষয়) → (4) Collective loss (সবাই ক্ষতিগ্রস্ত)।</p>
+<p><b>উদাহরণ:</b> Fisheries — নবায়নের চেয়ে বেশি মাছ ধরা; Forests — পুনর্জন্মের চেয়ে বেশি কাঠ; Groundwater — recharge-এর চেয়ে বেশি পানি তোলা। <b>Bangladesh উদাহরণ:</b> গাজীপুরের মাওনা ইউনিয়নে ধানক্ষেতের পাশে রঙিন টেক্সটাইল বর্জ্য, যা তুরাগ ও বুড়িগঙ্গায় যায় (Reuters ছবি); খাল ও নদীর ধারে প্লাস্টিক জমা।</p>`,
+ bx:[D('<b>Tragedy of the Commons:</b> When individuals acting in self-interest overuse a shared resource, everyone loses.'),K('Key idea: স্বল্পমেয়াদী ব্যক্তিগত লাভ → দীর্ঘমেয়াদী যৌথ ক্ষতি, যতক্ষণ না rules, cooperation বা regulation থাকে।')],
+ sq:[['Why do commons get destroyed?','Each user gains fully from taking more, but the cost of damage is shared by all, so everyone overuses it.']],
+ tf:[['Tragedy of the commons can apply to groundwater.',1],['It occurs when resources are privately regulated.',0,'It occurs with open-access shared resources.']]},
+{t:'4. তিনটি অতিরিক্ত Sustainability Principle',b:`<table><tr><th>Principle</th><th>উৎস শাস্ত্র</th><th>অর্থ</th></tr>
+<tr><td>Full-cost pricing</td><td>Economics</td><td>পণ্যের দামে লুকানো পরিবেশ ও স্বাস্থ্য খরচ ধরা; ভোক্তা প্রকৃত দাম দেখে</td></tr>
+<tr><td>Win-win solutions</td><td>Political Science</td><td>সহযোগিতা ও আপস; সুফল মানুষ ও পরিবেশ উভয়ের</td></tr>
+<tr><td>Responsibility to future generations</td><td>Ethics</td><td>জীবন-সহায়ক ব্যবস্থা আমাদের পাওয়ার মতো বা তার চেয়ে ভালো রেখে যাওয়া</td></tr></table>
+<p>সারকথা: Sustainability = better prices + cooperative politics + ethical responsibility।</p>`,
+ bx:[X('Memory trick: <b>"F-W-R"</b> (Full cost, Win-win, Responsibility)।')],
+ sq:[['Name three additional principles of sustainability.','Full-cost pricing, win-win solutions and responsibility to future generations.']],
+ tf:[['Full-cost pricing comes from ethics.',0,'It comes from economics.']]},
+{t:'5. Ecological Footprint ও Earth Overshoot Day 2026',b:`<p>Higher footprint উদাহরণ: বেশি মাংস, প্রতিদিন গাড়ি, বেশি AC, অনেক নতুন পণ্য, বড় বাড়ি → ~5 Earth। Lower: public transport, plant-based খাবার, শক্তি সাশ্রয়, reuse, ছোট বাড়ি → ~2 Earth।</p>
+<p><b>Earth Overshoot Day 2026: 30 July।</b> মানবজাতি প্রকৃতি ব্যবহার করছে পুনরুৎপাদনের চেয়ে <mark>73% দ্রুত = 1.73 Earths</mark> (রেকর্ড সর্বোচ্চ)। Carbon একাই footprint-এর <mark>61%</mark>।</p>
+<table><tr><th>দেশ</th><th>Overshoot Day</th><th>Earths</th></tr><tr><td>Qatar</td><td>4 Feb</td><td>10.0</td></tr><tr><td>United States</td><td>14 Mar</td><td>5.1</td></tr><tr><td>China</td><td>27 May</td><td>2.5</td></tr><tr><td>World average</td><td>30 Jul</td><td>1.73</td></tr><tr><td>Indonesia</td><td>18 Oct</td><td>1.3</td></tr><tr><td>India</td><td>none</td><td>0.75</td></tr><tr><td>Bangladesh</td><td>none</td><td>0.46</td></tr></table>
+<p><b>সতর্কতা (Slide):</b> Bangladesh-এর ছোট footprint মূলত <i>কম আয়ের লক্ষণ</i>, ভালো নীতির ফল নয়। প্রশ্ন: Bangladesh কি Qatar-এর footprint না কিনে growth করতে পারবে? Bangladesh একই সাথে সবচেয়ে climate-vulnerable দেশগুলোর একটি — "কে সমস্যা করে, কে মূল্য দেয়?"</p>`,
+ bx:[D('<b>Ecological footprint:</b> The amount of biologically productive land and water needed to provide the resources a person, community or country uses and to absorb the waste it produces.<br><b>Earth Overshoot Day:</b> The date when humanity has used a full year of Earth\'s regeneration.'),W('Bangladesh = 0.46 Earths, overshoot day নেই।')],
+ sq:[['What does Bangladesh\'s small footprint mean?','It mostly reflects low income, not good policy.']],
+ tf:[['Carbon is 61% of the global footprint.',1],['Indonesia has no overshoot day.',0,'India and Bangladesh have none; Indonesia is 18 October.']]},
+{t:'6. IPAT Model + Cases (India, US, China, Fast Fashion, Ghana)',b:`<p><b>I = P × A × T</b>: Impact = Population × Affluence (মাথাপিছু ভোগ) × Technology (প্রযুক্তির ভালো-মন্দ প্রভাব)।</p>
+<p><b>India (moderately developed):</b> Population-এর প্রভাব বেশি। <b>USA (highly developed):</b> Affluence ও Technology-র প্রভাব বেশি। মূল কথা: প্রভাব নির্ভর করে population, consumption ও technology-র ভারসাম্যে।</p>
+<p><b>China:</b> আয় বাড়লে বেশি appliance/electronics, মাংস-দুধ, গাড়ি-বিমান ভ্রমণ, packaging-waste। মাংস সরবরাহ 1962 (~5 kg) থেকে 2022 (~70 kg) per person per year।</p>
+<p><b>Fast fashion:</b> P = বড় বৈশ্বিক বাজার; A = বেশি কেনা, ঘন ঘন trend, অল্প ব্যবহার; T = সস্তা synthetic fibre, dyeing-finishing, global transport → textile waste, water pollution, বেশি energy, carbon emission। <b>Ghana:</b> BBC video — বিশ্বের অব্যবহৃত পুরোনো কাপড়ের dumping ground।</p>`,
+ bx:[D('<b>IPAT:</b> Environmental Impact = Population × Affluence × Technology.'),K('Fast fashion impact 4টি: textile waste, water pollution, high energy use, carbon emissions।')],
+ sq:[['Explain IPAT with India and the US.','In India population size matters most; in the US per-person consumption and technology matter most.']],
+ tf:[['In IPAT, T can only reduce impact.',0,'Technology has both beneficial and harmful effects.']]},
+{t:'7. পরিবেশ সমস্যার কারণ, Worldview, বিপ্লব ও IR 4.0',b:`<p><b>5 কারণ:</b> (i) Population growth, (ii) wasteful/unsustainable resource use, (iii) poverty, (iv) avoidance of full-cost pricing, (v) isolation from nature (environmental worldview)।</p>
+<p><b>Population:</b> 1800-এ 1 billion → 1930 (2) → 1960 (3) → 1974 (4) → 1987 (5) → 1999 (6) → 2011 (7 billion)। শীর্ষ দেশ: China 1,380m; India 1,330m; US 324m; Indonesia 259m; Brazil 206m; Pakistan 203m; Nigeria 187m; Bangladesh 163m; Russia 144m; Mexico 129m। Headline: "Depopulation is coming. Don't expect it to solve our problems."</p>
+<table><tr><th>Worldview</th><th>মূল ধারণা</th></tr><tr><td>Human-centered</td><td>প্রকৃতি মানুষের support system; মানুষ আলাদা ও নিয়ন্ত্রক; planetary management, stewardship</td></tr><tr><td>Life-centered</td><td>সব প্রজাতির মূল্য আছে; প্রত্যেকের ecological role; মানুষের কাজে লাগার বাইরেও মূল্য</td></tr><tr><td>Earth-centered</td><td>মানুষ প্রকৃতির অংশ ও নির্ভরশীল; natural capital সব প্রজাতির জন্য</td></tr></table>
+<table><tr><th>বিপ্লব</th><th>সময়</th><th>প্রভাব</th></tr><tr><td>Agricultural</td><td>≈10,000 BCE</td><td>বন কাটা, irrigation, salinity, soil erosion, ধান ও গবাদি থেকে methane, জনসংখ্যা বৃদ্ধি</td></tr><tr><td>Industrial</td><td>≈1750</td><td>কয়লা-তেল, কারখানা; air pollution, CO₂, mining, toxic waste, "take-make-waste"</td></tr><tr><td>IR 4.0</td><td>≈2010</td><td>AI/IoT; waste কমাতে পারে কিন্তু e-waste ও বিদ্যুৎ চাহিদা বাড়ায়</td></tr></table>
+<p><b>IEA, April 2026:</b> Data-centre বিদ্যুৎ চাহিদা 2025-এ <mark>+17%</mark> (মোট বৈশ্বিক +3%); 2030-এ দ্বিগুণ, AI-কেন্দ্রিক তিনগুণ; 5 বড় tech firm 2025-এ $400bn+ খরচ, 2026-এ ~75% বেশি; তারা কর্পোরেট renewable deal-এর ~40%। প্রশ্ন: T ভালো হলেও I বাড়ে — কোন term জিতছে? এটাও commons: বিদ্যুৎ ও cooling water।</p>
+<p><b>Closing (2026):</b> 2025 = 1.44°C পূর্ব-শিল্প যুগের উপরে (WMO); 2023–25 রেকর্ডের উষ্ণতম তিন বছর; ঢাকা 2026-এ বিশ্বের top-10 দূষিত শহরে। Gazipur উত্তর বদলানোর 3 কারণ: full-cost pricing, commons-এর rules, time horizon।</p>`,
+ bx:[K('সব environmental problem = ভুল দাম, ভুল নিয়ম বা ভুল time horizon-এর সিদ্ধান্ত।'),X('Memory trick: কারণ <b>"P-W-P-F-I"</b>: Population, Wasteful, Poverty, Full-cost avoidance, Isolation।')],
+ sq:[['List five basic causes of environmental problems.','Population growth, wasteful resource use, poverty, avoidance of full-cost pricing, and isolation from nature.']],
+ tf:[['Data-centre demand grew 17% in 2025.',1],['The Industrial Revolution began about 10,000 BCE.',0,'That is the Agricultural Revolution; Industrial is about 1750.']]}
+]},
+{id:'w6',title:'📘 Week 6 — Environmental Pollution',topics:[
+{t:'1. Basic Terms ও Pollution-এর ধরন',b:`<p><b>Learning outcomes:</b> key concept সংজ্ঞায়িত করা; air ও water pollution-এর উৎসের উদাহরণ; দূষণ ও চলতি অভ্যাসের সম্পর্ক ব্যাখ্যা।</p>
+<p>Pollutant প্রাকৃতিক পদার্থ/শক্তিও হতে পারে; প্রাকৃতিক মাত্রার বেশি হলে contaminant। কিছু pollutant দ্রুত পচে (সবজির মতো), কিছু দশক ধরে থাকে ও সরানো কঠিন: <mark>DDT, plastics, heavy metals, nuclear waste</mark>।</p>
+<p><b>7 প্রকার:</b> Water, Air, Land, Noise, Thermal, Light, Visual।</p>
+<table><tr><th>প্রকার</th><th>সংজ্ঞা (PDF)</th></tr><tr><td>Noise</td><td>Propagation of noise with harmful impact on human/animal life (sound/environmental noise pollution)</td></tr><tr><td>Thermal</td><td>Degradation of water quality by any process that changes ambient water temperature</td></tr><tr><td>Light (photo)</td><td>Presence of anthropogenic, artificial light in the night environment</td></tr><tr><td>Visual</td><td>Aesthetic issue; impairs ability to enjoy a vista/view</td></tr></table>
+<p>"Emerging Environmental Problems" slide-এ দুটি YouTube ভিডিও লিংক আছে (ব্যাখ্যা slide-এ নেই)।</p>`,
+ bx:[D('<b>Environmental pollution:</b> An effect caused by undesirable changes in the natural environment that harm plants, animals and humans.<br><b>Pollutant:</b> Any substance causing nuisance, harmful effects or uneasiness to organisms.'),X('Memory trick: <b>"W-A-L-N-T-L-V"</b> — "Water And Land Need Tidy Light, Visuals"।')],
+ sq:[['Name seven types of pollution.','Water, air, land, noise, thermal, light and visual pollution.'],['Give examples of persistent pollutants.','DDT, plastics, heavy metals and nuclear waste.']],
+ tf:[['All pollutants decompose quickly.',0,'Some, like plastics and DDT, take decades.']]},
+{t:'2. Air Pollution — বায়ুমণ্ডল, Primary/Secondary, উৎস',b:`<p>Air pollution সূচনা: TBS News শিরোনাম — Bangladesh বছরে ~$14bn হারায় বায়ুদূষণে। Dhaka-র দূষণের উৎস ও ছবি slide-এ আছে (ছবিভিত্তিক)।</p>
+<p><b>Atmosphere:</b> পৃথিবীকে ঘিরে "কম্বল", ~560 km পর্যন্ত বিস্তৃত; তাপমাত্রা নিয়ন্ত্রণ, ক্ষতিকর বিকিরণ থেকে রক্ষা, জীবন ধারণ। গঠন: N₂ 78%, O₂ 21%, Ar ~0.9%, CO₂ 0.04%; অল্প পরিমাণে CO, Ne, CH₄, Kr, জলীয় বাষ্প। "What if composition changes?" — প্রশ্ন।</p>
+<table><tr><th>Primary pollutant</th><th>Secondary pollutant</th></tr><tr><td>সরাসরি বায়ুমণ্ডলে নির্গত। উদা: CO, CO₂, SO₂, NO, NO₂, বেশির ভাগ hydrocarbon, বেশির ভাগ suspended particles</td><td>Primary-এর সাথে বায়ুমণ্ডলের উপাদানের বিক্রিয়ায় তৈরি। উদা: SO₃, HNO₃, H₂SO₄, H₂O₂, O₃, PANs, বেশির ভাগ NO₃⁻ ও SO₄²⁻ লবণ</td></tr></table>
+<p><b>উৎস:</b> Natural, Stationary (কারখানা/বিদ্যুৎকেন্দ্র), Mobile (যানবাহন)। <b>Indoor:</b> তামাকের ধোঁয়া, রান্না-গরমের যন্ত্র, নির্মাণসামগ্রী, রং, আসবাবের vapor। <b>Outdoor:</b> গাড়ির ধোঁয়া ও শিল্প নির্গমনের রাসায়নিক বিক্রিয়া। Anthropogenic উৎস: কারখানা, গাড়ি, বিমান, aerosol can, second-hand smoke; বড় শহরে ঘনীভূত; পাহাড়/উঁচু ভবন ছড়াতে বাধা দেয়; উন্নয়নশীল দেশের শহরে বেশি।</p>
+<p><b>Wind:</b> "Dilution is the solution to pollution" — বাতাস কম হলে stagnate ও ঘনীভূত; বেশি হলে ছড়িয়ে পাতলা। Indonesia haze (বন আগুন) ও Canada-র Rocky Mountain থেকে চীনের "fresh air" কেনা উদাহরণ।</p>`,
+ bx:[D('<b>Air pollution:</b> Chemicals added to the atmosphere by natural events or human activities in high enough concentrations to be harmful.<br><b>Primary pollutant:</b> Emitted directly into the air.<br><b>Secondary pollutant:</b> Formed in the air when a primary pollutant reacts with normal atmospheric substances or other pollutants.'),K('Atmosphere: N₂ 78, O₂ 21, Ar 0.9, CO₂ 0.04 (%)।')],
+ sq:[['Differentiate primary and secondary pollutants.','Primary pollutants are emitted directly (e.g. CO, SO₂); secondary pollutants form later by reactions in the atmosphere (e.g. O₃, H₂SO₄).']],
+ tf:[['Ozone is a primary pollutant.',0,'Ozone is secondary.'],['Low wind causes pollution to concentrate.',1]]},
+{t:'3. Major Air Pollutants',b:`<table><tr><th>Pollutant</th><th>তথ্য</th></tr>
+<tr><td>Carbon oxides</td><td>CO — অসম্পূর্ণ দহনে তৈরি অত্যন্ত বিষাক্ত গ্যাস। CO₂: troposphere-এর 93% carbon cycle থেকে, 7% মানুষের কাজ (মূলত fossil fuel); US Clean Air Act-এ pollutant হিসেবে regulated নয়</td></tr>
+<tr><td>Nitrogen oxides</td><td>NO তৈরি হয় ইঞ্জিন/কয়লা কেন্দ্রের উচ্চ তাপে N₂+O₂ বিক্রিয়ায়; বজ্রপাত ও মাটির ব্যাকটেরিয়া থেকেও। NO→NO₂; NO₂+জলীয় বাষ্প→HNO₃ ও nitrate (acid deposition-এর উপাদান)</td></tr>
+<tr><td>Sulfur dioxide</td><td>প্রায় 1/3 প্রাকৃতিক, 2/3 মানুষের (সালফারযুক্ত কয়লা পোড়ানো S+O₂→SO₂, তেল শোধন, sulfide আকরিক গলানো)। H₂SO₄ ও sulfate-এ রূপান্তরিত হয়ে acid deposition</td></tr>
+<tr><td>Suspended particulate matter (SPM)</td><td>বাতাসে ভাসমান কঠিন কণা ও তরল ফোঁটা। সবচেয়ে ক্ষতিকর: PM-10 (&lt;10 µm) ও PM-2.5। EPA: US-এ বছরে ~60,000 অকাল মৃত্যু</td></tr></table>
+<p><b>Particulate matter:</b> উৎস — sea salt, মাটির ধুলো, আগ্নেয় কণা, বনের আগুনের ধোঁয়া। ছোট কণা পানির ফোঁটায় জমে বৃষ্টিতে পড়ে; বড় কণা বৃষ্টিতে ধুয়ে যায়।<br><b>Coarse (inhalable):</b> 2.5–10 µm (রাস্তা, ধুলোময় শিল্প)। <b>Fine:</b> ≤2.5 µm (ধোঁয়া, haze; সরাসরি বা বিদ্যুৎকেন্দ্র/শিল্প/গাড়ির গ্যাস বিক্রিয়ায়)।</p>`,
+ bx:[K('PM coarse = 2.5–10 µm; fine = ≤2.5 µm।'),W('CO₂: 93% natural, 7% human।  SO₂: 1/3 natural, 2/3 human।')],
+ sq:[['Why is PM2.5 dangerous?','It is small enough to be inhaled deeply and causes serious health problems.']],
+ tf:[['SO₂ mostly comes from human sources.',1],['Fine particles are larger than 10 µm.',0,'They are 2.5 µm or smaller.']]},
+{t:'4. Air Quality Index (AQI)',b:`<p>AQI জানায় দূষণের মাত্রায় স্বাস্থ্য ঝুঁকি আছে কিনা; সরকার জনগণকে বর্তমান/পূর্বাভাসিত বায়ুমান জানাতে ব্যবহার করে। পরিসর <mark>0 (কম উদ্বেগ) – 500 (সর্বোচ্চ উদ্বেগ)</mark>। (উৎস: waqi.info, EPA)</p>
+<table><tr><th>Color (range)</th><th>কে প্রভাবিত</th><th>অর্থ</th><th>করণীয়</th></tr>
+<tr><td>Green 0–50</td><td>—</td><td>ভালো</td><td>স্বাভাবিক কাজ</td></tr>
+<tr><td>Yellow 51–100</td><td>অতিসংবেদনশীল ব্যক্তি</td><td>তাদের জন্য উদ্বেগ</td><td>ভারী কাজ ভালো সময়ে</td></tr>
+<tr><td>Orange 101–150</td><td>হৃদ/ফুসফুসের রোগী (হাঁপানি), বৃদ্ধ, শিশু</td><td>sensitive group-এর জন্য অস্বাস্থ্যকর</td><td>ভারী কাজ কমান/পিছিয়ে দিন</td></tr>
+<tr><td>Red 151–200</td><td>সবাই</td><td>সবার জন্য অস্বাস্থ্যকর</td><td>সবাই কমান; sensitive এড়ান</td></tr>
+<tr><td>Purple 201–300</td><td>সবাই</td><td>অত্যন্ত অস্বাস্থ্যকর</td><td>সবাই উল্লেখযোগ্য কমান; sensitive সব শারীরিক কাজ বন্ধ</td></tr></table>
+<div class="box ex"><b class="l">অতিরিক্ত</b>PDF-এর টেবিলে Purple পর্যন্ত আছে; 301–500 সাধারণত Maroon (Hazardous) — PDF-এ নেই।</div>`,
+ bx:[D('<b>AQI:</b> An index that indicates whether air pollutant levels may cause health concerns, ranging from 0 to 500.'),X('Memory trick: <b>"GYORP"</b> = Green, Yellow, Orange, Red, Purple (ভালো→খারাপ)।')],
+ sq:[['What is the AQI range and what does Red mean?','AQI ranges from 0 to 500. Red (151–200) means air quality is unhealthy for everyone.']],
+ tf:[['Orange (101–150) affects only sensitive groups.',1]]},
+{t:'5. Smog, Greenhouse Effect, Acid Rain, Inversion',b:`<p><b>Photochemical smog:</b> nitrogen oxides ও VOC সূর্যালোকে বিক্রিয়া করে শহরের উপর লালচে-বাদামি কুয়াশা। গ্রীষ্মে বেশি; রৌদ্রোজ্জ্বল, উষ্ণ, শুষ্ক ও যানবাহনবহুল শহরে বেশি। রোগ: rhinitis, bronchitis, asthma, pneumonia।</p>
+<p><b>Greenhouse effect:</b> প্রাকৃতিক প্রক্রিয়া — সূর্যের কিছু শক্তি মহাকাশে ফিরে যায়, বাকিটা greenhouse gas শোষণ ও পুনঃবিকিরণ করে পৃষ্ঠ উষ্ণ রাখে। "The other PROBLEM" — অতিরিক্ত হলে সমস্যা।</p>
+<p><b>Acid rain / acid deposition:</b> সালফিউরিক বা নাইট্রিক অ্যাসিডযুক্ত যেকোনো অধঃক্ষেপণ (EPA)। প্রভাব-শৃঙ্খল: SO₂, NOx, O₃, H₂O₂, PANs → পাতা ও বাকলে সরাসরি ক্ষতি; মাটির অম্লীকরণ → পুষ্টি leaching, বিষাক্ত ধাতু আয়ন মুক্তি → মূল ক্ষতি → পানি ও পুষ্টি শোষণ কমে; photosynthesis ও বৃদ্ধি কমে; খরা, ঠান্ডা, পোকা, রোগের প্রতি সংবেদনশীলতা → গাছের মৃত্যু; হ্রদ ও ভূগর্ভস্থ পানি দূষিত।</p>
+<p><b>Temperature inversion:</b> পাহাড়ঘেরা উপত্যকায় ঠান্ডা মেঘলা আবহাওয়া দূষণ আটকে রাখে; রৌদ্রোজ্জ্বল, হালকা বাতাস, তিন দিকে পাহাড় ও এক দিকে সমুদ্র থাকলেও inversion-প্রবণ (Fig 19-5)।</p>`,
+ bx:[D('<b>Photochemical smog:</b> A mixture of pollutants formed when nitrogen oxides and VOCs react in sunlight, creating a reddish-brown haze.<br><b>Acid rain:</b> Any precipitation containing acidic components such as sulfuric or nitric acid.'),K('Smog = NOx + VOC + sunlight।')],
+ sq:[['How does acid rain damage forests?','It damages leaves, acidifies soil, leaches nutrients, releases toxic metal ions and harms roots, weakening trees.']],
+ tf:[['Photochemical smog is more common in sunny warm cities.',1]]},
+{t:'6. স্বাস্থ্যের প্রভাব, সমাধান ও ব্যক্তিগত ভূমিকা',b:`<table><tr><th>Short term</th><th>Long term</th></tr><tr><td>অসুখ (pneumonia/bronchitis), জ্বালা-অস্বস্তি, মাথাব্যথা-মাথা ঘোরা-বমিভাব</td><td>হৃদরোগ, ফুসফুস ক্যান্সার, শ্বাসতন্ত্রের রোগ; স্নায়ু, মস্তিষ্ক, কিডনি, যকৃৎ ক্ষতি</td></tr></table>
+<p>Fig 19-15: সুস্থ ফুসফুস বনাম emphysema-য় মৃত ব্যক্তির ফুসফুস।</p>
+<table><tr><th>Outdoor solutions</th><th>Indoor solutions</th></tr><tr><td>Energy efficiency বাড়িয়ে fossil fuel কমানো; কম-দূষণকারী natural gas; renewable (solar, wind, hydrogen); উন্নয়নশীল দেশে প্রযুক্তি হস্তান্তর</td><td>দারিদ্র্য কমানো; সস্তা cookstove/solar cooker বিতরণ; ঘরে ধূমপান কমানো/নিষেধ; particulate, radon, formaldehyde-র সস্তা পরীক্ষা</td></tr></table>
+<p><b>আমরা কী করতে পারি:</b> সাইকেল, গণপরিবহন, carpool, ঘর ছাড়ার সময় যন্ত্র বন্ধ, পরিবার-বন্ধুদের জানানো, বাসায় pollution check, পরিবেশবিজ্ঞানী হওয়া। ভিডিও: Copenhagen (bike), Vietnam (bus), India (carpool), Sweden (traffic control)।</p>`,
+ bx:[K('Indoor-এর মূল সমাধান = দারিদ্র্য কমানো + cookstove।')],
+ sq:[['Give two indoor air pollution solutions.','Distribute cheap efficient cookstoves and ban or reduce indoor smoking.']],
+ tf:[['Radon testing is an indoor solution.',1]]},
+{t:'7. Water Pollution — Point ও Nonpoint Source',b:`<p><b>Water pollution:</b> পানির মানে পরিবর্তন যা জীবের ক্ষতি করে বা মানুষের ব্যবহারের অযোগ্য করে। কারণ: রাসায়নিক দূষণ, অতিরিক্ত তাপ।</p>
+<table><tr><th>Point source</th><th>Nonpoint source</th></tr><tr><td>নির্দিষ্ট স্থানে; শনাক্ত, পর্যবেক্ষণ ও নিয়ন্ত্রণ সহজ</td><td>বিস্তৃত, ছড়ানো এলাকা; শনাক্ত ও নিয়ন্ত্রণ কঠিন; পরিষ্কার ব্যয়বহুল</td></tr><tr><td colspan="2" class="ex">অতিরিক্ত উদাহরণ (PDF-এর ছবিভিত্তিক slide-এ থাকতে পারে): Point — কারখানার নিষ্কাশন পাইপ, ETP/ড্রেন; Nonpoint — কৃষিজমির সার-কীটনাশকের ধুয়ে যাওয়া, শহরের রাস্তার বৃষ্টির পানি।</td></tr></table>
+<p>"Major Water Pollutants and Their Sources" (Table 20-1) টেবিলটি ছবি আকারে আছে; তাই ওটা PDF দেখে আলাদা পড়ুন।</p>`,
+ bx:[D('<b>Water pollution:</b> Any change in water quality that can harm organisms or make water unfit for human use.'),W('Slide-এ Table 20-1 ও Point/Nonpoint ছবি আছে — এগুলো আমি লিখিত রূপে পাইনি; PDF-এ একবার চোখ বুলান।')],
+ sq:[['Why are nonpoint sources hard to control?','They are diffuse and spread over broad areas, so they are difficult to identify and expensive to clean up.']],
+ tf:[['Point sources are difficult to identify.',0,'They are easy to identify and regulate.']]}
+]},
+{id:'gl',title:'📕 Guest Lecture — Plastic Pollution: Materials, Systems and Solutions (সবচেয়ে গুরুত্বপূর্ণ)',topics:[
+{t:'1. Plastic কী? (Slides 1–2)',b:`<p>Plastic হলো প্রধানত <b>polymer</b> দিয়ে তৈরি উপাদান যা বিভিন্ন আকারে ঢালা যায়। Polymer = বড় অণু, যা বারবার পুনরাবৃত্ত ছোট একক (<b>monomer</b>) জুড়ে তৈরি। একটি monomer → অনেক monomer-এর শিকল = polymer (চিত্রে বল ও শিকল)।</p>
+<p><b>বৈশিষ্ট্য:</b> Lightweight (হালকা), Easy to shape (সহজে আকার দেওয়া যায়), Properties vary by type (ধরন অনুযায়ী ভিন্ন)।</p>
+<div class="box ex"><b class="l">সহজ উদাহরণ</b>Monomer = একটি কাগজের ক্লিপ; অনেক ক্লিপ জুড়ে শিকল = polymer।</div>`,
+ bx:[D('<b>Plastic:</b> A material made mainly of polymers that can be shaped into different forms.<br><b>Polymer:</b> A large molecule built from repeating units (monomers).')],
+ sq:[['What is a polymer?','A polymer is a large molecule made of many repeating units called monomers.']],
+ tf:[['All plastics have identical properties.',0,'Properties vary by type.']]},
+{t:'2. Single-use Plastic ও বৈশ্বিক উৎপাদন (Slide 3)',b:`<p>SUP = জীবাশ্ম জ্বালানি-ভিত্তিক পণ্য, যা ব্যবহারের পরপরই (প্রায়ই মিনিটে) ফেলে দেওয়ার জন্য তৈরি। শিরোনাম: <i>"Used for minutes. Produced at massive scale."</i></p>
+<ul><li>বৈশ্বিক প্লাস্টিক উৎপাদন (2018): <mark>360 million metric tonnes</mark></li><li>প্রায় <mark>≈50%</mark> single-use অনুমান</li><li><b>Packaging</b> = প্লাস্টিক ব্যবহারের প্রধান ধরন</li><li><b>US উদাহরণ:</b> বছরে <mark>380 billion</mark> plastic bag ও wrap → <mark>1.6 billion litres</mark> তেল খরচ</li></ul>
+<p>উৎস: Giacovelli et al. (2018), UNEP; Plastic Oceans (2020); US estimate "as provided"। ছবি: ম্যানগ্রোভ বনে ভেসে আসা বোতল।</p>`,
+ bx:[K('360 Mt; ≈50% SUP; packaging প্রধান; 380 bn bags → 1.6 bn L oil।')],
+ sq:[['Why are single-use plastics a problem?','They are fossil-fuel-based, used for minutes, produced at massive scale and quickly become waste.']],
+ tf:[['About 50% of plastic is single-use.',1]]},
+{t:'3. Plastic-এর ধরন (Slide 4 — Types at a Glance)',b:`<table><tr><th>Type</th><th>পূর্ণ নাম</th><th>উদাহরণ</th></tr>
+<tr><td>PET</td><td>Polyethylene terephthalate</td><td>পানি ও soft-drink বোতল</td></tr>
+<tr><td>HDPE</td><td>High-density polyethylene</td><td>detergent বোতল, milk jug</td></tr>
+<tr><td>PVC</td><td>Polyvinyl chloride</td><td>পাইপ, cable insulation</td></tr>
+<tr><td>LDPE</td><td>Low-density polyethylene</td><td>carrier bag, flexible film</td></tr>
+<tr><td>PP</td><td>Polypropylene</td><td>খাবারের container, bottle cap</td></tr>
+<tr><td>PS / EPS</td><td>Polystyrene / Expanded polystyrene</td><td>disposable cutlery, foam packaging</td></tr>
+<tr><td>PC</td><td>Polycarbonate</td><td>safety glasses, protective visor</td></tr>
+<tr><td>PLA</td><td>Polylactic acid</td><td>cold-drink cup, 3D-printing filament</td></tr>
+<tr><td>ABS</td><td>Acrylonitrile butadiene styrene</td><td>keyboard housing, toy brick</td></tr>
+<tr><td>PA</td><td>Polyamide (nylon)</td><td>cable tie, fishing line</td></tr>
+<tr><td>PU</td><td>Polyurethane</td><td>cushion foam, insulation foam</td></tr>
+<tr><td>Mixed/Multilayer (MLP)</td><td>একাধিক উপাদান/স্তর</td><td>snack packet, laminated sachet</td></tr></table>`,
+ bx:[W('Cox\'s Bazar facility ও recycling slide-এ PET, HDPE, LDPE, PP, MLP বারবার আসে — এগুলো ভালো করে মুখস্থ করুন।'),X('Memory trick: "<b>PET</b> বোতল, <b>HDPE</b> জগ, <b>LDPE</b> ব্যাগ, <b>PP</b> ঢাকনা, <b>MLP</b> চিপস প্যাকেট"।')],
+ sq:[['Define MLP with an example.','Multilayer plastic is made of multiple materials or layers, e.g. snack packets and laminated sachets.']],
+ tf:[['PET is used for water bottles.',1],['LDPE is used for pipes.',0,'PVC is used for pipes; LDPE for carrier bags and film.']]},
+{t:'4. বাংলাদেশের 17টি SUP (Slides 5–6)',b:`<p>MoEF&CC (পরিবেশ, বন ও জলবায়ু পরিবর্তন মন্ত্রণালয়) <mark>28 August 2024</mark>-এ 17টি আইটেমকে SUP হিসেবে চিহ্নিত করে (Waste Management Rules 2021-এর বিধি ৯ ব্যাখ্যা অনুযায়ী phase-out লক্ষ্যে)।</p>
+<ol><li>Straw</li><li>Stirrer</li><li>এককালীন utensil/cutlery (cup, plate, tray, spoon, fork)</li><li>Plastic stick (balloon, ice-cream/lollipop)</li><li>Plastic banner</li><li>পোস্টারের plastic cover</li><li>Sachet, pouch</li><li>Chocolate/lollipop cover</li><li>Styrofoam খাবারের প্যাকেজিং (বিরিয়ানি প্যাকেট)</li><li>Fast-food প্যাকেজিংয়ে পাতলা plastic film</li><li>Plastic invitation card, thermal lamination</li><li>সিগারেট প্যাক/tissue/toilet roll/সাবানের পাতলা cover</li><li>PE বা PP (বা মিশ্র) shopping/carry bag</li><li>Melamine foam sponge (ঘর পরিষ্কার)</li><li>যেকোনো পণ্যের single-use plastic packaging</li><li>Cigarette filter</li><li>Plastic bottle ও cap</li></ol>
+<p><b>Slide 6:</b> আদেশের বাংলা ও ইংরেজি তালিকা, তারিখ ২৮ আগস্ট ২০২৪। দ্বিতীয় প্রজ্ঞাপন (<b>9 April 2025</b>): <mark>Straw, Stirrer, Cotton Bud</mark> — এই তিন SUP-এর উৎপাদন, আমদানি, বাজারজাত, বিক্রয়, প্রদর্শন, মজুদ, পরিবহন ও ব্যবহার <mark>1 June 2025</mark> থেকে সম্পূর্ণ নিষিদ্ধ। (সরকার তালিকা সংশোধন করতে পারে।)</p>`,
+ bx:[K('17 items; 28 Aug 2024; পরে 3 টি banned (straw, stirrer, cotton bud) 1 June 2025 থেকে।'),X('Memory trick: ক্যাটাগরি — <b>খাওয়া</b> (1–3, 9, 10), <b>প্যাকেজিং</b> (7, 8, 12, 15), <b>বিজ্ঞাপন</b> (5, 6, 11), <b>অন্যান্য</b> (13, 14, 16, 17)।')],
+ sq:[['What is SUP and why restrict it?','SUP is plastic designed to be discarded right after use. It is restricted because it is used for minutes, produced at huge scale, uses fossil fuels and becomes persistent waste that clogs drains and pollutes rivers.'],['Challenge in implementation?','Enforcement and affordable alternatives are difficult; the 2002 polythene bag ban also faced these problems.']],
+ tf:[['17 SUP items were identified on 28 August 2024.',1],['Plastic bottles and caps are not in the list.',0,'They are item 17.']]},
+{t:'5. Plastic Particles — Airborne Micro/Nanoplastics (Slide 7)',b:`<p>Paper: <i>Atmospheric warming contributions from airborne microplastics and nanoplastics</i>, Nature Climate Change 16, 598–605 (2026) (Published 4 May 2026)।</p>
+<ul><li>রঙিন plastic সূর্যের আলো শোষণ করে নতুন, বর্ণহীন কণার চেয়ে প্রায় <mark>75 গুণ</mark> বেশি।</li><li>সাদা plastic বায়ুমণ্ডলীয় বার্ধক্যে (ageing) <mark>হলুদ</mark> হয় ও বেশি আলো শোষণ করে।</li><li>মডেল অনুমান: Shanghai-র বাতাসে প্রতি m³-এ সর্বোচ্চ <mark>4.18</mark> microplastic কণা, সঙ্গে খুব সামান্য nanoplastic।</li></ul>
+<p><b>কেন বেশি শোষণ করে? (Reflection Q4)</b> রঙ (pigment/chromophore) আলো শোষণ করে; বর্ণহীন কণা বেশি আলো পার করে/প্রতিফলিত করে। শোষিত আলো তাপে পরিণত হয় → বায়ুমণ্ডল উষ্ণ হয়, অর্থাৎ airborne plastic জলবায়ু উষ্ণায়নে ভূমিকা রাখে।</p>`,
+ bx:[D('<b>Microplastics:</b> Very small plastic particles (generally under 5 mm). <b>Nanoplastics:</b> even smaller particles (nanometre scale).'),X('Micro <5 mm সংজ্ঞাটি PDF-এ নেই; সাধারণ জ্ঞান।'),W('সংখ্যা: 75×, 4.18/m³, Shanghai।')],
+ sq:[['Why do coloured plastic particles warm the atmosphere more?','They absorb sunlight much more strongly (about 75 times), and the absorbed energy heats the air; aged white plastics turn yellow and also absorb more.']],
+ tf:[['White plastics become yellow with atmospheric ageing.',1],['Colourless particles absorb 75 times more light.',0,'Coloured ones absorb ~75 times more than new colourless ones.']]},
+{t:'6. Nanoplastic ও ধানের photosynthesis (Slide 8)',b:`<p>Zhu et al., Environ. Sci. Technol. 60(5): 3899–3910 (10 Feb 2026) — polystyrene (PS) nanoplastic ধানের photosynthesis কমায়, <b>route-specific</b> (প্রবেশপথ অনুযায়ী ভিন্ন)।</p>
+<p><b>3 ধাপ:</b> (1) বাতাসের কণা ধানের পাতায় জমে → (2) chloroplast-এ পৌঁছায় (যেখানে সূর্যালোক ধরা হয়) → (3) photosynthesis দুর্বল: কম energy, কম carbon fixation।</p>
+<table><tr><th>Leaf exposure</th><th>Root exposure</th></tr><tr><td>শক্তিশালী ও দীর্ঘস্থায়ী প্রভাব</td><td>শুধু উচ্চ মাত্রায় প্রভাব</td></tr></table>
+<p>ফলাফল (leaf): Photosynthetic rate <mark>85–89% ↓</mark>; photosynthetic pigment <mark>54–61% ↓</mark>; ATP energy production <mark>22–24% ↓</mark>; মাটিভিত্তিক পরীক্ষায় ধানের দানায় nanoplastic <mark>পাওয়া যায়নি</mark>।</p>`,
+ bx:[K('PS source: styrofoam, foam container, beach debris (slide-এর ছবি)।')],
+ sq:[['How do PS nanoplastics affect rice?','They settle on leaves, reach chloroplasts and reduce photosynthesis, pigments and ATP production.']],
+ tf:[['Nanoplastics were detected in rice grains in the experiment.',0,'They were not detected.']]},
+{t:'7. মানুষের স্বাস্থ্যে প্রভাব (Slides 9–10, 13)',b:`<p>Lamoree et al., Nat Med 31 (2025): মানবদেহে microplastic পাওয়া গেছে (human exposure) এবং কোষে প্রভাব (cellular effects)।</p>
+<table><tr><th>অঙ্গ</th><th>পরিমাণ / কণার আকার</th><th>কোষীয় প্রভাব</th></tr>
+<tr><td>Brain</td><td>4,917 µg/ml; 100–200 nm</td><td>↑ oxidative stress (OS), BBB ভাঙন; ↓ neural progenitor gene expression</td></tr>
+<tr><td>Blood</td><td>1.1–80 µg/ml; 0.3–3,000 µm</td><td>↑ OS, cytokine; ↓ cell viability</td></tr>
+<tr><td>Lung</td><td>0.56–1.19 MPs/g; 1–2,475 µm</td><td>↑ OS, DNA damage, মৃত্যু</td></tr>
+<tr><td>Liver</td><td>433 µg/ml; 0.4–30 µm</td><td>↑ OS, মৃত্যু, AST/ALT; ↓ antioxidant, proliferation</td></tr>
+<tr><td>Kidney</td><td>404 µg/ml; 0.4–29 µm</td><td>↑ OS, LDH leakage</td></tr>
+<tr><td>Colon</td><td>28.1 MPs/g; 800–1,600 µm</td><td>intestinal cell: ↑ OS, DNA damage</td></tr>
+<tr><td>Placenta</td><td>126.8 µg/ml; 5–300 µm</td><td>↑ মৃত্যু, DNA damage; ↓ proliferation</td></tr>
+<tr><td>Testis</td><td>328.4 µg/ml; 22–287 µm</td><td>(ovarian cell: ↑ OS, মৃত্যু; ↓ proliferation)</td></tr></table>
+<p><b>Slide 13 — Plastic lifecycle ও স্বাস্থ্য:</b> Fossil extraction → Plastic production → Product manufacture → Consumer use → Recycle → Waste। ধাপে ধাপে <b>industrial hazards/occupational health</b>, <b>greenhouse gas</b>, <b>other industrial emissions</b> (particulate matter, combustion products, water ও soil pollutants, volatiles), <b>direct exposure</b> (plastic chemicals, MNPs) এবং <b>environmental plastic</b> (macro waste → MNPs → chemicals)। প্রবেশপথ: inhalation, ingestion, dermal absorption। ফলাফল: microbial pathogen/vector proliferation, biodiversity loss, environmental degradation, food security সমস্যা, undernutrition, socioeconomic inequity। রোগ: endocrine/metabolic disorder, mental health, neurological, developmental, respiratory, cardiovascular, reproductive, cancer, immunological, infectious disease, injury।</p>`,
+ bx:[D('<b>MNPs:</b> Micro- and nanoplastics.'),K('প্রবেশপথ 3টি: Inhalation, Ingestion, Dermal absorption।'),X('Memory trick: "<b>IID</b>" = Inhale, Ingest, Dermal।')],
+ sq:[['Name three health impacts of plastic across its lifecycle.','Endocrine disorder, respiratory and cardiovascular disease, cancers, plus occupational injury.']],
+ tf:[['Microplastics were found in human brain, blood and placenta.',1]]},
+{t:'8. Rural Bangladesh, Climate Footprint (Slides 11–12)',b:`<p><b>Slide 11 — The Silent Plastic Crisis in Rural Bangladesh:</b> ধানক্ষেতের সেচের খাল, নদীতীর, জেলের নৌকা-জাল, জলাশয়ে sachet, প্যাকেট ও microplastic জমে।</p>
+<p><b>Slide 12 — Plastic\'s Growing Climate Footprint (OECD Global Plastics Outlook; UNEP Methane Assessment):</b></p>
+<ul><li>2019: <mark>1.8 billion tonnes</mark> GHG (plastics lifecycle) → 2060: <mark>4.3 billion tonnes</mark> (নীতি না বদলালে) = দ্বিগুণের বেশি</li><li>2019-এ বৈশ্বিক GHG-র <mark>3.4%</mark> প্লাস্টিক থেকে</li><li>এর <mark>90%</mark> এসেছে উৎপাদন ও জীবাশ্ম জ্বালানি থেকে রূপান্তরে</li><li>2019-এ মাত্র <mark>9%</mark> প্লাস্টিক বর্জ্য চূড়ান্তভাবে recycled</li><li>2060-এ প্রায় <mark>অর্ধেক</mark> landfill-এ যাবে</li><li><b>Landfill methane</b> মূলত পচনশীল জৈব বর্জ্য থেকে, প্লাস্টিক নিজে থেকে নয়।</li></ul>`,
+ bx:[W('Landfill methane = organic waste, not plastic itself — ফাঁদ প্রশ্ন!')],
+ sq:[['How much GHG do plastics emit in 2019 and 2060?','1.8 billion tonnes in 2019 and a projected 4.3 billion tonnes in 2060 without stronger policies.']],
+ tf:[['Landfill methane mainly comes from plastic.',0,'It mainly comes from decomposing organic waste.'],['Only 9% of plastic waste was recycled in 2019.',1]]},
+{t:'9. সমাধান ও বাংলাদেশের নীতি (Slides 14–21)',b:`<p><b>"How do we address the crisis?"</b> Word cloud-এর মূল ধারণা: <b>Reduce & Prevent, Reuse & Refill, Better Collection, Design for Circularity, EPR, Deposit-return, Bans & Levies, Phase-out targets, Source separation, Mechanical/Chemical recycling, Recycled content, Production caps, Plastic taxes, Pay-as-you-throw, Traceability, River interceptors, Enforcement, Global Plastics Treaty, Just transition, No open burning, Worker safety, Microfibre filters</b> ইত্যাদি।</p>
+<table><tr><th>সাল</th><th>নীতি</th></tr>
+<tr><td>2002</td><td>Polythene shopping-bag ban — <b>বিশ্বে প্রথম</b>; enforcement ও বিকল্প কঠিন</td></tr>
+<tr><td>2021</td><td>National action plan: recycling 50% (2025); plastic waste generation 30% কমানো (2030); SUP phase-out 90% (2026)</td></tr>
+<tr><td>2026</td><td>17 item চিহ্নিত, 3টি banned; FY2026–27 Budget Speech: 17 SUP নিষেধ; 3R policy-তে 5 বছরে 30% কমানোর অঙ্গীকার</td></tr></table>
+<p>উৎস: World Bank (2021); Budget Speech FY2026–27। <b>Slide 21 (সংবাদ):</b> Bangladesh Agricultural University ক্যাম্পাসে single-use বোতল নিষিদ্ধ; TBS: প্রথম plastic ban করা দেশ হয়েও Bangladesh এখন plastic দূষণে বিশ্বে <mark>9th</mark>; Daily Star (4 Oct 2026): Myanmar/Thailand লেবেলযুক্ত plastic বর্জ্য St Martin\'s দ্বীপে ভেসে এসেছে — <b>transboundary marine pollution</b>, প্রবাল ও জীববৈচিত্র্য ঝুঁকিতে।</p>
+<p><b>3R:</b> Reduce, Reuse, Recycle। Reduce = উৎসেই কমানো (সবচেয়ে কার্যকর), Reuse = বারবার ব্যবহার/refill, Recycle = নতুন পণ্যে রূপান্তর।</p>`,
+ bx:[D('<b>EPR (Extended Producer Responsibility):</b> Producers are responsible for the collection and end-of-life management of the products they sell.'),X('EPR-এর সংজ্ঞা PDF-এ নেই (word cloud-এ শুধু নাম)।'),K('2002 বিশ্বে প্রথম ban; 2021: 50% / 30% / 90%।')],
+ sq:[['What is the 3R principle?','Reduce, Reuse and Recycle; it cuts plastic waste by preventing generation first, then extending use, then recovering material.']],
+ tf:[['Bangladesh banned polythene bags in 2002.',1],['Bangladesh\'s 2021 plan targeted 90% recycling.',0,'Recycling 50%; SUP phase-out 90%.']]},
+{t:'10. Cox\'s Bazar Case Study — Skepticism to Solutions (Slides 22–28, 30)',b:`<p>প্রশ্ন: "Where do you think this packet goes after you throw it away?" (cheese puffs প্যাকেট → ড্রেন → নদী → সাগর)। "If waste has value, why is it still waste? What is missing?"</p>
+<p><b>3 সংশয়:</b> (1) কম-মূল্যের plastic কি ভালো পণ্যে recycle হয়? (2) আর্থিকভাবে টেকসই ব্যবসা মডেল হবে? (3) বিনিয়োগ-যোগ্য?</p>
+<p><b>Behaviour পরিবর্তন (Jan 2024–Jun 2026):</b> Roadside dumping <mark>−18%</mark>; roadside bin usage <mark>+15%</mark>; household segregation <mark>+18%</mark>; 36টি Samaj Committee-র মধ্যে <mark>27টিতে</mark> waste system চালু। বার্তা: systems সহায়ক হলে behaviour বদলায়।</p>
+<p><b>Waste flow (CXB):</b> Source (household, tourist, commercial) → bins/dumping site → scrap dealer → recycler; landfill → informal waste picker (IWP); mismanaged → drain/canal → river → ocean = plastic leak। Secondary: Chattogram/Dhaka/Gazipur-Narayanganj recycler, low-grade manufacturer, exporter। সংক্ষেপ: MWW, PW, SUP, IWP।</p>
+<p><b>System:</b> Household → segregated communal bin → segregated collection van (entrepreneur) → other waste→landfill; plastic waste→recycler; PET → existing supply chain; HDPE/LDPE/PP/PE/MLP (hard-to-recycle) → recycling facility → lumber, sheet, pellet → বাজার প্রচার। Floating barrier নদীতে আটকে। "Where does the chain break?"</p>
+<p><b>Floating barrier:</b> Bakkhali নদী থেকে <mark>12,023.249 kg</mark> plastic উদ্ধার (Jan 2024–Jun 2026)।</p>
+<table><tr><th>Input</th><th>Output</th><th>Use</th></tr><tr><td>PP, HDPE, LDPE</td><td>Pellets</td><td>Manufacturing</td></tr><tr><td>PP, HDPE, LDPE, MLP</td><td>Plastic lumber</td><td>Furniture/construction</td></tr><tr><td>MLP & mixed-colour</td><td>Sheets</td><td>Furniture/applications</td></tr></table>
+<p><b>Cox\'s Bazar Municipal Recycling Facility:</b> Mithaichori, Ramu; বাংলাদেশের প্রথম municipal plastic recycling facility; <mark>45.9 tonne</mark> recycled; BUET-এর testing ও validation (March 2026)। Chair slide: "Every chair has a past — ours was once plastic waste"; প্রশ্ন: recycled SUP হলে কি দাম বদলাবে?</p>`,
+ bx:[K('Behaviour: −18, +15, +18, 27/36; Barrier 12,023 kg; Facility 45.9 t।'),W('Recycled product-এর বাজার ও ক্রেতার আস্থা না থাকলে chain ভেঙে যায়।')],
+ sq:[['Evidence that behaviour can change?','Roadside dumping fell 18%, bin use rose 15%, segregation rose 18%, and 27 of 36 Samaj Committees activated waste systems.']],
+ tf:[['The facility is in Mithaichori, Ramu.',1],['Plastic lumber is made from PET only.',0,'Inputs are PP, HDPE, LDPE and MLP.']]},
+{t:'11. Recycling কখন কাজ করে? (Slide 29) ও Reflection প্রশ্ন',b:`<table><tr><th>Material</th><th>System</th><th>Market</th></tr><tr><td>Polymer type, compatible materials, product design</td><td>Collection, sorting & cleaning, processing capacity</td><td>Consistent quality, buyer demand, viable recovery cost</td></tr></table>
+<p><b>"Recyclable in Theory or Recycled in Practice?"</b> উদাহরণ: MLP/sachet theory-তে সম্ভব কিন্তু আলাদা না হলে, পরিষ্কার না হলে বা ক্রেতা না থাকলে ড্রেনে যায়; সংগ্রহ ভাঙলে leak; Cox\'s Bazar-এ segregation + facility + বাজার একসাথে হওয়ায় কাজ করেছে। বাংলাদেশে চ্যালেঞ্জ: low-value plastic, মিশ্র/ময়লা বর্জ্য, সংগ্রহ-segregation দুর্বলতা, informal sector, বাজার ও খরচ।</p>
+<p><b>Reflection প্রশ্ন (PDF slide 32) — উত্তরের রূপরেখা:</b> (1) প্রভাব: মাইক্রোপ্লাস্টিক মানবদেহ/অঙ্গে, ধানের photosynthesis কমা, climate footprint 1.8→4.3 bn t, নদী-প্রবাল দূষণ। (2) SUP + rationale + enforcement/বিকল্প চ্যালেঞ্জ। (3) Plastic ধরন + recycling চ্যালেঞ্জ বা material-system-market। (4) রঙিন কণা 75× আলো শোষণ → বায়ুমণ্ডল উষ্ণ। (5) 3R। (6) "Recyclable in theory…" বিশ্লেষণ।</p>`,
+ bx:[K('Material → System → Market (তিনটিই লাগে)।'),X('Memory trick: <b>"M-S-M"</b>।')],
+ sq:[['When does recycling work?','When the material is suitable, the collection-sorting-processing system exists, and there is consistent quality, buyer demand and viable cost.']],
+ tf:[['Recyclable in theory always means recycled in practice.',0,'It also needs collection systems and markets.']]}
+]}
+];
+const FIN={rev:`<ul><li><b>Week 2:</b> Sustainability = needs of present without compromising future; natural capital = resources + ecosystem services; commons tragedy; footprint 1.73 Earths (30 July 2026); IPAT; 5 causes; IR 4.0 data centres +17%।</li><li><b>Week 6:</b> 7 pollution types; primary vs secondary; PM2.5/PM10; AQI 0–500 (6 রঙের ধারণা); smog, acid rain, inversion; point vs nonpoint।</li><li><b>Guest:</b> 360 Mt, ≈50% SUP; 17 SUP (28 Aug 2024); 75× colour absorption; PS nanoplastic rice −85–89%; 1.8→4.3 bn t GHG; 2002/2021/2026 policy; CXB: −18/+15/+18, 27/36, 12,023 kg, 45.9 t; Material–System–Market।</li></ul>`,
+ tf:[['Sustainability is the overlap of environment, economy and society.',1],['Ecosystem services have 3 types only.',0,'Four: provisioning, regulating, cultural, supporting.'],['Earth Overshoot Day 2026 was 30 July.',1],['Bangladesh has an overshoot day in October.',0,'None; 0.46 Earths.'],['IPAT: I = P + A + T.',0,'I = P × A × T.'],['Ozone in smog is a secondary pollutant.',1],['AQI ranges from 0 to 100.',0,'0 to 500.'],['Nonpoint sources are easy to regulate.',0,'They are hard.'],['Plastic is made mainly of polymers.',1],['Packaging is the dominant plastic use.',1],['MOEF&CC identified 17 SUPs in 2024.',1],['Coloured plastics absorb ~75× more sunlight.',1],['Nanoplastics were found in rice grains.',0,'Not detected.'],['Only 9% plastic waste was recycled in 2019.',1],['Landfill methane mainly comes from plastic.',0,'From organic waste.'],['Bangladesh was first to ban polythene bags (2002).',1],['Roadside dumping reduced by 18%.',1],['Floating barriers recovered plastic from Bakkhali River.',1],['Cox\'s Bazar recycling facility is in Mithaichori, Ramu.',1],['A recyclable plastic is always recycled.',0,'Needs system and market.']],
+ sq:[['What is SUP?','A single-use plastic is designed to be discarded right after use.'],['Why are colored microplastics a climate concern?','They absorb sunlight strongly and warm the atmosphere.'],['Explain Tragedy of the Commons.','Self-interested overuse of shared resources harms everyone.'],['What are primary and secondary pollutants?','Primary are emitted directly; secondary form in the air by reactions.'],['What makes recycling work?','Suitable material, working collection/processing system, and a market.'],['Role of floating barriers?','They intercept plastic in rivers before it reaches the sea.']],
+ ck:['Week 2: Gazipur case, Hamza numbers','Natural capital & 4 ecosystem services','Commons, 3 principles, footprint table','IPAT + 5 causes + IR 4.0','Week 6: pollution types, primary/secondary','PM, major pollutants, AQI colours','Smog, acid rain, inversion, solutions, point/nonpoint','Guest: plastic types table, 17 SUPs','Guest: all statistics (360, 50%, 75×, 85–89%, 1.8/4.3, 9%)','Guest: policies 2002/2021/2026','Guest: CXB case numbers & system chain','Reflection questions 1–6 outline']};
+const app=document.getElementById('app'),nav=document.getElementById('nav');
+const qa=(a)=>a.map(([q,s])=>`<div class="q"><b>Q:</b> ${q} <button onclick="this.closest('.q').classList.toggle('s')">উত্তর</button><div class="a">${s}</div></div>`).join('');
+const tfh=(a)=>a.map(([q,v,c])=>`<div class="q"><b>T/F:</b> ${q} <button onclick="this.closest('.q').classList.toggle('s')">উত্তর</button><div class="a">${v?'✅ True':'❌ False — সংশোধন: '+c}</div></div>`).join('');
+let h='',n='';
+SEC.forEach(s=>{h+=`<h2 class="sec" id="${s.id}">${s.title}</h2>`;n+=`<h3>${s.title.split('—')[0]}</h3>`;
+s.topics.forEach((t,i)=>{const id=s.id+i;n+=`<a href="#${id}">${t.t}</a>`;
+h+=`<details class="t" id="${id}"${i==0?' open':''}><summary>${t.t}</summary><div class="in">${t.b}${t.bx.map(b=>`<div class="box ${b.k}"><b class="l">${b.l}</b>${b.h}</div>`).join('')}<h4>Short Questions</h4>${qa(t.sq)}<h4>True / False</h4>${tfh(t.tf)}</div></details>`})});
+h+=`<h2 class="sec" id="fin">🏁 Final Exam Revision</h2><details class="t" open id="f0"><summary>দ্রুত রিভিশন</summary><div class="in">${FIN.rev}</div></details><details class="t" id="f1"><summary>বড় True/False সেট (${FIN.tf.length})</summary><div class="in">${tfh(FIN.tf)}</div></details><details class="t" id="f2"><summary>গুরুত্বপূর্ণ Short Questions</summary><div class="in">${qa(FIN.sq)}</div></details><details class="t" id="f3" open><summary>Last-Minute Checklist</summary><div class="in">${FIN.ck.map(c=>`<label class="ck"><input type="checkbox"> ${c}</label>`).join('')}</div></details>`;
+n+=`<h3>Final</h3><a href="#f0">Revision</a><a href="#f1">True/False</a><a href="#f2">Short Q</a><a href="#f3">Checklist</a>`;
+app.innerHTML=h;nav.innerHTML=n;
+function tog(o){document.querySelectorAll('details.t').forEach(d=>d.open=o)}
+addEventListener('scroll',()=>{const m=document.documentElement;document.getElementById('bar').style.width=(m.scrollTop/(m.scrollHeight-m.clientHeight)*100)+'%'});
+nav.addEventListener('click',e=>{if(e.target.tagName=='A'){const d=document.querySelector(e.target.getAttribute('href'));if(d&&d.tagName=='DETAILS')d.open=true;nav.classList.remove('o')}});
+</script></body></html>
