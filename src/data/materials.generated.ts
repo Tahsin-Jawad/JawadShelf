@@ -109,6 +109,15 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 60173
       },
       {
+        "id": "lab 5.pdf",
+        "title": "Lab 5",
+        "filename": "lab 5.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20302/Others/lab%205.pdf",
+        "sizeInBytes": 573028
+      },
+      {
         "id": "lecture 1 to 4.html",
         "title": "Lecture 1 To 4",
         "filename": "lecture 1 to 4.html",
