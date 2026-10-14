@@ -28,12 +28,10 @@ function formatDisplayName(filename) {
   const ext = path.extname(filename);
   const base = path.basename(filename, ext);
 
-  const cleanName = base
+  return base
     .replace(/[_-]+/g, ' ')
     .replace(/\s+/g, ' ')
-    .trim();
-
-  return cleanName
+    .trim()
     .split(' ')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
@@ -45,17 +43,13 @@ function getFileType(filename) {
 }
 
 function scanFolder(folderPath, relativeUrlPrefix) {
-  if (!fs.existsSync(folderPath)) {
-    return [];
-  }
+  if (!fs.existsSync(folderPath)) return [];
 
   const entries = fs.readdirSync(folderPath, { withFileTypes: true });
   const items = [];
 
   for (const entry of entries) {
-    if (entry.isFile()) {
-      if (entry.name.startsWith('.')) continue;
-
+    if (entry.isFile() && !entry.name.startsWith('.')) {
       const fullPath = path.join(folderPath, entry.name);
       const stats = fs.statSync(fullPath);
       const ext = path.extname(entry.name);
@@ -89,18 +83,27 @@ function buildMaterialsData() {
       const courseCode = dir.name;
       const coursePath = path.join(MATERIALS_DIR, courseCode);
 
-      const chaptersPath = path.join(coursePath, 'Chapters');
-      const othersPath = path.join(coursePath, 'Others');
+      // Sub-folder discovery (case-insensitive)
+      const subEntries = fs.readdirSync(coursePath, { withFileTypes: true });
+      let chaptersPath = '';
+      let othersPath = '';
 
-      const chapters = scanFolder(
-        chaptersPath,
-        `/materials/${encodeURIComponent(courseCode)}/Chapters`
-      );
+      for (const sub of subEntries) {
+        if (sub.isDirectory()) {
+          if (sub.name.toLowerCase() === 'chapters') {
+            chaptersPath = path.join(coursePath, sub.name);
+          } else if (sub.name.toLowerCase() === 'others') {
+            othersPath = path.join(coursePath, sub.name);
+          }
+        }
+      }
 
-      const others = scanFolder(
-        othersPath,
-        `/materials/${encodeURIComponent(courseCode)}/Others`
-      );
+      const chapters = chaptersPath
+        ? scanFolder(chaptersPath, `/materials/${encodeURIComponent(courseCode)}/Chapters`)
+        : [];
+      const others = othersPath
+        ? scanFolder(othersPath, `/materials/${encodeURIComponent(courseCode)}/Others`)
+        : [];
 
       courses.push({
         id: courseCode.toLowerCase().replace(/\s+/g, '-'),

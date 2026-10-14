@@ -17,6 +17,20 @@ export const App: React.FC = () => {
   const [selectedCourseCode, setSelectedCourseCode] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
+  // Handle Browser Back / Forward buttons natively
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      if (event.state && event.state.courseCode) {
+        setSelectedCourseCode(event.state.courseCode);
+      } else {
+        setSelectedCourseCode(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'dark') {
@@ -31,13 +45,22 @@ export const App: React.FC = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
+  const handleSelectCourse = (code: string | null) => {
+    setSelectedCourseCode(code);
+    if (code) {
+      window.history.pushState({ courseCode: code }, '', `#course-${code.toLowerCase().replace(/\s+/g, '-')}`);
+    } else {
+      window.history.pushState(null, '', window.location.pathname);
+    }
+  };
+
   const handleNavigate = (tab: 'home' | 'courses', courseCode?: string) => {
     setActiveTab(tab);
     setSearchQuery('');
     if (courseCode) {
-      setSelectedCourseCode(courseCode);
+      handleSelectCourse(courseCode);
     } else if (tab === 'home') {
-      setSelectedCourseCode(null);
+      handleSelectCourse(null);
     }
   };
 
@@ -62,19 +85,19 @@ export const App: React.FC = () => {
             query={searchQuery}
             courses={generatedCourses}
             onSelectCourse={(code) => {
-              setSelectedCourseCode(code);
+              handleSelectCourse(code);
               setSearchQuery('');
             }}
           />
         ) : selectedCourse ? (
           <CourseDetail
             course={selectedCourse}
-            onBack={() => setSelectedCourseCode(null)}
+            onBack={() => handleSelectCourse(null)}
           />
         ) : (
           <Home
             courses={generatedCourses}
-            onSelectCourse={(code) => setSelectedCourseCode(code)}
+            onSelectCourse={(code) => handleSelectCourse(code)}
           />
         )}
       </main>
