@@ -2,7 +2,7 @@
 
 > **Jawad Shelf** is a personal study library made by me for **Myself** to keep university course materials organized in one place.
 
-🌐 **Live Demo:** https://jawadshelf.vercel.app/
+🌐 **Live Demo:** https://jawadshelf.vercel.app
 
 
 ---
