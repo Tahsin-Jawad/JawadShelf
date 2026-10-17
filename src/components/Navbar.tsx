@@ -1,12 +1,12 @@
 import React from 'react';
-import { BookOpen, Moon, Sun, Search } from 'lucide-react';
+import { BookOpen, Moon, Sun, Search, CheckSquare } from 'lucide-react';
 import { ThemeMode } from '../types';
 
 interface NavbarProps {
   theme: ThemeMode;
   onToggleTheme: () => void;
-  activeTab: 'home' | 'courses';
-  onNavigate: (tab: 'home' | 'courses', courseCode?: string) => void;
+  activeTab: 'home' | 'courses' | 'tracker';
+  onNavigate: (tab: 'home' | 'courses' | 'tracker', courseCode?: string) => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
 }
@@ -71,6 +71,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               Courses
+            </button>
+            <button
+              onClick={() => onNavigate('tracker')}
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
+                activeTab === 'tracker' && !searchQuery
+                  ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
+              }`}
+            >
+              <CheckSquare className="w-4 h-4" />
+              <span>Tracker</span>
             </button>
           </nav>
 

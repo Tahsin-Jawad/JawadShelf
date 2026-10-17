@@ -5,6 +5,7 @@ import { Navbar } from './components/Navbar';
 import { Home } from './components/Home';
 import { CourseDetail } from './components/CourseDetail';
 import { SearchResults } from './components/SearchResults';
+import { DailyTracker } from './components/DailyTracker';
 
 export const App: React.FC = () => {
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -13,11 +14,10 @@ export const App: React.FC = () => {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
-  const [activeTab, setActiveTab] = useState<'home' | 'courses'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'courses' | 'tracker'>('home');
   const [selectedCourseCode, setSelectedCourseCode] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // Handle Browser Back / Forward buttons natively
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
       if (event.state && event.state.courseCode) {
@@ -54,12 +54,12 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleNavigate = (tab: 'home' | 'courses', courseCode?: string) => {
+  const handleNavigate = (tab: 'home' | 'courses' | 'tracker', courseCode?: string) => {
     setActiveTab(tab);
     setSearchQuery('');
     if (courseCode) {
       handleSelectCourse(courseCode);
-    } else if (tab === 'home') {
+    } else {
       handleSelectCourse(null);
     }
   };
@@ -94,10 +94,14 @@ export const App: React.FC = () => {
             course={selectedCourse}
             onBack={() => handleSelectCourse(null)}
           />
+        ) : activeTab === 'tracker' ? (
+          <DailyTracker />
         ) : (
           <Home
             courses={generatedCourses}
             onSelectCourse={(code) => handleSelectCourse(code)}
+            onNavigateToTracker={() => handleNavigate('tracker')}
+            showTrackerWidget={activeTab === 'home'}
           />
         )}
       </main>
