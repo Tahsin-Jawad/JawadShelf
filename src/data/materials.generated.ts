@@ -69,6 +69,24 @@ export const generatedCourses: CourseData[] = [
         "extension": "pdf",
         "url": "/materials/CSE%20302/Chapters/4.Relational%20Algebra.pdf",
         "sizeInBytes": 2849142
+      },
+      {
+        "id": "5.Intermediate SQL.pdf",
+        "title": "5.Intermediate SQL",
+        "filename": "5.Intermediate SQL.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20302/Chapters/5.Intermediate%20SQL.pdf",
+        "sizeInBytes": 1351149
+      },
+      {
+        "id": "Lecture 5_practice.pdf",
+        "title": "Lecture 5 Practice",
+        "filename": "Lecture 5_practice.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20302/Chapters/Lecture%205_practice.pdf",
+        "sizeInBytes": 200403
       }
     ],
     "others": [
@@ -116,6 +134,15 @@ export const generatedCourses: CourseData[] = [
         "extension": "html",
         "url": "/materials/CSE%20302/Others/lecture%201%20to%204.html",
         "sizeInBytes": 56674
+      },
+      {
+        "id": "sql_exam_prep.html",
+        "title": "Sql Exam Prep",
+        "filename": "sql_exam_prep.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/CSE%20302/Others/sql_exam_prep.html",
+        "sizeInBytes": 44302
       }
     ]
   },
@@ -190,13 +217,13 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 63691
       },
       {
-        "id": "LAB3_Pre_Lab_CSE345.pdf",
-        "title": "LAB3 Pre Lab CSE345",
-        "filename": "LAB3_Pre_Lab_CSE345.pdf",
-        "type": "PDF",
-        "extension": "pdf",
-        "url": "/materials/CSE%20345/Others/LAB3_Pre_Lab_CSE345.pdf",
-        "sizeInBytes": 161815
+        "id": "chapter_7_study_guide.html",
+        "title": "Chapter 7 Study Guide",
+        "filename": "chapter_7_study_guide.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/CSE%20345/Others/chapter_7_study_guide.html",
+        "sizeInBytes": 99546
       }
     ]
   },
