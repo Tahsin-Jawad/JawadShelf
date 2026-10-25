@@ -244,6 +244,24 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 63691
       },
       {
+        "id": "Ch-7.html",
+        "title": "Ch 7",
+        "filename": "Ch-7.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/CSE%20345/Others/Ch-7.html",
+        "sizeInBytes": 33650
+      },
+      {
+        "id": "Ch-8.html",
+        "title": "Ch 8",
+        "filename": "Ch-8.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/CSE%20345/Others/Ch-8.html",
+        "sizeInBytes": 30375
+      },
+      {
         "id": "chapter_7_study_guide.html",
         "title": "Chapter 7 Study Guide",
         "filename": "chapter_7_study_guide.html",

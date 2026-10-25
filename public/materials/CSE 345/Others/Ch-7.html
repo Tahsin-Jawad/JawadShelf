@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chapter 7 – Arithmetic & Comparator Circuits (পেইজ বাই পেইজ)</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1b1f27;--card:#f3f6fb;--ac:#2563eb;--mut:#5a6272;--bd:#d3d9e4;--tip:#fff4d6;--tipb:#e0b43a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13161c;--fg:#e6e9ef;--card:#1c212b;--ac:#7aa5ff;--mut:#9aa3b5;--bd:#333b4b;--tip:#3a3217;--tipb:#a98a24}}
+:root[data-theme="dark"]{--bg:#13161c;--fg:#e6e9ef;--card:#1c212b;--ac:#7aa5ff;--mut:#9aa3b5;--bd:#333b4b;--tip:#3a3217;--tipb:#a98a24}
+html{scroll-padding-top:60px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.75 "Hind Siliguri",system-ui,sans-serif}
+main{max-width:820px;margin:auto;padding:12px 14px 60px}
+h1{font-size:1.5rem;margin:.6em 0 .2em}
+nav{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+nav a{padding:2px 10px;border:1px solid var(--bd);border-radius:99px;color:var(--ac);text-decoration:none;font-size:.85rem}
+.pg{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:6px 16px 14px;margin:18px 0}
+h2{font-size:1.15rem;color:var(--ac);margin:.7em 0 .3em}
+h3{font-size:1rem;margin:1em 0 .2em}
+.pn{font-size:.75rem;color:var(--mut)}
+li{margin:.15em 0}
+.f{display:block;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;margin:6px 0;font-family:ui-monospace,Consolas,monospace;font-size:.95rem;overflow-x:auto;white-space:nowrap}
+.tip{background:var(--tip);border-left:4px solid var(--tipb);padding:6px 12px;border-radius:6px;margin:10px 0;font-size:.95rem}
+.row{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}
+table{border-collapse:collapse;font-family:ui-monospace,Consolas,monospace;font-size:.9rem;background:var(--bg)}
+td,th{border:1px solid var(--bd);padding:2px 9px;text-align:center}
+th{background:var(--card)}
+.k td{width:34px;height:26px}
+.sc{overflow-x:auto}
+.d{stroke:currentColor;fill:none;stroke-width:1.6;color:var(--fg);max-width:100%;height:auto}
+.d use,.d rect.b{fill:var(--bg)}
+.d text{fill:currentColor;stroke:none;font-size:13px;font-family:ui-monospace,Consolas,monospace}
+.d circle.j{fill:currentColor}
+.d .ds{stroke-dasharray:4 3;stroke:var(--ac)}
+.cap{font-size:.8rem;color:var(--mut);margin:0 0 6px}
+</style></head><body><main>
+<svg width="0" height="0" style="position:absolute"><defs>
+<g id="and"><path d="M0 0H14A14 14 0 0 1 14 28H0Z"/></g>
+<g id="or"><path d="M0 0Q16 0 30 14Q16 28 0 28Q9 14 0 0Z"/></g>
+<g id="xor"><path d="M0 0Q16 0 30 14Q16 28 0 28Q9 14 0 0Z"/><path d="M-5 0Q4 14 -5 28"/></g>
+<g id="not"><path d="M0 0L16 8L0 16Z"/><circle cx="19" cy="8" r="3"/></g>
+<marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8Z" fill="currentColor" stroke="none"/></marker>
+</defs></svg>
+
+<h1>Chapter 7: Arithmetic and Comparator Circuits</h1>
+<p class="cap">Digital Logic Design – পেইজ ১৫১ থেকে ১৬৪ পর্যন্ত, প্রতিটা পেইজ আলাদা করে। ডায়াগ্রামের লাইন যেখানে ডট (●) আছে সেখানে জাংশন, ডট না থাকলে শুধু ক্রস করেছে।</p>
+<nav id="nav"></nav>
+
+<section class="pg" id="p151"><h2>পেইজ ১৫১ – 7.1 Introduction</h2>
+<ul>
+<li><b>কী নিয়ে চ্যাপ্টার:</b> ডিজিটাল সার্কিটের মূল কাজ হলো যোগ-বিয়োগের মতো arithmetic অপারেশন আর comparison। এগুলো সবই <b>combinational circuit</b>।</li>
+<li><b>Classical method (Chapter 6):</b> truth table → K-map → simplify। ধরে নেয় গেট কম মানেই সস্তা।</li>
+<li><b>IC ব্যবহার করলে এটা সত্য না:</b> একটা IC প্যাকেজে অনেক গেট থাকে। তাই খরচ নির্ভর করে <i>কয়টা IC, কী ধরনের IC এবং বাইরের কয়টা তার (external interconnection)</i> লাগছে তার ওপর, গেটের সংখ্যার ওপর না।</li>
+<li><b>Classical method-এর সমস্যা:</b> ইনপুট বেশি হলে truth table আর simplification অসম্ভব হয়ে যায়। আর রেজাল্ট হয় random SSI গেটের জট।</li>
+<li><b>সমাধান:</b> আগে দেখো MSI IC আছে কিনা। MSI ব্যবহার করলে IC আর তার কমে যায়। এই চ্যাপ্টারে সহজগুলো classical method-এ, জটিলগুলো MSI দিয়ে করা হয়েছে।</li>
+</ul>
+<div class="tip"><b>পরীক্ষায় লিখো:</b> SSI = কয়েকটা গেট, MSI = পুরো ফাংশন (adder, comparator ইত্যাদি) একটা চিপে। IC-তে cost মানে IC সংখ্যা + external wire।</div></section>
+
+<section class="pg" id="p152"><h2>পেইজ ১৫২ – 7.2 Adders ও 7.2.1 Half-Adder</h2>
+<ul>
+<li>বাইনারি যোগের ৪টা নিয়ম: 0+0=0, 0+1=1, 1+0=1, <b>1+1=10</b> (sum 0, <b>carry 1</b>)।</li>
+<li><b>Half-adder (HA):</b> দুই বিট যোগ করে। ইনপুট A, B। আউটপুট S (sum) ও C (carry)।</li>
+<li><b>Full-adder (FA):</b> তিন বিট (দুটো ডাটা বিট + আগের carry) যোগ করে। নাম এসেছে কারণ দুটো HA দিয়ে একটা FA বানানো যায়।</li>
+</ul>
+<div class="row"><div><p class="cap">Fig 7.1(b) Truth table</p><table id="t-ha"></table></div>
+<div><p class="cap">Fig 7.1(a) Block diagram</p>
+<svg class="d" width="150" height="130" viewBox="0 0 150 130"><path d="M50 8V40M100 8V40M75 84V115" marker-end="url(#ah)"/><rect class="b" x="30" y="40" width="90" height="44"/><text x="62" y="67">HA</text><text x="43" y="8">A</text><text x="95" y="8">B</text><text x="70" y="127">S</text><path d="M30 62H8" marker-end="url(#ah)"/><text x="0" y="55">C</text></svg></div></div>
+<h3>K-map (Fig 7.2)</h3>
+<div class="row"><div><p class="cap">C = AB (একটাই 1)</p><table class="k" id="k-hac"></table></div><div><p class="cap">S = A′B + AB′ (দুটো আলাদা 1, গ্রুপ হয় না)</p><table class="k" id="k-has"></table></div></div>
+<b class="f">S = A′B + AB′ = A ⊕ B</b><b class="f">C = AB</b>
+<div class="tip"><b>মনে রাখো:</b> HA = <b>১টা XOR + ১টা AND</b>। K-map আঁকলে ২ ভেরিয়েবলের ২×২ ঘর। 1 বসবে 01 ও 10 ঘরে (S), আর 11 ঘরে (C)।</div></section>
+
+<section class="pg" id="p153"><h2>পেইজ ১৫৩ – Half-adder সার্কিট ও 7.2.2 Full-Adder</h2>
+<h3>Fig 7.3 – Half-adder implementation</h3>
+<p>(a) AND-OR দিয়ে (NOT লাগে), (b) XOR দিয়ে। পরীক্ষায় (b) আঁকাই সহজ ও যথেষ্ট।</p>
+<div class="sc"><svg class="d" width="260" height="125" viewBox="0 0 260 125"><path d="M25 15H105M50 15V85H110M25 29H105M70 29V99H110M140 22H200M138 92H200"/><use href="#xor" x="110" y="8"/><use href="#and" x="110" y="78"/><circle class="j" cx="50" cy="15" r="3"/><circle class="j" cx="70" cy="29" r="3"/><text x="5" y="19">A</text><text x="5" y="33">B</text><text x="205" y="26">S = A⊕B</text><text x="205" y="96">C = AB</text></svg></div>
+<h3>Full-adder</h3>
+<ul><li>ইনপুট: Aᵢ, Bᵢ (ডাটা বিট) ও Cᵢ (আগের স্টেজের carry)। আউটপুট: Sᵢ (sum) ও Cᵢ₊₁ (পরের স্টেজে carry)।</li></ul>
+<div class="row"><div><p class="cap">Fig 7.4(b) Truth table</p><table id="t-fa"></table></div>
+<div><p class="cap">Fig 7.4(a) Block diagram</p>
+<svg class="d" width="190" height="130" viewBox="0 0 190 130"><path d="M65 8V40M105 8V40M85 84V115M40 62H8M180 62H150" marker-end="url(#ah)"/><rect class="b" x="40" y="40" width="110" height="44"/><text x="85" y="67">FA</text><text x="58" y="8">Aᵢ</text><text x="98" y="8">Bᵢ</text><text x="78" y="127">Sᵢ</text><text x="2" y="55">Cᵢ₊₁</text><text x="158" y="55">Cᵢ</text></svg></div></div>
+<div class="tip">Truth table লেখার ট্রিক: ১-এর সংখ্যা বিজোড় হলে S=1। ১-এর সংখ্যা ২ বা তার বেশি হলে carry=1।</div></section>
+
+<section class="pg" id="p154"><h2>পেইজ ১৫৪ – FA-র K-map ও লজিক ডায়াগ্রাম (Fig 7.5, 7.6)</h2>
+<b class="f">Sᵢ = Aᵢ′Bᵢ′Cᵢ + Aᵢ′BᵢCᵢ′ + AᵢBᵢ′Cᵢ′ + AᵢBᵢCᵢ</b><b class="f">Cᵢ₊₁ = AᵢBᵢ + AᵢCᵢ + BᵢCᵢ</b>
+<div class="row"><div><p class="cap">(a) Cᵢ₊₁ – ৩টা pair গ্রুপ: AB (110,111), AC (101,111), BC (011,111)</p><table class="k" id="k-fac"></table></div>
+<div><p class="cap">(b) Sᵢ – ৪টা আলাদা 1 (checkerboard), তাই গ্রুপ হয় না</p><table class="k" id="k-fas"></table></div></div>
+<ul><li>K-map-এর কলাম ক্রম <b>00 01 11 10</b> (Gray code)। 00-এর পাশে 10 আছে, তাই এটা wrap-around।</li>
+<li>Fig 7.6-এ ইনপুট ৩টা, NOT গেট ৩টা, S-এর জন্য ৪টা AND + ১টা ৪-ইনপুট OR। Cout-এর জন্য ৩টা AND + ১টা ৩-ইনপুট OR। এটা two-level (AND-OR) বাস্তবায়ন, গেট বেশি লাগে বলে পরের পেইজের পদ্ধতি ভালো।</li></ul>
+<div class="tip">Sᵢ = Aᵢ ⊕ Bᵢ ⊕ Cᵢ (তিনটার XOR), আর Cᵢ₊₁ = majority function (৩টার মধ্যে অন্তত ২টা 1)। এই দুটো সরাসরি মুখস্থ রাখো।</div></section>
+
+<section class="pg" id="p155a"><h2>পেইজ ১৫৫ – 7.2.3 Full-Adder using Half-Adder (Fig 7.7)</h2>
+<p>দুটো HA ও একটা OR গেট দিয়ে FA হয়। প্রথম HA: A, B যোগ করে <b>Pᵢ = A⊕B</b> ও <b>Gᵢ = AB</b>। দ্বিতীয় HA: Pᵢ ও Cᵢ যোগ করে sum ও একটা carry।</p>
+<div class="sc"><svg class="d" width="400" height="165" viewBox="0 0 400 165">
+<rect class="ds" x="75" y="8" width="60" height="104" rx="5"/><rect class="ds" x="205" y="15" width="60" height="100" rx="5"/>
+<path d="M20 27H85M50 27V67H90M20 41H85M70 41V81H90M120 34H215M170 34V87H220M20 150H190V48H215M190 101H220M118 74H280V112H300M248 94H270V126H300M250 41H350M330 119H375"/>
+<use href="#xor" x="90" y="20"/><use href="#and" x="90" y="60"/><use href="#xor" x="220" y="27"/><use href="#and" x="220" y="80"/><use href="#or" x="300" y="105"/>
+<circle class="j" cx="50" cy="27" r="3"/><circle class="j" cx="70" cy="41" r="3"/><circle class="j" cx="170" cy="34" r="3"/><circle class="j" cx="190" cy="101" r="3"/>
+<text x="3" y="31">Aᵢ</text><text x="3" y="45">Bᵢ</text><text x="3" y="154">Cᵢ</text><text x="125" y="28">Pᵢ</text><text x="125" y="68">Gᵢ</text><text x="355" y="45">Sᵢ</text><text x="340" y="123">Cᵢ₊₁</text><text x="85" y="124">HA 1</text><text x="215" y="130">HA 2</text></svg></div>
+<h3>Verification (Algebra দিয়ে প্রমাণ)</h3>
+<b class="f">Sᵢ = Pᵢ ⊕ Cᵢ = PᵢCᵢ′ + Pᵢ′Cᵢ</b>
+<p>Pᵢ = A⊕B বসালে ও expand করলে পাওয়া যায় Sᵢ = AB′C′ + A′BC′ + ABC + A′B′C, এটাই FA-র Sum।</p>
+<b class="f">Cᵢ₊₁ = Gᵢ + PᵢCᵢ = AB + (A⊕B)C = AB + AB′C + A′BC</b>
+<p>এরপর AB-কে AB(C+C′) লিখে ভাঙলে AB + AC + BC আসে। (AB-র সাথে AB′C মিলে AC, আর A′BC মিলে BC হয়)</p>
+<div class="tip"><b>মুখস্থ:</b> P = A⊕B (propagate), G = AB (generate), S = P⊕C, Cout = G + PC।</div></section>
+
+<section class="pg" id="p155b"><h2>পেইজ ১৫৫ (নিচের অংশ) – 7.3 Subtractor</h2>
+<ul>
+<li>বিয়োগ দুইভাবে করা যায়: (১) subtrahend-এর complement নিয়ে minuend-এর সাথে যোগ (তখন শুধু full-adder লাগে)। (২) সরাসরি কাগজ-কলমের মতো, মানে প্রতি বিট বিয়োগ করা।</li>
+<li>সরাসরি পদ্ধতিতে minuend বিট ছোট হলে পরের উচ্চ বিট থেকে <b>১ borrow</b> করতে হয়। borrow-টা একটা সিগন্যাল হিসেবে পরের স্টেজে যায়।</li>
+<li>adder-এর মতোই আছে <b>half-subtractor</b> ও <b>full-subtractor</b>।</li></ul></section>
+
+<section class="pg" id="p156"><h2>পেইজ ১৫৬ – 7.3.1 Half-Subtractor</h2>
+<ul>
+<li>দুই বিট বিয়োগ করে difference <b>D</b> দেয়, আর borrow লাগলে <b>B</b> দেয়। X = minuend, Y = subtrahend, কাজ X − Y।</li>
+<li>X ≥ Y হলে: 0−0=0, 1−0=1, 1−1=0। X &lt; Y (0−1) হলে পরের স্টেজ থেকে ১ borrow, মানে minuend-এ ২ যোগ হয়, ২−১=১, তাই D=1, B=1।</li></ul>
+<div class="row"><div><p class="cap">Fig 7.8(b) Truth table</p><table id="t-hs"></table></div>
+<div><p class="cap">Fig 7.8(a) Block diagram</p><svg class="d" width="150" height="130" viewBox="0 0 150 130"><path d="M50 8V40M100 8V40M50 84V115M100 84V115" marker-end="url(#ah)"/><rect class="b" x="30" y="40" width="90" height="44"/><text x="64" y="67">HS</text><text x="46" y="8">X</text><text x="96" y="8">Y</text><text x="46" y="127">B</text><text x="96" y="127">D</text></svg></div></div>
+<div class="row"><div><p class="cap">B = X′Y</p><table class="k" id="k-hsb"></table></div><div><p class="cap">D = X′Y + XY′</p><table class="k" id="k-hsd"></table></div></div>
+<b class="f">D = X′Y + XY′ = X ⊕ Y</b><b class="f">B = X′Y</b>
+<div class="tip">HA-এর সাথে একমাত্র পার্থক্য: carry C = AB, কিন্তু borrow B = <b>X′</b>Y (X-এ NOT)। D আর S একই (XOR)।</div></section>
+
+<section class="pg" id="p157"><h2>পেইজ ১৫৭ – Half-subtractor সার্কিট (Fig 7.10) ও 7.3.2 Full-Subtractor</h2>
+<div class="sc"><svg class="d" width="260" height="125" viewBox="0 0 260 125"><path d="M25 15H105M40 15V99M77 99H110M25 29H105M90 29V85H110M140 22H200M138 92H200M40 99H55"/><use href="#xor" x="110" y="8"/><use href="#and" x="110" y="78"/><use href="#not" x="55" y="91"/><circle class="j" cx="40" cy="15" r="3"/><circle class="j" cx="90" cy="29" r="3"/><text x="5" y="19">X</text><text x="5" y="33">Y</text><text x="205" y="26">D = X⊕Y</text><text x="205" y="96">B = X′Y</text></svg></div>
+<p>D-র লজিক হুবহু half-adder-এর S-এর মতো।</p>
+<h3>Full-Subtractor</h3>
+<ul><li>৩ ইনপুট: <b>Xᵢ</b> (minuend), <b>Yᵢ</b> (subtrahend), <b>Bᵢ</b> (আগের borrow)। ২ আউটপুট: <b>Dᵢ</b> (difference), <b>Bᵢ₊₁</b> (output borrow)। হিসাব: Xᵢ − Yᵢ − Bᵢ।</li>
+<li>Bᵢ = 0 হলে সারি চারটা half-subtractor-এর মতোই।</li>
+<li>বাকি ৪টা কেস:
+<br>• X=0, Y=0, B=1 → ২−০−১ = 1, তাই D=1, borrow=1
+<br>• X=0, Y=1, B=1 → ২−১−১ = 0, তাই D=0, borrow=1
+<br>• X=1, Y=0, B=1 → 1−0−1 = 0, তাই D=0, borrow=0
+<br>• X=1, Y=1, B=1 → ৩−১−১ = 1, তাই D=1, borrow=1</li></ul></section>
+
+<section class="pg" id="p158"><h2>পেইজ ১৫৮ – Full-Subtractor Truth Table ও K-map (Fig 7.11, 7.12)</h2>
+<div class="row"><div><p class="cap">Fig 7.11(b)</p><table id="t-fs"></table></div>
+<div><p class="cap">Fig 7.11(a) Block diagram</p><svg class="d" width="190" height="130" viewBox="0 0 190 130"><path d="M65 8V40M105 8V40M85 84V115M150 62H182M40 62H8" marker-end="url(#ah)"/><rect class="b" x="40" y="40" width="110" height="44"/><text x="85" y="67">FS</text><text x="58" y="8">Xᵢ</text><text x="98" y="8">Yᵢ</text><text x="78" y="127">Dᵢ</text><text x="2" y="55">Bᵢ₊₁</text><text x="156" y="55">Bᵢ</text></svg></div></div>
+<b class="f">Dᵢ = Xᵢ′Yᵢ′Bᵢ + Xᵢ′YᵢBᵢ′ + XᵢYᵢ′Bᵢ′ + XᵢYᵢBᵢ</b><b class="f">Bᵢ₊₁ = Xᵢ′Yᵢ + Xᵢ′Bᵢ + YᵢBᵢ</b>
+<div class="row"><div><p class="cap">(a) Bᵢ₊₁: গ্রুপ X′Y, X′B, YB</p><table class="k" id="k-fsb"></table></div><div><p class="cap">(b) Dᵢ: checkerboard, গ্রুপ নেই</p><table class="k" id="k-fsd"></table></div></div>
+<div class="tip"><b>মূল পয়েন্ট:</b> Dᵢ = Sᵢ (দুটোই তিনটার XOR)। Bᵢ₊₁ আর Cᵢ₊₁ এক, শুধু Xᵢ-তে complement। তাই <b>FA-র carry গেটে ঢোকার আগে X-কে NOT করলেই FA হয়ে যায় FS</b>। (বইয়ে Fig 7.12-এর নামে ছাপার ভুলে 9.12 লেখা আছে, ওটা 7.12।)</div></section>
+
+<section class="pg" id="p159"><h2>পেইজ ১৫৯ – Fig 7.13 FS implementation ও 7.4 Binary Parallel Adder শুরু</h2>
+<h3>Full-subtractor বাস্তবায়ন</h3>
+<p>বইয়ে এটা AND-OR (two-level) সার্কিট (Fig 7.6-এর মতো)। পরীক্ষায় সহজে আঁকার জন্য দুটো half-subtractor ও একটা OR দিয়ে নিচের ব্লক ডায়াগ্রাম আঁকতে পারো। এটা সমতুল্য।</p>
+<div class="sc"><svg class="d" width="380" height="150" viewBox="0 0 380 150"><path d="M20 28H60M20 52H60M130 28H190M20 130H170V52H190M130 52H160V102H290M260 52H275V116H290M260 28H340M320 109H375" /><rect class="b" x="60" y="10" width="70" height="60"/><rect class="b" x="190" y="10" width="70" height="60"/><use href="#or" x="290" y="95"/><text x="85" y="45">HS 1</text><text x="215" y="45">HS 2</text><text x="3" y="25">Xᵢ</text><text x="3" y="49">Yᵢ</text><text x="3" y="126">Bᵢ</text><text x="140" y="22">D₁</text><text x="345" y="25">Dᵢ</text><text x="335" y="126">Bᵢ₊₁</text><text x="132" y="66">B₁</text><text x="262" y="66">B₂</text></svg></div>
+<h3>7.4 Binary Parallel Adder (ধারণা)</h3>
+<ul><li>n-বিটের দুটো সংখ্যা FA দিয়ে যোগ করা যায়। উদাহরণ: A = 1011, B = 0011 → S = 1110। (বইয়ের লেখায় 1010 আছে, কিন্তু টেবিলে ও যোগফলে 1011 ঠিক, ওটাই ধরো।)</li></ul>
+<div class="f" style="white-space:pre">Subscript        3 2 1 0
+Augend   Aᵢ      1 0 1 1
+Addend   Bᵢ      0 0 1 1
+Input carry Cᵢ   0 1 1 0   (C₀ = 0)
+Sum      Sᵢ      1 1 1 0
+Out carry Cᵢ₊₁   0 0 1 1</div>
+<ul><li>যোগ শুরু হয় <b>LSB (subscript 0)</b> থেকে। প্রথম স্টেজে input carry C₀ অবশ্যই <b>0</b>।</li>
+<li>iতম স্টেজের output carry Cᵢ₊₁ পরের (বামের) স্টেজের input carry হয়। sum বিটগুলো ডান থেকে বামে একে একে তৈরি হয়।</li></ul></section>
+
+<section class="pg" id="p160"><h2>পেইজ ১৬০ – Binary Adder Fig 7.14, 7.15</h2>
+<ul><li><b>Binary parallel adder</b> = cascade-এ জোড়া লাগানো FA। এক FA-র Cout পরের FA-র Cin-এ যায়। A ও B-র সব বিট একসাথে দেওয়া হয় (parallel)।</li>
+<li>n-বিট adder-এ n টা FA লাগে।</li></ul>
+<p class="cap">Fig 7.14(b) – 4-bit adder (FA দিয়ে)</p><div class="sc" id="rip"></div>
+<p class="cap">Fig 7.15 – দুটো 4-bit adder cascade করে 8-bit adder। ডানেরটা নিচের ৪ বিট (A₃–A₀), বামেরটা উপরের ৪ বিট (A₇–A₄)।</p>
+<div class="sc"><svg class="d" width="400" height="135" viewBox="-5 0 410 135"><rect class="b" x="15" y="35" width="150" height="50"/><rect class="b" x="215" y="35" width="150" height="50"/><path d="M60 8V35M90 8V35M120 8V35M150 8V35M260 8V35M290 8V35M320 8V35M350 8V35M60 85V118M90 85V118M120 85V118M150 85V118M260 85V118M290 85V118M320 85V118M350 85V118M215 60H165M365 60H395M15 60H-3" marker-end="url(#ah)"/><text x="30" y="64">4-bit adder</text><text x="230" y="64">4-bit adder</text><text x="22" y="22">B₇…B₄</text><text x="105" y="22">A₇…A₄</text><text x="222" y="22">B₃…B₀</text><text x="305" y="22">A₃…A₀</text><text x="30" y="131">S₇…S₄</text><text x="230" y="131">S₃…S₀</text><text x="176" y="54">C₄</text><text x="375" y="54">C₀</text><text x="-5" y="53">C₈</text></svg></div>
+<ul><li>বাঁয়ের শেষ output carry <b>C₈ = 1</b> মানে overflow, মানে যোগফল 11111111 ছাড়িয়ে গেছে।</li>
+<li><b>কেন MSI/iterative পদ্ধতি ভালো:</b> classical method-এ 4-bit adder-এর ইনপুট ৯টা (A৪ + B৪ + C₀), তাই truth table-এ 2⁹ = <b>512</b> সারি লাগত। FA cascade করে সেটা সহজ হয়েছে।</li></ul></section>
+
+<section class="pg" id="p161"><h2>পেইজ ১৬১ – 7.5 Look-Ahead Carry (সমস্যা ও ধারণা)</h2>
+<ul>
+<li><b>সমস্যা:</b> ripple adder-এ Sᵢ ঠিক হতে carry-কে সব স্টেজ পার হতে হয়। S₃ তখনই ঠিক হবে যখন C₃ ঠিক, C₃ ঠিক হবে C₂ ঠিক হলে, এভাবে C₀ পর্যন্ত। এটাই <b>carry propagation delay</b>।</li>
+<li><b>গেট লেভেল গুনতে:</b> Fig 7.7(b)-তে Cᵢ থেকে Cᵢ₊₁ যেতে AND + OR = <b>২ লেভেল</b>। 4-bit adder-এ C₀ থেকে C₄ = 2×4 = <b>৮ লেভেল</b>। n-bit-এ <b>2n লেভেল</b>। P ও G সবার জন্য একসাথেই settle করে, কারণ ওগুলো শুধু A, B-র ওপর নির্ভর করে।</li>
+<li>যেহেতু বাকি সব arithmetic আসলে যোগ দিয়ে হয়, তাই যোগের গতি খুব গুরুত্বপূর্ণ।</li>
+<li><b>দ্রুত করার উপায়:</b> (১) দ্রুত গেট ব্যবহার করা, কিন্তু এর সীমা আছে। (২) সার্কিট জটিল করে delay কমানো। এর মধ্যে সবচেয়ে প্রচলিত হলো <b>look-ahead carry</b>।</li></ul>
+<div class="tip">পরীক্ষায় এভাবে লেখো: "Ripple carry adder-এর delay = 2n gate delay। Look-ahead-এ সব carry একসাথে ২ গেট লেভেলে তৈরি হয়।"</div></section>
+
+<section class="pg" id="p162"><h2>পেইজ ১৬২ – Look-ahead সমীকরণ (C₁ থেকে C₄)</h2>
+<b class="f">Sᵢ = Pᵢ ⊕ Cᵢ     Cᵢ₊₁ = Gᵢ + PᵢCᵢ</b><b class="f">Pᵢ = Aᵢ ⊕ Bᵢ     Gᵢ = AᵢBᵢ</b>
+<ul><li><b>Gᵢ (carry generate):</b> Aᵢ ও Bᵢ দুটোই 1 হলে carry তৈরি করে, input carry যাই হোক।</li>
+<li><b>Pᵢ (carry propagate):</b> Cᵢ-কে Cᵢ₊₁-এ পাঠায়।</li></ul>
+<p>এখন প্রতিটা Cᵢ-এর মান আগেরটা বসিয়ে বসিয়ে বের করা হয় (substitution):</p>
+<b class="f">C₁ = G₀ + P₀C₀</b>
+<b class="f">C₂ = G₁ + P₁C₁ = G₁ + P₁G₀ + P₁P₀C₀</b>
+<b class="f">C₃ = G₂ + P₂C₂ = G₂ + P₂G₁ + P₂P₁G₀ + P₂P₁P₀C₀</b>
+<b class="f">C₄ = G₃ + P₃G₂ + P₃P₂G₁ + P₃P₂P₁G₀ + P₃P₂P₁P₀C₀</b>
+<ul><li>প্রতিটা SOP ফর্মে, তাই এক লেভেল AND + একটা OR গেটেই হয়ে যায়। এই সার্কিটের নাম <b>look-ahead carry generator</b>।</li>
+<li>C₄-কে C₃, C₂, C₁-এর জন্য অপেক্ষা করতে হয় না, সবাই একই সময়ে তৈরি হয়।</li></ul>
+<div class="tip">প্যাটার্ন: Cₙ-এ যত পদ, ততগুলো AND, তাই C₁ = ২ পদ, C₂ = ৩ পদ, C₃ = ৪ পদ, C₄ = ৫ পদ। AND গেটের ইনপুট ২ থেকে ৫টা পর্যন্ত বাড়ে।</div></section>
+
+<section class="pg" id="p163"><h2>পেইজ ১৬৩ – Look-ahead Carry Generator (Fig 7.16)</h2>
+<p class="cap">(a) Block diagram: ইনপুট P₃G₃ P₂G₂ P₁G₁ P₀G₀ C₀ (৯টা), আউটপুট C₄ C₃ C₂ C₁ (৪টা)</p><div class="sc" id="lca"></div>
+<p>(b) Logic diagram: প্রতিটা carry-র জন্য আলাদা AND-OR। C₁ = ২ AND + ১ OR। C₂ = ৩ AND + ১ OR। C₃ = ৪ AND + ১ OR। C₄ = ৫ AND + ১ OR। মোট ১৪টা AND আর ৪টা OR। অঙ্কন কৌশল: ৯টা উল্লম্ব ইনপুট লাইন টানো, প্রতিটা AND গেটে পদের ভেরিয়েবলের লাইনে ডট দাও।</p>
+<p><b>C₁ উদাহরণ (আঁকতে পারার জন্য):</b></p>
+<div class="sc"><svg class="d" width="300" height="110" viewBox="0 0 300 110"><path d="M20 8V95M50 8V95M20 32H100M50 52H100M20 76H100M50 98H100M128 38H175M128 82H175" /><use href="#and" x="100" y="24" transform="translate(0 0)"/><use href="#and" x="100" y="68"/><use href="#or" x="170" y="46"/><path d="M200 60H260"/><circle class="j" cx="20" cy="32" r="3"/><circle class="j" cx="50" cy="52" r="3"/><circle class="j" cx="20" cy="76" r="3"/><circle class="j" cx="50" cy="98" r="3"/><text x="8" y="106">G₀</text><text x="40" y="106">…</text><text x="265" y="64">C₁</text><text x="62" y="26" font-size="11">G₀</text><text x="102" y="20">AND</text></svg></div>
+<p class="cap">সরল ভাবে: C₁ = G₀ + P₀C₀ হলো AND(P₀, C₀) আর G₀-এর OR। বইয়ের ডায়াগ্রামে একইভাবে বড়গুলো আছে।</p>
+<ul><li>এই সার্কিট ২ গেট লেভেলে সব carry দেয় (AND, তারপর OR)।</li></ul></section>
+
+<section class="pg" id="p164"><h2>পেইজ ১৬৩ (নিচ) ও ১৬৪ – Look-ahead 4-bit Adder (Fig 7.17) ও 7.6 2’s Complement Adder</h2>
+<h3>4-bit adder with look-ahead carry generator</h3>
+<ul><li>প্রতিটা বিটের জন্য <b>১টা XOR (Pᵢ)</b> ও <b>১টা AND (Gᵢ)</b>। সব P, G এক গেট লেভেলে তৈরি হয়।</li>
+<li>P ও G আর C₀ → look-ahead generator → C₁…C₄ (২ লেভেলে)।</li>
+<li>আবার <b>১টা XOR</b> দিয়ে Sᵢ = Pᵢ ⊕ Cᵢ। S₀-এ Cᵢ = C₀, S₁-এ C₁ ইত্যাদি। এখানে প্রতিটা Sᵢ-র delay সমান।</li></ul>
+<div class="sc"><svg class="d" width="470" height="125" viewBox="0 0 470 125"><rect class="b" x="5" y="30" width="95" height="50"/><rect class="b" x="170" y="30" width="110" height="50"/><rect class="b" x="355" y="30" width="95" height="50"/><path d="M100 48H170M100 62H170M280 55H355M5 14H30M60 14V30M312 105V55M312 105H100M125 105V30" marker-end="url(#ah)"/><path d="M52 8V30M80 8V30M225 8V30M225 80V30"/><path d="M450 55H468M450 55" marker-end="url(#ah)"/><text x="16" y="52">XOR + AND</text><text x="16" y="68">(×৪)</text><text x="185" y="52">Look-ahead</text><text x="185" y="68">Carry Gen</text><text x="365" y="52">XOR (×৪)</text><text x="365" y="68">Pᵢ ⊕ Cᵢ</text><text x="116" y="44">Pᵢ</text><text x="116" y="77">Gᵢ</text><text x="293" y="49">C₁…C₄</text><text x="40" y="8">Aᵢ,Bᵢ</text><text x="205" y="8">C₀</text><text x="440" y="100">Sᵢ</text><text x="316" y="100">Pᵢ</text></svg></div>
+<p class="cap">ব্লক-লেভেল ডায়াগ্রাম। Fig 7.17-তে এই ব্লকগুলোই গেট দিয়ে আঁকা। পরীক্ষায় পুরো বিস্তারিত না পারলে এই কাঠামো লিখে P, G, C, S-এর সূত্র দিলেই চলবে।</p>
+<h3>7.6 2’s Complement Arithmetic Circuits</h3>
+<ul><li>আধুনিক কম্পিউটার negative সংখ্যা <b>2’s complement</b>-এ রাখে। এতে যোগ-বিয়োগ দুটোই শুধু <b>যোগ</b> দিয়ে করা যায়, আলাদা subtractor লাগে না।</li>
+<li><b>7.6.1 2’s Complement Adder:</b> sign bit সহ positive ও negative সংখ্যা Fig 7.14-র সাধারণ binary adder-এই যোগ করা যায়।</li></ul>
+<p><b>উদাহরণ (Fig 7.18): (−3) + (+6)</b></p>
+<div class="f" style="white-space:pre">−3 = 1101   (প্রথম 1 = sign bit)
++6 = 0110   (প্রথম 0 = sign bit)
+-----------
+Sum = 0011  = +3 ✔     (C₄ = 1, এটা <b>অগ্রাহ্য</b> করা হয়)</div>
+<div class="tip"><b>2’s complement বের করার নিয়ম:</b> 3 = 0011 → সব বিট উল্টাও (1100) → ১ যোগ করো → 1101 = −3। এখানে sign bit-এ carry out হলে (C₄ = 1) সেটা বাদ দাও। এটাই ২’s complement পদ্ধতির নিয়ম।</div></section>
+
+<script>
+const $=i=>document.getElementById(i);
+function tb(id,h,r){$(id).innerHTML='<tr>'+h.map(x=>'<th>'+x+'</th>').join('')+'</tr>'+r.map(a=>'<tr>'+a.map(x=>'<td>'+x+'</td>').join('')+'</tr>').join('')}
+function rows(n,f){let o=[];for(let i=0;i<1<<n;i++){let v=[...Array(n)].map((_,k)=>(i>>(n-1-k))&1);o.push([...v,...f(...v)])}return o}
+function km(id,rv,cv,cols,f){$(id).innerHTML='<tr><th>'+rv+'＼'+cv+'</th>'+cols.map(c=>'<th>'+c.join('')+'</th>').join('')+'</tr>'+[0,1].map(r=>'<tr><th>'+r+'</th>'+cols.map(c=>'<td>'+(f(r,...c)?'1':'')+'</td>').join('')+'</tr>').join('')}
+const c2=[[0],[1]],c3=[[0,0],[0,1],[1,1],[1,0]];
+tb('t-ha',['A','B','C','S'],rows(2,(a,b)=>[a&b,a^b]));
+tb('t-fa',['Aᵢ','Bᵢ','Cᵢ','Cᵢ₊₁','Sᵢ'],rows(3,(a,b,c)=>[+(a+b+c>1),a^b^c]));
+tb('t-hs',['X','Y','B','D'],rows(2,(x,y)=>[+(x<y),x^y]));
+tb('t-fs',['Xᵢ','Yᵢ','Bᵢ','Bᵢ₊₁','Dᵢ'],rows(3,(x,y,b)=>[+(x-y-b<0),x^y^b]));
+km('k-hac','A','B',c2,(a,b)=>a&b);km('k-has','A','B',c2,(a,b)=>a^b);
+km('k-fac','Aᵢ','BᵢCᵢ',c3,(a,b,c)=>a+b+c>1);km('k-fas','Aᵢ','BᵢCᵢ',c3,(a,b,c)=>a^b^c);
+km('k-hsb','X','Y',c2,(x,y)=>!x&&y);km('k-hsd','X','Y',c2,(x,y)=>x^y);
+km('k-fsb','Xᵢ','YᵢBᵢ',c3,(x,y,b)=>x-y-b<0);km('k-fsd','Xᵢ','YᵢBᵢ',c3,(x,y,b)=>x^y^b);
+// ripple adder
+(function(){let s='<svg class="d" width="440" height="125" viewBox="-10 0 440 125">';
+[3,2,1,0].forEach((i,k)=>{let x=20+k*95,cx=x+35;
+s+=`<rect class="b" x="${x}" y="40" width="70" height="44"/><text x="${cx-8}" y="66">FA</text><path d="M${cx-15} 8V40M${cx+15} 8V40M${cx} 84V108" marker-end="url(#ah)"/><text x="${cx-26}" y="8">B${i}</text><text x="${cx+8}" y="8">A${i}</text><text x="${cx-6}" y="121">S${i}</text>`;
+if(k>0)s+=`<path d="M${x} 62H${x-25}" marker-end="url(#ah)"/><text x="${x-22}" y="56">C${i+1}</text>`;
+});
+s+='<path d="M20 62H2" marker-end="url(#ah)"/><text x="-10" y="56">C4</text><path d="M400 62H375" marker-end="url(#ah)"/><text x="395" y="56">C0</text></svg>';$('rip').innerHTML=s})();
+// LCA block
+(function(){let l=['P₃','G₃','P₂','G₂','P₁','G₁','P₀','G₀','C₀'],o=['C₄','C₃','C₂','C₁'];
+let s='<svg class="d" width="340" height="130" viewBox="0 0 340 130"><rect class="b" x="15" y="38" width="310" height="48"/><text x="95" y="66">Look-ahead Carry Generator</text>';
+l.forEach((t,i)=>{let x=30+i*34;s+=`<path d="M${x} 8V38" marker-end="url(#ah)"/><text x="${x-7}" y="7">${t}</text>`});
+o.forEach((t,i)=>{let x=90+i*42;s+=`<path d="M${x} 86V112" marker-end="url(#ah)"/><text x="${x-7}" y="126">${t}</text>`});
+$('lca').innerHTML=s+'</svg>'})();
+// nav
+$('nav').innerHTML=[...document.querySelectorAll('.pg')].map(e=>'<a href="#'+e.id+'">'+e.querySelector('h2').textContent.split('–')[0].trim()+'</a>').join('');
+</script>
+</main></body></html>

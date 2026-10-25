@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chapter 8 – Encoders, Decoders, MUX, DEMUX (পেইজ বাই পেইজ)</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1b1f27;--card:#f3f6fb;--ac:#2563eb;--mut:#5a6272;--bd:#d3d9e4;--tip:#fff4d6;--tipb:#e0b43a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13161c;--fg:#e6e9ef;--card:#1c212b;--ac:#7aa5ff;--mut:#9aa3b5;--bd:#333b4b;--tip:#3a3217;--tipb:#a98a24}}
+:root[data-theme="dark"]{--bg:#13161c;--fg:#e6e9ef;--card:#1c212b;--ac:#7aa5ff;--mut:#9aa3b5;--bd:#333b4b;--tip:#3a3217;--tipb:#a98a24}
+html{scroll-padding-top:60px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.75 "Hind Siliguri",system-ui,sans-serif}
+main{max-width:860px;margin:auto;padding:12px 14px 60px}
+h1{font-size:1.5rem;margin:.6em 0 .2em}
+nav{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+nav a{padding:2px 10px;border:1px solid var(--bd);border-radius:99px;color:var(--ac);text-decoration:none;font-size:.85rem}
+.pg{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:6px 16px 14px;margin:18px 0}
+h2{font-size:1.15rem;color:var(--ac);margin:.7em 0 .3em}
+h3{font-size:1rem;margin:1em 0 .2em}
+li{margin:.15em 0}
+.f{display:block;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;margin:6px 0;font-family:ui-monospace,Consolas,monospace;font-size:.95rem;overflow-x:auto;white-space:nowrap}
+.tip{background:var(--tip);border-left:4px solid var(--tipb);padding:6px 12px;border-radius:6px;margin:10px 0;font-size:.95rem}
+.row{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}
+table{border-collapse:collapse;font-family:ui-monospace,Consolas,monospace;font-size:.85rem;background:var(--bg)}
+td,th{border:1px solid var(--bd);padding:1px 7px;text-align:center}
+th{background:var(--card)}
+.sc{overflow-x:auto}
+.d{stroke:currentColor;fill:none;stroke-width:1.5;color:var(--fg);max-width:100%;height:auto}
+.d use,.d rect.b{fill:var(--bg)}
+.d text{fill:currentColor;stroke:none;font-size:12px;font-family:ui-monospace,Consolas,monospace}
+.d circle.j{fill:currentColor}
+.cap{font-size:.8rem;color:var(--mut);margin:0 0 6px}
+</style></head><body><main>
+<svg width="0" height="0" style="position:absolute"><defs>
+<g id="and"><path d="M0 0H14A14 14 0 0 1 14 28H0Z"/></g>
+<g id="or"><path d="M0 0Q16 0 30 14Q16 28 0 28Q9 14 0 0Z"/></g>
+<g id="not"><path d="M0 0L16 8L0 16Z"/><circle cx="19" cy="8" r="3"/></g>
+<marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8Z" fill="currentColor" stroke="none"/></marker>
+</defs></svg>
+
+<h1>Chapter 8: Encoders, Decoders, Multiplexers, Demultiplexers</h1>
+<p class="cap">পেইজ ১৭৭–১৮৯, সব পেইজ। গেট-ডায়াগ্রামে বইয়ের মতোই আঁকা: <b>● ডট = ওই উল্লম্ব লাইনটা গেটের ইনপুটে যুক্ত</b>, ডট না থাকলে যুক্ত না। (এই বইয়ে MUX/DEMUX এই অংশে নেই, শুধু ইন্ট্রোতে ধারণা আছে।)</p>
+<nav id="nav"></nav>
+
+<section class="pg" id="p177"><h2>পেইজ ১৭৭ – 8.1 Introduction ও 8.2.1 Encoder শুরু</h2>
+<ul>
+<li>n বিটের binary code দিয়ে সর্বোচ্চ <b>2ⁿ</b> টা আলাদা জিনিস বোঝানো যায়। Discrete ইনপুটকে binary code-এ বদলায় <b>Encoder</b>, উল্টোটা করে <b>Decoder</b>। এক code থেকে আরেক code-এ বদলানোর জন্য <b>Code converter</b> (বিশেষ ধরনের encoder)।</li>
+<li><b>Multiplexing:</b> অনেক তথ্য-ইউনিট কম সংখ্যক লাইনে পাঠানো (many → one)। <b>Demultiplexing:</b> উল্টো, কম লাইনে আসা তথ্য অনেক জায়গায় ছড়িয়ে দেওয়া (one → many)।</li>
+<li><b>Encoder:</b> ২ⁿ (বা কম) ইনপুট লাইন, n আউটপুট লাইন। একসময়ে <b>একটাই ইনপুট active</b> থাকে, আউটপুট সেই ইনপুটের binary code দেয়।</li>
+<li><b>Active-LOW ইনপুট:</b> active লাইন 0, বাকিগুলো 1। <b>Active-HIGH ইনপুট:</b> active লাইন 1, বাকিগুলো 0।</li>
+<li>Octal-to-binary (8-to-3 line) encoder-এর সূত্র, <b>active-LOW:</b></li></ul>
+<b class="f">O₀ = D₁′+D₃′+D₅′+D₇′ = (D₁D₃D₅D₇)′</b><b class="f">O₁ = D₂′+D₃′+D₆′+D₇′ = (D₂D₃D₆D₇)′</b><b class="f">O₂ = D₄′+D₅′+D₆′+D₇′ = (D₄D₅D₆D₇)′</b>
+<div class="tip"><b>মুখস্থ ট্রিক:</b> O₀ = যাদের binary-র শেষ বিট 1 (D₁,3,5,7)। O₁ = মাঝের বিট 1 (D₂,3,6,7)। O₂ = প্রথম বিট 1 (D₄,5,6,7)।</div></section>
+
+<section class="pg" id="p178"><h2>পেইজ ১৭৮ – Fig 8.1: 8×3 Encoder (Active-HIGH সূত্র, ব্লক ও truth table)</h2>
+<p><b>Active-HIGH ইনপুটের জন্য সূত্র</b> (শুধু OR গেট):</p>
+<b class="f">O₀ = D₁ + D₃ + D₅ + D₇</b><b class="f">O₁ = D₂ + D₃ + D₆ + D₇</b><b class="f">O₂ = D₄ + D₅ + D₆ + D₇</b>
+<div class="row"><div><p class="cap">(a) Active-LOW ইনপুট (ইনপুটে বাবল)</p><div id="b1"></div></div><div><p class="cap">(c) Active-HIGH ইনপুট</p><div id="b2"></div></div></div>
+<div class="row"><div><p class="cap">(b) Truth table – active-LOW</p><table id="t-el"></table></div><div><p class="cap">(d) Truth table – active-HIGH</p><table id="t-eh"></table></div></div>
+<ul><li>৮টা ইনপুট থাকায় 2⁸ = 256 কম্বিনেশন, কিন্তু অর্থপূর্ণ মাত্র ৮টা। বাকি ২৪৮টা <b>don’t care</b> (সার্কিট ধরে নেয় একসাথে একটার বেশি active হবে না)।</li>
+<li>D₀ থাকলে সব আউটপুট 000 (যেমন কোনো ইনপুটই active না থাকলেও 000), তাই D₀ গেটে <b>যুক্ত করা হয় না</b> (Fig 8.2-তে লেখা আছে)।</li></ul></section>
+
+<section class="pg" id="p179"><h2>পেইজ ১৭৯ – Fig 8.2, Priority Encoder, 8.2.2 MSI Encoder IC</h2>
+<p class="cap">Fig 8.2(b) – Active-HIGH ইনপুট: ৩টা OR গেট</p><div class="sc" id="e-h"></div>
+<p class="cap">Fig 8.2(a) – Active-LOW ইনপুট: ৩টা NAND গেট (O = (D₁D₃D₅D₇)′ ইত্যাদি)</p><div class="sc" id="e-l"></div>
+<h3>Priority Encoder</h3>
+<ul><li>সাধারণ encoder IC আকারে পাওয়া যায় না (গেট দিয়ে সহজেই বানানো যায়)। IC-তে পাওয়া যায় <b>priority encoder</b>।</li>
+<li>এতে প্রতিটা ইনপুটে priority থাকে। একসাথে একাধিক ইনপুট active হলে <b>সর্বোচ্চ priority-র ইনপুট</b> encode হয়। বড় subscript = বেশি priority ধরলে D₂ ও D₅ একসাথে active হলে আউটপুট <b>101</b> (D₅ জেতে)।</li></ul>
+<table><tr><th>IC</th><th>বর্ণনা (Table 8.1)</th></tr><tr><td>74147</td><td>Decimal-to-BCD priority encoder, active-LOW ইনপুট, inverted আউটপুট</td></tr><tr><td>74148</td><td>Octal-to-binary priority encoder, active-LOW ইনপুট, inverted আউটপুট</td></tr></table>
+<h3>IC 74147 (Fig 8.3)</h3>
+<ul><li>৯টা active-LOW ইনপুট (D₁′–D₉′) → ৪টা active-LOW আউটপুট (O₀′–O₃′)। <b>D₉′ সবচেয়ে বেশি priority</b>। 10-to-4 line priority encoding।</li>
+<li>Decimal “zero”-র জন্য আলাদা ইনপুট লাগে না: সব ৯টা ইনপুট HIGH হলে সব আউটপুট HIGH (inverted-এ 0000 = 0)।</li></ul>
+<div class="sc" id="p147"></div>
+<div class="tip">উদাহরণ: শুধু D₅′ = 0 হলে BCD 0101, কিন্তু আউটপুট inverted, তাই O₃′O₂′O₁′O₀′ = 1010।</div></section>
+
+<section class="pg" id="p180"><h2>পেইজ ১৮০ – 8.3 Decoders: 3-to-8 (Binary-to-octal) সূত্র</h2>
+<ul><li><b>Decoder:</b> n-ইনপুট (binary code) নেয়, কোডের সাথে মেলানো <b>শুধু একটা</b> আউটপুট active করে। আউটপুট সর্বোচ্চ 2ⁿ টা।</li>
+<li><b>Active-LOW আউটপুট:</b> active আউটপুট 0, বাকি 1। <b>Active-HIGH:</b> active 1, বাকি 0।</li>
+<li>অব্যবহৃত (invalid) কোড দিলে ২ⁿ-র কম আউটপুটওয়ালা ডিকোডারে সব আউটপুট inactive থাকে।</li>
+<li>3-to-8 line decoder = <b>1-of-8 decoder</b> = binary-to-octal decoder।</li></ul>
+<p><b>Active-LOW আউটপুট</b> (NAND বা OR আকারে):</p>
+<b class="f">O₀ = A₂+A₁+A₀ = (A₂′A₁′A₀′)′ ... O₇ = A₂′+A₁′+A₀′ = (A₂A₁A₀)′</b>
+<p><b>Active-HIGH আউটপুট</b> (শুধু AND, প্রতিটা একটা minterm):</p>
+<b class="f">O₀=A₂′A₁′A₀′   O₁=A₂′A₁′A₀   O₂=A₂′A₁A₀′   O₃=A₂′A₁A₀</b><b class="f">O₄=A₂A₁′A₀′   O₅=A₂A₁′A₀   O₆=A₂A₁A₀′   O₇=A₂A₁A₀</b>
+<div class="tip"><b>নিয়ম:</b> Oₖ = binary(k)-র minterm। বিট 1 হলে সরাসরি, 0 হলে complement। Active-LOW = এই minterm-কে NAND করা।</div></section>
+
+<section class="pg" id="p181"><h2>পেইজ ১৮১ – Fig 8.4: 3×8 Decoder ব্লক ও Truth table</h2>
+<p>Active-LOW সূত্রের শেষ কয়টা: O₅=A₂A₁′A₀, O₆=A₂A₁A₀′, O₇=A₂A₁A₀ (active-HIGH আকারে)। Active-HIGH ডিকোডারের আউটপুটকে invert করলেই active-LOW ডিকোডার (Fig 8.5)।</p>
+<div class="row"><div><p class="cap">(a) Active-LOW আউটপুট</p><div id="b3"></div></div><div><p class="cap">(c) Active-HIGH আউটপুট</p><div id="b4"></div></div></div>
+<div class="row"><div><p class="cap">(b) Truth table – active-LOW (যে আউটপুট 0 সেটাই active)</p><table id="t-dl"></table></div><div><p class="cap">(d) Truth table – active-HIGH</p><table id="t-dh"></table></div></div></section>
+
+<section class="pg" id="p182"><h2>পেইজ ১৮২ – Fig 8.5 লজিক ডায়াগ্রাম ও BCD-to-Decimal Decoder</h2>
+<p class="cap">Fig 8.5(a) – 3-to-8 decoder, <b>active-LOW</b> আউটপুট (৮টা NAND, ৩টা ইনপুট ও তাদের complement লাইন)</p><div class="sc" id="d-l"></div>
+<p class="cap">Fig 8.5(b) – 3-to-8 decoder, <b>active-HIGH</b> আউটপুট (৮টা AND) (বইয়ে ছাপার ভুলে এটাও “(a)” লেখা)</p><div class="sc" id="d-h"></div>
+<ul><li>n-to-m line decoder (m ≤ 2ⁿ) আসলে n ভেরিয়েবলের 2ⁿ (বা কম) <b>minterm (active-HIGH)</b> অথবা <b>maxterm (active-LOW)</b> তৈরি করে।</li></ul>
+<h3>BCD-to-Decimal Decoder (active-LOW)</h3>
+<ul><li>BCD বা Excess-3 কোডও decode করা যায়। BCD-র ইনপুট A₃A₂A₁A₀ (4টা), আউটপুট O₀–O₉ (10টা)। <b>Invalid BCD (1010–1111)</b> দিলে কোনো আউটপুটই active হয় না (সব 1)।</li></ul>
+<b class="f">O₀ = (A₃′A₂′A₁′A₀′)′     O₁ = (A₃′A₂′A₁′A₀)′</b><b class="f">O₂ = (A₃′A₂′A₁A₀′)′     O₃ = (A₃′A₂′A₁A₀)′</b><b class="f">O₄ = (A₃′A₂A₁′A₀′)′     O₅ = (A₃′A₂A₁′A₀)′</b></section>
+
+<section class="pg" id="p183"><h2>পেইজ ১৮৩ – বাকি সূত্র ও Fig 8.6: BCD-to-Decimal Decoder</h2>
+<b class="f">O₆ = (A₃′A₂A₁A₀′)′     O₇ = (A₃′A₂A₁A₀)′</b><b class="f">O₈ = (A₃A₂′A₁′A₀′)′     O₉ = (A₃A₂′A₁′A₀)′</b>
+<div class="row"><div><p class="cap">(a) Block diagram</p><div id="b5"></div></div><div><p class="cap">(b) Truth table (শেষ ৬ সারি = invalid, সব 1)</p><table id="t-bcd"></table></div></div>
+<div class="tip">O₈, O₉-তে শুধু A₃ = 1 আর A₂ = A₁ = 0 লাগে। তাই এদের গেটে ৪টা ইনপুটই লাগে, কিন্তু 8, 9-এর পর (1010+) কোন গেটের সাথে মেলে না, ফলে invalid-এ কোনো আউটপুট active হয় না।</div></section>
+
+<section class="pg" id="p184"><h2>পেইজ ১৮৪ – Fig 8.7 BCD Decoder সার্কিট ও 8.3.2 Enable Input</h2>
+<p class="cap">Fig 8.7 – ১০টা NAND গেট, ৪টা ইনপুট ও তাদের complement লাইন (প্রতিটা গেট একটা BCD অঙ্ক মেলায়)</p><div class="sc" id="d-bcd"></div>
+<h3>Decoder with Enable</h3>
+<ul><li>Enable ইনপুট সক্রিয় থাকলে ডিকোডার স্বাভাবিক কাজ করে। সক্রিয় না থাকলে <b>কোনো আউটপুটই active হয় না</b>।</li>
+<li>উদাহরণ: 2-to-4 decoder, active-LOW আউটপুট, active-LOW enable (E = 0 হলে চালু):</li></ul>
+<b class="f">O₀ = E+A₁+A₀ = (E′A₁′A₀′)′     O₁ = E+A₁+A₀′ = (E′A₁′A₀)′</b><b class="f">O₂ = E+A₁′+A₀ = (E′A₁A₀′)′     O₃ = E+A₁′+A₀′ = (E′A₁A₀)′</b>
+<div class="tip">Enable মানে একটা বাড়তি ইনপুট যা প্রতিটা গেটে ঢোকে। E ঠিক থাকলে গেট খোলা, না হলে সব আউটপুট 1 (active-LOW-তে inactive)।</div></section>
+
+<section class="pg" id="p185"><h2>পেইজ ১৮৫ – Fig 8.8, 8.9: 2×4 Decoder with Enable ও 8.3.3 Expansion</h2>
+<div class="row"><div><p class="cap">(a) Block diagram (E-তে বাবল = active-LOW enable)</p><div id="b6"></div></div><div><p class="cap">(b) Truth table: E=1 হলে সব আউটপুট 1 (inactive)</p><table id="t-en"></table></div></div>
+<p class="cap">Fig 8.9 – লজিক: ৪টা NAND, প্রতিটার ইনপুটে E′, আর A₁/A₀ বা তাদের complement</p><div class="sc" id="d-en"></div>
+<h3>8.3.3 Decoder Expansion</h3>
+<ul><li>বড় ডিকোডার দরকার হলে ছোট ডিকোডারকে <b>enable ইনপুট</b> দিয়ে জোড়া লাগানো যায়। Fig 8.10(a): 2×4 দিয়ে 3×8; (b): 2×4 দিয়ে 4×16।</li>
+<li><b>3×8:</b> A₂ = 0 হলে D1 চালু, D2 বন্ধ → O₀–O₃ একটা জ্বলে। A₂ = 1 হলে D2 চালু, D1 বন্ধ → O₄–O₇ একটা জ্বলে। D1-এর E সরাসরি A₂, D2-এর E-তে A₂′ (NOT)।</li>
+<li>উদাহরণ: A₂A₁A₀ = 101 → D2 enable (A₂=1), তার A₁A₀ = 01 মানে O₁ → মোট ডিকোডারের <b>O₅</b> active।</li></ul></section>
+
+<section class="pg" id="p186"><h2>পেইজ ১৮৬ – Fig 8.10: Expansion ডায়াগ্রাম</h2>
+<p class="cap">(a) 3×8 decoder = 2×4 দুটো (সংক্ষিপ্ত ব্লক ডায়াগ্রাম)</p>
+<div class="sc"><svg class="d" width="320" height="230" viewBox="0 0 320 230">
+<rect class="b" x="100" y="20" width="80" height="70"/><text x="118" y="60">D1 2×4</text><rect class="b" x="100" y="130" width="80" height="70"/><text x="118" y="170">D2 2×4</text>
+<path d="M5 35H97M10 35V145M26 145H44M10 145H26M66 145H97M40 55H97M40 75H97M60 165H97M60 55V165M80 75V185M40 55H34M40 75H34M60 165H40M80 185H97"/>
+<use href="#not" x="40" y="137"/>
+<path d="M60 165H97M80 185H97" /><circle class="j" cx="10" cy="35" r="3"/><circle class="j" cx="60" cy="55" r="3"/><circle class="j" cx="80" cy="75" r="3"/>
+<text x="0" y="28">A₂</text><text x="14" y="59" font-size="11">A₁</text><text x="14" y="79" font-size="11">A₀</text><text x="103" y="35" font-size="11">E</text><text x="103" y="59" font-size="11">A₁</text><text x="103" y="79" font-size="11">A₀</text><text x="103" y="149" font-size="11">E</text><text x="103" y="169" font-size="11">A₁</text><text x="103" y="189" font-size="11">A₀</text>
+<path d="M180 40H230M180 60H230M180 160H230M180 180H230" marker-end="url(#ah)"/><text x="235" y="44">O₀…O₃</text><text x="235" y="184">O₄…O₇</text></svg></div>
+<p class="cap">(b) 4×16 decoder = 2×4 পাঁচটা: D1 উপরের ২ বিট (A₃A₂) decode করে, তার ৪ আউটপুট D2–D5-এর enable চালায়</p><div class="sc" id="x16"></div>
+<ul><li>A₃A₂ = 00 → D1-এর O₀ = LOW → D2 চালু। 01 → D3, 10 → D4, 11 → D5।</li>
+<li><b>উদাহরণ:</b> A₃A₂A₁A₀ = 0110: A₃A₂ = 01 → D1-এর O₁ LOW → D3 চালু। A₁A₀ = 10 → D3-এর O₂ active → মোট ডিকোডারের <b>O₆</b>।</li></ul></section>
+
+<section class="pg" id="p187"><h2>পেইজ ১৮৭ – 8.3.4 Decoder দিয়ে Combinational Logic (SOP)</h2>
+<ul><li>Decoder ২ⁿ টা minterm (active-HIGH) বা maxterm (active-LOW) দেয়। যেকোনো Boolean function = minterm-এর যোগ বা maxterm-এর গুণ। তাই <b>n ইনপুট, m আউটপুটের যেকোনো সার্কিট = n-to-2ⁿ decoder + m টা OR/NAND বা AND/NOR গেট।</b></li>
+<li><b>Canonical SOP:</b> function-এর ইনপুটগুলো decoder-এ দাও। <b>Active-HIGH decoder</b> হলে function-এর minterm-এর আউটপুটগুলো <b>OR</b> করো। <b>Active-LOW decoder</b> হলে সেগুলো <b>NAND</b> করো (DeMorgan)।</li></ul>
+<b class="f">F₁(A,B,C) = Σ(1,2,4,7)     F₂(A,B,C) = Σ(0,5,6,7)</b>
+<p class="cap">Fig 8.11(a) – active-HIGH decoder (E = 1), OR গেট। O₁, O₂, O₄, O₇ → F₁। O₀, O₅, O₆, O₇ → F₂।</p><div class="sc" id="s-h"></div>
+<p class="cap">Fig 8.11(b) – active-LOW decoder (E = 0), NAND গেট (বইয়ে এটাও “(a)” ছাপা)</p><div class="sc" id="s-l"></div></section>
+
+<section class="pg" id="p188"><h2>পেইজ ১৮৮ – Canonical POS Implementation (Fig 8.12)</h2>
+<ul><li><b>Canonical POS:</b> function-এর ইনপুট decoder-এ দাও। <b>Active-LOW decoder</b> (maxterm দেয়) হলে function-এর maxterm-গুলোর আউটপুট <b>AND</b> করো। <b>Active-HIGH decoder</b> হলে সেগুলো <b>NOR</b> করো।</li></ul>
+<b class="f">F₁(A,B,C) = Π(0,3,5,6)     F₂(A,B,C) = Π(1,2,3,4)</b>
+<p class="cap">(a) Active-LOW decoder (E = 0) + AND গেট</p><div class="sc" id="p-l"></div>
+<p class="cap">(b) Active-HIGH decoder (E = 1) + NOR গেট (বইয়ের ফিগারে ডানেরটা active-HIGH। ক্যাপশনে ভুলে “Figure 10.12” আর দুটোই “(a)” লেখা)</p><div class="sc" id="p-h"></div>
+<div class="tip"><b>কোনটা নেবে?</b> minterm সংখ্যা <b>2ⁿ/2-এর কম</b> হলে Fig 8.11 (SOP) ভালো, নইলে Fig 8.12 (POS)। কম সংখ্যক গেট লাগে।</div>
+<ul><li>Decoder পদ্ধতিতে যেকোনো সার্কিট হয়, কিন্তু অন্য পদ্ধতির সাথে তুলনা করে সেরাটা নিতে হয়। <b>অনেকগুলো আউটপুট</b> আর প্রতিটায় <b>কম minterm/maxterm</b> থাকলে এই পদ্ধতি সবচেয়ে ভালো, কারণ একটা ডিকোডার সবার জন্য শেয়ার হয়।</li></ul></section>
+
+<section class="pg" id="p189"><h2>পেইজ ১৮৯ – 8.3.5 MSI Decoder IC ও 8.4 Code Converter</h2>
+<table><tr><th>IC (Table 8.2)</th><th>বর্ণনা</th></tr><tr><td>74139</td><td>Dual 2-to-4 decoder, active-LOW</td></tr><tr><td>74155</td><td>Dual 2-to-4 decoder, active-LOW</td></tr><tr><td>74156</td><td>Dual 2-to-4, active-LOW (open-collector)</td></tr><tr><td>74138</td><td>3-to-8 decoder, active-LOW</td></tr><tr><td>74154</td><td>4-to-16 decoder, <b>active-HIGH</b></td></tr><tr><td>7442</td><td>BCD-to-decimal decoder, active-LOW</td></tr></table>
+<h3>IC 74138 (Fig 8.13)</h3>
+<ul><li>A₀–A₂ = ৩টা address লাইন। O₀′–O₇′ = ৮টা active-LOW আউটপুট।</li>
+<li>৩টা enable: <b>E₁′, E₂′ (active-LOW)</b> আর <b>E₃ (active-HIGH)</b>। ভেতরে এরা AND হয়ে একটা enable বানায়, মানে চালু হতে E₁′=0, E₂′=0, E₃=1 লাগে।</li></ul>
+<div class="sc" id="p138"></div>
+<h3>8.4 Code Converter</h3>
+<ul><li>বিভিন্ন সিস্টেম BCD, Excess-3 ইত্যাদি আলাদা code ব্যবহার করে, তাই এক সিস্টেমের আউটপুট আরেকটার ইনপুট করতে code conversion লাগে। Code converter = combinational circuit, একধরনের encoder। classical method বা MSI দিয়ে বানানো যায়।</li>
+<li><b>BCD-to-Excess-3:</b> Excess-3 = BCD + 3। ইনপুট 1010–1111 invalid, তাই এদের আউটপুট <b>don’t care (x)</b> (K-map সরলীকরণে কাজে লাগে)।</li></ul>
+<div class="row"><div><p class="cap">Fig 8.14 – Truth table (B₃B₂B₁B₀ → E₃E₂E₁E₀)</p><table id="t-xs"></table></div>
+<div><p class="cap">Fig 8.15-এর K-map সরলীকরণের ফল:</p>
+<b class="f">E₀ = B₀′</b><b class="f">E₁ = B₁′B₀′ + B₁B₀</b><b class="f">E₂ = B₂′B₀ + B₂′B₁ + B₂B₁′B₀′</b><b class="f">E₃ = B₃ + B₂B₀ + B₂B₁</b></div></div>
+<div class="tip">যাচাই: B = 0101 (5) হলে E₃ = 0+1·1 = 1, E₂ = 0+0+0·… = 0, E₁ = 0·1′... = B₁′B₀′ = 0, B₁B₀ = 0 → 0, E₀ = 0 → 1000 = Excess-3 (8)। ✔</div></section>
+
+<script>
+const $=i=>document.getElementById(i);
+function tb(id,h,r){$(id).innerHTML='<tr>'+h.map(x=>'<th>'+x+'</th>').join('')+'</tr>'+r.map(a=>'<tr>'+a.map(x=>'<td>'+x+'</td>').join('')+'</tr>').join('')}
+const bits=(v,n)=>[...Array(n)].map((_,i)=>(v>>(n-1-i))&1);
+// tables
+const hot=k=>bits(1<<k,8);
+tb('t-eh',['D₇','D₆','D₅','D₄','D₃','D₂','D₁','D₀','O₂','O₁','O₀'],[0,1,2,3,4,5,6,7].map(k=>[...hot(k),...bits(k,3)]));
+tb('t-el',['D₇','D₆','D₅','D₄','D₃','D₂','D₁','D₀','O₂','O₁','O₀'],[0,1,2,3,4,5,6,7].map(k=>[...hot(k).map(x=>1-x),...bits(k,3)]));
+tb('t-dh',['A₂','A₁','A₀','O₇','O₆','O₅','O₄','O₃','O₂','O₁','O₀'],[0,1,2,3,4,5,6,7].map(k=>[...bits(k,3),...hot(k)]));
+tb('t-dl',['A₂','A₁','A₀','O₇','O₆','O₅','O₄','O₃','O₂','O₁','O₀'],[0,1,2,3,4,5,6,7].map(k=>[...bits(k,3),...hot(k).map(x=>1-x)]));
+tb('t-bcd',['A₃','A₂','A₁','A₀','O₉','O₈','O₇','O₆','O₅','O₄','O₃','O₂','O₁','O₀'],[...Array(16).keys()].map(k=>[...bits(k,4),...bits(k<10?1<<k:0,10).map(x=>1-x)]));
+tb('t-en',['E','A₁','A₀','O₃','O₂','O₁','O₀'],[...Array(8).keys()].map(k=>[...bits(k,3),...bits(k<4?1<<(k&3):0,4).map(x=>1-x)]));
+tb('t-xs',['B₃','B₂','B₁','B₀','E₃','E₂','E₁','E₀'],[...Array(16).keys()].map(k=>[...bits(k,4),...(k<10?bits(k+3,4):['x','x','x','x'])]));
+// block diagrams
+function blk(t,ins,outs,lowIn=[],lowOut=false){let h=Math.max(ins.length,outs.length)*20+10,s=`<svg class="d" width="220" height="${h+8}" viewBox="0 0 220 ${h+8}"><rect class="b" x="60" y="4" width="100" height="${h}"/><text x="110" y="${h/2+4}" text-anchor="middle">${t}</text>`;
+ins.forEach((n,i)=>{let y=22+20*i;s+=lowIn.includes(i)?`<path d="M26 ${y}H57"/><circle cx="58.5" cy="${y}" r="3"/>`:`<path d="M26 ${y}H60"/>`;s+=`<text x="0" y="${y+4}">${n}</text>`});
+outs.forEach((n,i)=>{let y=22+20*i;s+=lowOut?`<circle cx="163" cy="${y}" r="3"/><path d="M166 ${y}H190"/>`:`<path d="M160 ${y}H190"/>`;s+=`<text x="194" y="${y+4}">${n}</text>`});return s+'</svg>'}
+const D=[0,1,2,3,4,5,6,7].map(i=>'D'+'₀₁₂₃₄₅₆₇'[i]),O=n=>[...Array(n).keys()].map(i=>'O'+'₀₁₂₃₄₅₆₇₈₉'[i]);
+$('b1').innerHTML=blk('8×3 encoder',D,['O₀','O₁','O₂'],[0,1,2,3,4,5,6,7]);
+$('b2').innerHTML=blk('8×3 encoder',D,['O₀','O₁','O₂']);
+$('b3').innerHTML=blk('3×8 decoder',['A₀','A₁','A₂'],O(8),[],true);
+$('b4').innerHTML=blk('3×8 decoder',['A₀','A₁','A₂'],O(8));
+$('b5').innerHTML=blk('BCD-to-decimal',['A₀','A₁','A₂','A₃'],O(10),[],true);
+$('b6').innerHTML=blk('2×4 decoder',['A₀','A₁','E'],O(4),[2],true);
+// gate matrix
+function mx(id,vars,gates){let n=vars.length,gx=34+26*n,y0=40,H=y0+34*gates.length,W=gx+130;let s=`<svg class="d" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`;
+vars.forEach((v,i)=>{let x=20+26*i;s+=`<path d="M${x} 24V${H-8}"/><text x="${x}" y="16" text-anchor="middle" font-size="11">${v}</text>`});
+gates.forEach((g,j)=>{let y=y0+34*j,a=/and/.test(g.t),w=a?28:30,b=/^n/.test(g.t);
+s+=`<path d="M8 ${y}H${gx}"/><use href="#${a?'and':'or'}" x="${gx}" y="${y-14}"/>`;if(b)s+=`<circle cx="${gx+w+3}" cy="${y}" r="3"/>`;
+s+=`<path d="M${gx+w+(b?6:0)} ${y}h28"/><text x="${gx+w+36}" y="${y+4}">${g.n}</text>`;g.d.forEach(i=>s+=`<circle class="j" cx="${20+26*i}" cy="${y}" r="3"/>`)});
+$(id).innerHTML=s+'</svg>'}
+const sub='₀₁₂₃₄₅₆₇₈₉';
+function dec(id,ins,cnt,t,pre=[]){let vars=[...pre,...ins.flatMap(a=>[a,a+'′'])];
+mx(id,vars,[...Array(cnt).keys()].map(k=>({n:'O'+sub[k],t,d:[...pre.map((_,i)=>i),...ins.map((_,j)=>pre.length+2*j+(((k>>(ins.length-1-j))&1)?0:1))]})))}
+mx('e-h',D,[{n:'O₀',t:'or',d:[1,3,5,7]},{n:'O₁',t:'or',d:[2,3,6,7]},{n:'O₂',t:'or',d:[4,5,6,7]}]);
+mx('e-l',D,[{n:'O₀',t:'nand',d:[1,3,5,7]},{n:'O₁',t:'nand',d:[2,3,6,7]},{n:'O₂',t:'nand',d:[4,5,6,7]}]);
+dec('d-l',['A₂','A₁','A₀'],8,'nand');dec('d-h',['A₂','A₁','A₀'],8,'and');
+dec('d-bcd',['A₃','A₂','A₁','A₀'],10,'nand');
+dec('d-en',['A₁','A₀'],4,'nand',['E′']);
+const O8=O(8);
+mx('s-h',O8,[{n:'F₁',t:'or',d:[1,2,4,7]},{n:'F₂',t:'or',d:[0,5,6,7]}]);
+mx('s-l',O8,[{n:'F₁',t:'nand',d:[1,2,4,7]},{n:'F₂',t:'nand',d:[0,5,6,7]}]);
+mx('p-l',O8,[{n:'F₁',t:'and',d:[0,3,5,6]},{n:'F₂',t:'and',d:[1,2,3,4]}]);
+mx('p-h',O8,[{n:'F₁',t:'nor',d:[0,3,5,6]},{n:'F₂',t:'nor',d:[1,2,3,4]}]);
+// 4x16
+(function(){let s='<svg class="d" width="320" height="270" viewBox="0 0 320 270"><rect class="b" x="20" y="60" width="70" height="100"/><text x="38" y="115">D1 2×4</text>';
+[['A₃',80],['A₂',100],['E',120]].forEach(([n,y])=>s+=`<path d="M0 ${y}H20"/><text x="0" y="${y-4}" font-size="11">${n}</text>`);
+let xs=[110,125,140,155],yo=[75,90,105,120];
+[0,1,2,3].forEach(k=>{let by=10+60*k,ye=by+12;s+=`<path d="M90 ${yo[k]}H${xs[k]}V${ye}H190"/><text x="94" y="${yo[k]-3}" font-size="10">O${sub[k]}</text><rect class="b" x="190" y="${by}" width="70" height="50"/><text x="206" y="${by+32}" font-size="11">D${k+2}</text><text x="193" y="${by+16}" font-size="10">E</text><path d="M260 ${by+25}H290" marker-end="url(#ah)"/><text x="262" y="${by+20}" font-size="10">O${4*k}–O${4*k+3}</text><path d="M170 ${by+28}H190M180 ${by+40}H190"/><circle class="j" cx="170" cy="${by+28}" r="3"/><circle class="j" cx="180" cy="${by+40}" r="3"/>`});
+s+='<path d="M170 38V250M180 38V250"/><text x="160" y="262" font-size="11">A₁</text><text x="176" y="262" font-size="11">A₀</text></svg>';$('x16').innerHTML=s})();
+// DIP pins
+function dip(id,nm,top,bot){let s='<svg class="d" width="340" height="115" viewBox="0 0 340 115"><rect class="b" x="10" y="30" width="320" height="52"/><text x="150" y="60">'+nm+'</text>';
+top.forEach((t,i)=>{let x=30+40*i;s+=`<path d="M${x} 30V20"/><text x="${x}" y="14" text-anchor="middle" font-size="10">${16-i}</text><text x="${x}" y="46" text-anchor="middle" font-size="11">${t}</text>`});
+bot.forEach((t,i)=>{let x=30+40*i;s+=`<path d="M${x} 82V92"/><text x="${x}" y="108" text-anchor="middle" font-size="10">${i+1}</text><text x="${x}" y="76" text-anchor="middle" font-size="11">${t}</text>`});$(id).innerHTML=s+'</svg>'}
+dip('p147','74147',['Vcc','NC','O₃′','D₃′','D₂′','D₁′','D₉′','O₀′'],['D₄′','D₅′','D₆′','D₇′','D₈′','O₂′','O₁′','GND']);
+dip('p138','74138',['Vcc','O₀′','O₁′','O₂′','O₃′','O₄′','O₅′','O₆′'],['A₀','A₁','A₂','E₁′','E₂′','E₃','O₇′','GND']);
+$('nav').innerHTML=[...document.querySelectorAll('.pg')].map(e=>'<a href="#'+e.id+'">'+e.querySelector('h2').textContent.split('–')[0].trim()+'</a>').join('');
+</script>
+</main></body></html>
