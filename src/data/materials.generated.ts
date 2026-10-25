@@ -213,15 +213,6 @@ export const generatedCourses: CourseData[] = [
         "extension": "pdf",
         "url": "/materials/CSE%20345/Chapters/Ch-8.pdf",
         "sizeInBytes": 1930414
-      },
-      {
-        "id": "CSE 345 (DLD) - FULL BOOK (compressed).pdf",
-        "title": "CSE 345 (DLD) FULL BOOK (compressed)",
-        "filename": "CSE 345 (DLD) - FULL BOOK (compressed).pdf",
-        "type": "PDF",
-        "extension": "pdf",
-        "url": "/materials/CSE%20345/Chapters/CSE%20345%20(DLD)%20-%20FULL%20BOOK%20(compressed).pdf",
-        "sizeInBytes": 67307483
       }
     ],
     "others": [
