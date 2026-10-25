@@ -179,6 +179,15 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 5841231
       },
       {
+        "id": "ch-6.pdf",
+        "title": "Ch 6",
+        "filename": "ch-6.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20345/Chapters/ch-6.pdf",
+        "sizeInBytes": 2539142
+      },
+      {
         "id": "ch-6-7.pdf",
         "title": "Ch 6 7",
         "filename": "ch-6-7.pdf",
@@ -186,6 +195,33 @@ export const generatedCourses: CourseData[] = [
         "extension": "pdf",
         "url": "/materials/CSE%20345/Chapters/ch-6-7.pdf",
         "sizeInBytes": 8658104
+      },
+      {
+        "id": "ch-7.pdf",
+        "title": "Ch 7",
+        "filename": "ch-7.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20345/Chapters/ch-7.pdf",
+        "sizeInBytes": 2093748
+      },
+      {
+        "id": "Ch-8.pdf",
+        "title": "Ch 8",
+        "filename": "Ch-8.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20345/Chapters/Ch-8.pdf",
+        "sizeInBytes": 1930414
+      },
+      {
+        "id": "CSE 345 (DLD) - FULL BOOK (compressed).pdf",
+        "title": "CSE 345 (DLD) FULL BOOK (compressed)",
+        "filename": "CSE 345 (DLD) - FULL BOOK (compressed).pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20345/Chapters/CSE%20345%20(DLD)%20-%20FULL%20BOOK%20(compressed).pdf",
+        "sizeInBytes": 67307483
       }
     ],
     "others": [
