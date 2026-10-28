@@ -359,13 +359,67 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 1173091
       },
       {
-        "id": "Chapter2-social-psychology-robert-baron.pdf",
-        "title": "Chapter2 Social Psychology Robert Baron",
-        "filename": "Chapter2-social-psychology-robert-baron.pdf",
+        "id": "2. Social Psychology Research.pdf",
+        "title": "2. Social Psychology Research",
+        "filename": "2. Social Psychology Research.pdf",
         "type": "PDF",
         "extension": "pdf",
-        "url": "/materials/GEN%20209/Chapters/Chapter2-social-psychology-robert-baron.pdf",
+        "url": "/materials/GEN%20209/Chapters/2.%20Social%20Psychology%20Research.pdf",
+        "sizeInBytes": 1054661
+      },
+      {
+        "id": "3. Social cognition.pdf",
+        "title": "3. Social Cognition",
+        "filename": "3. Social cognition.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/GEN%20209/Chapters/3.%20Social%20cognition.pdf",
+        "sizeInBytes": 925350
+      },
+      {
+        "id": "4. Attitude.pdf",
+        "title": "4. Attitude",
+        "filename": "4. Attitude.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/GEN%20209/Chapters/4.%20Attitude.pdf",
+        "sizeInBytes": 608973
+      },
+      {
+        "id": "Ch1 Intro to Psy-4-7.pdf",
+        "title": "Ch1 Intro To Psy 4 7",
+        "filename": "Ch1 Intro to Psy-4-7.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/GEN%20209/Chapters/Ch1%20Intro%20to%20Psy-4-7.pdf",
+        "sizeInBytes": 843854
+      },
+      {
+        "id": "Chapter2-social-psychology-robert-baron (1).pdf",
+        "title": "Chapter2 Social Psychology Robert Baron (1)",
+        "filename": "Chapter2-social-psychology-robert-baron (1).pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/GEN%20209/Chapters/Chapter2-social-psychology-robert-baron%20(1).pdf",
         "sizeInBytes": 1555608
+      },
+      {
+        "id": "Chapter3-social-psychology-13th-ed-robert-baron.pdf",
+        "title": "Chapter3 Social Psychology 13th Ed Robert Baron",
+        "filename": "Chapter3-social-psychology-13th-ed-robert-baron.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/GEN%20209/Chapters/Chapter3-social-psychology-13th-ed-robert-baron.pdf",
+        "sizeInBytes": 2660979
+      },
+      {
+        "id": "Chapter4-social-psychology-13th-robert-baron.pdf",
+        "title": "Chapter4 Social Psychology 13th Robert Baron",
+        "filename": "Chapter4-social-psychology-13th-robert-baron.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/GEN%20209/Chapters/Chapter4-social-psychology-13th-robert-baron.pdf",
+        "sizeInBytes": 3405139
       }
     ],
     "others": []
