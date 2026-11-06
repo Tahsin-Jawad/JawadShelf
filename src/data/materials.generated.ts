@@ -80,6 +80,15 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 1351149
       },
       {
+        "id": "6.Entity Relationship Diagram.pdf",
+        "title": "6.Entity Relationship Diagram",
+        "filename": "6.Entity Relationship Diagram.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20302/Chapters/6.Entity%20Relationship%20Diagram.pdf",
+        "sizeInBytes": 1796180
+      },
+      {
         "id": "Lecture 5_practice.pdf",
         "title": "Lecture 5 Practice",
         "filename": "Lecture 5_practice.pdf",
@@ -107,6 +116,15 @@ export const generatedCourses: CourseData[] = [
         "extension": "html",
         "url": "/materials/CSE%20302/Others/Ch%204%20Details%20Overview.html",
         "sizeInBytes": 190609
+      },
+      {
+        "id": "CH 6.html",
+        "title": "CH 6",
+        "filename": "CH 6.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/CSE%20302/Others/CH%206.html",
+        "sizeInBytes": 94509
       },
       {
         "id": "LAB 1-2-3.html",
@@ -212,7 +230,16 @@ export const generatedCourses: CourseData[] = [
         "type": "PDF",
         "extension": "pdf",
         "url": "/materials/CSE%20345/Chapters/Ch-8.pdf",
-        "sizeInBytes": 1930414
+        "sizeInBytes": 5153399
+      },
+      {
+        "id": "Ch-9.pdf",
+        "title": "Ch 9",
+        "filename": "Ch-9.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20345/Chapters/Ch-9.pdf",
+        "sizeInBytes": 3671976
       }
     ],
     "others": [
