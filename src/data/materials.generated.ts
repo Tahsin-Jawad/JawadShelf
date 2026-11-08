@@ -296,6 +296,15 @@ export const generatedCourses: CourseData[] = [
         "extension": "html",
         "url": "/materials/CSE%20345/Others/chapter_7_study_guide.html",
         "sizeInBytes": 99546
+      },
+      {
+        "id": "Chapter 8 – Encoder, MUX, DEMUX.html",
+        "title": "Chapter 8 – Encoder, MUX, DEMUX",
+        "filename": "Chapter 8 – Encoder, MUX, DEMUX.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/CSE%20345/Others/Chapter%208%20%E2%80%93%20Encoder%2C%20MUX%2C%20DEMUX.html",
+        "sizeInBytes": 41850
       }
     ]
   },

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chapter 8 – Encoder, MUX, DEMUX গাইড</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--ink:#1d2433;--mut:#5b6476;--card:#f4f6fb;--line:#cfd6e6;--acc:#2456d6;--ok:#e8f5e9;--okb:#2e7d32;--wr:#fff3df;--wrb:#b26a00;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12151c;--ink:#e6e9f2;--mut:#9aa3b5;--card:#1b2030;--line:#2f3752;--acc:#8aaaff;--ok:#152a1a;--okb:#74d37f;--wr:#2c2513;--wrb:#f0b550;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12151c;--ink:#e6e9f2;--mut:#9aa3b5;--card:#1b2030;--line:#2f3752;--acc:#8aaaff;--ok:#152a1a;--okb:#74d37f;--wr:#2c2513;--wrb:#f0b550;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans Bengali','Hind Siliguri','Kalpurush','Nirmala UI','Vrinda',system-ui,sans-serif;line-height:1.75;font-size:16px}
+main{max-width:860px;margin:auto;padding:16px}
+h1{font-size:1.5rem;margin:.3em 0}h2{font-size:1.25rem;margin:0 0 .4em;color:var(--acc)}h3{font-size:1.05rem;margin:1em 0 .2em}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:18px 0}
+.pg{display:inline-block;background:var(--acc);color:var(--bg);font-size:.75rem;padding:1px 9px;border-radius:99px;margin-bottom:6px;font-weight:600}
+.eq{font-family:'Cambria Math','Times New Roman',serif;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 12px;margin:6px 0;overflow-x:auto;white-space:pre;font-size:1.02rem}
+.ex,.tp{border-radius:8px;padding:8px 12px;margin:10px 0;font-size:.95rem}
+.ex{background:var(--ok);border-left:4px solid var(--okb)}.tp{background:var(--wr);border-left:4px solid var(--wrb)}
+.sc{overflow-x:auto;margin:8px 0}
+table{border-collapse:collapse;margin:4px auto;font-size:.85rem}th,td{border:1px solid var(--line);padding:2px 8px;text-align:center}th{background:var(--bg)}
+.ic td{min-width:44px;font-size:.78rem}.ic small{display:block;color:var(--mut);font-size:.65rem}
+table.km td,table.km th{width:30px;height:24px;padding:0}table.km td.one{background:var(--acc);color:var(--bg);font-weight:700}
+.kms{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}figure{margin:0;text-align:center;font-size:.8rem}
+svg{width:100%;height:auto;display:block;margin:6px auto;color:var(--ink)}
+svg path,svg rect,svg circle{stroke:currentColor;fill:none;stroke-width:1.6}svg circle.d{fill:currentColor}svg circle.bg{fill:var(--bg)}
+svg text{fill:currentColor;stroke:none;font-size:12px;font-family:system-ui,sans-serif}
+nav a{display:inline-block;margin:2px 6px 2px 0;font-size:.85rem;color:var(--acc)}
+ul{padding-left:1.2em;margin:.3em 0}code{background:var(--bg);padding:0 4px;border-radius:4px}
+</style></head><body><main>
+<h1>Chapter 8: Encoder, MUX, DEMUX (পেজ বাই পেজ)</h1>
+<p>Decoder সেকশন (8.3, পেজ 180–189) বাদ। বাকি সব পেজ ক্রমানুসারে। সবুজ বক্স = পরীক্ষায় যা লিখবে, হলুদ = মনে রাখার ট্রিক।</p>
+<nav><a href="#p177">177 Intro</a><a href="#p178">178 Encoder</a><a href="#p179">179 Priority</a><a href="#p189">189 Code Conv.</a><a href="#p192">192 7-Segment</a><a href="#p195">195 Parity</a><a href="#p198">198 MUX</a><a href="#p203">203 MUX দিয়ে Logic</a><a href="#p206">206 DEMUX</a><a href="#p210">210 Exercise</a></nav>
+
+<section id="p177"><span class="pg">পেজ 177</span><h2>8.1 Introduction ও 8.2.1 Encoder</h2>
+<ul>
+<li>Digital system এ তথ্য binary code এ থাকে। <b>n-bit code দিয়ে 2ⁿ টি আলাদা element</b> বোঝানো যায়। Error detection এও code ব্যবহার হয়।</li>
+<li><b>Encoder:</b> discrete input → binary code। <b>Decoder:</b> binary code → discrete output (উল্টো কাজ)।</li>
+<li><b>Code converter:</b> এক code থেকে আরেক code (যেমন BCD→Excess-3); এটা encoder এর বিশেষ রূপ।</li>
+<li><b>Multiplexing:</b> অনেক information কম channel/line দিয়ে পাঠানো। <b>Demultiplexing:</b> উল্টো, কম line থেকে অনেক unit এ ছড়ানো।</li>
+<li>MUX/DEMUX লাগে যখন <i>many source → one destination</i> বা <i>one source → many destination</i> path select করতে হয়।</li>
+</ul>
+<h3>Encoder এর সংজ্ঞা</h3>
+<p>Encoder একটি combinational circuit যার <b>2ⁿ (বা কম) input line</b> আর <b>n output line</b>। একসময় <b>শুধু একটি input active</b> থাকে; output সেই input এর binary code দেয়।</p>
+<ul><li><b>Active-LOW input:</b> active input = 0, বাকি সব = 1।</li><li><b>Active-HIGH input:</b> active input = 1, বাকি সব = 0।</li></ul>
+<p>Octal-to-binary encoder = <b>8-to-3 line encoder</b>। Truth table থেকে Boolean function:</p>
+<div class="eq">Active-LOW:
+O₀ = D₁′ + D₃′ + D₅′ + D₇′ = (D₁D₃D₅D₇)′
+O₁ = D₂′ + D₃′ + D₆′ + D₇′ = (D₂D₃D₆D₇)′
+O₂ = D₄′ + D₅′ + D₆′ + D₇′ = (D₄D₅D₆D₇)′</div>
+<div class="ex"><b>লেখার নিয়ম:</b> যেসব input এর binary code এ ওই output bit = 1, শুধু সেই input গুলো OR (active-HIGH) বা NAND (active-LOW) করো। যেমন O₀ = 1 হয় ১, ৩, ৫, ৭ এর জন্য (বিজোড় সংখ্যা)।</div></section>
+
+<section id="p178"><span class="pg">পেজ 178</span><h2>Fig 8.1: Octal-to-Binary Encoder (8×3)</h2>
+<div class="eq">Active-HIGH:
+O₀ = D₁ + D₃ + D₅ + D₇
+O₁ = D₂ + D₃ + D₆ + D₇
+O₂ = D₄ + D₅ + D₆ + D₇</div>
+<h3>(a),(c) Block diagram</h3><div id="b-enc"></div>
+<h3>(d) Truth table: active-HIGH input</h3><div id="t-eh"></div>
+<h3>(b) Truth table: active-LOW input</h3><div id="t-el"></div>
+<div class="tp"><b>লক্ষ্য করো:</b> active-HIGH এ D₀ এর জন্য O₂O₁O₀ = 000, আর D₀ কোনো gate এ connect হয় না (কারণ কোনো output bit 1 হয় না)। Active-LOW এ input bubble দেওয়া থাকে।</div>
+<h3>Fig 8.2 এর আগের কথা (পেজের শেষে)</h3>
+<p>Logic implementation (Fig 8.2) নিচের পেজে। এখানে মূল কথা: circuit ধরে নেয় <b>একসময় একটাই input active</b>। 8টি input এ 2⁸ = 256 সম্ভাব্য combination, কিন্তু অর্থপূর্ণ মাত্র 8টি; বাকি গুলো <b>don't care</b>।</p></section>
+
+<section id="p179"><span class="pg">পেজ 179</span><h2>Logic Implementation, Priority Encoder, 74147</h2>
+<ul><li>এই ধরনের simple encoder IC package এ পাওয়া যায় না, কারণ gate দিয়ে সহজেই বানানো যায়।</li>
+<li>IC তে পাওয়া যায় <b>priority encoder</b>: একসাথে একাধিক input active হলে <b>সবচেয়ে বেশি priority এর input</b> encode হয়।</li>
+<li>উদাহরণ: বড় subscript এর priority বেশি ধরলে D₂ ও D₅ একসাথে active হলে output = <b>101</b> (D₅ জিতবে)। Priority encoder এর truth table সাধারণ encoder থেকে আলাদা (input এ don't care X থাকে)।</li></ul>
+<h3>Fig 8.2 Logic diagram (8-to-3)</h3>
+<p>(a) Active-LOW input: 4-input <b>NAND</b> gate (O₀: D₁D₃D₅D₇)। (b) Active-HIGH input: 4-input <b>OR</b> gate। আঁকার সময় মাঝখানের বিন্দু (•) = ওই input ওই gate এ যুক্ত।</p>
+<div id="g-eh"></div><div id="g-el"></div>
+<h3>8.2.2 Table 8.1: MSI Encoder IC</h3>
+<div class="sc"><table><tr><th>IC</th><th>বর্ণনা</th></tr><tr><td>74147</td><td>Decimal-to-BCD priority encoder, active-LOW input, inverted output</td></tr><tr><td>74148</td><td>Octal-to-binary priority encoder, active-LOW input, inverted output</td></tr></table></div>
+<h3>IC 74147 (Fig 8.3)</h3>
+<ul><li>৯টি active-LOW input (D₁′–D₉′), ৪টি active-LOW output (O₀′–O₃′)।</li>
+<li><b>D₉′ এর priority সবচেয়ে বেশি</b>। 10-to-4 line encoding, "zero" implied: ৯টি input ই HIGH হলে decimal 0 encode হয় এবং চারটি output ই HIGH হয়।</li></ul>
+<div id="ic147"></div>
+<div class="ex">Priority encoder = একাধিক input active হলে highest priority input এর code দেয়। 74147: Decimal-to-BCD, active-LOW in/out, D₉ highest। 74148: Octal-to-binary।</div></section>
+
+<section id="p189"><span class="pg">পেজ 189 (নিচের অংশ) – 191</span><h2>8.4 Code Converter: BCD to Excess-3</h2>
+<ul><li>বিভিন্ন system এ আলাদা code (BCD, Excess-3 ইত্যাদি) চলে; এক system এর output অন্য system এর input হলে conversion দরকার।</li>
+<li>Code converter = combinational circuit, encoder এর special type। বানানো যায় classical method (truth table → K-map → gate) বা MSI দিয়ে।</li></ul>
+<h3>Fig 8.14: Block diagram ও Truth table</h3><div id="b-xs"></div><div id="t-xs"></div>
+<p>BCD এ 1010–1111 invalid, তাই output <b>don't care (X)</b>।</p>
+<h3>Fig 8.15: K-map (সব ৪টি output)</h3>
+<div class="kms" id="km-xs"></div>
+<p>Rows = B₃B₂, columns = B₁B₀ (Gray order 00, 01, 11, 10)। X গুলো দরকারমতো 1 ধরে বড় group করো। ফল:</p>
+<div class="eq">E₀ = B₀′
+E₁ = B₁′B₀′ + B₁B₀
+E₂ = B₂′B₀ + B₂′B₁ + B₂B₁′B₀′
+E₃ = B₃ + B₂B₀ + B₂B₁</div>
+<h3>Fig 8.16: Logic diagram আঁকার ধাপ</h3>
+<ul><li>B₃B₂B₁B₀ প্রত্যেকের জন্য NOT gate (B′ পেতে)।</li><li>E₀ = সরাসরি B₀ এর NOT output (কোনো gate লাগে না)।</li>
+<li>E₁: ২টি AND (B₁′B₀′, B₁B₀) → ১টি OR।</li><li>E₂: ৩টি AND (B₂′B₀, B₂′B₁, B₂B₁′B₀′) → OR।</li><li>E₃: B₃ সরাসরি + ২টি AND (B₂B₀, B₂B₁) → ৩-input OR।</li></ul>
+<h3>Fig 8.17: 4-bit Binary Adder দিয়ে</h3>
+<p>Excess-3 = BCD + binary 3 (0011)। তাই 4-bit adder এর এক input এ BCD, অন্য input এ 0011, <b>C₀ = 0</b>, C₄ unused; output S₃S₂S₁S₀ = E₃E₂E₁E₀।</p>
+<div id="g-add"></div>
+<div class="ex">লিখবে: truth table → K-map → E₀–E₃ equation → logic diagram। বা সংক্ষেপে: Excess-3 = BCD + 3, তাই adder দিয়ে সহজেই হয়।</div></section>
+
+<section id="p192"><span class="pg">পেজ 192 – 195</span><h2>8.5 BCD-to-7-Segment Display Decoder</h2>
+<ul><li>Decimal দেখার জন্য সবচেয়ে জনপ্রিয় device = 7-segment display (৭টি LED: a, b, c, d, e, f, g)।</li>
+<li>BCD কে 7-segment code এ convert করতে হয়। Current নিয়ন্ত্রণ করে কিছু segment জ্বলে, কিছু নিভে থাকে। যেমন "6" দেখাতে a, c, d, e, f, g জ্বলে, b নিভে।</li>
+<li>Decoder 4-bit BCD নিয়ে ঠিক segment গুলো activate করে। এখানে <b>active-LOW output</b> (0 = segment জ্বলবে)। <b>Invalid BCD (1010–1111) এ কোনো segment জ্বলে না</b>, মানে সব output 1।</li></ul>
+<h3>Fig 8.18 Segment layout ও (b) digit pattern</h3><div id="g-seg"></div>
+<h3>Fig 8.19: Block diagram ও Truth table (active-LOW)</h3><div id="b-7"></div><div id="t-7"></div>
+<h3>Fig 8.20: K-map ও simplified function</h3>
+<div class="kms" id="km-7"></div>
+<p>এখানে K-map এ plot হয় output এর মান (1 = segment নিভে থাকা)। Invalid input এর cell গুলোও <b>1</b> (don't care নয়)।</p>
+<div class="eq">a = B₃B₂ + B₃B₁ + B₂B₁′B₀′ + B₃′B₂′B₁′B₀
+b = B₃B₂ + B₃B₁ + B₂B₁′B₀ + B₂B₁B₀′
+c = B₃B₂ + B₃B₁ + B₂′B₁B₀′
+d = B₃B₂ + B₃B₁ + B₂B₁′B₀′ + B₂B₁B₀ + B₃′B₂′B₁′B₀
+e = B₃B₁ + B₀ + B₂B₁′
+f = B₃B₂ + B₁B₀ + B₂′B₁ + B₃′B₂′B₀
+g = B₃B₂ + B₃B₁ + B₂B₁B₀ + B₃′B₂′B₁′</div>
+<h3>Fig 8.21: Logic diagram (shared term)</h3>
+<ul><li><b>B₃B₂</b> সব output এ আছে শুধু <b>e</b> বাদে। <b>B₃B₁</b> সব output এ আছে শুধু <b>f</b> বাদে।</li>
+<li><b>B₃′B₂′B₁′B₀</b> a ও d তে common। <b>B₂B₁B₀</b> d ও g তে common। <b>B₂B₁′B₀′</b> a ও d তে common।</li>
+<li>তাই এই AND gate গুলো একবার বানিয়ে একাধিক OR gate এ ভাগ করে দাও। ৪টি NOT gate, তারপর AND layer, তারপর প্রতি segment এর OR gate।</li></ul>
+<div class="tp">পরীক্ষায় সময় কম হলে truth table + 7টি equation লিখে shared term গুলো উল্লেখ করো।</div>
+<h3>8.5.2 Table 8.3 (পেজ 195): MSI decoder/driver IC</h3>
+<div class="sc"><table><tr><th>IC</th><th>Output</th></tr><tr><td>7446, 74246</td><td>Active-LOW; open collector</td></tr><tr><td>7447, 74247</td><td>Active-LOW; open collector</td></tr><tr><td>7448, 74248</td><td>Active-HIGH; pull-up resistor = 2kΩ</td></tr><tr><td>7449, 74249</td><td>Active-HIGH; open collector</td></tr></table></div>
+<p>এই IC গুলো LED drive করতেও পারে। <b>7447</b> নিয়ে আলোচনা: ৪টি BCD input (B₀–B₃), output a′–g′ (active-LOW, open collector)।</p>
+<ul><li><b>RBI′ = 0</b> এবং input decimal zero হলে display blank হয়।</li><li><b>BI/RBO′ = 0</b> সব segment জোর করে বন্ধ করে।</li><li><b>LT′ = 0</b> সব segment জ্বালায় (শর্ত: BI/RBO′ = 1)।</li></ul>
+<div id="ic7447"></div></section>
+
+<section id="p195"><span class="pg">পেজ 195 (নিচে) – 198</span><h2>8.6 Parity Generator ও Checker</h2>
+<ul><li>Parity bit = message এর সাথে একটি extra bit, যাতে মোট 1 এর সংখ্যা <b>odd</b> (odd parity) বা <b>even</b> (even parity) হয়। Error detection এর জন্য।</li>
+<li>Transmitter এর circuit = <b>parity generator</b>। Receiver এর circuit = <b>parity checker</b>। Checked parity transmitted parity এর সাথে না মিললে error।</li></ul>
+<h3>Odd Parity Generator (Fig 8.23)</h3>
+<div id="b-par"></div>
+<div class="sc" style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center"><div id="t-p3"></div><div id="t-p4"></div></div>
+<p>3-bit এ P = 1 হয় যখন data তে 1 এর সংখ্যা <b>even</b> (মোট odd করার জন্য)। এটা <b>EXOR এর complement</b>। বিজোড় সংখ্যক input এ EXOR ও EXNOR সমান, তাই EXNOR ও বলা যায়। 4-bit এ ৮টি minterm এ 0 এর সংখ্যা even; এটা EXNOR, মানে EXOR এর complement।</p>
+<div class="eq">3-bit: P = (D₂ ⊕ D₁ ⊕ D₀)′
+4-bit: P = (D₃ ⊕ D₂ ⊕ D₁ ⊕ D₀)′
+n-bit: P = (Dₙ₋₁ ⊕ Dₙ₋₂ ⊕ … ⊕ D₁ ⊕ D₀)′</div>
+<h3>Fig 8.24: 4-bit odd parity generator logic</h3><div id="g-pg"></div>
+<p>(D₃⊕D₂) ও (D₁⊕D₀) এর ২টি XOR → ৩য় XOR → NOT।</p>
+<h3>Odd Parity Checker (Fig 8.25, 8.26)</h3>
+<p>n-bit message = (n−1) bit data + 1 parity bit। Output <b>E = 1 মানে error, E = 0 মানে error নেই</b>।</p>
+<div class="eq">E = (P ⊕ Dₙ₋₁ ⊕ … ⊕ D₁ ⊕ D₀)′</div>
+<div id="t-pc"></div><div id="g-pc"></div>
+<div class="ex">Fig 8.24 ও 8.26 একই রকম, শুধু P input হিসেবে ঢোকে। তাই <b>একই circuit parity generator ও checker দুটোই</b> হিসেবে চলে। Even parity এর জন্য শেষের NOT বাদ দাও (P = XOR শুধু)।</div>
+<h3>8.6.2 IC 74180 (8-bit parity generator/checker)</h3>
+<ul><li>Odd ও even দুই parity generate/check করে। Enable input: <b>P_E</b> (even), <b>P_O</b> (odd)। Data D₀–D₇। Output <b>E_E</b>, <b>E_O</b>।</li>
+<li><b>True active-HIGH parity:</b> P_E = 1, P_O = 0। <b>True active-LOW parity:</b> P_E = 0, P_O = 1।</li>
+<li>9-bit word (৮ bit + parity) check: দুই enable ও একটি inverter ৯ম data input হিসেবে। Active-HIGH parity check এ ৯ম data input P_O তে দাও, আর P_O ও P_E এর মাঝে inverter। Active-LOW parity check এ ৯ম input P_E তে, inverter P_E ও P_O এর মাঝে।</li></ul>
+<div id="ic74180"></div></section>
+
+<section id="p198"><span class="pg">পেজ 198 – 199</span><h2>8.7 Multiplexer (MUX)</h2>
+<ul><li>MUX = অনেক input line থেকে এক বাছাই করে <b>একটি output line</b> এ পাঠায়। বাছাই করে <b>address (select) line</b>। সাধারণত <b>2ⁿ input ও n address line</b>।</li>
+<li>MUX কে <b>data selector</b> ও বলে।</li>
+<li>AND gate অংশ decoder এর মতো address decode করে; সাধারণভাবে 2ⁿ-to-1 MUX = n-to-2ⁿ decoder + প্রতি AND এ একটি করে data input + একটি OR gate।</li></ul>
+<h3>Fig 8.28: 4×1 MUX</h3>
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center"><div id="b-mux" style="flex:1 1 280px"></div>
+<div class="sc"><table><tr><th>A₁</th><th>A₀</th><th>O</th></tr><tr><td>0</td><td>0</td><td>I₀</td></tr><tr><td>0</td><td>1</td><td>I₁</td></tr><tr><td>1</td><td>0</td><td>I₂</td></tr><tr><td>1</td><td>1</td><td>I₃</td></tr></table></div></div>
+<div class="eq">O = I₀A₁′A₀′ + I₁A₁′A₀ + I₂A₁A₀′ + I₃A₁A₀</div>
+<h3>Fig 8.29: Logic diagram</h3><div id="g-mux"></div>
+<p>২টি NOT, ৪টি 3-input AND (প্রতিটিতে একটি I ও দুটি address line), ১টি 4-input OR।</p></section>
+
+<section id="p200"><span class="pg">পেজ 200 – 201</span><h2>8.7.2 Enable সহ MUX ও 8.7.3 IC</h2>
+<ul><li>Enable active থাকলে MUX স্বাভাবিক কাজ করে; inactive থাকলে output disabled (0)। সাধারণত enable <b>active-LOW</b>।</li></ul>
+<div class="eq">O = I₀E′A₁′A₀′ + I₁E′A₁′A₀ + I₂E′A₁A₀′ + I₃E′A₁A₀</div>
+<div class="sc"><table><tr><th>E</th><th>A₁</th><th>A₀</th><th>O</th></tr><tr><td>0</td><td>0</td><td>0</td><td>I₀</td></tr><tr><td>0</td><td>0</td><td>1</td><td>I₁</td></tr><tr><td>0</td><td>1</td><td>0</td><td>I₂</td></tr><tr><td>0</td><td>1</td><td>1</td><td>I₃</td></tr><tr><td>1</td><td>x</td><td>x</td><td>0</td></tr></table></div>
+<p>(বইয়ে E=1 এর ৪ সারিতেই A এর যেকোনো মান, output 0।)</p>
+<h3>Fig 8.31: Logic diagram (active-LOW enable)</h3><div id="g-mxe"></div>
+<p>আগের diagram এর সাথে তফাত: প্রতি AND gate এ E′ ও যুক্ত (৪-input AND)।</p>
+<h3>Table 8.4: MSI MUX IC</h3>
+<div class="sc"><table><tr><th>IC</th><th>বর্ণনা</th><th>Output</th></tr><tr><td>74157</td><td>Quad 2×1 MUX</td><td>Same as input</td></tr><tr><td>74158</td><td>Quad 2×1 MUX</td><td>Inverted input</td></tr><tr><td>74153</td><td>Dual 4×1 MUX</td><td>Same as input</td></tr><tr><td>74352</td><td>Dual 4×1 MUX</td><td>Inverted input</td></tr><tr><td>74151</td><td>8×1 MUX</td><td>Complementary outputs</td></tr><tr><td>74150</td><td>16×1 MUX</td><td>Inverted input</td></tr></table></div>
+<p><b>74151:</b> 8-to-1 MUX, active-LOW enable E। input I₀–I₇, address A₂A₁A₀, output O ও O′ (দুটোই)।</p>
+<div id="ic74151"></div></section>
+
+<section id="p201"><span class="pg">পেজ 201 – 202</span><h2>8.7.4 MUX Expansion</h2>
+<p>বড় MUX বানাতে ছোট MUX এর <b>enable</b> ব্যবহার করা হয়।</p>
+<h3>Fig 8.33(a): 8×1 = দুটি 4×1 + OR</h3><div id="g-ex8"></div>
+<ul><li>A₂ = 0: M1 enabled, M2 disabled (M2 output 0)। OR এর output = M1 এর selected input।</li>
+<li>A₂ = 1: M1 disabled (output 0), M2 enabled। Output = M2 এর selected input।</li>
+<li>উদাহরণ: A₂A₁A₀ = 101 → M2 enabled, A₁A₀ = 01 → M2 এর I₁ = combined এর <b>I₅</b>।</li></ul>
+<h3>Fig 8.33(b): 16×1 = চারটি 4×1 (M1–M4) + একটি 4×1 (M5)</h3><div id="g-ex16"></div>
+<ul><li>A₃A₂ = 00 → M5 এর output = M1 এর output; 01 → M2; 10 → M3; 11 → M4।</li>
+<li>M1–M4 এ low-order bit A₁A₀ common। উদাহরণ: A₃A₂A₁A₀ = 0110 → M5 এর I₁ (M2 এর output) → M2 এর I₂ = combined এর <b>I₆</b>।</li></ul>
+<div class="tp">মনে রাখো: 8×1 = 2×(4×1) + OR, 16×1 = 4×(4×1) + 1×(4×1), 32×1 = 4×(8×1) + 1×(4×1) বা 2×(16×1) + OR।</div></section>
+
+<section id="p203"><span class="pg">পেজ 203 – 206</span><h2>8.7.5 MUX দিয়ে Combinational Logic</h2>
+<p>MUX আসলে active-HIGH decoder + OR gate। যে minterm function এ আছে তার input এ <b>1</b>, নেই তার input এ <b>0</b> দাও। Variable গুলো address line এ।</p>
+<h3>পদ্ধতি ১ (Fig 8.34): n variable → 2ⁿ×1 MUX</h3>
+<p>উদাহরণ: F(A,B,C,D) = Σ(0,2,3,6,8,9,12,14), 16×1 MUX। A, B, C, D = A₃A₂A₁A₀। I₀, I₂, I₃, I₆, I₈, I₉, I₁₂, I₁₄ এ <b>1</b>; বাকি সব (I₁, I₄, I₅, I₇, I₁₀, I₁₁, I₁₃, I₁₅) এ <b>0</b>। Enable E = 0 (active-LOW এ সর্বদা চালু)।</p>
+<h3>পদ্ধতি ২ (ভালো): n variable → 2ⁿ⁻¹×1 MUX</h3>
+<p>n−1 টি variable address এ, বাকি একটি (A) MUX এর input এ। Input হয় চারটির একটি: <b>0, 1, A, A′</b>।</p>
+<h3>Fig 8.35: F(A,B,C) = Σ(1,3,5,6), 4×1 MUX</h3>
+<p>B → A₁, C → A₀ (এই ক্রমে)।</p><div id="g-m35"></div>
+<ul><li>BC = 00: I₀ = 0 → m₀, m₄ দুটোই 0।</li><li>BC = 01: I₁ = 1 → m₁, m₅ দুটোই 1।</li><li>BC = 10: I₂ = A → শুধু m₆ = AB′… (ABC′) =1, m₂ = 0।</li><li>BC = 11: I₃ = A′ → শুধু m₃ = 1, m₇ = 0।</li></ul>
+<h3>Implementation table (Fig 8.35c) আঁকার নিয়ম</h3>
+<ol><li>Function কে Σ minterm form এ লেখো। ক্রম ABCD…, A সবচেয়ে বামে।</li>
+<li>MUX input I₀, I₁, … এর নিচে দুই সারিতে minterm লেখো: <b>উপরের সারি (A′)</b> = 0 থেকে 2ⁿ⁻¹−1, <b>নিচের সারি (A)</b> = বাকি অর্ধেক।</li>
+<li>Function এর minterm গুলো circle করো। প্রতি column দেখো: <b>দুটোই circle নেই → 0; দুটোই circle আছে → 1; শুধু নিচেরটা circle → A; শুধু উপরেরটা circle → A′</b>।</li></ol>
+<div id="t-i35"></div>
+<h3>Fig 8.36: F(A,B,C,D) = Σ(0,1,3,4,8,9,15), 8×1 MUX</h3>
+<p>B, C, D → A₂, A₁, A₀।</p><div id="t-i36"></div>
+<div class="eq">I₀=1, I₁=1, I₂=0, I₃=A′, I₄=A′, I₅=0, I₆=0, I₇=A</div>
+<p>আঁকার সময়: I₀, I₁ → logic 1; I₂, I₅, I₆ → logic 0; I₃, I₄ → A এর NOT output; I₇ → A।</p>
+<div class="ex"><b>MUX বনাম Decoder:</b> Decoder পদ্ধতিতে একটি decoder সব output function তৈরি করে, কিন্তু প্রতি output এ একটি external gate লাগে। MUX পদ্ধতিতে ছোট unit, কিন্তু প্রতি output function এ একটি করে MUX। Output কম হলে MUX ভালো; অনেক output হলে decoder দিয়ে IC কম লাগে।</div></section>
+
+<section id="p206"><span class="pg">পেজ 206 – 209</span><h2>8.8 Demultiplexer (DEMUX)</h2>
+<ul><li>DEMUX = <b>একটি input line</b> এর তথ্য <b>2ⁿ টি output line এর একটিতে</b> পাঠায়। n টি address line নির্ধারণ করে কোন output।</li></ul>
+<h3>Fig 8.37: 1-to-4 DEMUX</h3>
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center"><div id="b-dmx" style="flex:1 1 260px"></div><div id="t-dmx"></div></div>
+<div class="eq">O₀ = I A₁′A₀′
+O₁ = I A₁′A₀
+O₂ = I A₁A₀′
+O₃ = I A₁A₀</div>
+<h3>Fig 8.38: Logic diagram</h3><div id="g-dmx"></div>
+<div class="ex">এই circuit আসলে <b>2-to-4 decoder (active-HIGH output ও active-HIGH enable)</b>, যেখানে DEMUX এর input I = enable। আবার active-LOW output ও active-LOW enable সহ 2-to-4 decoder (Fig 8.9) কে 1-to-4 DEMUX হিসেবে ব্যবহার করা যায়, যদি enable E কে input ধরা হয়। শুধু পার্থক্য: unselected output গুলো 1 থাকে।</div>
+<h3>8.8.2 Table 8.5: MSI DEMUX IC</h3>
+<p>Decoder ও demultiplexer একই circuit থেকে পাওয়া যায়, তাই কিছু IC কে <b>decoder/demultiplexer</b> বলা হয়। (Table 8.2 এর IC গুলোই।)</p>
+<div class="sc"><table><tr><th>IC</th><th>বর্ণনা</th><th>Output</th></tr><tr><td>74139</td><td>Dual 1×4 DEMUX</td><td>Same as input</td></tr><tr><td>74155</td><td>Dual 1×4 DEMUX</td><td>Inverted input / Same as input</td></tr><tr><td>74156</td><td>Dual 1×4 DEMUX</td><td>Inverted input / Same as input (open-collector)</td></tr><tr><td>74138</td><td>1×8 DEMUX</td><td>Inverted input / Same as input</td></tr><tr><td>74154</td><td>1×16 DEMUX</td><td>Same as input</td></tr></table></div>
+<h3>8.8.3 DEMUX Expansion (Fig 8.39): 1×16 = পাঁচটি 1×4</h3><div id="g-dx"></div>
+<ul><li>DM1 কে high-order bit A₃A₂ select করে: 00 → O₀ (DM2), 01 → O₁ (DM3), 10 → O₂ (DM4), 11 → O₃ (DM5)। বাইরের input I প্রথমে DM1 এ ঢোকে।</li>
+<li>নির্বাচিত DEMUX এ low-order bit A₁A₀ (সব DM2–DM5 এ common) নির্ধারণ করে কোন output এ I আসবে।</li>
+<li>উদাহরণ: A₃A₂A₁A₀ = 0110 → I যায় DM1 এর O₁ → DM3 এর input → A₁A₀ = 10 → DM3 এর O₂ = combined এর <b>O₆</b>।</li></ul>
+<h3>8.8.4 DEMUX দিয়ে Combinational Logic (Fig 8.40)</h3>
+<p>I = 1 দিলে DEMUX = active-HIGH decoder। তখন পদ্ধতি decoder এর মতোই: <b>যে minterm function এ আছে সেই output গুলো OR করো</b>।</p>
+<div class="eq">F₁(A,B,C) = Σ(1,2,4,7) = O₁ + O₂ + O₄ + O₇
+F₂(A,B,C) = Σ(0,5,6,7) = O₀ + O₅ + O₆ + O₇</div>
+<p>1×8 DEMUX, I = 1, A₂A₁A₀ = ABC, আর দুটি OR gate (একটি F₁ এর, একটি F₂ এর)।</p></section>
+
+<section id="p210"><span class="pg">পেজ 210 – 212</span><h2>Exercises ও Further Reading</h2>
+<p>Decoder সংক্রান্ত প্রশ্ন (8.3–8.13, 8.17, 8.19, 8.20) বাদ। বাকি প্রশ্নের কোনটায় কোন পদ্ধতি:</p>
+<ul>
+<li><b>8.1, 8.2</b> Encoder (decimal-to-BCD, Excess-3, hex-to-binary, 12-to-4): প্রতি output bit এর জন্য যেসব input এ ওই bit = 1, সেগুলো OR/NAND করো। 8.2 এ output inverted (শেষে NOT)।</li>
+<li><b>8.14</b> Excess-3-to-BCD (classical): ১০টি valid input (0011–1100), বাকি X → K-map। <b>8.15</b> Adder দিয়ে: Excess-3 থেকে 0011 বিয়োগ, অর্থাৎ <b>+1101 (−3 এর 2's complement)</b> যোগ করো, C₀ = 0।</li>
+<li><b>8.16, 8.18</b> 7-segment (active-HIGH / hex): 8.5 এর মতো, active-HIGH এ lit segment = 1। Hex এ ১৬ input ই valid।</li>
+<li><b>8.21, 8.22</b> Parity: 3-bit odd generator/checker (XOR + NOT); n-bit even: XOR chain, NOT ছাড়া।</li>
+<li><b>8.23</b> 2-to-4 decoder (active-HIGH) + ৪টি AND (I_k দিয়ে) + OR = 4×1 MUX। <b>8.24</b> Enable active-HIGH: AND এ E (NOT ছাড়া) যোগ।</li>
+<li><b>8.25–8.27, 8.33</b> MUX expansion: 8×1 = দুটি 4×1 (active-LOW E) + OR; 32×1 = 4×(8×1) + 4×1; 32×1 = 2×(16×1) + OR; 40×1 = পাঁচটি 8×1 + একটি 8×1 (৫টি input ব্যবহার)।</li>
+<li><b>8.28, 8.30, 8.31, 8.32, 8.29</b> MUX দিয়ে function: 8.28 (16×1: minterm এ 1; বা 8×1 বইয়ের Fig 8.36), 8.30 (a) 16×1, (b) 8×1 এ implementation table পদ্ধতি, 8.31 Full adder (Sum = Σ(1,2,4,7), Carry = Σ(3,5,6,7), দুটি 4×1 বা 8×1), 8.29 x, y কে address এ দিয়ে input নির্ণয়।</li>
+<li><b>8.34, 8.35</b> DEMUX expansion: 1×32 = 1×4 + চারটি 1×8; 1×40 = 1×8 (প্রথম স্তর, ৫টি output) + পাঁচটি 1×8।</li></ul>
+<p>Further Reading: TTL Data Book (TI, 1988); Sandige, Modern Digital Design; R.P. Jain, Modern Digital Electronics; Mano, Digital Logic and Computer Design / Digital Design; Uyemura; D.C. Green, Digital Electronics; Microprocessor Data Handbook (BPB)।</p></section>
+</main>
+<script>
+const $=i=>document.getElementById(i),put=(i,h)=>{const e=$(i);if(e)e.innerHTML=h};
+const bin=(n,w)=>n.toString(2).padStart(w,'0').split('');
+const T=(h,r)=>`<div class="sc"><table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${r.map(a=>`<tr>${a.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</table></div>`;
+const SV=(W,H,b)=>`<svg viewBox="0 0 ${W} ${H}" style="max-width:${Math.min(Math.round(W*1.4),760)}px" role="img">${b}</svg>`;
+const sh=(t,x,y,w,h)=>t=='and'?`<path d="M${x} ${y}H${x+w*.55}A${w*.45} ${h/2} 0 0 1 ${x+w*.55} ${y+h}H${x}Z"/>`:t=='or'?`<path d="M${x} ${y}Q${x+w*.6} ${y} ${x+w} ${y+h/2}Q${x+w*.6} ${y+h} ${x} ${y+h}Q${x+w*.25} ${y+h/2} ${x} ${y}Z"/>`:sh('or',x+5,y,w-5,h)+`<path d="M${x} ${y}Q${x+w*.25} ${y+h/2} ${x} ${y+h}"/>`;
+const bx=(x,y,w,h,t)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3"/><text x="${x+w/2}" y="${y+h/2+4}" text-anchor="middle">${t}</text>`;
+const ln=d=>`<path d="${d}"/>`,tx=(x,y,t,a='start')=>`<text x="${x}" y="${y}" text-anchor="${a}">${t}</text>`,dt=(x,y)=>`<circle class="d" cx="${x}" cy="${y}" r="2.8"/>`;
+function blk(l,ins,outs,o={}){const n=Math.max(ins.length,outs.length),h=n*24+16,w=100,x=64;let s=`<rect x="${x}" y="8" width="${w}" height="${h}" rx="3"/>`+tx(x+w/2,8+h/2+4,l,'middle');
+ const pos=(a,i)=>8+h/a.length*(i+.5);
+ ins.forEach((t,i)=>{const y=pos(ins,i);s+=ln(`M${x-26} ${y}H${x}`)+tx(x-30,y+4,t,'end');if(o.b)s+=`<circle class="bg" cx="${x-3}" cy="${y}" r="3"/>`});
+ outs.forEach((t,i)=>{const y=pos(outs,i);s+=ln(`M${x+w} ${y}h26`)+tx(x+w+30,y+4,t);if(o.bo)s+=`<circle class="bg" cx="${x+w+3}" cy="${y}" r="3"/>`});
+ (o.bot||[]).forEach((t,i,a)=>{const px=x+w*(i+1)/(a.length+1);s+=ln(`M${px} ${8+h}v22`)+tx(px,8+h+34,t,'middle')});
+ return SV(x+w+90,h+16+(o.bot?38:0),s)}
+function mx(o){const cw=32,x0=34,gh=o.gh||36,gap=16,top=48,n=o.cols.length,R=o.rows.length,gx=x0+n*cw+20,gw=46,H=top+R*(gh+gap)+6;let s='';
+ o.cols.forEach((c,i)=>{const x=x0+i*cw,cp=c.endsWith('′');s+=tx(x,11,c,'middle');
+  s+=cp?ln(`M${x-cw} 16H${x}V24M${x-5} 24h10l-5 9zM${x} 39V${H-6}`)+`<circle class="bg" cx="${x}" cy="36" r="2.8"/>`:ln(`M${x} 16V${H-6}`)});
+ const outs=[];
+ o.rows.forEach((r,k)=>{const y=top+k*(gh+gap),m=r.c.length;
+  r.c.forEach((c,j)=>{const py=y+gh*(j+1)/(m+1);
+   if(typeof c=='number'){s+=ln(`M${x0+c*cw} ${py}H${gx}`)+dt(x0+c*cw,py)}else s+=ln(`M22 ${py}H${gx}`)+tx(2,py+4,c)});
+  s+=sh(o.t,gx,y,gw,gh);const my=y+gh/2;let ex=gx+gw;
+  if(o.bub){s+=`<circle class="bg" cx="${ex+3}" cy="${my}" r="3"/>`;ex+=6}
+  if(o.mg){s+=ln(`M${ex} ${my}H${gx+gw+24}`);outs.push(my)}else s+=ln(`M${ex} ${my}h26`)+tx(ex+30,my+4,r.o)});
+ let W=gx+gw+70;
+ if(o.mg){const ox=gx+gw+24,y1=top+gh/2-8,y2=top+(R-1)*(gh+gap)+gh/2+8,ym=(y1+y2)/2;s+=sh('or',ox,y1,36,y2-y1)+ln(`M${ox+36} ${ym}h26`)+tx(ox+66,ym+4,o.mg);outs.forEach(p=>s+=ln(`M${ox} ${p}H${ox+5}`));W=ox+90}
+ return SV(W,H,s)}
+const ic=(n,b,t)=>`<div class="sc"><table class="ic"><caption>${n}</caption><tr>${t.map((x,i)=>`<td>${x}<small>${t.length*2-i}</small></td>`).join('')}</tr><tr>${b.map((x,i)=>`<td>${x}<small>${i+1}</small></td>`).join('')}</tr></table></div>`;
+const gr=[0,1,3,2];
+const km=(f,t)=>{let h=`<table class="km"><tr><th>${t}</th><th>00</th><th>01</th><th>11</th><th>10</th></tr>`;gr.forEach(r=>{h+=`<tr><th>${bin(r,2).join('')}</th>`+gr.map(c=>{const v=f(r*4+c);return `<td class="${v===1?'one':''}">${v===0?'':v}</td>`}).join('')+'</tr>'});return h+'</table>'};
+const ones=n=>n.toString(2).split('1').length-1;
+
+/* encoder */
+const D=[7,6,5,4,3,2,1,0].map(i=>'D'+i);
+put('b-enc',blk('8×3 Encoder',['D0','D1','D2','D3','D4','D5','D6','D7'],['O0','O1','O2']));
+put('t-eh',T([...D,'O₂','O₁','O₀'],[0,1,2,3,4,5,6,7].map(i=>[...[7,6,5,4,3,2,1,0].map(d=>d==i?1:0),...bin(i,3)])));
+put('t-el',T([...D,'O₂','O₁','O₀'],[0,1,2,3,4,5,6,7].map(i=>[...[7,6,5,4,3,2,1,0].map(d=>d==i?0:1),...bin(i,3)])));
+const eC=['D0','D1','D2','D3','D4','D5','D6','D7'],eR=[{c:[1,3,5,7],o:'O0'},{c:[2,3,6,7],o:'O1'},{c:[4,5,6,7],o:'O2'}];
+put('g-eh','<p><b>(b) Active-HIGH:</b></p>'+mx({cols:eC,rows:eR,t:'or',gh:44}));
+put('g-el','<p><b>(a) Active-LOW (NAND):</b></p>'+mx({cols:eC,rows:eR,t:'and',bub:1,gh:44}));
+put('ic147',ic('74147',['D4′','D5′','D6′','D7′','D8′','O2′','O1′','GND'],['Vcc','NC','O3′','D3′','D2′','D1′','D9′','O0′']));
+/* code converter */
+put('b-xs',blk('BCD-to-Excess-3',['B0','B1','B2','B3'],['E0','E1','E2','E3']));
+put('t-xs',T(['B₃','B₂','B₁','B₀','E₃','E₂','E₁','E₀'],[...Array(10).keys()].map(d=>[...bin(d,4),...bin(d+3,4)]).concat([['1010–1111','','','','X','X','X','X']])));
+put('km-xs',[3,2,1,0].map(b=>`<figure><figcaption>E${b} (BCD+3)</figcaption>${km(m=>m>9?'X':(((m+3)>>b)&1),'B₃B₂\\B₁B₀')}</figure>`).join(''));
+put('g-add',SV(420,200,bx(60,60,300,70,'4-bit binary adder')+['A₃','A₂','A₁','A₀'].map((t,i)=>tx(85+40*i,22,t,'middle')).join('')+tx(60,12,'BCD →','end')+ln('M85 28V60M125 28V60M165 28V60M205 28V60')+ln('M245 50V60M285 50V60M325 50V60M365 50V60')+tx(245,45,'0','middle')+tx(285,45,'0','middle')+tx(325,45,'1','middle')+tx(365,45,'1','middle')+tx(40,100,'C₄ (unused)','end')+ln('M44 96H60')+tx(366,100,'C₀ = 0')+tx(210,112,'S₃ S₂ S₁ S₀','middle')+ln('M90 130V160M150 130V160M210 130V160M270 130V160')+tx(210,180,'E₃ E₂ E₁ E₀  (Excess-3)','middle')));
+/* 7-seg */
+const lit=['abcdef','bc','abdeg','abcdg','bcfg','acdfg','acdefg','abc','abcdefg','abcdfg'],sg='abcdefg';
+let ss='';
+const seg=(d,ox)=>{const p={a:[6,0,24,0],b:[32,6,32,24],c:[32,32,32,50],d:[6,56,24,56],e:[0,32,0,50],f:[0,6,0,24],g:[6,28,24,28]};let r='';for(const k of sg){const q=p[k],on=lit[d].includes(k);r+=`<path d="M${q[0]+ox} ${q[1]+4}L${q[2]+ox} ${q[3]+4}" style="stroke-width:${on?4:1.2};opacity:${on?1:.25}"/>`}return r+tx(ox+16,76,d,'middle')};
+put('g-seg',SV(520,100,[...Array(10).keys()].map(d=>seg(d,8+d*50)).join('')+tx(2,96,'a=উপর, b=ডান-উপর, c=ডান-নিচ, d=নিচ, e=বাম-নিচ, f=বাম-উপর, g=মাঝ')));
+put('b-7',blk('BCD-to-7-segment',['B0','B1','B2','B3'],[...sg],{bo:1}));
+put('t-7',T(['B₃','B₂','B₁','B₀',...sg],[...Array(10).keys()].map(d=>[...bin(d,4),...[...sg].map(k=>lit[d].includes(k)?0:1)]).concat([['1010–1111','','','',1,1,1,1,1,1,1]])));
+put('km-7',[...sg].map((k,i)=>`<figure><figcaption>${k}</figcaption>${km(m=>m>9?1:(lit[m].includes(k)?0:1),'B₃B₂\\B₁B₀')}</figure>`).join(''));
+put('ic7447',ic('7447',['B1','B2','LT′','BI/RBO′','RBI′','B3','B0','GND'],['Vcc','f′','g′','a′','b′','c′','d′','e′']));
+/* parity */
+put('b-par',blk('Odd parity generator',['D0','D1','…','Dn−1'],['P']));
+put('t-p3',T(['D₂','D₁','D₀','P'],[...Array(8).keys()].map(i=>[...bin(i,3),ones(i)%2?0:1])));
+put('t-p4',T(['D₃','D₂','D₁','D₀','P'],[...Array(16).keys()].map(i=>[...bin(i,4),ones(i)%2?0:1])));
+put('t-pc',T(['P','D₂','D₁','D₀','E'],[...Array(16).keys()].map(i=>[...bin(i,4),ones(i)%2?0:1])));
+const par=(L,o)=>SV(290,120,L.map((t,i)=>tx(2,[24,38,84,98][i]+4,t)+ln(`M26 ${[24,38,84,98][i]}H${i<2?70:70}`)).join('')+sh('xor',70,14,44,34)+sh('xor',70,74,44,34)+ln('M114 31H132V54H146M114 91H132V70H146')+sh('xor',146,46,44,34)+ln('M190 63H196M196 51v24l20-12z')+`<circle class="bg" cx="219" cy="63" r="3"/>`+ln('M222 63h28')+tx(256,67,o));
+put('g-pg',par(['D3','D2','D1','D0'],'P'));put('g-pc',par(['P','D2','D1','D0'],'E'));
+put('ic74180',ic('74180',['D6','D7','P_E','P_O','E_E','E_O','GND'],['Vcc','D5','D4','D3','D2','D1','D0']));
+/* mux */
+put('b-mux',blk('4×1 MUX',['I0','I1','I2','I3'],['O'],{bot:['A1','A0']}));
+const mC=['A1','A1′','A0','A0′'];
+put('g-mux',mx({cols:mC,rows:[{c:['I0',1,3]},{c:['I1',1,2]},{c:['I2',0,3]},{c:['I3',0,2]}],t:'and',mg:'O',gh:40}));
+put('g-mxe',mx({cols:['E','E′','A1','A1′','A0','A0′'],rows:[{c:['I0',1,3,5]},{c:['I1',1,3,4]},{c:['I2',1,2,5]},{c:['I3',1,2,4]}],t:'and',mg:'O',gh:48}));
+put('ic74151',ic('74151',['I3','I2','I1','I0','O','O′','E′','GND'],['Vcc','I4','I5','I6','I7','A0','A1','A2']));
+put('g-ex8',SV(480,190,bx(60,40,90,70,'4×1 MUX M1')+bx(230,40,90,70,'4×1 MUX M2')+ln('M36 90H60M206 90H230')+tx(2,94,'I0–I3')+tx(176,94,'I4–I7')+ln('M150 60H170V18H365V62H390M320 60H350V78H390')+sh('or',390,50,44,40)+ln('M434 70h28')+tx(468,74,'O')+tx(105,126,'E ← A2','middle')+tx(275,126,'E ← A2′ (NOT দিয়ে)','middle')+ln('M105 110V150M275 110V150M105 150H275')+dt(105,150)+dt(275,150)+tx(190,170,'A1 A0 (দুটোতে common)','middle')));
+let g16='';[0,1,2,3].forEach(i=>{const y=10+i*60;g16+=bx(60,y,90,50,`M${i+1}: I${i*4}–I${i*4+3}`)+ln(`M150 ${y+25}H${170+12*i}V${90+i*20}H230`)+ln(`M45 ${y+40}H60`)+dt(45,y+40)});
+put('g-ex16',SV(420,270,g16+ln('M45 10V245')+tx(45,6,'A1A0 (common)','middle').replace('text-anchor="middle"','text-anchor="start"')+bx(230,60,90,140,'4×1 MUX M5')+ln('M320 130h40')+tx(364,134,'O')+ln('M275 200V235')+tx(275,250,'A3 A2','middle')));
+/* impl tables */
+const impl=(ms,n)=>{const h=2**(n-1),I=[],a=[],b=[];for(let c=0;c<h;c++){const t=ms.includes(c),u=ms.includes(c+h);I.push('I'+c);a.push(t?`<b style="color:var(--acc)">(${c})</b>`:c);b.push(u?`<b style="color:var(--acc)">(${c+h})</b>`:c+h)}
+ return T(['',...I],[["A′",...a],["A",...b],['I =',...[...Array(h).keys()].map(c=>{const t=ms.includes(c),u=ms.includes(c+h);return t&&u?1:!t&&!u?0:u?'A':'A′'})]])};
+put('t-i35',impl([1,3,5,6],3));put('t-i36',impl([0,1,3,4,8,9,15],4));
+put('g-m35',SV(300,170,bx(110,10,100,120,'4×1 MUX')+['0','1','A','A′'].map((t,i)=>'').join('')+tx(104,30,'0','end')+tx(104,55,'1','end')+ln('M106 26H110M106 51H110')+ln('M70 70V105M70 80H110')+dt(70,80)+tx(70,64,'A','middle')+ln('M70 105H82M82 97v16l12-8z')+`<circle class="bg" cx="97" cy="105" r="3"/>`+ln('M100 105H110')+tx(114,34,'I0')+tx(114,59,'I1')+tx(114,84,'I2')+tx(114,109,'I3')+ln('M135 130V150M185 130V150')+tx(135,164,'B → A1','middle')+tx(185,164,'C → A0','middle')+ln('M210 70h40')+tx(256,74,'F')));
+/* demux */
+put('b-dmx',blk('1×4 DEMUX',['I'],['O0','O1','O2','O3'],{bot:['A1','A0']}));
+put('t-dmx',T(['I','A₁','A₀','O₃','O₂','O₁','O₀'],[...Array(8).keys()].map(i=>{const I=i>>2,a=i&3;return [I,...bin(a,2),...[3,2,1,0].map(k=>I&&a==k?1:0)]})));
+put('g-dmx',mx({cols:['I','A1','A1′','A0','A0′'],rows:[{c:[0,2,4],o:'O0'},{c:[0,2,3],o:'O1'},{c:[0,1,4],o:'O2'},{c:[0,1,3],o:'O3'}],t:'and',gh:40}));
+let gd=bx(40,70,90,100,'1×4 DM1')+ln('M10 120H40')+tx(2,116,'I')+tx(85,190,'A3 A2','middle')+ln('M85 170V178');
+[0,1,2,3].forEach(i=>{const y=10+i*60;gd+=bx(230,y,100,50,`DM${i+2}: O${i*4}–O${i*4+3}`)+ln(`M130 ${90+i*20}H${146+12*i}V${y+25}H230`)+ln(`M205 ${y+40}H230`)+dt(205,y+40)});
+put('g-dx',SV(400,270,gd+ln('M205 10V245')+tx(205,6,'A1A0','middle')+ln('M330 35h30M330 95h30M330 155h30M330 215h30')));
+</script></body></html>
