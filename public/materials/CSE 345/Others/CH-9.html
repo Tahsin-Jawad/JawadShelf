@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 9: Sequential Circuits & Flip-Flops | Complete Study Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Hind Siliguri', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        .bangla {
+            font-family: 'Hind Siliguri', sans-serif;
+            line-height: 1.75;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .overline {
+            text-decoration: overline;
+        }
+        /* Print Styles for Clean PDF Export */
+        @media print {
+            body {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+            }
+            .card-section {
+                box-shadow: none !important;
+                border: 1px solid #cbd5e1 !important;
+                break-inside: avoid-page;
+                margin-bottom: 1.5rem !important;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+        /* Custom K-Map Grid Styling */
+        .kmap-table {
+            border-collapse: collapse;
+        }
+        .kmap-table th, .kmap-table td {
+            border: 2px solid #334155;
+            width: 52px;
+            height: 48px;
+            text-align: center;
+            vertical-align: middle;
+            position: relative;
+        }
+        .kmap-corner {
+            background: linear-gradient(to top right, transparent calc(50% - 1px), #334155, transparent calc(50% + 1px));
+            width: 68px !important;
+            height: 54px !important;
+        }
+        .cell-idx {
+            position: absolute;
+            top: 2px;
+            right: 4px;
+            font-size: 0.65rem;
+            color: #64748b;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .group-pill-h {
+            border: 2.5px solid #2563eb;
+            background-color: rgba(37, 99, 235, 0.12);
+            border-radius: 12px;
+        }
+        .group-pill-v {
+            border: 2.5px solid #dc2626;
+            background-color: rgba(220, 38, 38, 0.12);
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-blue-900 selection:text-white">
+
+    <!-- Top Mobile Navigation Bar -->
+    <header class="lg:hidden sticky top-0 z-50 bg-slate-900 text-white px-4 py-3 flex items-center justify-between shadow-md no-print">
+        <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-blue-300">Digital Logic Design</span>
+            <h1 class="text-base font-bold leading-tight">Chapter 9: Sequential Circuits</h1>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3 py-2 rounded-lg transition">
+                Print PDF
+            </button>
+            <button id="mobileMenuBtn" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer Navigation -->
+    <div id="mobileDrawer" class="hidden fixed inset-0 z-40 bg-slate-900/80 backdrop-blur-sm lg:hidden no-print">
+        <div class="w-72 bg-slate-900 text-slate-100 h-full p-5 overflow-y-auto">
+            <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-3">
+                <span class="font-bold text-lg text-white">Chapter 9 Contents</span>
+                <button id="closeDrawerBtn" class="text-slate-400 hover:text-white text-xl">&times;</button>
+            </div>
+            <nav class="space-y-2 text-sm" id="mobileNavLinks"></nav>
+        </div>
+    </div>
+
+    <div class="flex min-h-screen">
+        <!-- Sticky Left Sidebar (Desktop) -->
+        <aside class="hidden lg:flex lg:flex-col lg:w-80 lg:fixed lg:inset-y-0 bg-slate-900 text-slate-200 border-r border-slate-800 no-print">
+            <div class="p-6 border-b border-slate-800 bg-slate-950">
+                <div class="inline-block px-2.5 py-1 rounded-md bg-blue-900/60 border border-blue-700/50 text-blue-300 text-xs font-semibold tracking-wide uppercase mb-2">
+                    Complete Bilingual Notes
+                </div>
+                <h1 class="text-xl font-extrabold text-white tracking-tight">Chapter 9: Sequential Logic & Flip-Flops</h1>
+                <p class="text-xs text-slate-400 mt-1">Easy Bangla + Exam-Ready English (5 & 8 Marks)</p>
+            </div>
+
+            <!-- Language Filter Controls -->
+            <div class="px-6 py-3 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between gap-1">
+                <span class="text-xs font-medium text-slate-400">View Mode:</span>
+                <div class="inline-flex rounded-lg bg-slate-800 p-0.5 text-xs">
+                    <button onclick="setViewMode('both')" id="btn-both" class="px-2.5 py-1 rounded-md font-semibold bg-blue-600 text-white transition">Both</button>
+                    <button onclick="setViewMode('bn')" id="btn-bn" class="px-2.5 py-1 rounded-md font-semibold text-slate-300 hover:text-white transition">বাংলা</button>
+                    <button onclick="setViewMode('en')" id="btn-en" class="px-2.5 py-1 rounded-md font-semibold text-slate-300 hover:text-white transition">English</button>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-4 space-y-1.5 overflow-y-auto text-sm" id="desktopNavLinks">
+                <a href="#sec-note-audit" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-amber-300 font-medium transition">0. Note Verification & Clarifications</a>
+                <a href="#sec-intro" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">1. Combinational vs Sequential Circuits</a>
+                <a href="#sec-latches" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">2. Latches (SR & Gated D Latch)</a>
+                <a href="#sec-flipflops" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">3. Flip-Flops (SR, D, JK, T)</a>
+                <a href="#sec-race-around" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">4. Race-Around & Master-Slave JK</a>
+                <a href="#sec-tables-theory" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">5. Q(n+1), Characteristic vs Excitation & Don't Care</a>
+                <div class="pt-3 pb-1 px-3 text-xs font-bold uppercase tracking-wider text-blue-400">
+                    High Priority: Flip-Flop Conversions
+                </div>
+                <a href="#conv-sr-to-jk" class="block px-3 py-2 rounded-lg bg-blue-950/50 border border-blue-800/40 hover:bg-blue-900/50 text-white font-semibold transition">6.1 Conversion: SR to JK Flip-Flop</a>
+                <a href="#conv-jk-to-sr" class="block px-3 py-2 rounded-lg bg-blue-950/50 border border-blue-800/40 hover:bg-blue-900/50 text-white font-semibold transition">6.2 Conversion: JK to SR Flip-Flop</a>
+                <a href="#conv-d-to-t" class="block px-3 py-2 rounded-lg bg-blue-950/50 border border-blue-800/40 hover:bg-blue-900/50 text-white font-semibold transition">6.3 Conversion: D to T Flip-Flop</a>
+                <a href="#conv-t-to-d" class="block px-3 py-2 rounded-lg bg-blue-950/50 border border-blue-800/40 hover:bg-blue-900/50 text-white font-semibold transition">6.4 Conversion: T to D Flip-Flop</a>
+            </nav>
+
+            <div class="p-4 border-t border-slate-800 bg-slate-950">
+                <button onclick="window.print()" class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl shadow-sm transition flex items-center justify-center gap-2 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                    Save / Print as PDF
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content flex-1 lg:ml-80 px-4 sm:px-8 lg:px-12 py-8 max-w-6xl mx-auto">
+
+            <!-- Title Banner -->
+            <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white rounded-2xl p-6 sm:p-8 mb-8 shadow-lg border border-slate-800">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold mb-3">
+                            Morris Mano & Class Lecture Verified • Complete Study Guide
+                        </span>
+                        <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-2">
+                            Chapter 9: Sequential Circuits & Flip-Flop Conversions
+                        </h1>
+                        <p class="text-slate-300 text-sm sm:text-base max-w-3xl">
+                            A complete bilingual master-guide designed for deep conceptual clarity in <strong>Easy Bangla</strong> and high-scoring <strong>5 & 8 Mark Exam Answers in English</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 0: PDF & HANDWRITTEN NOTES VERIFICATION & COMMON PITFALLS -->
+            <section id="sec-note-audit" class="card-section bg-white rounded-2xl shadow-sm border border-amber-200 p-6 sm:p-8 mb-8">
+                <div class="flex items-center gap-3 mb-4 border-b border-amber-100 pb-4">
+                    <span class="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 font-bold flex items-center justify-center text-lg">!</span>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">0. Standard Textbook vs. Classroom Notes Check (Important Clarifications)</h2>
+                        <p class="text-xs text-slate-500">Ensuring 100% accuracy across standard Morris Mano conventions and handwritten lecture notes</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bn-block bg-amber-50/60 border border-amber-200/80 rounded-xl p-5 bangla text-slate-800">
+                        <h3 class="font-bold text-amber-950 text-base mb-2">বাংলা নোট ও সতর্কতা (ক্লাস লেকচার ও বইয়ের পার্থক্য):</h3>
+                        <ul class="list-disc pl-5 space-y-2 text-sm">
+                            <li><strong>১. Available বনাম Desired ফ্লিপ-ফ্লপ উল্টে ফেলা:</strong> হাতে লেখা নোটে শিক্ষার্থীরা প্রায়ই "SR to JK" বলতে কোনটি আছে (Available) আর কোনটি বানাতে হবে (Desired) তা গুলিয়ে ফেলে। মনে রাখবে: <strong>"A to B"</strong> মানে <strong>A হলো Available</strong> (যা হাতে আছে) এবং <strong>B হলো Desired</strong> (যা বানাতে হবে)।</li>
+                            <li><strong>২. K-Map এ Gray Code এর ক্রম:</strong> ৩-ভেরিয়েবল K-Map-এ কলামের মান সবসময় <strong>00, 01, 11, 10</strong> হয়। অনেকেই ভুল করে 00, 01, 10, 11 লিখে ফেলে—এতে পুরো সমীকরণ ভুল হয়ে যায়।</li>
+                            <li><strong>৩. S এবং R ইনপুটের ক্রম:</strong> কিছু বইয়ে Excitation Table-এ <code>S R</code> ক্রম থাকে, আবার কিছু ক্লাস নোটে <code>R S</code> থাকে। এই নোটে স্ট্যান্ডার্ড <strong>(S, R)</strong> এবং <strong>(J, K)</strong> ক্রম অনুসরণ করা হয়েছে এবং প্রতিটি কলাম স্পষ্ট করে দেখানো হয়েছে।</li>
+                            <li><strong>৪. NAND বনাম NOR Latch:</strong> বেসিক NOR ল্যাচে <code>S=1, R=1</code> হলো Forbidden/Invalid অবস্থা, কিন্তু NAND ল্যাচে (Active-Low) <code>S'=0, R'=0</code> হলো Invalid অবস্থা। পরীক্ষায় সবসময় Active-High (NOR ভিত্তিক) ধরা হয় যদি না উল্লেখ থাকে।</li>
+                        </ul>
+                    </div>
+
+                    <div class="en-block bg-slate-50 border border-slate-200 rounded-xl p-5 text-slate-800">
+                        <h3 class="font-bold text-slate-900 text-base mb-2">Key Technical Verifications & Common Handwriting Errors:</h3>
+                        <ul class="list-disc pl-5 space-y-2 text-sm">
+                            <li><strong>Conversion Direction Rule ("X to Y"):</strong> In <em>"Convert X Flip-Flop to Y Flip-Flop"</em>, <strong>X is the Available (Given) FF</strong> and <strong>Y is the Desired (Target) FF</strong>. You always write the Characteristic Table of Y and the Excitation Table of X.</li>
+                            <li><strong>K-Map Column Ordering:</strong> Columns must follow Gray Code (<code>00, 01, 11, 10</code>). Mixing binary order (<code>10</code> before <code>11</code>) is the #1 cause of wrong Boolean expressions in handwritten scripts.</li>
+                            <li><strong>Don't Care ('X') Usage:</strong> Don't cares in K-maps are <em>only</em> grouped with <code>1</code>s if they help form a larger power-of-2 group (quad or pair). Never group 'X's alone.</li>
+                            <li><strong>Clock Edge Notation:</strong> A triangle (<code>&gt;</code>) on the CLK pin indicates positive-edge triggering; a bubble with a triangle (<code>o&gt;</code>) indicates negative-edge triggering.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 1: SEQUENTIAL CIRCUITS -->
+            <section id="sec-intro" class="card-section bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-700">Topic 01</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-1">1. Sequential Circuits & Comparison with Combinational Circuits</h2>
+                </div>
+
+                <!-- Easy Bangla -->
+                <div class="bn-block mb-6 bg-blue-50/50 border-l-4 border-blue-700 rounded-r-xl p-5 bangla">
+                    <h3 class="text-lg font-bold text-blue-950 mb-2">সহজ বাংলায় বুঝি (Basic Concept):</h3>
+                    <p class="text-slate-800 mb-3">
+                        ডিজিটাল ইলেকট্রনিক্সে লজিক সার্কিট প্রধানত দুই প্রকার: <strong>Combinational Circuit</strong> এবং <strong>Sequential Circuit</strong>।
+                    </p>
+                    <p class="text-slate-800 mb-3">
+                        <strong>Combinational Circuit</strong> (যেমন: Adder, Multiplexer) এর আউটপুট শুধুমাত্র <strong>বর্তমান ইনপুটের (Present Input)</strong> ওপর নির্ভর করে। এর কোনো মেমোরি বা স্মৃতিশক্তি নেই। যেমন: ক্যালকুলেটরে ২+২ চাপলে ৪ দেখাবে—আগে কী চেপেছিলে তা সে মনে রাখে না।
+                    </p>
+                    <p class="text-slate-800 mb-3">
+                        অন্যদিকে, <strong>Sequential Circuit</strong> হলো এমন সার্কিট যার আউটপুট <strong>বর্তমান ইনপুট (Present Input)</strong> এবং <strong>পূর্ববর্তী অবস্থা বা মেমোরি (Past Output / Present State)</strong>—এই দুটোর ওপরই নির্ভর করে। অর্থাৎ, এটি তথ্য ধরে রাখতে (Store করতে) পারে। যেমন: টিভির রিমোটের চ্যানেল আপ বাটন—বর্তমানে ৫ নম্বর চ্যানেলে থাকলে বাটন চাপলে ৬ হবে, অর্থাৎ সার্কিটটিকে মনে রাখতে হচ্ছে যে আগে ৫ নম্বর চ্যানেল চলছিল!
+                    </p>
+                    <div class="bg-white p-3.5 rounded-lg border border-blue-200 text-sm">
+                        <strong>মূল সূত্র:</strong> <span class="mono font-semibold text-blue-900">Sequential Circuit = Combinational Circuit + Memory Element (Latch / Flip-Flop)</span>
+                    </div>
+                </div>
+
+                <!-- Exam-Ready English -->
+                <div class="en-block mb-6">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Exam-Ready Answer (English — 5 Marks):</h3>
+                    <p class="text-slate-700 text-sm leading-relaxed mb-4">
+                        <strong>Definition:</strong> A <strong>Sequential Circuit</strong> is a digital logic circuit whose output at any instant depends not only on the present external inputs but also on the past sequence of inputs (i.e., the present state stored in memory elements). It consists of a combinational logic network coupled with memory elements (Latches or Flip-Flops) via a feedback path.
+                    </p>
+
+                    <!-- SVG Block Diagram of Sequential Circuit -->
+                    <div class="my-5 flex justify-center bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <svg viewBox="0 0 620 210" class="w-full max-w-xl h-auto">
+                            <defs>
+                                <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e3a8a"/>
+                                </marker>
+                            </defs>
+                            <!-- Combinational Block -->
+                            <rect x="170" y="25" width="260" height="75" rx="10" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2"/>
+                            <text x="300" y="58" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">Combinational Logic</text>
+                            <text x="300" y="78" text-anchor="middle" font-size="12" fill="#334155">Circuit (Gates)</text>
+
+                            <!-- Memory Block -->
+                            <rect x="210" y="135" width="180" height="55" rx="10" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+                            <text x="300" y="160" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">Memory Elements</text>
+                            <text x="300" y="177" text-anchor="middle" font-size="11" fill="#475569">(Flip-Flops / Latches)</text>
+
+                            <!-- External Inputs -->
+                            <line x1="40" y1="50" x2="165" y2="50" stroke="#1e3a8a" stroke-width="2" marker-end="url(#arrow)"/>
+                            <text x="95" y="40" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a">External Inputs</text>
+
+                            <!-- External Outputs -->
+                            <line x1="430" y1="50" x2="575" y2="50" stroke="#1e3a8a" stroke-width="2" marker-end="url(#arrow)"/>
+                            <text x="505" y="40" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a">External Outputs</text>
+
+                            <!-- Next State Path -->
+                            <polyline points="430,80 480,80 480,162 395,162" fill="none" stroke="#1e3a8a" stroke-width="2" marker-end="url(#arrow)"/>
+                            <text x="535" y="125" text-anchor="middle" font-size="11" font-weight="600" fill="#1e3a8a">Next State</text>
+
+                            <!-- Present State Feedback Path -->
+                            <polyline points="210,162 120,162 120,80 165,80" fill="none" stroke="#1e3a8a" stroke-width="2" marker-end="url(#arrow)"/>
+                            <text x="65" y="125" text-anchor="middle" font-size="11" font-weight="600" fill="#1e3a8a">Present State</text>
+
+                            <!-- Clock Input -->
+                            <line x1="300" y1="208" x2="300" y2="193" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow)"/>
+                            <text x="345" y="205" font-size="11" font-weight="bold" fill="#dc2626">Clock (CLK)</text>
+                        </svg>
+                    </div>
+
+                    <!-- Comparison Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left border-collapse border border-slate-300">
+                            <thead class="bg-slate-900 text-white">
+                                <tr>
+                                    <th class="p-3 border border-slate-700">Feature</th>
+                                    <th class="p-3 border border-slate-700">Combinational Circuit</th>
+                                    <th class="p-3 border border-slate-700">Sequential Circuit</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                <tr class="bg-white">
+                                    <td class="p-3 font-semibold border border-slate-300">Output Dependency</td>
+                                    <td class="p-3 border border-slate-300">Depends <strong>only</strong> on present inputs.</td>
+                                    <td class="p-3 border border-slate-300">Depends on <strong>present inputs + past outputs</strong> (present state).</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="p-3 font-semibold border border-slate-300">Memory Element</td>
+                                    <td class="p-3 border border-slate-300">No memory element required.</td>
+                                    <td class="p-3 border border-slate-300">Requires memory elements (Latches / Flip-Flops).</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="p-3 font-semibold border border-slate-300">Feedback Path</td>
+                                    <td class="p-3 border border-slate-300">No feedback path exists.</td>
+                                    <td class="p-3 border border-slate-300">Feedback path from output to input is mandatory.</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="p-3 font-semibold border border-slate-300">Clock Signal</td>
+                                    <td class="p-3 border border-slate-300">Not required.</td>
+                                    <td class="p-3 border border-slate-300">Required for synchronous sequential circuits.</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="p-3 font-semibold border border-slate-300">Examples</td>
+                                    <td class="p-3 border border-slate-300">Half Adder, Full Adder, MUX, Decoder, Encoder.</td>
+                                    <td class="p-3 border border-slate-300">Flip-Flops, Counters, Shift Registers, Memory Units.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-4 bg-slate-100 p-4 rounded-xl border border-slate-300 text-sm">
+                        <strong>Types of Sequential Circuits:</strong>
+                        <ul class="list-disc pl-5 mt-1 space-y-1 text-slate-700">
+                            <li><strong>Asynchronous Sequential Circuit:</strong> Output changes immediately whenever inputs change (no clock signal; uses unclocked Latches).</li>
+                            <li><strong>Synchronous Sequential Circuit:</strong> Output changes only at discrete instants synchronized by a master <strong>Clock (CLK)</strong> pulse (uses Flip-Flops).</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: LATCHES -->
+            <section id="sec-latches" class="card-section bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-700">Topic 02</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-1">2. Latches (SR Latch & Gated D Latch)</h2>
+                </div>
+
+                <!-- Easy Bangla -->
+                <div class="bn-block mb-6 bg-blue-50/50 border-l-4 border-blue-700 rounded-r-xl p-5 bangla">
+                    <h3 class="text-lg font-bold text-blue-950 mb-2">সহজ বাংলায় বুঝি (Latch কী এবং কীভাবে কাজ করে?):</h3>
+                    <p class="text-slate-800 mb-3">
+                        <strong>Latch (ল্যাচ)</strong> হলো ডিজিটাল মেমোরির সবচেয়ে ক্ষুদ্র একক (Basic 1-bit Memory Element)। এটি ১ বিট তথ্য (<code>0</code> অথবা <code>1</code>) ধরে রাখতে পারে। ল্যাচ হলো <strong>Level-Triggered</strong>—অর্থাৎ এর Enable (বা Clock) পিন যতক্ষণ HIGH (<code>1</code>) থাকবে, ইনপুট বদলালে সাথে সাথে আউটপুটও বদলে যাবে।
+                    </p>
+                    <p class="text-slate-800 mb-2">
+                        <strong>SR Latch (Set-Reset Latch):</strong> দুটি NOR গেট (অথবা দুটি NAND গেট) ক্রস-কাপলড (Cross-coupled) করে SR Latch তৈরি করা হয়। এর দুটি ইনপুট: <strong>S (Set)</strong> এবং <strong>R (Reset)</strong>, এবং দুটি আউটপুট: <strong>Q</strong> এবং <strong>Q'</strong> (যা সবসময় Q-এর বিপরীত)।
+                    </p>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-800 text-sm mb-3">
+                        <li><strong>S = 0, R = 0 (Hold / No Change):</strong> সার্কিট আগের মানটাই ধরে রাখবে (Q যা ছিল তাই থাকবে)।</li>
+                        <li><strong>S = 1, R = 0 (Set):</strong> আউটপুট সেট হয়ে <strong>Q = 1</strong> হবে (এবং Q' = 0)।</li>
+                        <li><strong>S = 0, R = 1 (Reset):</strong> আউটপুট রিসেট হয়ে <strong>Q = 0</strong> হবে (এবং Q' = 1)।</li>
+                        <li><strong>S = 1, R = 1 (Invalid / Forbidden):</strong> একই সাথে Set এবং Reset করা সম্ভব নয়! এতে Q এবং Q' দুটোই 0 হয়ে যায়, যা লজিকবিরোধী। তাই এই অবস্থা নিষিদ্ধ।</li>
+                    </ul>
+                    <p class="text-slate-800 text-sm">
+                        <strong>D Latch (Data / Transparent Latch):</strong> SR Latch-এর Invalid অবস্থা (<code>S=1, R=1</code>) দূর করার জন্য S ও R-এর মাঝে একটি NOT গেট বসিয়ে D Latch তৈরি করা হয়। ফলে <code>D=1</code> দিলে <code>Q=1</code> এবং <code>D=0</code> দিলে <code>Q=0</code> হয়।
+                    </p>
+                </div>
+
+                <!-- Exam-Ready English -->
+                <div class="en-block">
+                    <h3 class="text-lg font-bold text-slate-900 mb-3">Exam-Ready Answer (English — 5 Marks):</h3>
+                    <p class="text-slate-700 text-sm leading-relaxed mb-4">
+                        A <strong>Latch</strong> is a bistable multivibrator (1-bit memory element) that operates asynchronously or with a level-sensitive Enable signal. Because it is <strong>level-triggered</strong>, its output responds continuously to input changes as long as the Enable signal is active.
+                    </p>
+
+                    <div class="grid md:grid-cols-2 gap-6 items-center mb-4">
+                        <!-- NOR SR Latch SVG -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                            <span class="text-xs font-bold text-slate-600 uppercase mb-2">NOR-Based SR Latch Logic Diagram</span>
+                            <svg viewBox="0 0 340 180" class="w-full max-w-xs h-auto">
+                                <!-- Top NOR Gate (R input -> Q output) -->
+                                <path d="M 110 25 Q 130 45 110 65 Q 155 65 175 45 Q 155 25 110 25 Z" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2"/>
+                                <circle cx="180" cy="45" r="4" fill="#fff" stroke="#1e3a8a" stroke-width="2"/>
+                                <!-- Bottom NOR Gate (S input -> Q' output) -->
+                                <path d="M 110 115 Q 130 135 110 155 Q 155 155 175 135 Q 155 115 110 115 Z" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2"/>
+                                <circle cx="180" cy="135" r="4" fill="#fff" stroke="#1e3a8a" stroke-width="2"/>
+
+                                <!-- Inputs R and S -->
+                                <line x1="40" y1="35" x2="115" y2="35" stroke="#0f172a" stroke-width="2"/>
+                                <text x="25" y="40" font-size="14" font-weight="bold" fill="#0f172a">R</text>
+                                <line x1="40" y1="145" x2="115" y2="145" stroke="#0f172a" stroke-width="2"/>
+                                <text x="25" y="150" font-size="14" font-weight="bold" fill="#0f172a">S</text>
+
+                                <!-- Outputs Q and Q' -->
+                                <line x1="184" y1="45" x2="290" y2="45" stroke="#0f172a" stroke-width="2"/>
+                                <text x="300" y="50" font-size="14" font-weight="bold" fill="#1e3a8a">Q</text>
+                                <line x1="184" y1="135" x2="290" y2="135" stroke="#0f172a" stroke-width="2"/>
+                                <text x="300" y="140" font-size="14" font-weight="bold" fill="#1e3a8a" class="overline">Q</text>
+
+                                <!-- Cross-Coupled Feedback Wires -->
+                                <polyline points="230,45 230,75 85,105 85,125 115,125" fill="none" stroke="#dc2626" stroke-width="1.8"/>
+                                <circle cx="230" cy="45" r="3" fill="#dc2626"/>
+                                <polyline points="230,135 230,105 85,75 85,55 115,55" fill="none" stroke="#2563eb" stroke-width="1.8"/>
+                                <circle cx="230" cy="135" r="3" fill="#2563eb"/>
+                            </svg>
+                        </div>
+
+                        <!-- SR Latch Truth Table -->
+                        <div>
+                            <table class="w-full text-sm text-center border-collapse border border-slate-300">
+                                <thead class="bg-slate-800 text-white">
+                                    <tr>
+                                        <th class="p-2.5 border border-slate-600">S</th>
+                                        <th class="p-2.5 border border-slate-600">R</th>
+                                        <th class="p-2.5 border border-slate-600">Q(next)</th>
+                                        <th class="p-2.5 border border-slate-600"><span class="overline">Q</span>(next)</th>
+                                        <th class="p-2.5 border border-slate-600">State / Operation</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-white">
+                                        <td class="p-2 border border-slate-300 mono">0</td>
+                                        <td class="p-2 border border-slate-300 mono">0</td>
+                                        <td class="p-2 border border-slate-300 mono font-bold">Q</td>
+                                        <td class="p-2 border border-slate-300 mono"><span class="overline">Q</span></td>
+                                        <td class="p-2 border border-slate-300 font-medium text-slate-700">No Change (Hold)</td>
+                                    </tr>
+                                    <tr class="bg-slate-50">
+                                        <td class="p-2 border border-slate-300 mono">0</td>
+                                        <td class="p-2 border border-slate-300 mono">1</td>
+                                        <td class="p-2 border border-slate-300 mono font-bold text-blue-700">0</td>
+                                        <td class="p-2 border border-slate-300 mono">1</td>
+                                        <td class="p-2 border border-slate-300 font-medium text-blue-800">Reset</td>
+                                    </tr>
+                                    <tr class="bg-white">
+                                        <td class="p-2 border border-slate-300 mono">1</td>
+                                        <td class="p-2 border border-slate-300 mono">0</td>
+                                        <td class="p-2 border border-slate-300 mono font-bold text-emerald-700">1</td>
+                                        <td class="p-2 border border-slate-300 mono">0</td>
+                                        <td class="p-2 border border-slate-300 font-medium text-emerald-800">Set</td>
+                                    </tr>
+                                    <tr class="bg-red-50">
+                                        <td class="p-2 border border-slate-300 mono">1</td>
+                                        <td class="p-2 border border-slate-300 mono">1</td>
+                                        <td class="p-2 border border-slate-300 mono font-bold text-red-600">0</td>
+                                        <td class="p-2 border border-slate-300 mono font-bold text-red-600">0</td>
+                                        <td class="p-2 border border-slate-300 font-bold text-red-700">Invalid / Forbidden</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Latch vs Flip-Flop Mini Comparison -->
+                    <div class="bg-slate-100 rounded-xl p-4 border border-slate-300 text-sm">
+                        <strong class="text-slate-900">Key Difference: Latch vs. Flip-Flop</strong>
+                        <p class="text-slate-700 mt-1">
+                            A <strong>Latch</strong> is <em>level-triggered</em> (checks inputs continuously while Enable = 1), whereas a <strong>Flip-Flop</strong> is <em>edge-triggered</em> (samples inputs only at the exact rising or falling transition edge of the Clock signal).
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: ALL FOUR FLIP-FLOPS -->
+            <section id="sec-flipflops" class="card-section bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-700">Topic 03</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-1">3. Flip-Flops: SR, D, JK, and T Flip-Flops</h2>
+                </div>
+
+                <!-- Easy Bangla -->
+                <div class="bn-block mb-6 bg-blue-50/50 border-l-4 border-blue-700 rounded-r-xl p-5 bangla">
+                    <h3 class="text-lg font-bold text-blue-950 mb-2">সহজ বাংলায় চারটি Flip-Flop-এর পরিচয়:</h3>
+                    <p class="text-slate-800 mb-3">
+                        <strong>Flip-Flop</strong> হলো Clock-controlled (Edge-triggered) ১-বিট মেমোরি ডিভাইস। এটি কেবল Clock পালসের এজ-এ (যেমন 0 থেকে 1 হওয়ার মুহূর্তে) ইনপুট গ্রহণ করে আউটপুট আপডেট করে। সিলেবাসে ৪ ধরনের Flip-Flop পড়তে হয়:
+                    </p>
+                    <ol class="list-decimal pl-5 space-y-2.5 text-slate-800 text-sm">
+                        <li>
+                            <strong>SR Flip-Flop (Set-Reset):</strong> ক্লকড SR ল্যাচ। <code>S=1, R=0</code> হলে আউটপুট <code>1</code> (Set) হয়; <code>S=0, R=1</code> হলে আউটপুট <code>0</code> (Reset) হয়; <code>S=0, R=0</code> হলে আগের মান থাকে; আর <code>S=1, R=1</code> হলো <strong>Invalid/Indeterminate</strong> অবস্থা।
+                        </li>
+                        <li>
+                            <strong>D Flip-Flop (Data / Delay):</strong> এর মাত্র ১টি ইনপুট <code>D</code>। ক্লক এলে ইনপুট <code>D</code>-তে যা থাকে, আউটপুট <code>Q(n+1)</code>-এ ঠিক তাই চলে যায় (<code>Q(n+1) = D</code>)। এটি রেজিস্টার ও ডেটা স্টোরেজে ব্যবহৃত হয়।
+                        </li>
+                        <li>
+                            <strong>JK Flip-Flop (Jack-Kilby):</strong> এটি SR Flip-Flop-এর উন্নত সংস্করণ। এখানে SR-এর Invalid সমস্যা সমাধান করা হয়েছে! <code>J=1, K=0</code> হলে Set (1), <code>J=0, K=1</code> হলে Reset (0), <code>J=0, K=0</code> হলে Hold, এবং <strong><code>J=1, K=1</code> হলে আউটপুট Toggle (উল্টে) যায়</strong> (অর্থাৎ আগে 0 থাকলে 1 হবে, আর 1 থাকলে 0 হবে)।
+                        </li>
+                        <li>
+                            <strong>T Flip-Flop (Toggle):</strong> JK Flip-Flop-এর J এবং K ইনপুট দুটিকে একসাথে যুক্ত করে T ইনপুট বানানো হয়। <code>T=0</code> হলে আউটপুট অপরিবর্তিত থাকে (Hold), এবং <code>T=1</code> হলে আউটপুট উল্টে যায় (Toggle: <code>Q(n+1) = Q'</code>)। এটি Counter তৈরিতে সবচেয়ে বেশি ব্যবহৃত হয়।
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- Exam-Ready English Summary Grid -->
+                <div class="en-block grid md:grid-cols-2 gap-5">
+                    <!-- SR FF Card -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-bold text-slate-900">1. SR Flip-Flop</h4>
+                            <span class="mono text-xs bg-blue-100 text-blue-900 px-2 py-0.5 rounded font-semibold">Q(n+1) = S + R'Q</span>
+                        </div>
+                        <p class="text-xs text-slate-600 mb-3">Inputs: <strong>S</strong> (Set), <strong>R</strong> (Reset), <strong>CLK</strong>. Suffers from undefined state when S = R = 1.</p>
+                        <div class="flex justify-center">
+                            <svg viewBox="0 0 180 100" class="w-40 h-auto">
+                                <rect x="50" y="15" width="80" height="70" rx="6" fill="#fff" stroke="#1e3a8a" stroke-width="2"/>
+                                <line x1="20" y1="30" x2="50" y2="30" stroke="#0f172a" stroke-width="1.8"/><text x="10" y="34" font-size="11" font-weight="bold">S</text>
+                                <line x1="20" y1="70" x2="50" y2="70" stroke="#0f172a" stroke-width="1.8"/><text x="10" y="74" font-size="11" font-weight="bold">R</text>
+                                <polyline points="50,45 58,50 50,55" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+                                <line x1="20" y1="50" x2="50" y2="50" stroke="#dc2626" stroke-width="1.5"/><text x="62" y="54" font-size="9" fill="#dc2626">CLK</text>
+                                <line x1="130" y1="30" x2="160" y2="30" stroke="#0f172a" stroke-width="1.8"/><text x="164" y="34" font-size="11" font-weight="bold">Q</text>
+                                <line x1="130" y1="70" x2="160" y2="70" stroke="#0f172a" stroke-width="1.8"/><text x="164" y="74" font-size="11" font-weight="bold" class="overline">Q</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- D FF Card -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-bold text-slate-900">2. D (Data) Flip-Flop</h4>
+                            <span class="mono text-xs bg-blue-100 text-blue-900 px-2 py-0.5 rounded font-semibold">Q(n+1) = D</span>
+                        </div>
+                        <p class="text-xs text-slate-600 mb-3">Single data input <strong>D</strong>. Eliminates S=R=1 condition; next state directly follows D at clock edge.</p>
+                        <div class="flex justify-center">
+                            <svg viewBox="0 0 180 100" class="w-40 h-auto">
+                                <rect x="50" y="15" width="80" height="70" rx="6" fill="#fff" stroke="#1e3a8a" stroke-width="2"/>
+                                <line x1="20" y1="32" x2="50" y2="32" stroke="#0f172a" stroke-width="1.8"/><text x="10" y="36" font-size="11" font-weight="bold">D</text>
+                                <polyline points="50,63 58,68 50,73" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+                                <line x1="20" y1="68" x2="50" y2="68" stroke="#dc2626" stroke-width="1.5"/><text x="62" y="72" font-size="9" fill="#dc2626">CLK</text>
+                                <line x1="130" y1="32" x2="160" y2="32" stroke="#0f172a" stroke-width="1.8"/><text x="164" y="36" font-size="11" font-weight="bold">Q</text>
+                                <line x1="130" y1="68" x2="160" y2="68" stroke="#0f172a" stroke-width="1.8"/><text x="164" y="72" font-size="11" font-weight="bold" class="overline">Q</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- JK FF Card -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-bold text-slate-900">3. JK Flip-Flop</h4>
+                            <span class="mono text-xs bg-blue-100 text-blue-900 px-2 py-0.5 rounded font-semibold">Q(n+1) = JQ' + K'Q</span>
+                        </div>
+                        <p class="text-xs text-slate-600 mb-3">Universal FF. J=Set, K=Reset. When <strong>J = K = 1</strong>, output toggles: Q(n+1) = Q'(n).</p>
+                        <div class="flex justify-center">
+                            <svg viewBox="0 0 180 100" class="w-40 h-auto">
+                                <rect x="50" y="15" width="80" height="70" rx="6" fill="#fff" stroke="#1e3a8a" stroke-width="2"/>
+                                <line x1="20" y1="30" x2="50" y2="30" stroke="#0f172a" stroke-width="1.8"/><text x="10" y="34" font-size="11" font-weight="bold">J</text>
+                                <line x1="20" y1="70" x2="50" y2="70" stroke="#0f172a" stroke-width="1.8"/><text x="10" y="74" font-size="11" font-weight="bold">K</text>
+                                <polyline points="50,45 58,50 50,55" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+                                <line x1="20" y1="50" x2="50" y2="50" stroke="#dc2626" stroke-width="1.5"/><text x="62" y="54" font-size="9" fill="#dc2626">CLK</text>
+                                <line x1="130" y1="30" x2="160" y2="30" stroke="#0f172a" stroke-width="1.8"/><text x="164" y="34" font-size="11" font-weight="bold">Q</text>
+                                <line x1="130" y1="70" x2="160" y2="70" stroke="#0f172a" stroke-width="1.8"/><text x="164" y="74" font-size="11" font-weight="bold" class="overline">Q</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- T FF Card -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-bold text-slate-900">4. T (Toggle) Flip-Flop</h4>
+                            <span class="mono text-xs bg-blue-100 text-blue-900 px-2 py-0.5 rounded font-semibold">Q(n+1) = T &oplus; Q</span>
+                        </div>
+                        <p class="text-xs text-slate-600 mb-3">Obtained by tying J and K together. T=0 holds state; T=1 complements (toggles) state.</p>
+                        <div class="flex justify-center">
+                            <svg viewBox="0 0 180 100" class="w-40 h-auto">
+                                <rect x="50" y="15" width="80" height="70" rx="6" fill="#fff" stroke="#1e3a8a" stroke-width="2"/>
+                                <line x1="20" y1="32" x2="50" y2="32" stroke="#0f172a" stroke-width="1.8"/><text x="10" y="36" font-size="11" font-weight="bold">T</text>
+                                <polyline points="50,63 58,68 50,73" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+                                <line x1="20" y1="68" x2="50" y2="68" stroke="#dc2626" stroke-width="1.5"/><text x="62" y="72" font-size="9" fill="#dc2626">CLK</text>
+                                <line x1="130" y1="32" x2="160" y2="32" stroke="#0f172a" stroke-width="1.8"/><text x="164" y="36" font-size="11" font-weight="bold">Q</text>
+                                <line x1="130" y1="68" x2="160" y2="68" stroke="#0f172a" stroke-width="1.8"/><text x="164" y="72" font-size="11" font-weight="bold" class="overline">Q</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: RACE-AROUND & MASTER-SLAVE JK -->
+            <section id="sec-race-around" class="card-section bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-700">Topic 04 • Important 5-Mark Exam Question</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-1">4. Race-Around Condition & Master-Slave JK Flip-Flop</h2>
+                </div>
+
+                <!-- Easy Bangla -->
+                <div class="bn-block mb-6 bg-blue-50/50 border-l-4 border-blue-700 rounded-r-xl p-5 bangla">
+                    <h3 class="text-lg font-bold text-blue-950 mb-2">সহজ বাংলায় বুঝি (Race-Around কী এবং কেন হয়?):</h3>
+                    <p class="text-slate-800 mb-3">
+                        <strong>Race-Around Condition:</strong> একটি Level-Triggered JK Flip-Flop-এ যখন <strong>J = 1 এবং K = 1</strong> থাকে, তখন আউটপুট Toggle করে (অর্থাৎ 0 থেকে 1 বা 1 থেকে 0 হয়)। এখন ধরো, Clock পালসটি যতক্ষণ HIGH (<code>CLK = 1</code>) থাকে তার সময়কাল যদি Flip-Flop-এর ভেতরের গেটগুলোর প্রোপাগেশন ডিলে (Propagation Delay, <code>t<sub>pd</sub></code>) থেকে বেশি হয়, তবে কী ঘটবে?
+                    </p>
+                    <p class="text-slate-800 mb-3">
+                        আউটপুট একবার Toggle হয়ে 0 থেকে 1 হওয়ার পরও যেহেতু <code>CLK</code> এখনো 1 আছে, তাই নতুন আউটপুট <code>1</code> আবার ইনপুটে ফিডব্যাক হয়ে আউটপুটকে আবার <code>0</code> করে দেবে! এভাবে একটি মাত্র Clock পালসের মধ্যেই আউটপুট <strong>0 → 1 → 0 → 1 → 0...</strong> করে অনবরত কাঁপতে বা দৌড়াতে (Oscillate করতে) থাকবে। ক্লক শেষে আউটপুট 0 হবে নাকি 1 হবে তা আগে থেকে বলা অসম্ভব হয়ে পড়ে। এই অনিশ্চিত অবস্থাকেই <strong>Race-Around Condition</strong> বলে।
+                    </p>
+                    <div class="bg-white p-3.5 rounded-lg border border-blue-200 text-sm mb-3">
+                        <strong>সমাধান (Master-Slave JK Flip-Flop):</strong> এই সমস্যা দূর করতে দুটি JK Flip-Flop সিরিজে যুক্ত করা হয়। প্রথমটিকে বলে <strong>Master</strong> এবং দ্বিতীয়টিকে বলে <strong>Slave</strong>। Master সরাসরি <code>CLK</code> পায়, আর Slave একটি NOT গেটের মাধ্যমে উল্টো ক্লক (<code>CLK'</code>) পায়। ফলে:
+                        <ul class="list-disc pl-5 mt-1">
+                            <li>যখন <code>CLK = 1</code>, তখন <strong>Master কাজ করে</strong> (Slave বন্ধ থাকে), তাই আউটপুট একবারই বদলায়।</li>
+                            <li>যখন <code>CLK = 0</code>, তখন Master বন্ধ হয় এবং <strong>Slave কাজ করে</strong> (Master-এর মান Slave-এ কপি হয়)। ফলে এক ক্লক সাইকেলে আউটপুট কেবল <strong>একবারই</strong> Toggle করে!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Exam-Ready English -->
+                <div class="en-block">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Exam-Ready Answer (English — 5 Marks):</h3>
+                    <p class="text-slate-700 text-sm leading-relaxed mb-3">
+                        <strong>1. Race-Around Condition:</strong> In a level-triggered JK flip-flop, when <strong>J = 1, K = 1, and CLK = 1</strong>, the output toggles after a propagation delay (<span class="mono">t<sub>pd</sub></span>). If the clock pulse width (<span class="mono">t<sub>w</sub></span>) is greater than the propagation delay (<span class="mono">t<sub>w</sub> &gt; t<sub>pd</sub></span>), the toggled output feeds back to the input while the clock is still HIGH, causing the output to toggle repeatedly (<span class="mono">0 &rarr; 1 &rarr; 0 &rarr; 1...</span>) within a single clock pulse. At the end of the clock pulse, the final state becomes unpredictable. This phenomenon is called the <strong>Race-Around Condition</strong>.
+                    </p>
+                    <p class="text-slate-700 text-sm leading-relaxed mb-4">
+                        <strong>2. Prevention using Master-Slave JK Flip-Flop:</strong> A Master-Slave JK flip-flop cascades two clocked SR/JK flip-flops: a <strong>Master</strong> driven by <span class="mono">CLK</span> and a <strong>Slave</strong> driven by inverted <span class="mono"><span class="overline">CLK</span></span>.
+                        When <span class="mono">CLK = 1</span>, the Master is enabled and samples J & K, while the Slave is disabled. When <span class="mono">CLK</span> goes to <span class="mono">0</span>, the Master is isolated and the Slave is enabled, copying the Master's state to the final output <span class="mono">Q</span>. Since the feedback loop is broken during any single half-cycle, racing is completely eliminated.
+                    </p>
+
+                    <!-- Master-Slave JK SVG Diagram -->
+                    <div class="flex justify-center bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <svg viewBox="0 0 600 185" class="w-full max-w-2xl h-auto">
+                            <!-- Master Block -->
+                            <rect x="100" y="25" width="140" height="90" rx="8" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2"/>
+                            <text x="170" y="65" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">MASTER</text>
+                            <text x="170" y="83" text-anchor="middle" font-size="11" fill="#334155">JK Flip-Flop</text>
+
+                            <!-- Slave Block -->
+                            <rect x="330" y="25" width="140" height="90" rx="8" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+                            <text x="400" y="65" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">SLAVE</text>
+                            <text x="400" y="83" text-anchor="middle" font-size="11" fill="#334155">SR Flip-Flop</text>
+
+                            <!-- J and K inputs -->
+                            <line x1="40" y1="45" x2="100" y2="45" stroke="#0f172a" stroke-width="2"/>
+                            <text x="25" y="50" font-size="13" font-weight="bold">J</text>
+                            <line x1="40" y1="95" x2="100" y2="95" stroke="#0f172a" stroke-width="2"/>
+                            <text x="25" y="100" font-size="13" font-weight="bold">K</text>
+
+                            <!-- Master to Slave connections -->
+                            <line x1="240" y1="45" x2="330" y2="45" stroke="#0f172a" stroke-width="2"/>
+                            <text x="285" y="38" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e3a8a">Q<tspan dy="3" font-size="8">M</tspan></text>
+                            <line x1="240" y1="95" x2="330" y2="95" stroke="#0f172a" stroke-width="2"/>
+                            <text x="285" y="88" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e3a8a"><tspan class="overline">Q</tspan><tspan dy="3" font-size="8">M</tspan></text>
+
+                            <!-- Final Outputs -->
+                            <line x1="470" y1="45" x2="545" y2="45" stroke="#0f172a" stroke-width="2"/>
+                            <text x="555" y="50" font-size="14" font-weight="bold" fill="#1e3a8a">Q</text>
+                            <line x1="470" y1="95" x2="545" y2="95" stroke="#0f172a" stroke-width="2"/>
+                            <text x="555" y="100" font-size="14" font-weight="bold" fill="#1e3a8a" class="overline">Q</text>
+
+                            <!-- Feedback from Slave Q/Q' back to Master -->
+                            <polyline points="505,45 505,12 70,12 70,35 100,35" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="4,2"/>
+                            <polyline points="520,95 520,170 70,170 70,105 100,105" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="4,2"/>
+
+                            <!-- Clock and Inverter -->
+                            <line x1="170" y1="150" x2="170" y2="115" stroke="#dc2626" stroke-width="2"/>
+                            <text x="135" y="154" font-size="12" font-weight="bold" fill="#dc2626">CLK</text>
+                            <line x1="170" y1="150" x2="265" y2="150" stroke="#dc2626" stroke-width="2"/>
+                            <!-- Inverter Triangle -->
+                            <polygon points="265,141 265,159 282,150" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+                            <circle cx="286" cy="150" r="3.5" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+                            <polyline points="290,150 400,150 400,115" fill="none" stroke="#dc2626" stroke-width="2"/>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: Q(n+1), CHARACTERISTIC VS EXCITATION, DON'T CARE -->
+            <section id="sec-tables-theory" class="card-section bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-700">Topic 05 • Core Foundation for Conversions</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-1">5. Understanding Q(n) vs Q(n+1), Characteristic vs Excitation Tables & Don't Care (X)</h2>
+                </div>
+
+                <!-- Easy Bangla -->
+                <div class="bn-block mb-6 bg-blue-50/50 border-l-4 border-blue-700 rounded-r-xl p-5 bangla space-y-3 text-slate-800">
+                    <h3 class="text-lg font-bold text-blue-950">সহজ বাংলায় মূল ধারণাগুলো ক্লিয়ার করি:</h3>
+                    <p>
+                        <strong>১. Q(n) এবং Q(n+1) কী?</strong><br>
+                        ধরো ঘড়ির কাঁটা (Clock pulse) এখন টিক দেওয়ার ঠিক আগের মুহূর্তে ফ্লিপ-ফ্লপের আউটপুটে যে মান জমা আছে, তাকে বলে <strong>Present State বা Q(n)</strong> (বর্তমান অবস্থা)। আর Clock pulse আসার পর ফ্লিপ-ফ্লপের আউটপুট বদলে যে নতুন মান তৈরি হয়, তাকে বলে <strong>Next State বা Q(n+1)</strong> (পরবর্তী অবস্থা)।
+                    </p>
+                    <p>
+                        <strong>২. Characteristic Table বনাম Excitation Table (পার্থক্য কী?):</strong><br>
+                        • <strong>Characteristic Table (বৈশিষ্ট্য সারণি):</strong> এখানে ইনপুটগুলো (যেমন J, K) এবং বর্তমান অবস্থা <code>Q(n)</code> দেওয়া থাকে; তোমাকে বের করতে হয় <strong>পরবর্তী অবস্থা <code>Q(n+1)</code> কী হবে?</strong> (অর্থাৎ: <em>ইনপুট দিলে আউটপুট কী হবে?</em>)।<br>
+                        • <strong>Excitation Table (উদ্দীপনা সারণি):</strong> এটি ঠিক উল্টো! এখানে বর্তমান অবস্থা <code>Q(n)</code> থেকে পরবর্তী অবস্থা <code>Q(n+1)</code>-এ যেতে হলে <strong>ইনপুট পিনগুলোতে (যেমন S, R) কী মান দিতে হবে</strong> তা লেখা থাকে। (অর্থাৎ: <em>আউটপুট 0 থেকে 1 করতে চাইলে ইনপুটে কী দেবো?</em>)।
+                    </p>
+                    <p>
+                        <strong>৩. Don't Care Condition ('X') কীভাবে আসে? (সহজ উদাহরণ):</strong><br>
+                        ধরো তোমার কাছে একটি SR Flip-Flop আছে। বর্তমানে এর আউটপুট <code>Q(n) = 0</code> এবং তুমি চাও ক্লকের পর আউটপুট <code>Q(n+1) = 0</code>-ই থাকুক (<code>0 &rarr; 0</code>)।<br>
+                        তুমি দুইভাবে এটি করতে পারো:<br>
+                        (ক) <code>S = 0, R = 0</code> (No Change) দিলে 0 থেকে 0 থাকবে।<br>
+                        (খ) <code>S = 0, R = 1</code> (Reset) দিলেও আউটপুট 0 হবে!<br>
+                        লক্ষ্য করো: উভয় ক্ষেত্রেই <strong><code>S = 0</code> নিশ্চিতভাবে দিতে হবে</strong>, কিন্তু <strong><code>R</code>-এর মান 0 হোক বা 1 হোক—আউটপুট 0-ই আসছে!</strong> তাই R-এর মান নিয়ে আমাদের কোনো মাথাব্যথা নেই; আমরা R-এর ঘরে লিখি <strong><code>X</code> (Don't Care)</strong>। এজন্যই <code>0 &rarr; 0</code> ট্রানজিশনে SR-এর Excitation হয় <code>S = 0, R = X</code>!
+                    </p>
+                </div>
+
+                <!-- Master Reference Table: All 4 Characteristic & Excitation Tables -->
+                <div class="en-block">
+                    <h3 class="text-lg font-bold text-slate-900 mb-3">Master Reference: Excitation Tables of All 4 Flip-Flops (Memorize This!)</h3>
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- SR Excitation -->
+                        <div class="border border-slate-300 rounded-xl overflow-hidden">
+                            <div class="bg-slate-900 text-white text-center py-2 font-bold text-sm">SR Excitation Table</div>
+                            <table class="w-full text-center text-sm mono">
+                                <thead class="bg-slate-100 text-slate-700 font-sans text-xs">
+                                    <tr><th class="p-2 border">Q(n)</th><th class="p-2 border">Q(n+1)</th><th class="p-2 border bg-blue-50 text-blue-900">S</th><th class="p-2 border bg-blue-50 text-blue-900">R</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="p-2 border">0</td><td class="p-2 border">0</td><td class="p-2 border font-bold">0</td><td class="p-2 border font-bold text-amber-700">X</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2 border">0</td><td class="p-2 border">1</td><td class="p-2 border font-bold text-blue-700">1</td><td class="p-2 border font-bold">0</td></tr>
+                                    <tr><td class="p-2 border">1</td><td class="p-2 border">0</td><td class="p-2 border font-bold">0</td><td class="p-2 border font-bold text-blue-700">1</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2 border">1</td><td class="p-2 border">1</td><td class="p-2 border font-bold text-amber-700">X</td><td class="p-2 border font-bold">0</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- JK Excitation -->
+                        <div class="border border-slate-300 rounded-xl overflow-hidden">
+                            <div class="bg-slate-900 text-white text-center py-2 font-bold text-sm">JK Excitation Table</div>
+                            <table class="w-full text-center text-sm mono">
+                                <thead class="bg-slate-100 text-slate-700 font-sans text-xs">
+                                    <tr><th class="p-2 border">Q(n)</th><th class="p-2 border">Q(n+1)</th><th class="p-2 border bg-blue-50 text-blue-900">J</th><th class="p-2 border bg-blue-50 text-blue-900">K</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="p-2 border">0</td><td class="p-2 border">0</td><td class="p-2 border font-bold">0</td><td class="p-2 border font-bold text-amber-700">X</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2 border">0</td><td class="p-2 border">1</td><td class="p-2 border font-bold text-blue-700">1</td><td class="p-2 border font-bold text-amber-700">X</td></tr>
+                                    <tr><td class="p-2 border">1</td><td class="p-2 border">0</td><td class="p-2 border font-bold text-amber-700">X</td><td class="p-2 border font-bold text-blue-700">1</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2 border">1</td><td class="p-2 border">1</td><td class="p-2 border font-bold text-amber-700">X</td><td class="p-2 border font-bold">0</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- D Excitation -->
+                        <div class="border border-slate-300 rounded-xl overflow-hidden">
+                            <div class="bg-slate-900 text-white text-center py-2 font-bold text-sm">D Excitation Table</div>
+                            <table class="w-full text-center text-sm mono">
+                                <thead class="bg-slate-100 text-slate-700 font-sans text-xs">
+                                    <tr><th class="p-2 border">Q(n)</th><th class="p-2 border">Q(n+1)</th><th class="p-2 border bg-blue-50 text-blue-900">D</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="p-2 border">0</td><td class="p-2 border">0</td><td class="p-2 border font-bold">0</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2 border">0</td><td class="p-2 border">1</td><td class="p-2 border font-bold text-blue-700">1</td></tr>
+                                    <tr><td class="p-2 border">1</td><td class="p-2 border">0</td><td class="p-2 border font-bold">0</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2 border">1</td><td class="p-2 border">1</td><td class="p-2 border font-bold text-blue-700">1</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- T Excitation -->
+                        <div class="border border-slate-300 rounded-xl overflow-hidden">
+                            <div class="bg-slate-900 text-white text-center py-2 font-bold text-sm">T Excitation Table</div>
+                            <table class="w-full text-center text-sm mono">
+                                <thead class="bg-slate-100 text-slate-700 font-sans text-xs">
+                                    <tr><th class="p-2 border">Q(n)</th><th class="p-2 border">Q(n+1)</th><th class="p-2 border bg-blue-50 text-blue-900">T</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="p-2 border">0</td><td class="p-2 border">0</td><td class="p-2 border font-bold">0</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2 border">0</td><td class="p-2 border">1</td><td class="p-2 border font-bold text-blue-700">1</td></tr>
+                                    <tr><td class="p-2 border">1</td><td class="p-2 border">0</td><td class="p-2 border font-bold text-blue-700">1</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2 border">1</td><td class="p-2 border">1</td><td class="p-2 border font-bold">0</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- How Equations Become Circuits Box -->
+                    <div class="mt-5 bg-blue-950 text-white rounded-xl p-5">
+                        <h4 class="font-bold text-blue-200 text-base mb-1">How Final Equations Become Circuit Connections (Golden Rule):</h4>
+                        <p class="text-sm text-slate-200 leading-relaxed">
+                            In any conversion, the <strong>Available Flip-Flop</strong> sits at the output stage. Its inputs (e.g., <span class="mono text-amber-300">S</span> and <span class="mono text-amber-300">R</span>) are driven by combinational logic gates whose inputs come from the <strong>External Desired Inputs</strong> (e.g., <span class="mono text-amber-300">J, K</span>) and the <strong>Feedback Outputs</strong> (<span class="mono text-amber-300">Q</span> and <span class="mono text-amber-300"><span class="overline">Q</span></span>) of the Available Flip-Flop! For example, <span class="mono font-bold text-emerald-300">S = J &middot; <span class="overline">Q</span></span> literally means: take an <strong>AND gate</strong>, connect external input <span class="mono">J</span> and feedback wire <span class="mono"><span class="overline">Q</span></span> into it, and feed its output into pin <span class="mono">S</span>.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- HIGHEST PRIORITY SECTION: THE FOUR FLIP-FLOP CONVERSIONS              -->
+            <!-- ===================================================================== -->
+            <div class="bg-slate-900 text-white rounded-2xl p-6 mb-8 border-l-8 border-blue-500 shadow-md page-break">
+                <span class="text-xs font-bold uppercase tracking-widest text-blue-400">Highest Exam Priority • 8 Marks Guaranteed</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold mt-1">6. Complete Flip-Flop Conversions (Step-by-Step)</h2>
+                <p class="text-slate-300 text-sm mt-1">
+                    Every conversion below follows the exact 8-step textbook & exam structure so you never lose a single mark.
+                </p>
+            </div>
+
+            <!-- ===================================================================== -->
+            <!-- CONVERSION 1: SR TO JK FLIP-FLOP                                      -->
+            <!-- ===================================================================== -->
+            <section id="conv-sr-to-jk" class="card-section bg-white rounded-2xl shadow-sm border-2 border-blue-900/20 p-6 sm:p-8 mb-10">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4 mb-6">
+                    <div>
+                        <span class="px-2.5 py-1 rounded bg-blue-900 text-white text-xs font-bold">Conversion 01 of 04</span>
+                        <h3 class="text-2xl font-extrabold text-slate-900 mt-2">Convert SR Flip-Flop to JK Flip-Flop</h3>
+                    </div>
+                    <span class="text-xs font-semibold bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-300">8 Marks Standard Question</span>
+                </div>
+
+                <!-- Bangla Intuition -->
+                <div class="bn-block mb-6 bg-blue-50/60 border-l-4 border-blue-700 rounded-r-xl p-5 bangla text-slate-800 text-sm">
+                    <h4 class="font-bold text-blue-950 text-base mb-1">সহজ বাংলায় ধাপে ধাপে ব্যাখ্যা (SR থেকে JK):</h4>
+                    <p class="mb-2">
+                        আমাদের হাতে আছে <strong>SR Flip-Flop (Available)</strong>, আর সেটিকে এমনভাবে কানেকশন দিতে হবে যেন বাইরে থেকে সেটি <strong>JK Flip-Flop (Desired)</strong>-এর মতো আচরণ করে।
+                    </p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>ধাপ ১:</strong> বাইরের ইনপুট হবে <code>J</code> এবং <code>K</code>, আর ভেতরের SR ফ্লিপ-ফ্লপের বর্তমান আউটপুট হলো <code>Q(n)</code>।</li>
+                        <li><strong>ধাপ ২:</strong> প্রথমে JK-এর Characteristic Table থেকে <code>J, K</code> এবং <code>Q(n)</code>-এর ৮টি কম্বিনেশনের জন্য <code>Q(n+1)</code> বের করি। (মনে রাখবে: <code>J=1, K=1</code> হলে <code>Q(n+1)</code> উল্টে যায়)।</li>
+                        <li><strong>ধাপ ৩:</strong> এরপর প্রতিটি সারিতে <code>Q(n)</code> থেকে <code>Q(n+1)</code>-এ যেতে SR ফ্লিপ-ফ্লপের <code>S</code> এবং <code>R</code> পিনে কী দিতে হবে তা SR Excitation Table দেখে বসিয়ে দিই।</li>
+                        <li><strong>ধাপ ৪:</strong> <code>S</code> এবং <code>R</code>-এর জন্য আলাদা দুটি ৩-ভেরিয়েবল K-Map করে সরল সমীকরণ বের করি: <strong>S = J&middot;Q'</strong> এবং <strong>R = K&middot;Q</strong>।</li>
+                    </ul>
+                </div>
+
+                <!-- Step 1, 2, 3 Grid -->
+                <div class="grid md:grid-cols-3 gap-4 mb-6">
+                    <!-- Step 1 -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <span class="text-xs font-bold text-blue-700 uppercase">Step 1</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Available vs. Desired FF</h4>
+                        <ul class="text-xs text-slate-700 space-y-1.5">
+                            <li><strong>Available (Given) FF:</strong> SR Flip-Flop (Inputs: <span class="mono font-bold">S, R</span>)</li>
+                            <li><strong>Desired (Target) FF:</strong> JK Flip-Flop (Inputs: <span class="mono font-bold">J, K</span>)</li>
+                            <li><strong>Goal:</strong> Express <span class="mono font-bold">S</span> and <span class="mono font-bold">R</span> in terms of <span class="mono font-bold">J, K, Q(n)</span>.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <span class="text-xs font-bold text-blue-700 uppercase">Step 2</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Desired (JK) Characteristic Table</h4>
+                        <table class="w-full text-center text-xs mono border border-slate-300 bg-white">
+                            <thead class="bg-slate-800 text-white">
+                                <tr><th class="p-1.5 border">J</th><th class="p-1.5 border">K</th><th class="p-1.5 border">Q(n+1)</th><th class="p-1.5 border font-sans">Mode</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border font-bold">Q(n)</td><td class="p-1 border font-sans">Hold</td></tr>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">1</td><td class="p-1 border font-bold">0</td><td class="p-1 border font-sans">Reset</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">0</td><td class="p-1 border font-bold">1</td><td class="p-1 border font-sans">Set</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">1</td><td class="p-1 border font-bold text-blue-700"><span class="overline">Q</span>(n)</td><td class="p-1 border font-sans">Toggle</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <span class="text-xs font-bold text-blue-700 uppercase">Step 3</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Available (SR) Excitation Table</h4>
+                        <table class="w-full text-center text-xs mono border border-slate-300 bg-white">
+                            <thead class="bg-slate-800 text-white">
+                                <tr><th class="p-1.5 border">Q(n)</th><th class="p-1.5 border">Q(n+1)</th><th class="p-1.5 border">S</th><th class="p-1.5 border">R</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border font-bold">0</td><td class="p-1 border font-bold text-amber-700">X</td></tr>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">1</td><td class="p-1 border font-bold text-blue-700">1</td><td class="p-1 border font-bold">0</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">0</td><td class="p-1 border font-bold">0</td><td class="p-1 border font-bold text-blue-700">1</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">1</td><td class="p-1 border font-bold text-amber-700">X</td><td class="p-1 border font-bold">0</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Step 4: Combined Table -->
+                <div class="mb-6">
+                    <span class="text-xs font-bold text-blue-700 uppercase">Step 4</span>
+                    <h4 class="font-bold text-slate-900 text-base mb-2">Combined Conversion Table (All 8 Rows Verified)</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-center text-xs sm:text-sm border-collapse border border-slate-300">
+                            <thead class="bg-slate-900 text-white">
+                                <tr>
+                                    <th class="p-2 border border-slate-700">Row</th>
+                                    <th class="p-2 border border-slate-700 bg-blue-950">J</th>
+                                    <th class="p-2 border border-slate-700 bg-blue-950">K</th>
+                                    <th class="p-2 border border-slate-700 bg-blue-950">Q(n)</th>
+                                    <th class="p-2 border border-slate-700 bg-slate-800">Q(n+1)</th>
+                                    <th class="p-2 border border-slate-700 bg-emerald-950">S</th>
+                                    <th class="p-2 border border-slate-700 bg-emerald-950">R</th>
+                                    <th class="p-2 border border-slate-700 text-left">Row-by-Row Reasoning</th>
+                                </tr>
+                            </thead>
+                            <tbody class="mono">
+                                <tr class="bg-white">
+                                    <td class="p-2 border border-slate-300 text-slate-500">0</td>
+                                    <td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td><td class="p-2 border border-slate-300 font-bold text-amber-700">X</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">J=0,K=0 (Hold): 0 &rarr; 0 requires S=0, R=X</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="p-2 border border-slate-300 text-slate-500">1</td>
+                                    <td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-amber-700">X</td><td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">J=0,K=0 (Hold): 1 &rarr; 1 requires S=X, R=0</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="p-2 border border-slate-300 text-slate-500">2</td>
+                                    <td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td><td class="p-2 border border-slate-300 font-bold text-amber-700">X</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">J=0,K=1 (Reset): 0 &rarr; 0 requires S=0, R=X</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="p-2 border border-slate-300 text-slate-500">3</td>
+                                    <td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td><td class="p-2 border border-slate-300 font-bold text-blue-700">1</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">J=0,K=1 (Reset): 1 &rarr; 0 requires S=0, R=1</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="p-2 border border-slate-300 text-slate-500">4</td>
+                                    <td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-blue-700">1</td><td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">J=1,K=0 (Set): 0 &rarr; 1 requires S=1, R=0</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="p-2 border border-slate-300 text-slate-500">5</td>
+                                    <td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-amber-700">X</td><td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">J=1,K=0 (Set): 1 &rarr; 1 requires S=X, R=0</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="p-2 border border-slate-300 text-slate-500">6</td>
+                                    <td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-blue-700">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-blue-700">1</td><td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">J=1,K=1 (Toggle): 0 &rarr; 1 requires S=1, R=0</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="p-2 border border-slate-300 text-slate-500">7</td>
+                                    <td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-blue-700">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td><td class="p-2 border border-slate-300 font-bold text-blue-700">1</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">J=1,K=1 (Toggle): 1 &rarr; 0 requires S=0, R=1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Step 5 & 6: K-Maps & Final Equations -->
+                <div class="mb-6">
+                    <span class="text-xs font-bold text-blue-700 uppercase">Step 5 & Step 6</span>
+                    <h4 class="font-bold text-slate-900 text-base mb-3">K-Map Simplification (Gray Code: 00, 01, 11, 10) & Final Equations</h4>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- K-Map for S -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                            <div class="text-sm font-bold text-slate-900 mb-2">K-Map for <span class="mono text-blue-800">S</span> = &Sigma;m(4, 6) + d(1, 5)</div>
+                            <table class="kmap-table mono text-sm bg-white">
+                                <tr>
+                                    <th class="kmap-corner text-xs font-sans">
+                                        <span class="absolute bottom-1 left-1.5 font-bold">J</span>
+                                        <span class="absolute top-1 right-1.5 font-bold">KQ</span>
+                                    </th>
+                                    <th class="bg-slate-100">00</th>
+                                    <th class="bg-slate-100">01</th>
+                                    <th class="bg-slate-100">11</th>
+                                    <th class="bg-slate-100">10</th>
+                                </tr>
+                                <tr>
+                                    <th class="bg-slate-100">0</th>
+                                    <td><span class="cell-idx">0</span>0</td>
+                                    <td><span class="cell-idx">1</span>X</td>
+                                    <td><span class="cell-idx">3</span>0</td>
+                                    <td><span class="cell-idx">2</span>0</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-slate-100">1</th>
+                                    <td class="group-pill-h font-bold text-blue-700"><span class="cell-idx">4</span>1</td>
+                                    <td><span class="cell-idx">5</span>X</td>
+                                    <td><span class="cell-idx">7</span>0</td>
+                                    <td class="group-pill-h font-bold text-blue-700"><span class="cell-idx">6</span>1</td>
+                                </tr>
+                            </table>
+                            <p class="text-xs text-slate-700 mt-3 text-center">
+                                <strong>Grouping:</strong> Pair of <span class="mono">1</span>s at cells (4, 6) [wrap-around]. Here J=1, K changes (0&rarr;1), Q=0 (<span class="mono"><span class="overline">Q</span></span>).<br>
+                                <span class="inline-block mt-1.5 px-3 py-1 bg-blue-900 text-white rounded-md mono font-bold text-sm">S = J &middot; <span class="overline">Q</span></span>
+                            </p>
+                        </div>
+
+                        <!-- K-Map for R -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                            <div class="text-sm font-bold text-slate-900 mb-2">K-Map for <span class="mono text-blue-800">R</span> = &Sigma;m(3, 7) + d(0, 2)</div>
+                            <table class="kmap-table mono text-sm bg-white">
+                                <tr>
+                                    <th class="kmap-corner text-xs font-sans">
+                                        <span class="absolute bottom-1 left-1.5 font-bold">J</span>
+                                        <span class="absolute top-1 right-1.5 font-bold">KQ</span>
+                                    </th>
+                                    <th class="bg-slate-100">00</th>
+                                    <th class="bg-slate-100">01</th>
+                                    <th class="bg-slate-100">11</th>
+                                    <th class="bg-slate-100">10</th>
+                                </tr>
+                                <tr>
+                                    <th class="bg-slate-100">0</th>
+                                    <td><span class="cell-idx">0</span>X</td>
+                                    <td><span class="cell-idx">1</span>0</td>
+                                    <td class="group-pill-v font-bold text-red-700"><span class="cell-idx">3</span>1</td>
+                                    <td><span class="cell-idx">2</span>X</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-slate-100">1</th>
+                                    <td><span class="cell-idx">4</span>0</td>
+                                    <td><span class="cell-idx">5</span>0</td>
+                                    <td class="group-pill-v font-bold text-red-700"><span class="cell-idx">7</span>1</td>
+                                    <td><span class="cell-idx">6</span>0</td>
+                                </tr>
+                            </table>
+                            <p class="text-xs text-slate-700 mt-3 text-center">
+                                <strong>Grouping:</strong> Vertical pair of <span class="mono">1</span>s at cells (3, 7). Here J changes (0&rarr;1), K=1, Q=1.<br>
+                                <span class="inline-block mt-1.5 px-3 py-1 bg-blue-900 text-white rounded-md mono font-bold text-sm">R = K &middot; Q</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 7 & 8: Circuit Diagram & Exam Summary -->
+                <div class="grid md:grid-cols-2 gap-6 items-center">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                        <span class="text-xs font-bold text-blue-700 uppercase self-start mb-2">Step 7: Logic Circuit Diagram</span>
+                        <svg viewBox="0 0 380 210" class="w-full max-w-sm h-auto">
+                            <!-- Available SR Flip-Flop -->
+                            <rect x="195" y="45" width="95" height="110" rx="8" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2"/>
+                            <text x="242" y="95" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">SR</text>
+                            <text x="242" y="112" text-anchor="middle" font-size="11" fill="#334155">Flip-Flop</text>
+                            <text x="205" y="70" font-size="11" font-weight="bold">S</text>
+                            <text x="205" y="138" font-size="11" font-weight="bold">R</text>
+                            <text x="275" y="70" font-size="11" font-weight="bold">Q</text>
+                            <text x="275" y="138" font-size="11" font-weight="bold" class="overline">Q</text>
+
+                            <!-- Top AND Gate (S = J * Q') -->
+                            <path d="M 105 50 L 130 50 A 15 15 0 0 1 130 80 L 105 80 Z" fill="#fff" stroke="#0f172a" stroke-width="2"/>
+                            <line x1="145" y1="65" x2="195" y2="65" stroke="#0f172a" stroke-width="2"/>
+                            <!-- J Input -->
+                            <line x1="35" y1="58" x2="105" y2="58" stroke="#0f172a" stroke-width="2"/>
+                            <text x="18" y="62" font-size="13" font-weight="bold" fill="#1e3a8a">J</text>
+
+                            <!-- Bottom AND Gate (R = K * Q) -->
+                            <path d="M 105 120 L 130 120 A 15 15 0 0 1 130 150 L 105 150 Z" fill="#fff" stroke="#0f172a" stroke-width="2"/>
+                            <line x1="145" y1="135" x2="195" y2="135" stroke="#0f172a" stroke-width="2"/>
+                            <!-- K Input -->
+                            <line x1="35" y1="142" x2="105" y2="142" stroke="#0f172a" stroke-width="2"/>
+                            <text x="18" y="146" font-size="13" font-weight="bold" fill="#1e3a8a">K</text>
+
+                            <!-- Outputs Q and Q' -->
+                            <line x1="290" y1="65" x2="350" y2="65" stroke="#0f172a" stroke-width="2"/>
+                            <text x="358" y="69" font-size="13" font-weight="bold">Q</text>
+                            <line x1="290" y1="135" x2="350" y2="135" stroke="#0f172a" stroke-width="2"/>
+                            <text x="358" y="139" font-size="13" font-weight="bold" class="overline">Q</text>
+
+                            <!-- Feedback Q to Bottom AND Gate -->
+                            <polyline points="325,65 325,20 75,20 75,127 105,127" fill="none" stroke="#dc2626" stroke-width="1.6"/>
+                            <circle cx="325" cy="65" r="3" fill="#dc2626"/>
+
+                            <!-- Feedback Q' to Top AND Gate -->
+                            <polyline points="325,135 325,185 60,185 60,72 105,72" fill="none" stroke="#2563eb" stroke-width="1.6"/>
+                            <circle cx="325" cy="135" r="3" fill="#2563eb"/>
+
+                            <!-- Clock -->
+                            <polyline points="195,95 203,100 195,105" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+                            <line x1="165" y1="100" x2="195" y2="100" stroke="#dc2626" stroke-width="1.5"/>
+                            <text x="140" y="103" font-size="10" font-weight="bold" fill="#dc2626">CLK</text>
+                        </svg>
+                    </div>
+
+                    <div class="bg-slate-900 text-slate-100 p-5 rounded-xl">
+                        <span class="text-xs font-bold text-blue-400 uppercase">Step 7 & 8: Circuit Explanation & Exam Conclusion</span>
+                        <ul class="text-xs sm:text-sm space-y-2 mt-2 text-slate-300">
+                            <li><strong>AND Gate 1:</strong> Connects external input <span class="mono text-white">J</span> with feedback <span class="mono text-white"><span class="overline">Q</span></span> to drive the <span class="mono text-amber-300">S</span> input (<span class="mono">S = J&middot;<span class="overline">Q</span></span>).</li>
+                            <li><strong>AND Gate 2:</strong> Connects external input <span class="mono text-white">K</span> with feedback <span class="mono text-white">Q</span> to drive the <span class="mono text-amber-300">R</span> input (<span class="mono">R = K&middot;Q</span>).</li>
+                            <li><strong>Why this fixes S=R=1:</strong> Because <span class="mono">Q</span> and <span class="mono"><span class="overline">Q</span></span> are never both 1 simultaneously, <span class="mono">S</span> and <span class="mono">R</span> can never both be 1 at the same time—even when <span class="mono">J = K = 1</span>!</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- CONVERSION 2: JK TO SR FLIP-FLOP                                      -->
+            <!-- ===================================================================== -->
+            <section id="conv-jk-to-sr" class="card-section bg-white rounded-2xl shadow-sm border-2 border-blue-900/20 p-6 sm:p-8 mb-10 page-break">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4 mb-6">
+                    <div>
+                        <span class="px-2.5 py-1 rounded bg-blue-900 text-white text-xs font-bold">Conversion 02 of 04</span>
+                        <h3 class="text-2xl font-extrabold text-slate-900 mt-2">Convert JK Flip-Flop to SR Flip-Flop</h3>
+                    </div>
+                    <span class="text-xs font-semibold bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-300">8 Marks Standard Question</span>
+                </div>
+
+                <!-- Bangla Intuition -->
+                <div class="bn-block mb-6 bg-blue-50/60 border-l-4 border-blue-700 rounded-r-xl p-5 bangla text-slate-800 text-sm">
+                    <h4 class="font-bold text-blue-950 text-base mb-1">সহজ বাংলায় ধাপে ধাপে ব্যাখ্যা (JK থেকে SR):</h4>
+                    <p class="mb-2">
+                        এখানে আমাদের হাতে আছে <strong>JK Flip-Flop (Available)</strong>, আর বানাতে হবে <strong>SR Flip-Flop (Desired)</strong>।
+                    </p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>গুরুত্বপূর্ণ পয়েন্ট:</strong> Desired ফ্লিপ-ফ্লপ যেহেতু SR, তাই <code>S = 1, R = 1</code> হলে আউটপুট <code>Q(n+1)</code> হবে <strong>Don't Care (X)</strong>! ফলে রো-৬ এবং রো-৭ এ <code>Q(n+1) = X</code> হওয়ায় <code>J</code> ও <code>K</code> উভয় ঘরেই <code>X</code> বসবে।</li>
+                        <li><strong>K-Map ও চূড়ান্ত ফলাফল:</strong> K-Map করলে দেখা যায় <strong>J = S</strong> এবং <strong>K = R</strong>। অর্থাৎ কোনো অতিরিক্ত লজিক গেট ছাড়াই সরাসরি S পিনকে J-তে এবং R পিনকে K-তে যুক্ত করলেই JK Flip-Flop একটি SR Flip-Flop হিসেবে কাজ করে!</li>
+                    </ul>
+                </div>
+
+                <!-- Step 1, 2, 3 Grid -->
+                <div class="grid md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <span class="text-xs font-bold text-blue-700 uppercase">Step 1</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Available vs. Desired FF</h4>
+                        <ul class="text-xs text-slate-700 space-y-1.5">
+                            <li><strong>Available (Given) FF:</strong> JK Flip-Flop (Inputs: <span class="mono font-bold">J, K</span>)</li>
+                            <li><strong>Desired (Target) FF:</strong> SR Flip-Flop (Inputs: <span class="mono font-bold">S, R</span>)</li>
+                            <li><strong>Goal:</strong> Express <span class="mono font-bold">J</span> and <span class="mono font-bold">K</span> in terms of <span class="mono font-bold">S, R, Q(n)</span>.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <span class="text-xs font-bold text-blue-700 uppercase">Step 2</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Desired (SR) Characteristic Table</h4>
+                        <table class="w-full text-center text-xs mono border border-slate-300 bg-white">
+                            <thead class="bg-slate-800 text-white">
+                                <tr><th class="p-1.5 border">S</th><th class="p-1.5 border">R</th><th class="p-1.5 border">Q(n+1)</th><th class="p-1.5 border font-sans">Mode</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border font-bold">Q(n)</td><td class="p-1 border font-sans">Hold</td></tr>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">1</td><td class="p-1 border font-bold">0</td><td class="p-1 border font-sans">Reset</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">0</td><td class="p-1 border font-bold">1</td><td class="p-1 border font-sans">Set</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">1</td><td class="p-1 border font-bold text-red-600">X</td><td class="p-1 border font-sans text-red-700">Invalid</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <span class="text-xs font-bold text-blue-700 uppercase">Step 3</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Available (JK) Excitation Table</h4>
+                        <table class="w-full text-center text-xs mono border border-slate-300 bg-white">
+                            <thead class="bg-slate-800 text-white">
+                                <tr><th class="p-1.5 border">Q(n)</th><th class="p-1.5 border">Q(n+1)</th><th class="p-1.5 border">J</th><th class="p-1.5 border">K</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border font-bold">0</td><td class="p-1 border font-bold text-amber-700">X</td></tr>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">1</td><td class="p-1 border font-bold text-blue-700">1</td><td class="p-1 border font-bold text-amber-700">X</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">0</td><td class="p-1 border font-bold text-amber-700">X</td><td class="p-1 border font-bold text-blue-700">1</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">1</td><td class="p-1 border font-bold text-amber-700">X</td><td class="p-1 border font-bold">0</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Step 4: Combined Table -->
+                <div class="mb-6">
+                    <span class="text-xs font-bold text-blue-700 uppercase">Step 4</span>
+                    <h4 class="font-bold text-slate-900 text-base mb-2">Combined Conversion Table (All 8 Rows Verified)</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-center text-xs sm:text-sm border-collapse border border-slate-300">
+                            <thead class="bg-slate-900 text-white">
+                                <tr>
+                                    <th class="p-2 border border-slate-700">Row</th>
+                                    <th class="p-2 border border-slate-700 bg-blue-950">S</th>
+                                    <th class="p-2 border border-slate-700 bg-blue-950">R</th>
+                                    <th class="p-2 border border-slate-700 bg-blue-950">Q(n)</th>
+                                    <th class="p-2 border border-slate-700 bg-slate-800">Q(n+1)</th>
+                                    <th class="p-2 border border-slate-700 bg-emerald-950">J</th>
+                                    <th class="p-2 border border-slate-700 bg-emerald-950">K</th>
+                                    <th class="p-2 border border-slate-700 text-left">Row-by-Row Reasoning</th>
+                                </tr>
+                            </thead>
+                            <tbody class="mono">
+                                <tr class="bg-white">
+                                    <td class="p-2 border border-slate-300 text-slate-500">0</td>
+                                    <td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td><td class="p-2 border border-slate-300 font-bold text-amber-700">X</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">Hold (0 &rarr; 0) &rArr; JK Excitation: J=0, K=X</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="p-2 border border-slate-300 text-slate-500">1</td>
+                                    <td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-amber-700">X</td><td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">Hold (1 &rarr; 1) &rArr; JK Excitation: J=X, K=0</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="p-2 border border-slate-300 text-slate-500">2</td>
+                                    <td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td><td class="p-2 border border-slate-300 font-bold text-amber-700">X</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">Reset (0 &rarr; 0) &rArr; JK Excitation: J=0, K=X</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="p-2 border border-slate-300 text-slate-500">3</td>
+                                    <td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-amber-700">X</td><td class="p-2 border border-slate-300 font-bold text-blue-700">1</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">Reset (1 &rarr; 0) &rArr; JK Excitation: J=X, K=1</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="p-2 border border-slate-300 text-slate-500">4</td>
+                                    <td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-blue-700">1</td><td class="p-2 border border-slate-300 font-bold text-amber-700">X</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">Set (0 &rarr; 1) &rArr; JK Excitation: J=1, K=X</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="p-2 border border-slate-300 text-slate-500">5</td>
+                                    <td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-amber-700">X</td><td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">Set (1 &rarr; 1) &rArr; JK Excitation: J=X, K=0</td>
+                                </tr>
+                                <tr class="bg-red-50/60">
+                                    <td class="p-2 border border-slate-300 text-slate-500">6</td>
+                                    <td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-red-600">X</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-amber-700">X</td><td class="p-2 border border-slate-300 font-bold text-amber-700">X</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">S=1,R=1 is Forbidden in SR &rArr; Q(n+1)=X &rArr; J=X, K=X</td>
+                                </tr>
+                                <tr class="bg-red-50/60">
+                                    <td class="p-2 border border-slate-300 text-slate-500">7</td>
+                                    <td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-red-600">X</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-amber-700">X</td><td class="p-2 border border-slate-300 font-bold text-amber-700">X</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">S=1,R=1 is Forbidden in SR &rArr; Q(n+1)=X &rArr; J=X, K=X</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Step 5 & 6: K-Maps -->
+                <div class="mb-6">
+                    <span class="text-xs font-bold text-blue-700 uppercase">Step 5 & Step 6</span>
+                    <h4 class="font-bold text-slate-900 text-base mb-3">K-Map Simplification & Final Equations</h4>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- K-Map for J -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                            <div class="text-sm font-bold text-slate-900 mb-2">K-Map for <span class="mono text-blue-800">J</span> = &Sigma;m(4) + d(1, 3, 5, 6, 7)</div>
+                            <table class="kmap-table mono text-sm bg-white">
+                                <tr>
+                                    <th class="kmap-corner text-xs font-sans">
+                                        <span class="absolute bottom-1 left-1.5 font-bold">S</span>
+                                        <span class="absolute top-1 right-1.5 font-bold">RQ</span>
+                                    </th>
+                                    <th class="bg-slate-100">00</th>
+                                    <th class="bg-slate-100">01</th>
+                                    <th class="bg-slate-100">11</th>
+                                    <th class="bg-slate-100">10</th>
+                                </tr>
+                                <tr>
+                                    <th class="bg-slate-100">0</th>
+                                    <td><span class="cell-idx">0</span>0</td>
+                                    <td><span class="cell-idx">1</span>X</td>
+                                    <td><span class="cell-idx">3</span>X</td>
+                                    <td><span class="cell-idx">2</span>0</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-slate-100">1</th>
+                                    <td class="group-pill-h font-bold text-blue-700"><span class="cell-idx">4</span>1</td>
+                                    <td class="group-pill-h font-bold text-amber-700"><span class="cell-idx">5</span>X</td>
+                                    <td class="group-pill-h font-bold text-amber-700"><span class="cell-idx">7</span>X</td>
+                                    <td class="group-pill-h font-bold text-amber-700"><span class="cell-idx">6</span>X</td>
+                                </tr>
+                            </table>
+                            <p class="text-xs text-slate-700 mt-3 text-center">
+                                <strong>Grouping:</strong> Entire bottom row (Quad of 4, 5, 7, 6) where <span class="mono">S = 1</span>.<br>
+                                <span class="inline-block mt-1.5 px-3 py-1 bg-blue-900 text-white rounded-md mono font-bold text-sm">J = S</span>
+                            </p>
+                        </div>
+
+                        <!-- K-Map for K -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                            <div class="text-sm font-bold text-slate-900 mb-2">K-Map for <span class="mono text-blue-800">K</span> = &Sigma;m(3) + d(0, 2, 4, 6, 7)</div>
+                            <table class="kmap-table mono text-sm bg-white">
+                                <tr>
+                                    <th class="kmap-corner text-xs font-sans">
+                                        <span class="absolute bottom-1 left-1.5 font-bold">S</span>
+                                        <span class="absolute top-1 right-1.5 font-bold">RQ</span>
+                                    </th>
+                                    <th class="bg-slate-100">00</th>
+                                    <th class="bg-slate-100">01</th>
+                                    <th class="bg-slate-100">11</th>
+                                    <th class="bg-slate-100">10</th>
+                                </tr>
+                                <tr>
+                                    <th class="bg-slate-100">0</th>
+                                    <td><span class="cell-idx">0</span>X</td>
+                                    <td><span class="cell-idx">1</span>0</td>
+                                    <td class="group-pill-v font-bold text-red-700"><span class="cell-idx">3</span>1</td>
+                                    <td class="group-pill-v font-bold text-amber-700"><span class="cell-idx">2</span>X</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-slate-100">1</th>
+                                    <td><span class="cell-idx">4</span>X</td>
+                                    <td><span class="cell-idx">5</span>0</td>
+                                    <td class="group-pill-v font-bold text-amber-700"><span class="cell-idx">7</span>X</td>
+                                    <td class="group-pill-v font-bold text-amber-700"><span class="cell-idx">6</span>X</td>
+                                </tr>
+                            </table>
+                            <p class="text-xs text-slate-700 mt-3 text-center">
+                                <strong>Grouping:</strong> Quad of cells (3, 2, 7, 6) where <span class="mono">R = 1</span>.<br>
+                                <span class="inline-block mt-1.5 px-3 py-1 bg-blue-900 text-white rounded-md mono font-bold text-sm">K = R</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 7 & 8: Circuit Diagram & Summary -->
+                <div class="grid md:grid-cols-2 gap-6 items-center">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                        <span class="text-xs font-bold text-blue-700 uppercase self-start mb-2">Step 7: Logic Circuit Diagram</span>
+                        <svg viewBox="0 0 340 160" class="w-full max-w-xs h-auto">
+                            <rect x="115" y="25" width="110" height="110" rx="8" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2"/>
+                            <text x="170" y="75" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">JK</text>
+                            <text x="170" y="92" text-anchor="middle" font-size="11" fill="#334155">Flip-Flop</text>
+                            <text x="125" y="50" font-size="11" font-weight="bold">J</text>
+                            <text x="125" y="118" font-size="11" font-weight="bold">K</text>
+                            <text x="210" y="50" font-size="11" font-weight="bold">Q</text>
+                            <text x="210" y="118" font-size="11" font-weight="bold" class="overline">Q</text>
+
+                            <!-- Direct S -> J and R -> K wires -->
+                            <line x1="45" y1="45" x2="115" y2="45" stroke="#0f172a" stroke-width="2"/>
+                            <text x="25" y="50" font-size="14" font-weight="bold" fill="#1e3a8a">S</text>
+
+                            <line x1="45" y1="113" x2="115" y2="113" stroke="#0f172a" stroke-width="2"/>
+                            <text x="25" y="118" font-size="14" font-weight="bold" fill="#1e3a8a">R</text>
+
+                            <!-- Clock -->
+                            <polyline points="115,75 123,80 115,85" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+                            <line x1="80" y1="80" x2="115" y2="80" stroke="#dc2626" stroke-width="1.5"/>
+                            <text x="52" y="84" font-size="10" font-weight="bold" fill="#dc2626">CLK</text>
+
+                            <!-- Outputs -->
+                            <line x1="225" y1="45" x2="290" y2="45" stroke="#0f172a" stroke-width="2"/>
+                            <text x="300" y="50" font-size="14" font-weight="bold">Q</text>
+                            <line x1="225" y1="113" x2="290" y2="113" stroke="#0f172a" stroke-width="2"/>
+                            <text x="300" y="118" font-size="14" font-weight="bold" class="overline">Q</text>
+                        </svg>
+                    </div>
+
+                    <div class="bg-slate-900 text-slate-100 p-5 rounded-xl">
+                        <span class="text-xs font-bold text-blue-400 uppercase">Step 7 & 8: Circuit Explanation & Exam Conclusion</span>
+                        <p class="text-xs sm:text-sm mt-2 text-slate-300 leading-relaxed">
+                            No external combinational gates are required! Since <span class="mono text-amber-300 font-bold">J = S</span> and <span class="mono text-amber-300 font-bold">K = R</span>, external input <span class="mono">S</span> is connected directly to pin <span class="mono">J</span>, and external input <span class="mono">R</span> is connected directly to pin <span class="mono">K</span> (assuming the forbidden condition <span class="mono">S = R = 1</span> is never applied).
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- CONVERSION 3: D TO T FLIP-FLOP                                        -->
+            <!-- ===================================================================== -->
+            <section id="conv-d-to-t" class="card-section bg-white rounded-2xl shadow-sm border-2 border-blue-900/20 p-6 sm:p-8 mb-10 page-break">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4 mb-6">
+                    <div>
+                        <span class="px-2.5 py-1 rounded bg-blue-900 text-white text-xs font-bold">Conversion 03 of 04</span>
+                        <h3 class="text-2xl font-extrabold text-slate-900 mt-2">Convert D Flip-Flop to T Flip-Flop</h3>
+                    </div>
+                    <span class="text-xs font-semibold bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-300">5 to 8 Marks Standard Question</span>
+                </div>
+
+                <!-- Bangla Intuition -->
+                <div class="bn-block mb-6 bg-blue-50/60 border-l-4 border-blue-700 rounded-r-xl p-5 bangla text-slate-800 text-sm">
+                    <h4 class="font-bold text-blue-950 text-base mb-1">সহজ বাংলায় ধাপে ধাপে ব্যাখ্যা (D থেকে T):</h4>
+                    <p class="mb-2">
+                        আমাদের হাতে আছে <strong>D Flip-Flop (Available)</strong>, আর বানাতে হবে <strong>T Flip-Flop (Desired)</strong>।
+                    </p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>D Flip-Flop-এর বৈশিষ্ট্য হলো <code>D = Q(n+1)</code> (অর্থাৎ পরবর্তী অবস্থায় যা চাই, D-তে ঠিক তাই দিতে হয়)।</li>
+                        <li>T Flip-Flop-এ <code>T = 0</code> হলে <code>Q(n+1) = Q(n)</code> এবং <code>T = 1</code> হলে <code>Q(n+1) = Q'(n)</code>।</li>
+                        <li>তাই Combined Table-এর <code>D</code> কলামটি হুবহু <code>Q(n+1)</code>-এর সমান হবে: <code>0, 1, 1, 0</code>—যা একটি <strong>XOR Gate</strong>-এর ট্রুথ টেবিল! তাই চূড়ান্ত সমীকরণ: <strong>D = T &oplus; Q</strong>।</li>
+                    </ul>
+                </div>
+
+                <!-- Step 1, 2, 3 Grid -->
+                <div class="grid md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <span class="text-xs font-bold text-blue-700 uppercase">Step 1</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Available vs. Desired FF</h4>
+                        <ul class="text-xs text-slate-700 space-y-1.5">
+                            <li><strong>Available (Given) FF:</strong> D Flip-Flop (Input: <span class="mono font-bold">D</span>)</li>
+                            <li><strong>Desired (Target) FF:</strong> T Flip-Flop (Input: <span class="mono font-bold">T</span>)</li>
+                            <li><strong>Goal:</strong> Express <span class="mono font-bold">D</span> in terms of <span class="mono font-bold">T</span> and <span class="mono font-bold">Q(n)</span>.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <span class="text-xs font-bold text-blue-700 uppercase">Step 2</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Desired (T) Characteristic Table</h4>
+                        <table class="w-full text-center text-xs mono border border-slate-300 bg-white">
+                            <thead class="bg-slate-800 text-white">
+                                <tr><th class="p-1.5 border">T</th><th class="p-1.5 border">Q(n)</th><th class="p-1.5 border">Q(n+1)</th><th class="p-1.5 border font-sans">Mode</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border font-bold">0</td><td class="p-1 border font-sans">Hold</td></tr>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">1</td><td class="p-1 border font-bold">1</td><td class="p-1 border font-sans">Hold</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">0</td><td class="p-1 border font-bold text-blue-700">1</td><td class="p-1 border font-sans">Toggle</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">1</td><td class="p-1 border font-bold text-blue-700">0</td><td class="p-1 border font-sans">Toggle</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <span class="text-xs font-bold text-blue-700 uppercase">Step 3</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Available (D) Excitation Table</h4>
+                        <table class="w-full text-center text-xs mono border border-slate-300 bg-white">
+                            <thead class="bg-slate-800 text-white">
+                                <tr><th class="p-1.5 border">Q(n)</th><th class="p-1.5 border">Q(n+1)</th><th class="p-1.5 border">D</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border font-bold">0</td></tr>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">1</td><td class="p-1 border font-bold text-blue-700">1</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">0</td><td class="p-1 border font-bold">0</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">1</td><td class="p-1 border font-bold text-blue-700">1</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Step 4: Combined Table -->
+                <div class="mb-6">
+                    <span class="text-xs font-bold text-blue-700 uppercase">Step 4</span>
+                    <h4 class="font-bold text-slate-900 text-base mb-2">Combined Conversion Table (All 4 Rows Verified)</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-center text-xs sm:text-sm border-collapse border border-slate-300">
+                            <thead class="bg-slate-900 text-white">
+                                <tr>
+                                    <th class="p-2 border border-slate-700">Row</th>
+                                    <th class="p-2 border border-slate-700 bg-blue-950">T</th>
+                                    <th class="p-2 border border-slate-700 bg-blue-950">Q(n)</th>
+                                    <th class="p-2 border border-slate-700 bg-slate-800">Q(n+1)</th>
+                                    <th class="p-2 border border-slate-700 bg-emerald-950">D</th>
+                                    <th class="p-2 border border-slate-700 text-left">Row-by-Row Reasoning</th>
+                                </tr>
+                            </thead>
+                            <tbody class="mono">
+                                <tr class="bg-white">
+                                    <td class="p-2 border border-slate-300 text-slate-500">0</td>
+                                    <td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">T=0 (Hold): Q(n)=0 &rarr; Q(n+1)=0, so D must be 0</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="p-2 border border-slate-300 text-slate-500">1</td>
+                                    <td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-blue-700">1</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">T=0 (Hold): Q(n)=1 &rarr; Q(n+1)=1, so D must be 1</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="p-2 border border-slate-300 text-slate-500">2</td>
+                                    <td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-blue-700">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-blue-700">1</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">T=1 (Toggle): Q(n)=0 &rarr; Q(n+1)=1, so D must be 1</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="p-2 border border-slate-300 text-slate-500">3</td>
+                                    <td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-blue-700">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">T=1 (Toggle): Q(n)=1 &rarr; Q(n+1)=0, so D must be 0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Step 5, 6, 7, 8 -->
+                <div class="grid md:grid-cols-2 gap-6 items-center">
+                    <!-- K-Map for D -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                        <span class="text-xs font-bold text-blue-700 uppercase self-start mb-1">Step 5 & 6: 2-Variable K-Map</span>
+                        <div class="text-sm font-bold text-slate-900 mb-2">K-Map for <span class="mono text-blue-800">D</span> = &Sigma;m(1, 2)</div>
+                        <table class="kmap-table mono text-sm bg-white">
+                            <tr>
+                                <th class="kmap-corner text-xs font-sans">
+                                    <span class="absolute bottom-1 left-1.5 font-bold">T</span>
+                                    <span class="absolute top-1 right-1.5 font-bold">Q</span>
+                                </th>
+                                <th class="bg-slate-100">0</th>
+                                <th class="bg-slate-100">1</th>
+                            </tr>
+                            <tr>
+                                <th class="bg-slate-100">0</th>
+                                <td><span class="cell-idx">0</span>0</td>
+                                <td class="group-pill-h font-bold text-blue-700"><span class="cell-idx">1</span>1</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-slate-100">1</th>
+                                <td class="group-pill-v font-bold text-red-700"><span class="cell-idx">2</span>1</td>
+                                <td><span class="cell-idx">3</span>0</td>
+                            </tr>
+                        </table>
+                        <p class="text-xs text-slate-700 mt-3 text-center">
+                            <strong>Checkerboard Pattern:</strong> Diagonal <span class="mono">1</span>s cannot be grouped; yields XOR:<br>
+                            <span class="inline-block mt-1.5 px-3 py-1 bg-blue-900 text-white rounded-md mono font-bold text-sm">D = T&middot;<span class="overline">Q</span> + <span class="overline">T</span>&middot;Q = T &oplus; Q</span>
+                        </p>
+                    </div>
+
+                    <!-- Circuit Diagram for D to T -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                        <span class="text-xs font-bold text-blue-700 uppercase self-start mb-2">Step 7: Logic Circuit Diagram</span>
+                        <svg viewBox="0 0 360 175" class="w-full max-w-sm h-auto">
+                            <!-- Available D Flip-Flop -->
+                            <rect x="185" y="30" width="95" height="100" rx="8" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2"/>
+                            <text x="232" y="75" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">D</text>
+                            <text x="232" y="92" text-anchor="middle" font-size="11" fill="#334155">Flip-Flop</text>
+                            <text x="195" y="57" font-size="11" font-weight="bold">D</text>
+                            <text x="265" y="57" font-size="11" font-weight="bold">Q</text>
+                            <text x="265" y="115" font-size="11" font-weight="bold" class="overline">Q</text>
+
+                            <!-- XOR Gate -->
+                            <path d="M 92 38 Q 104 53 92 68" fill="none" stroke="#0f172a" stroke-width="2"/>
+                            <path d="M 98 38 Q 110 53 98 68 Q 126 68 140 53 Q 126 38 98 38 Z" fill="#fff" stroke="#0f172a" stroke-width="2"/>
+                            <line x1="140" y1="53" x2="185" y2="53" stroke="#0f172a" stroke-width="2"/>
+
+                            <!-- T Input -->
+                            <line x1="35" y1="45" x2="100" y2="45" stroke="#0f172a" stroke-width="2"/>
+                            <text x="18" y="49" font-size="14" font-weight="bold" fill="#1e3a8a">T</text>
+
+                            <!-- Outputs -->
+                            <line x1="280" y1="53" x2="335" y2="53" stroke="#0f172a" stroke-width="2"/>
+                            <text x="342" y="57" font-size="13" font-weight="bold">Q</text>
+                            <line x1="280" y1="110" x2="335" y2="110" stroke="#0f172a" stroke-width="2"/>
+                            <text x="342" y="114" font-size="13" font-weight="bold" class="overline">Q</text>
+
+                            <!-- Feedback Q to XOR Gate -->
+                            <polyline points="310,53 310,152 65,152 65,61 100,61" fill="none" stroke="#dc2626" stroke-width="1.8"/>
+                            <circle cx="310" cy="53" r="3" fill="#dc2626"/>
+
+                            <!-- Clock -->
+                            <polyline points="185,105 193,110 185,115" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+                            <line x1="150" y1="110" x2="185" y2="110" stroke="#dc2626" stroke-width="1.5"/>
+                            <text x="125" y="114" font-size="10" font-weight="bold" fill="#dc2626">CLK</text>
+                        </svg>
+                        <p class="text-xs text-slate-600 mt-1 text-center">
+                            <strong>Step 8 Summary:</strong> Connect an <strong>XOR gate</strong> with inputs <span class="mono">T</span> and feedback <span class="mono">Q</span> to the <span class="mono">D</span> input.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- CONVERSION 4: T TO D FLIP-FLOP                                        -->
+            <!-- ===================================================================== -->
+            <section id="conv-t-to-d" class="card-section bg-white rounded-2xl shadow-sm border-2 border-blue-900/20 p-6 sm:p-8 mb-10 page-break">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4 mb-6">
+                    <div>
+                        <span class="px-2.5 py-1 rounded bg-blue-900 text-white text-xs font-bold">Conversion 04 of 04</span>
+                        <h3 class="text-2xl font-extrabold text-slate-900 mt-2">Convert T Flip-Flop to D Flip-Flop</h3>
+                    </div>
+                    <span class="text-xs font-semibold bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-300">5 to 8 Marks Standard Question</span>
+                </div>
+
+                <!-- Bangla Intuition -->
+                <div class="bn-block mb-6 bg-blue-50/60 border-l-4 border-blue-700 rounded-r-xl p-5 bangla text-slate-800 text-sm">
+                    <h4 class="font-bold text-blue-950 text-base mb-1">সহজ বাংলায় ধাপে ধাপে ব্যাখ্যা (T থেকে D):</h4>
+                    <p class="mb-2">
+                        এখানে আমাদের হাতে আছে <strong>T Flip-Flop (Available)</strong>, আর বানাতে হবে <strong>D Flip-Flop (Desired)</strong>।
+                    </p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>চিন্তা করে দেখো: যদি <code>D</code> এবং বর্তমান অবস্থা <code>Q(n)</code> <strong>সমান</strong> হয় (যেমন <code>D=0, Q=0</code> অথবা <code>D=1, Q=1</code>), তাহলে আউটপুট বদলানোর দরকার নেই—তাই <code>T = 0</code> হবে।</li>
+                        <li>আর যদি <code>D</code> এবং <code>Q(n)</code> <strong>ভিন্ন</strong> হয় (যেমন <code>D=1, Q=0</code> অথবা <code>D=0, Q=1</code>), তাহলে আউটপুট উল্টে দিতে হবে—তাই <code>T = 1</code> হবে।</li>
+                        <li>অর্থাৎ এখানেও একটি <strong>XOR Gate</strong> লাগবে! চূড়ান্ত সমীকরণ: <strong>T = D &oplus; Q</strong>।</li>
+                    </ul>
+                </div>
+
+                <!-- Step 1, 2, 3 Grid -->
+                <div class="grid md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <span class="text-xs font-bold text-blue-700 uppercase">Step 1</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Available vs. Desired FF</h4>
+                        <ul class="text-xs text-slate-700 space-y-1.5">
+                            <li><strong>Available (Given) FF:</strong> T Flip-Flop (Input: <span class="mono font-bold">T</span>)</li>
+                            <li><strong>Desired (Target) FF:</strong> D Flip-Flop (Input: <span class="mono font-bold">D</span>)</li>
+                            <li><strong>Goal:</strong> Express <span class="mono font-bold">T</span> in terms of <span class="mono font-bold">D</span> and <span class="mono font-bold">Q(n)</span>.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <span class="text-xs font-bold text-blue-700 uppercase">Step 2</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Desired (D) Characteristic Table</h4>
+                        <table class="w-full text-center text-xs mono border border-slate-300 bg-white">
+                            <thead class="bg-slate-800 text-white">
+                                <tr><th class="p-1.5 border">D</th><th class="p-1.5 border">Q(n)</th><th class="p-1.5 border">Q(n+1)</th><th class="p-1.5 border font-sans">Mode</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border font-bold">0</td><td class="p-1 border font-sans">Reset</td></tr>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">1</td><td class="p-1 border font-bold">0</td><td class="p-1 border font-sans">Reset</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">0</td><td class="p-1 border font-bold text-blue-700">1</td><td class="p-1 border font-sans">Set</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">1</td><td class="p-1 border font-bold text-blue-700">1</td><td class="p-1 border font-sans">Set</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <span class="text-xs font-bold text-blue-700 uppercase">Step 3</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Available (T) Excitation Table</h4>
+                        <table class="w-full text-center text-xs mono border border-slate-300 bg-white">
+                            <thead class="bg-slate-800 text-white">
+                                <tr><th class="p-1.5 border">Q(n)</th><th class="p-1.5 border">Q(n+1)</th><th class="p-1.5 border">T</th><th class="p-1.5 border font-sans">Action</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border font-bold">0</td><td class="p-1 border font-sans">Hold</td></tr>
+                                <tr><td class="p-1 border">0</td><td class="p-1 border">1</td><td class="p-1 border font-bold text-blue-700">1</td><td class="p-1 border font-sans">Toggle</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">0</td><td class="p-1 border font-bold text-blue-700">1</td><td class="p-1 border font-sans">Toggle</td></tr>
+                                <tr><td class="p-1 border">1</td><td class="p-1 border">1</td><td class="p-1 border font-bold">0</td><td class="p-1 border font-sans">Hold</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Step 4: Combined Table -->
+                <div class="mb-6">
+                    <span class="text-xs font-bold text-blue-700 uppercase">Step 4</span>
+                    <h4 class="font-bold text-slate-900 text-base mb-2">Combined Conversion Table (All 4 Rows Verified)</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-center text-xs sm:text-sm border-collapse border border-slate-300">
+                            <thead class="bg-slate-900 text-white">
+                                <tr>
+                                    <th class="p-2 border border-slate-700">Row</th>
+                                    <th class="p-2 border border-slate-700 bg-blue-950">D</th>
+                                    <th class="p-2 border border-slate-700 bg-blue-950">Q(n)</th>
+                                    <th class="p-2 border border-slate-700 bg-slate-800">Q(n+1)</th>
+                                    <th class="p-2 border border-slate-700 bg-emerald-950">T</th>
+                                    <th class="p-2 border border-slate-700 text-left">Row-by-Row Reasoning</th>
+                                </tr>
+                            </thead>
+                            <tbody class="mono">
+                                <tr class="bg-white">
+                                    <td class="p-2 border border-slate-300 text-slate-500">0</td>
+                                    <td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">0 &rarr; 0 (No change needed) &rArr; T = 0</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="p-2 border border-slate-300 text-slate-500">1</td>
+                                    <td class="p-2 border border-slate-300">0</td><td class="p-2 border border-slate-300">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-blue-700">1</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">1 &rarr; 0 (Must toggle 1 to 0) &rArr; T = 1</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="p-2 border border-slate-300 text-slate-500">2</td>
+                                    <td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">0</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-blue-700">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-blue-700">1</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">0 &rarr; 1 (Must toggle 0 to 1) &rArr; T = 1</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="p-2 border border-slate-300 text-slate-500">3</td>
+                                    <td class="p-2 border border-slate-300">1</td><td class="p-2 border border-slate-300">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold text-blue-700">1</td>
+                                    <td class="p-2 border border-slate-300 font-bold">0</td>
+                                    <td class="p-2 border border-slate-300 font-sans text-left text-xs text-slate-600">1 &rarr; 1 (No change needed) &rArr; T = 0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Step 5, 6, 7, 8 -->
+                <div class="grid md:grid-cols-2 gap-6 items-center">
+                    <!-- K-Map for T -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                        <span class="text-xs font-bold text-blue-700 uppercase self-start mb-1">Step 5 & 6: 2-Variable K-Map</span>
+                        <div class="text-sm font-bold text-slate-900 mb-2">K-Map for <span class="mono text-blue-800">T</span> = &Sigma;m(1, 2)</div>
+                        <table class="kmap-table mono text-sm bg-white">
+                            <tr>
+                                <th class="kmap-corner text-xs font-sans">
+                                    <span class="absolute bottom-1 left-1.5 font-bold">D</span>
+                                    <span class="absolute top-1 right-1.5 font-bold">Q</span>
+                                </th>
+                                <th class="bg-slate-100">0</th>
+                                <th class="bg-slate-100">1</th>
+                            </tr>
+                            <tr>
+                                <th class="bg-slate-100">0</th>
+                                <td><span class="cell-idx">0</span>0</td>
+                                <td class="group-pill-h font-bold text-blue-700"><span class="cell-idx">1</span>1</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-slate-100">1</th>
+                                <td class="group-pill-v font-bold text-red-700"><span class="cell-idx">2</span>1</td>
+                                <td><span class="cell-idx">3</span>0</td>
+                            </tr>
+                        </table>
+                        <p class="text-xs text-slate-700 mt-3 text-center">
+                            <strong>Checkerboard Pattern:</strong> Diagonal <span class="mono">1</span>s cannot be grouped; yields XOR:<br>
+                            <span class="inline-block mt-1.5 px-3 py-1 bg-blue-900 text-white rounded-md mono font-bold text-sm">T = D&middot;<span class="overline">Q</span> + <span class="overline">D</span>&middot;Q = D &oplus; Q</span>
+                        </p>
+                    </div>
+
+                    <!-- Circuit Diagram for T to D -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                        <span class="text-xs font-bold text-blue-700 uppercase self-start mb-2">Step 7: Logic Circuit Diagram</span>
+                        <svg viewBox="0 0 360 175" class="w-full max-w-sm h-auto">
+                            <!-- Available T Flip-Flop -->
+                            <rect x="185" y="30" width="95" height="100" rx="8" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2"/>
+                            <text x="232" y="75" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">T</text>
+                            <text x="232" y="92" text-anchor="middle" font-size="11" fill="#334155">Flip-Flop</text>
+                            <text x="195" y="57" font-size="11" font-weight="bold">T</text>
+                            <text x="265" y="57" font-size="11" font-weight="bold">Q</text>
+                            <text x="265" y="115" font-size="11" font-weight="bold" class="overline">Q</text>
+
+                            <!-- XOR Gate -->
+                            <path d="M 92 38 Q 104 53 92 68" fill="none" stroke="#0f172a" stroke-width="2"/>
+                            <path d="M 98 38 Q 110 53 98 68 Q 126 68 140 53 Q 126 38 98 38 Z" fill="#fff" stroke="#0f172a" stroke-width="2"/>
+                            <line x1="140" y1="53" x2="185" y2="53" stroke="#0f172a" stroke-width="2"/>
+
+                            <!-- D Input -->
+                            <line x1="35" y1="45" x2="100" y2="45" stroke="#0f172a" stroke-width="2"/>
+                            <text x="18" y="49" font-size="14" font-weight="bold" fill="#1e3a8a">D</text>
+
+                            <!-- Outputs -->
+                            <line x1="280" y1="53" x2="335" y2="53" stroke="#0f172a" stroke-width="2"/>
+                            <text x="342" y="57" font-size="13" font-weight="bold">Q</text>
+                            <line x1="280" y1="110" x2="335" y2="110" stroke="#0f172a" stroke-width="2"/>
+                            <text x="342" y="114" font-size="13" font-weight="bold" class="overline">Q</text>
+
+                            <!-- Feedback Q to XOR Gate -->
+                            <polyline points="310,53 310,152 65,152 65,61 100,61" fill="none" stroke="#dc2626" stroke-width="1.8"/>
+                            <circle cx="310" cy="53" r="3" fill="#dc2626"/>
+
+                            <!-- Clock -->
+                            <polyline points="185,105 193,110 185,115" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+                            <line x1="150" y1="110" x2="185" y2="110" stroke="#dc2626" stroke-width="1.5"/>
+                            <text x="125" y="114" font-size="10" font-weight="bold" fill="#dc2626">CLK</text>
+                        </svg>
+                        <p class="text-xs text-slate-600 mt-1 text-center">
+                            <strong>Step 8 Summary:</strong> Connect an <strong>XOR gate</strong> with inputs <span class="mono">D</span> and feedback <span class="mono">Q</span> to the <span class="mono">T</span> input.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EXAM CHEAT SHEET FOOTER -->
+            <footer class="bg-slate-900 text-slate-200 rounded-2xl p-6 sm:p-8 border border-slate-800">
+                <h3 class="text-lg font-bold text-white mb-3">Quick Exam Revision Cheat Sheet (All Conversions)</h3>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm mono">
+                    <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700">
+                        <div class="text-xs text-blue-300 font-sans mb-1">1. SR &rarr; JK Flip-Flop</div>
+                        <div class="font-bold text-white">S = J &middot; <span class="overline">Q</span></div>
+                        <div class="font-bold text-white">R = K &middot; Q</div>
+                    </div>
+                    <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700">
+                        <div class="text-xs text-blue-300 font-sans mb-1">2. JK &rarr; SR Flip-Flop</div>
+                        <div class="font-bold text-white">J = S</div>
+                        <div class="font-bold text-white">K = R</div>
+                    </div>
+                    <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700">
+                        <div class="text-xs text-blue-300 font-sans mb-1">3. D &rarr; T Flip-Flop</div>
+                        <div class="font-bold text-white">D = T &oplus; Q</div>
+                    </div>
+                    <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700">
+                        <div class="text-xs text-blue-300 font-sans mb-1">4. T &rarr; D Flip-Flop</div>
+                        <div class="font-bold text-white">T = D &oplus; Q</div>
+                    </div>
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <script>
+        // Populate Mobile Drawer Navigation from Desktop Links
+        const desktopNav = document.getElementById('desktopNavLinks');
+        const mobileNav = document.getElementById('mobileNavLinks');
+        if (desktopNav && mobileNav) {
+            mobileNav.innerHTML = desktopNav.innerHTML;
+            mobileNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.getElementById('mobileDrawer').classList.add('hidden');
+                });
+            });
+        }
+
+        // Mobile Menu Toggle Logic
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+        const mobileDrawer = document.getElementById('mobileDrawer');
+
+        if (mobileMenuBtn && mobileDrawer) {
+            mobileMenuBtn.addEventListener('click', () => mobileDrawer.classList.remove('hidden'));
+        }
+        if (closeDrawerBtn && mobileDrawer) {
+            closeDrawerBtn.addEventListener('click', () => mobileDrawer.classList.add('hidden'));
+        }
+
+        // View Mode Switcher (Both / Bangla Only / English Only)
+        function setViewMode(mode) {
+            const bnBlocks = document.querySelectorAll('.bn-block');
+            const enBlocks = document.querySelectorAll('.en-block');
+            const buttons = {
+                both: document.getElementById('btn-both'),
+                bn: document.getElementById('btn-bn'),
+                en: document.getElementById('btn-en')
+            };
+
+            Object.keys(buttons).forEach(key => {
+                if (buttons[key]) {
+                    if (key === mode) {
+                        buttons[key].classList.add('bg-blue-600', 'text-white');
+                        buttons[key].classList.remove('text-slate-300');
+                    } else {
+                        buttons[key].classList.remove('bg-blue-600', 'text-white');
+                        buttons[key].classList.add('text-slate-300');
+                    }
+                }
+            });
+
+            bnBlocks.forEach(el => el.style.display = (mode === 'en') ? 'none' : 'block');
+            enBlocks.forEach(el => el.style.display = (mode === 'bn') ? 'none' : 'block');
+        }
+    </script>
+</body>
+</html>

@@ -179,6 +179,15 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 6884301
       },
       {
+        "id": "ch-10.pdf",
+        "title": "Ch 10",
+        "filename": "ch-10.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20345/Chapters/ch-10.pdf",
+        "sizeInBytes": 3605043
+      },
+      {
         "id": "ch-3-4.pdf",
         "title": "Ch 3 4",
         "filename": "ch-3-4.pdf",
@@ -280,6 +289,15 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 33650
       },
       {
+        "id": "CH-7_study_guide.html",
+        "title": "CH 7 Study Guide",
+        "filename": "CH-7_study_guide.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/CSE%20345/Others/CH-7_study_guide.html",
+        "sizeInBytes": 99546
+      },
+      {
         "id": "Ch-8.html",
         "title": "Ch 8",
         "filename": "Ch-8.html",
@@ -289,22 +307,22 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 30375
       },
       {
-        "id": "chapter_7_study_guide.html",
-        "title": "Chapter 7 Study Guide",
-        "filename": "chapter_7_study_guide.html",
+        "id": "CH-8 – Encoder, MUX, DEMUX.html",
+        "title": "CH 8 – Encoder, MUX, DEMUX",
+        "filename": "CH-8 – Encoder, MUX, DEMUX.html",
         "type": "HTML",
         "extension": "html",
-        "url": "/materials/CSE%20345/Others/chapter_7_study_guide.html",
-        "sizeInBytes": 99546
+        "url": "/materials/CSE%20345/Others/CH-8%20%E2%80%93%20Encoder%2C%20MUX%2C%20DEMUX.html",
+        "sizeInBytes": 41850
       },
       {
-        "id": "Chapter 8 – Encoder, MUX, DEMUX.html",
-        "title": "Chapter 8 – Encoder, MUX, DEMUX",
-        "filename": "Chapter 8 – Encoder, MUX, DEMUX.html",
+        "id": "CH-9.html",
+        "title": "CH 9",
+        "filename": "CH-9.html",
         "type": "HTML",
         "extension": "html",
-        "url": "/materials/CSE%20345/Others/Chapter%208%20%E2%80%93%20Encoder%2C%20MUX%2C%20DEMUX.html",
-        "sizeInBytes": 41850
+        "url": "/materials/CSE%20345/Others/CH-9.html",
+        "sizeInBytes": 160144
       }
     ]
   },
