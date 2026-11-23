@@ -27,7 +27,7 @@ const options: NotificationOptions & { vibrate?: number[] } = {
     badge: '/pwa-192x192.png',
     vibrate: [200, 100, 200],
   };
-  // PWA Service Worker থাকলে সেটির মাধ্যমে নোটিফিকেশন পাঠাবে (মোবাইলে সবচেয়ে ভালো কাজ করে)
+  
   if ('serviceWorker' in navigator) {
     const registration = await navigator.serviceWorker.ready;
     if (registration && 'showNotification' in registration) {
@@ -36,6 +36,6 @@ const options: NotificationOptions & { vibrate?: number[] } = {
     }
   }
 
-  // ফলব্যাক হিসেবে সাধারণ ব্রাউজার নোটিফিকেশন
+  
   new Notification(title, options);
 };
