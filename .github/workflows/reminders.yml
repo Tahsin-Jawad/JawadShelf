@@ -1,0 +1,16 @@
+name: Daily Study Reminders
+
+on:
+  schedule:
+    # 4:00 PM Bangladesh Time (10:00 UTC)
+    - cron: '0 10 * * *'
+    # 9:00 PM Bangladesh Time (15:00 UTC)
+    - cron: '0 15 * * *'
+  workflow_dispatch:
+
+jobs:
+  trigger-reminders:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Vercel Reminder API
+        run: curl -s https://jawadshelf.vercel.app/api/send-reminders
