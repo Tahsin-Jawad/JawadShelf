@@ -12,7 +12,8 @@ import {
   BellRing,
 } from 'lucide-react';
 import {
-  requestNotificationPermission,
+  subscribeToPushNotifications,
+  syncRemindersToCloud,
   sendStudyNotification,
 } from '../utils/notifications';
 
@@ -21,6 +22,7 @@ interface Task {
   text: string;
   completed: boolean;
   createdAt: number;
+  expiresAt: number;
 }
 
 interface Exam {
@@ -56,7 +58,10 @@ export const DailyTracker: React.FC = () => {
     try {
       const parsed: Task[] = JSON.parse(saved);
       const now = Date.now();
-      return parsed.filter((task) => now - (task.createdAt || now) < ONE_DAY_MS);
+      return parsed.filter((task) => {
+        const expiry = task.expiresAt || (task.createdAt || now) + ONE_DAY_MS;
+        return expiry > now;
+      });
     } catch {
       return [];
     }
@@ -87,6 +92,7 @@ export const DailyTracker: React.FC = () => {
   );
 
   const [newTaskText, setNewTaskText] = useState('');
+  const [durationDays, setDurationDays] = useState<number>(1);
   const [newExamTitle, setNewExamTitle] = useState('');
   const [newExamDate, setNewExamDate] = useState('');
 
@@ -101,7 +107,7 @@ export const DailyTracker: React.FC = () => {
 
   useEffect(() => {
     const now = Date.now();
-    const validTasks = tasks.filter((t) => now - t.createdAt < ONE_DAY_MS);
+    const validTasks = tasks.filter((t) => (t.expiresAt || t.createdAt + ONE_DAY_MS) > now);
     localStorage.setItem('jawad_shelf_tasks', JSON.stringify(validTasks));
   }, [tasks]);
 
@@ -119,6 +125,12 @@ export const DailyTracker: React.FC = () => {
 
     localStorage.setItem('jawad_shelf_exams', JSON.stringify(validExams));
   }, [exams]);
+
+  useEffect(() => {
+    if (notifEnabled) {
+      syncRemindersToCloud(tasks, exams);
+    }
+  }, [tasks, exams, notifEnabled]);
 
   const buildReminderSummary = () => {
     const pendingTasks = tasks.filter((t) => !t.completed);
@@ -148,30 +160,15 @@ export const DailyTracker: React.FC = () => {
     return messages.join('\n');
   };
 
-  // দিনে একবার অটোমেটিক ডেইলি রিমাইন্ডার পাঠানো
-  useEffect(() => {
-    if (!notifEnabled) return;
-
-    const todayStr = new Date().toDateString();
-    const lastNotified = localStorage.getItem('jawad_shelf_last_notified');
-    if (lastNotified === todayStr) return;
-
-    const summary = buildReminderSummary();
-    if (summary) {
-      sendStudyNotification('Jawad Shelf — Daily Study Reminder', summary);
-      localStorage.setItem('jawad_shelf_last_notified', todayStr);
-    }
-  }, [notifEnabled, tasks, exams]);
-
   const handleEnableNotifications = async () => {
-    const granted = await requestNotificationPermission();
+    const granted = await subscribeToPushNotifications(tasks, exams);
     setNotifEnabled(granted);
 
     if (granted) {
       const summary = buildReminderSummary();
       sendStudyNotification(
-        'Jawad Shelf — Reminders Active',
-        summary || 'You will receive alerts for pending tasks and upcoming exams.'
+        'Jawad Shelf — 3x Daily Reminders Active',
+        summary || 'You will receive alerts 3 times a day (9 AM, 4 PM, 9 PM).'
       );
     }
   };
@@ -189,11 +186,13 @@ export const DailyTracker: React.FC = () => {
     const text = newTaskText.trim();
     if (!text) return;
 
+    const now = Date.now();
     const newTask: Task = {
-      id: Date.now().toString(),
+      id: now.toString(),
       text,
       completed: false,
-      createdAt: Date.now(),
+      createdAt: now,
+      expiresAt: now + durationDays * ONE_DAY_MS,
     };
 
     setTasks((prev) => [...prev, newTask]);
@@ -228,12 +227,17 @@ export const DailyTracker: React.FC = () => {
     setExams(exams.filter((e) => e.id !== id));
   };
 
-  const getTimeLeftText = (createdAt: number) => {
-    const elapsed = Date.now() - createdAt;
-    const remainingMs = ONE_DAY_MS - elapsed;
+  const getTimeLeftText = (task: Task) => {
+    const expiry = task.expiresAt || task.createdAt + ONE_DAY_MS;
+    const remainingMs = expiry - Date.now();
     if (remainingMs <= 0) return 'Expiring soon';
-    const hours = Math.floor(remainingMs / (1000 * 60 * 60));
-    return `${hours}h remaining`;
+    const totalHours = Math.floor(remainingMs / (1000 * 60 * 60));
+    if (totalHours >= 24) {
+      const days = Math.floor(totalHours / 24);
+      const hours = totalHours % 24;
+      return `${days}d ${hours}h left`;
+    }
+    return `${totalHours}h left`;
   };
 
   const completedCount = tasks.filter((t) => t.completed).length;
@@ -242,7 +246,6 @@ export const DailyTracker: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
-      {/* Reminder Banner */}
       <div className="bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-500/20 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-indigo-600 text-white rounded-xl">
@@ -250,12 +253,12 @@ export const DailyTracker: React.FC = () => {
           </div>
           <div>
             <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-              {notifEnabled ? 'Daily Reminders Active' : 'Enable Study Reminders'}
+              {notifEnabled ? 'Background Reminders Active (3x Daily)' : 'Enable Background Study Reminders'}
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               {notifEnabled
-                ? 'Alerts enabled for unfinished tasks and exams within 3 days.'
-                : 'Get device notifications for pending tasks and upcoming exam dates.'}
+                ? 'Notifies at 9 AM, 4 PM & 9 PM even when the app is closed.'
+                : 'Get push notifications 3 times a day for pending tasks and exams.'}
             </p>
           </div>
         </div>
@@ -277,16 +280,15 @@ export const DailyTracker: React.FC = () => {
         )}
       </div>
 
-      {/* Daily Tasks Section */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm transition-colors">
         <div className="flex justify-between items-center mb-4">
           <div>
             <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-              Daily Tasks
+              Study Tasks
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Tasks automatically expire 24 hours after creation.
+              Choose custom expiration duration for each task.
             </p>
           </div>
           <span className="text-xs font-semibold px-2.5 py-1 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20 rounded-full">
@@ -303,7 +305,7 @@ export const DailyTracker: React.FC = () => {
           </div>
         )}
 
-        <form onSubmit={addTask} className="flex gap-2 mb-3">
+        <form onSubmit={addTask} className="flex flex-col sm:flex-row gap-2 mb-3">
           <input
             type="text"
             value={newTaskText}
@@ -311,12 +313,24 @@ export const DailyTracker: React.FC = () => {
             placeholder="Add a new task..."
             className="flex-1 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-indigo-500"
           />
-          <button
-            type="submit"
-            className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-1 transition-colors"
-          >
-            <Plus className="w-4 h-4" /> Add
-          </button>
+          <div className="flex gap-2">
+            <select
+              value={durationDays}
+              onChange={(e) => setDurationDays(Number(e.target.value))}
+              className="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-500"
+            >
+              <option value={1}>1 Day</option>
+              <option value={2}>2 Days</option>
+              <option value={3}>3 Days</option>
+              <option value={7}>7 Days</option>
+            </select>
+            <button
+              type="submit"
+              className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-1 transition-colors"
+            >
+              <Plus className="w-4 h-4" /> Add
+            </button>
+          </div>
         </form>
 
         <div className="flex flex-wrap items-center gap-1.5 mb-6">
@@ -338,7 +352,7 @@ export const DailyTracker: React.FC = () => {
         <div className="space-y-2">
           {tasks.length === 0 ? (
             <p className="text-slate-400 dark:text-slate-500 text-center py-6 text-sm">
-              No tasks added for today
+              No active tasks added
             </p>
           ) : (
             tasks.map((task) => (
@@ -369,7 +383,7 @@ export const DailyTracker: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <span className="text-[11px] text-slate-400 dark:text-slate-500 flex items-center gap-1">
                     <Clock className="w-3 h-3" />
-                    {getTimeLeftText(task.createdAt)}
+                    {getTimeLeftText(task)}
                   </span>
                   <button
                     onClick={() => deleteTask(task.id)}
@@ -384,7 +398,6 @@ export const DailyTracker: React.FC = () => {
         </div>
       </div>
 
-      {/* Upcoming Exams Section */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm transition-colors">
         <div className="flex justify-between items-center mb-4">
           <div>
