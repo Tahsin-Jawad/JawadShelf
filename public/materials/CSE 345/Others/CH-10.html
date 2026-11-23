@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 10: Sequential Logic Design | Complete Bilingual Study Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Hind Siliguri', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        .bangla {
+            font-family: 'Hind Siliguri', sans-serif;
+            line-height: 1.85;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .overline {
+            text-decoration: overline;
+        }
+        @media print {
+            body { background-color: #ffffff !important; color: #000000 !important; }
+            .no-print { display: none !important; }
+            .main-content { margin-left: 0 !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; }
+            .card-section { box-shadow: none !important; border: 1px solid #cbd5e1 !important; break-inside: avoid-page; margin-bottom: 1.5rem !important; }
+            .page-break { page-break-before: always; }
+        }
+        /* K-Map Styling */
+        .kmap-table { border-collapse: collapse; }
+        .kmap-table th, .kmap-table td {
+            border: 2px solid #334155;
+            width: 52px;
+            height: 46px;
+            text-align: center;
+            vertical-align: middle;
+            position: relative;
+        }
+        .kmap-corner {
+            background: linear-gradient(to top right, transparent calc(50% - 1px), #334155, transparent calc(50% + 1px));
+            width: 72px !important;
+            height: 52px !important;
+        }
+        .cell-idx {
+            position: absolute;
+            top: 1px;
+            right: 3px;
+            font-size: 0.62rem;
+            color: #64748b;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .grp-blue { background-color: rgba(37, 99, 235, 0.14); border: 2.5px solid #1d4ed8 !important; font-weight: 700; color: #1e3a8a; }
+        .grp-red { background-color: rgba(220, 38, 38, 0.14); border: 2.5px solid #b91c1c !important; font-weight: 700; color: #7f1d1d; }
+        .grp-green { background-color: rgba(5, 150, 105, 0.14); border: 2.5px solid #047857 !important; font-weight: 700; color: #064e3b; }
+    </style>
+</head>
+<body class="antialiased selection:bg-blue-900 selection:text-white">
+
+    <!-- Mobile Sticky Top Bar -->
+    <header class="lg:hidden sticky top-0 z-50 bg-slate-950 text-white px-4 py-3 flex items-center justify-between shadow-md no-print">
+        <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-blue-300">Digital Logic Design</span>
+            <h1 class="text-base font-bold leading-tight">Chapter 10: Sequential Logic Design</h1>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3 py-2 rounded-lg transition">Print PDF</button>
+            <button id="mobileMenuBtn" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200" aria-label="Menu">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileDrawer" class="hidden fixed inset-0 z-40 bg-slate-900/80 backdrop-blur-sm lg:hidden no-print">
+        <div class="w-72 bg-slate-950 text-slate-100 h-full p-5 overflow-y-auto">
+            <div class="flex justify-between items-center mb-5 border-b border-slate-800 pb-3">
+                <span class="font-bold text-lg text-white">Chapter 10 Index</span>
+                <button id="closeDrawerBtn" class="text-slate-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <nav class="space-y-1.5 text-sm" id="mobileNavLinks"></nav>
+        </div>
+    </div>
+
+    <div class="flex min-h-screen">
+        <!-- Fixed Desktop Sidebar -->
+        <aside class="hidden lg:flex lg:flex-col lg:w-80 lg:fixed lg:inset-y-0 bg-slate-950 text-slate-200 border-r border-slate-800 no-print">
+            <div class="p-5 border-b border-slate-800">
+                <span class="inline-block px-2.5 py-0.5 rounded bg-blue-900/70 border border-blue-700/50 text-blue-300 text-xs font-semibold uppercase tracking-wide mb-2">
+                    Complete Step-by-Step Guide
+                </span>
+                <h1 class="text-lg font-extrabold text-white tracking-tight">Chapter 10: Sequential Logic Design</h1>
+                <p class="text-xs text-slate-400 mt-1">Part A: Easy Bangla &bull; Part B: Exam English</p>
+            </div>
+
+            <!-- Language Toggle -->
+            <div class="px-5 py-3 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+                <span class="text-xs font-medium text-slate-400">Language Mode:</span>
+                <div class="inline-flex rounded-lg bg-slate-800 p-0.5 text-xs">
+                    <button onclick="setViewMode('both')" id="btn-both" class="px-2.5 py-1 rounded-md font-semibold bg-blue-600 text-white transition">Both</button>
+                    <button onclick="setViewMode('bn')" id="btn-bn" class="px-2.5 py-1 rounded-md font-semibold text-slate-300 hover:text-white transition">বাংলা</button>
+                    <button onclick="setViewMode('en')" id="btn-en" class="px-2.5 py-1 rounded-md font-semibold text-slate-300 hover:text-white transition">English</button>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto text-xs" id="desktopNavLinks">
+                <a href="#sec-pdf-audit" class="block px-3 py-2 rounded-lg hover:bg-slate-900 text-amber-300 font-semibold transition">0. PDF &amp; Handwriting Audit (Typos &amp; Notes)</a>
+                <a href="#sec-10-1" class="block px-3 py-2 rounded-lg hover:bg-slate-900 text-slate-300 hover:text-white transition">10.1 Introduction to Sequential Circuits</a>
+                <a href="#sec-zero-to-hero" class="block px-3 py-2 rounded-lg bg-blue-950/60 border border-blue-800/50 text-blue-200 font-semibold transition">★ Zero-to-Hero: States &amp; Transition Tables</a>
+                <a href="#sec-10-2" class="block px-3 py-2 rounded-lg hover:bg-slate-900 text-slate-300 hover:text-white transition">10.2 Representations (Fig 10.1, Table 10.1–10.2)</a>
+                <a href="#sec-10-3" class="block px-3 py-2 rounded-lg hover:bg-slate-900 text-slate-300 hover:text-white transition">10.3 Analysis Procedure (Fig 10.4 Step-by-Step)</a>
+                <a href="#sec-10-4-1" class="block px-3 py-2 rounded-lg bg-blue-950/60 border border-blue-800/50 text-blue-200 font-semibold transition">10.4.1 State Reduction (Tables 10.4–10.8)</a>
+                <a href="#sec-10-4-2" class="block px-3 py-2 rounded-lg hover:bg-slate-900 text-slate-300 hover:text-white transition">10.4.2 State Assignment (Tables 10.9–10.10)</a>
+                <a href="#sec-10-5-master" class="block px-3 py-2 rounded-lg bg-blue-950/60 border border-blue-800/50 text-blue-200 font-semibold transition">10.5 15-Step Design Blueprint &amp; K-Map Rules</a>
+                <a href="#sec-ex1" class="block px-3 py-2 rounded-lg hover:bg-slate-900 text-slate-300 hover:text-white pl-5 transition">&bull; Example 1: JK Design (Fig 10.6)</a>
+                <a href="#sec-ex2" class="block px-3 py-2 rounded-lg hover:bg-slate-900 text-slate-300 hover:text-white pl-5 transition">&bull; Example 2: SR Design (Table 10.4)</a>
+                <a href="#sec-ex3" class="block px-3 py-2 rounded-lg hover:bg-slate-900 text-slate-300 hover:text-white pl-5 transition">&bull; Example 3: 0010 Sequence Detector</a>
+                <a href="#sec-reset-self" class="block px-3 py-2 rounded-lg hover:bg-slate-900 text-slate-300 hover:text-white transition">10.5.1 Master Reset, Unused &amp; Self-Starting</a>
+                <a href="#sec-exercises" class="block px-3 py-2 rounded-lg bg-emerald-950/50 border border-emerald-800/40 text-emerald-200 font-semibold transition">Complete Solutions: Exercises 10.1 – 10.11</a>
+            </nav>
+
+            <div class="p-4 border-t border-slate-800">
+                <button onclick="window.print()" class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl shadow transition flex items-center justify-center gap-2 text-xs">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                    Save / Print Study Guide as PDF
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Study Guide Area -->
+        <main class="main-content flex-1 lg:ml-80 px-4 sm:px-8 lg:px-12 py-8 max-w-6xl mx-auto">
+
+            <!-- Hero Header -->
+            <div class="bg-gradient-to-r from-slate-950 via-blue-950 to-slate-900 text-white rounded-2xl p-6 sm:p-8 mb-8 shadow-lg border border-slate-800">
+                <span class="inline-block px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold mb-3">
+                    25-Page Textbook &amp; Handwritten Notes Verified &bull; East West University Edition
+                </span>
+                <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-2">
+                    Chapter 10: Sequential Logic Design
+                </h1>
+                <p class="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">
+                    Designed specifically to take you from zero confusion to complete exam mastery. Every concept follows: <strong>Basic Intuition &rarr; Why We Need It &rarr; Tiny Step-by-Step Example &rarr; Full Textbook Problem &rarr; Exam-Ready English Answer</strong>.
+                </p>
+            </div>
+
+            <!-- ===================================================================== -->
+            <!-- SECTION 0: PDF & HANDWRITING AUDIT (CRITICAL CLARIFICATIONS)          -->
+            <!-- ===================================================================== -->
+            <section id="sec-pdf-audit" class="card-section bg-white rounded-2xl shadow-sm border-2 border-amber-300 p-6 sm:p-8 mb-8">
+                <div class="flex items-center gap-3 border-b border-amber-200 pb-4 mb-5">
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 font-extrabold flex items-center justify-center text-lg">!</div>
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-800">Section 0 &bull; Critical PDF &amp; Class Note Audit</span>
+                        <h2 class="text-xl font-bold text-slate-900">Important Textbook Printing Typos &amp; Handwritten Notes Explained</h2>
+                    </div>
+                </div>
+
+                <div class="bn-block bg-amber-50/70 border-l-4 border-amber-600 p-4 rounded-r-xl mb-5 bangla text-sm text-slate-800">
+                    <p class="font-bold text-amber-950 mb-1">কেন এই অংশটি আগে পড়া জরুরি?</p>
+                    <p>তোমার দেওয়া ২৫ পৃষ্ঠার বইয়ের পিডিএফে বেশ কিছু ছাপার ভুল (Printing Typos) এবং ক্লাসের হাতে লেখা পেন্সিল/কলমের নোট রয়েছে। তুমি যদি না জেনে বইয়ের ছাপার ভুল মুখস্থ করো, তাহলে পরীক্ষায় নম্বর কাটা যাবে! নিচে প্রতিটি পৃষ্ঠার ছাপার ভুল এবং হাতে লেখা নোট আলাদা করে পরিষ্কার করে দেওয়া হলো:</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4 text-xs sm:text-sm">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <h3 class="font-bold text-slate-900 mb-2">1. Textbook Printing Typos Identified Across the 25 Pages:</h3>
+                        <ul class="list-disc pl-5 space-y-2 text-slate-700">
+                            <li><strong>Page 4 (Table 10.2 Column Order):</strong> The column headers are printed in Gray-code order <code>00, 10, 11, 01</code> instead of standard <code>00, 01, 11, 10</code>, which swaps the middle columns compared to Table 10.1.</li>
+                            <li><strong>Page 5 (Caption Typo):</strong> The state diagram at the top of page 5 is mislabeled as <em>"Table 10.3 State diagram for the sequential circuit of Figure 10.1"</em> — it is actually <strong>Figure 10.3</strong>!</li>
+                            <li><strong>Page 8 (Table 10.4 OCR/Print Garble):</strong> Rows E, F, G are visually smudged/shifted in the scan. From the text on page 7–8, the true rows are: <strong>E &rarr; A,0 (x=0), F,1 (x=1)</strong>; <strong>F &rarr; E,0 (x=0), F,1 (x=1)</strong>; <strong>G &rarr; A,0 (x=0), F,1 (x=1)</strong>.</li>
+                            <li><strong>Page 10 (Table 10.9 Header Typo):</strong> Both the 2nd and 3rd assignment columns are printed as <em>"Assignment 2"</em>. The 3rd column is actually <strong>Assignment 3</strong>.</li>
+                            <li><strong>Page 12 (Table 10.11):</strong> Column headers are printed as <code>1  0</code>, whereas the entries in the rows (<code>00, 01</code> for row 00) actually correspond to <strong>x = 0 (left)</strong> and <strong>x = 1 (right)</strong>!</li>
+                            <li><strong>Page 18 (Table 10.18 Row 10 Output):</strong> Output column shows <code>1 0</code>, whereas Table 10.17 and the K-map for <code>z = Q1<sub>n</sub>Q2'<sub>n</sub>x'</code> prove that for state <code>10</code>, output is <strong>1 when x=0</strong> and <strong>0 when x=1</strong>.</li>
+                            <li><strong>Page 21 (Figure 10.15 Caption):</strong> Printed as <em>"Figure 13.10"</em> — this is a typo for <strong>Figure 10.10</strong>.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-blue-50/50 border border-blue-200 rounded-xl p-4">
+                        <h3 class="font-bold text-blue-950 mb-2">2. Handwritten Pencil/Pen Annotations Decoded:</h3>
+                        <ul class="list-disc pl-5 space-y-2 text-slate-700">
+                            <li><strong>Page 2 (Figure 10.1):</strong> Pencil line traces the wire from <code>Q2</code> up to the top AND gate input to verify <code>z = x<sub>1</sub>Q2<sub>n</sub></code>.</li>
+                            <li><strong>Page 4 (Figure 10.2):</strong> Hand-drawn circle around <code>00/0, 10/1</code> and bracket around <code>00/0..10/0</code> highlight how multiple input/output pairs share a single directed arrow between two states.</li>
+                            <li><strong>Page 5 (Figure 10.4):</strong> Handwritten labels <code>T1, T2, T3, T4, T5, T6</code> mark the internal gate outputs (e.g., <code>T1 = xQ1</code>, <code>T2 = x'Q1'</code>, <code>T4 = xQ1'</code>, <code>T5 = x'Q2</code>) to make writing excitation equations easier!</li>
+                            <li><strong>Page 11 (Figure 10.6):</strong> Checkmark (&check;) next to the transition diagram indicates an exam-important problem.</li>
+                            <li><strong>Page 22 (Exercises 10.1–10.3):</strong> Pencil gate-tracing notes (<code>x1, x2', z</code>, <code>R2 = Q2'</code>, <code>x'Q1</code>, <code>Q2'Q1</code>) show the exact intermediate gate products derived by the instructor in class—all verified in our Exercise solutions below!</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- SECTION 10.1: INTRODUCTION                                            -->
+            <!-- ===================================================================== -->
+            <section id="sec-10-1" class="card-section bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-700">Section 10.1</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-1">10.1 Introduction to Sequential Logic Design</h2>
+                </div>
+
+                <!-- Part A: Easy Bangla -->
+                <div class="bn-block mb-6 bg-blue-50/50 border-l-4 border-blue-700 rounded-r-xl p-5 bangla text-slate-800 space-y-3">
+                    <h3 class="text-lg font-bold text-blue-950">Part A: সহজ বাংলায় বিস্তারিত ব্যাখ্যা</h3>
+                    <p>
+                        <strong>১. Sequential Circuit কী?</strong><br>
+                        কোনো ডিজিটাল সার্কিটে যদি অন্তত একটি <strong>Flip-Flop</strong> (মেমোরি উপাদান) থাকে, তবে তাকে <strong>Sequential Circuit</strong> বলে। এর সাথে AND, OR, NOT ইত্যাদি Combinational Gate থাকতেও পারে, আবার নাও থাকতে পারে। এই সার্কিটের আউটপুট কেবল বর্তমান ইনপুটের ওপর নির্ভর করে না—বরং সার্কিটের ভেতরে আগে থেকে কী মান জমা আছে (<strong>Present State</strong>), তার ওপরও নির্ভর করে।
+                    </p>
+                    <p>
+                        <strong>২. Synchronous বনাম Asynchronous Sequential Circuit (পার্থক্য কী এবং কেন Synchronous ব্যবহার করি?):</strong><br>
+                        &bull; <strong>Asynchronous Sequential Circuit:</strong> এখানে কোনো ঘড়ি বা Clock (<code>CK</code>) থাকে না। ইনপুট যেকোনো মুহূর্তে বদলালে সার্কিটের অবস্থা সাথে সাথে বদলে যায়। এর বড় সমস্যা হলো—যদি দুটি ইনপুট প্রায় একই সময়ে বদলায়, তবে সার্কিটটি <strong>Unstable (অস্থির)</strong> হয়ে ভুল আউটপুট দিতে পারে।<br>
+                        &bull; <strong>Synchronous (Clocked) Sequential Circuit:</strong> এখানে একটি মাস্টার <strong>Clock Pulse (CK)</strong> থাকে। ইনপুট যাই বদলাক না কেন, ঘড়ির কাঁটা বা Clock-এর নির্দিষ্ট পালস না আসা পর্যন্ত ফ্লিপ-ফ্লপের অবস্থা বদলায় না। এতে কোনো Instability (অস্থিরতা) থাকে না। তাই পুরো অধ্যায় ১০-এ আমরা শুধুমাত্র <strong>Clocked Synchronous Sequential Circuit</strong> নিয়ে কাজ করব।
+                    </p>
+                    <p>
+                        <strong>৩. চারটি মূল উপাদান:</strong> প্রতিটি ক্লকড সিকোয়েনশিয়াল সার্কিটে চারটি বিষয় থাকে:<br>
+                        (১) <strong>External Inputs (x):</strong> বাইরে থেকে দেওয়া ইনপুট।<br>
+                        (২) <strong>Present State (Q<sub>n</sub>):</strong> ক্লক পালস আসার ঠিক আগে ফ্লিপ-ফ্লপে জমা থাকা মান।<br>
+                        (৩) <strong>Next State (Q<sub>n+1</sub>):</strong> ক্লক পালস আসার পর ফ্লিপ-ফ্লপে যে নতুন মান জমা হবে।<br>
+                        (৪) <strong>External Outputs (z):</strong> সার্কিট থেকে বাইরে বের হওয়া চূড়ান্ত আউটপুট।
+                    </p>
+                </div>
+
+                <!-- Part B: Exam-Ready English -->
+                <div class="en-block">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Part B: Easy English — Exam Preparation (5 Marks)</h3>
+                    <p class="text-sm text-slate-700 leading-relaxed mb-3">
+                        <strong>Sequential Circuit:</strong> A digital logic circuit containing memory elements (flip-flops) along with combinational logic gates is called a <em>sequential circuit</em>. Its external outputs and next internal state are functions of both the <strong>external inputs</strong> and the <strong>present state</strong> of the flip-flops.
+                    </p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left border-collapse border border-slate-300">
+                            <thead class="bg-slate-900 text-white">
+                                <tr>
+                                    <th class="p-3 border border-slate-700">Basis</th>
+                                    <th class="p-3 border border-slate-700">Synchronous (Clocked) Sequential Circuit</th>
+                                    <th class="p-3 border border-slate-700">Asynchronous Sequential Circuit</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                <tr class="bg-white">
+                                    <td class="p-3 font-semibold border border-slate-300">Timing Control</td>
+                                    <td class="p-3 border border-slate-300">Behavior is defined only at discrete instants synchronized by a <strong>Clock (CK)</strong> pulse.</td>
+                                    <td class="p-3 border border-slate-300">Behavior depends on the order in which inputs change; affected at <strong>any instant</strong> without a clock.</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="p-3 font-semibold border border-slate-300">Stability</td>
+                                    <td class="p-3 border border-slate-300"><strong>Highly stable</strong>; immune to race/instability issues.</td>
+                                    <td class="p-3 border border-slate-300">May become <strong>unstable</strong>, making design difficult.</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="p-3 font-semibold border border-slate-300">Popularity</td>
+                                    <td class="p-3 border border-slate-300">Most widely used in modern digital systems.</td>
+                                    <td class="p-3 border border-slate-300">Less commonly used due to timing hazards.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- HIGHEST PRIORITY: ZERO-TO-HERO GUIDE ON STATES & TRANSITION TABLES     -->
+            <!-- ===================================================================== -->
+            <section id="sec-zero-to-hero" class="card-section bg-white rounded-2xl shadow-md border-2 border-blue-700 p-6 sm:p-8 mb-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="px-2.5 py-1 rounded bg-blue-700 text-white text-xs font-bold uppercase tracking-wider">Highest Priority Deep-Dive</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900 mt-2">Zero-to-Hero: How States Become Next States &amp; How to Fill Transition Tables</h2>
+                    <p class="text-xs text-slate-500 mt-1">Answering all 10 fundamental questions slowly, with progressive examples from 1 Flip-Flop to 2 Flip-Flops</p>
+                </div>
+
+                <!-- 10 Fundamental Questions Answered Slowly -->
+                <div class="bn-block mb-6 bg-blue-50/60 border-l-4 border-blue-700 rounded-r-xl p-5 bangla text-slate-800 space-y-3 text-sm">
+                    <h3 class="text-lg font-bold text-blue-950">Part A: একদম শূন্য থেকে ১০টি মৌলিক প্রশ্নের সহজ উত্তর</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white p-3.5 rounded-xl border border-blue-200">
+                            <p><strong>১. State (অবস্থা) কী?</strong><br>সার্কিটের সবগুলো ফ্লিপ-ফ্লপের আউটপুটে এই মুহূর্তে যে বাইনারি সংখ্যা জমা আছে, তাকেই <strong>State</strong> বলে। যেমন: ২টি ফ্লিপ-ফ্লপ <code>Q1</code> এবং <code>Q2</code>-তে যদি <code>0</code> এবং <code>1</code> জমা থাকে, তবে সার্কিটটি <code>01</code> স্টেটে আছে।</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-blue-200">
+                            <p><strong>২. Present State বা Q(n) কী?</strong><br>Clock pulse আসার <strong>ঠিক আগের মুহূর্তে</strong> ফ্লিপ-ফ্লপের ভেতরে যে মান জমা আছে। সময় <code>t = n</code> বোঝাতে একে <code>Q(n)</code> বা <code>Q<sub>n</sub></code> লেখা হয়।</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-blue-200">
+                            <p><strong>৩. Next State বা Q(n+1) কী?</strong><br>একটি Clock pulse আসার <strong>ঠিক পরের মুহূর্তে</strong> (সময় <code>t = n+1</code>) ফ্লিপ-ফ্লপের আউটপুট আপডেট হয়ে যে নতুন মান তৈরি হয়, তাকে <code>Q(n+1)</code> বা <code>Q<sub>n+1</sub></code> বলে।</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-blue-200">
+                            <p><strong>৪. External Input Combinations কেন লাগে?</strong><br>ফ্লিপ-ফ্লপের পরবর্তী অবস্থা কেবল বর্তমান অবস্থার ওপর নির্ভর করে না, বাইরে থেকে তুমি কী সিগন্যাল (যেমন <code>x = 0</code> নাকি <code>x = 1</code>) দিচ্ছ তার ওপরও নির্ভর করে। তাই সব সম্ভাব্য ইনপুট কম্বিনেশন টেবিলে রাখতে হয়।</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-blue-200">
+                            <p><strong>৫. Clock Pulse কীভাবে State বদলায়?</strong><br>ক্লক আসার আগে গেটগুলো হিসাব করে রাখে পরবর্তী মান কী হবে, কিন্তু আউটপুট বদলায় না। যেই মুহূর্তে Clock-এর ট্রিগার এজ (Edge) আসে, সাথে সাথে <code>Q(n)</code> মুছে গিয়ে <code>Q(n+1)</code>-এর মান ফ্লিপ-ফ্লপে লোড হয়ে যায়।</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-blue-200">
+                            <p><strong>৬. Next State ও Output কীভাবে হিসাব করব?</strong><br>খুবই সহজ! প্রথমে <strong>Next-State Equation</strong> (যেমন <code>Q<sub>n+1</sub> = x &oplus; Q<sub>n</sub></code>)-এ বর্তমান <code>Q<sub>n</sub></code> এবং ইনপুট <code>x</code>-এর মান বসিয়ে <code>Q<sub>n+1</sub></code> বের করবে। তারপর <strong>Output Equation</strong> (যেমন <code>z = x&middot;Q<sub>n</sub></code>)-এ একই মান বসিয়ে <code>z</code> বের করবে।</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progressive Mini Examples (1 FF -> 2 FFs) -->
+                <div class="space-y-6 mb-6">
+                    <!-- Mini Example A: 1 Flip-Flop, 1 Input -->
+                    <div class="bg-slate-50 border border-slate-300 rounded-xl p-5">
+                        <span class="px-2 py-0.5 bg-slate-800 text-white text-xs font-bold rounded">Level 1 Warm-Up</span>
+                        <h4 class="font-bold text-slate-900 text-base mt-1 mb-2">Mini Example A: 1 Flip-Flop (Q) and 1 External Input (x)</h4>
+                        <p class="text-xs sm:text-sm text-slate-700 mb-3">
+                            <strong>Given Equations:</strong> Next State Equation: <span class="mono font-bold text-blue-900">Q(n+1) = x &oplus; Q(n)</span> &nbsp;|&nbsp; Output Equation: <span class="mono font-bold text-emerald-800">z = x &middot; Q(n)</span>.<br>
+                            Since there is <strong>1 flip-flop</strong>, there are <span class="mono">2<sup>1</sup> = 2</span> possible Present States: <strong>0</strong> and <strong>1</strong>. Since there is <strong>1 input (x)</strong>, there are <span class="mono">2<sup>1</sup> = 2</span> input values: <strong>0</strong> and <strong>1</strong>. Total cells = <span class="mono">2 &times; 2 = 4</span>.
+                        </p>
+                        <div class="grid md:grid-cols-2 gap-4 items-center">
+                            <div class="text-xs space-y-1.5 bg-white p-3.5 rounded-lg border border-slate-200 mono">
+                                <div class="font-sans font-bold text-slate-800 mb-1">Cell-by-Cell Calculation:</div>
+                                <div>&bull; Row Q(n)=0, Col x=0: Q(n+1) = 0&oplus;0 = <strong>0</strong>; z = 0&middot;0 = <strong>0</strong></div>
+                                <div>&bull; Row Q(n)=0, Col x=1: Q(n+1) = 1&oplus;0 = <strong>1</strong>; z = 1&middot;0 = <strong>0</strong></div>
+                                <div>&bull; Row Q(n)=1, Col x=0: Q(n+1) = 0&oplus;1 = <strong>1</strong>; z = 0&middot;1 = <strong>0</strong></div>
+                                <div>&bull; Row Q(n)=1, Col x=1: Q(n+1) = 1&oplus;1 = <strong>0</strong>; z = 1&middot;1 = <strong>1</strong></div>
+                            </div>
+                            <table class="w-full text-center text-xs mono border border-slate-300 bg-white">
+                                <thead class="bg-slate-900 text-white">
+                                    <tr>
+                                        <th class="p-2 border" rowspan="2">Present State<br>Q(n)</th>
+                                        <th class="p-2 border" colspan="2">Next State Q(n+1)</th>
+                                        <th class="p-2 border" colspan="2">Output z</th>
+                                    </tr>
+                                    <tr class="bg-slate-800">
+                                        <th class="p-1.5 border">x = 0</th><th class="p-1.5 border">x = 1</th>
+                                        <th class="p-1.5 border">x = 0</th><th class="p-1.5 border">x = 1</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="p-2 border font-bold">0</td><td class="p-2 border">0</td><td class="p-2 border text-blue-700 font-bold">1</td><td class="p-2 border">0</td><td class="p-2 border">0</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2 border font-bold">1</td><td class="p-2 border text-blue-700 font-bold">1</td><td class="p-2 border">0</td><td class="p-2 border">0</td><td class="p-2 border text-emerald-700 font-bold">1</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Mini Example B: 2 Flip-Flops, 1 Input -->
+                    <div class="bg-slate-50 border border-slate-300 rounded-xl p-5">
+                        <span class="px-2 py-0.5 bg-blue-800 text-white text-xs font-bold rounded">Level 2 Step-Up</span>
+                        <h4 class="font-bold text-slate-900 text-base mt-1 mb-2">Mini Example B: 2 Flip-Flops (Q1, Q2) and 1 External Input (x)</h4>
+                        <p class="text-xs sm:text-sm text-slate-700 mb-2">
+                            With <strong>2 flip-flops</strong>, there are <span class="mono">2<sup>2</sup> = 4</span> Present States: <strong>00, 01, 10, 11</strong>. Suppose <span class="mono">Q1(n+1) = x + Q2(n)</span> and <span class="mono">Q2(n+1) = Q1(n)</span>, with output <span class="mono">z = Q1(n)&middot;Q2(n)</span>.
+                            Let's calculate Row <span class="mono font-bold">Q1Q2 = 01</span> for <span class="mono font-bold">x = 0</span>:
+                        </p>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 text-xs mono text-slate-800">
+                            Here Q1(n) = 0, Q2(n) = 1, and x = 0:<br>
+                            1) Q1(n+1) = x + Q2(n) = 0 + 1 = <strong>1</strong><br>
+                            2) Q2(n+1) = Q1(n) = <strong>0</strong> &nbsp;&rArr;&nbsp; So Combined Next State <strong>Q1(n+1)Q2(n+1) = 10</strong>!<br>
+                            3) Output z = Q1(n)&middot;Q2(n) = 0 &middot; 1 = <strong>0</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transition Table vs State Table & How Arrows Are Drawn -->
+                <div class="en-block grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-base mb-2">Transition Table vs. State Table (Exam Comparison)</h4>
+                        <table class="w-full text-xs sm:text-sm text-left border-collapse border border-slate-300">
+                            <thead class="bg-slate-900 text-white">
+                                <tr>
+                                    <th class="p-2.5 border border-slate-700">Transition Table</th>
+                                    <th class="p-2.5 border border-slate-700">State Table</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white">
+                                    <td class="p-2.5 border border-slate-300">Uses <strong>binary values</strong> (e.g., <code>00, 01, 10, 11</code>) for states.</td>
+                                    <td class="p-2.5 border border-slate-300">Uses <strong>alphabetic symbols</strong> (e.g., <code>A, B, C, D</code>) for states.</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="p-2.5 border border-slate-300">Shows exact flip-flop bit transitions (<span class="mono">Q1<sub>n</sub>Q2<sub>n</sub> &rarr; Q1<sub>n+1</sub>Q2<sub>n+1</sub></span>).</td>
+                                    <td class="p-2.5 border border-slate-300">Compact, abstract representation independent of flip-flop bit coding.</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="p-2.5 border border-slate-300">Used directly for <strong>circuit analysis</strong> &amp; deriving K-maps.</td>
+                                    <td class="p-2.5 border border-slate-300">Used for <strong>state reduction</strong> and high-level behavioral design.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="bg-slate-900 text-slate-100 rounded-xl p-5 text-xs sm:text-sm">
+                        <h4 class="font-bold text-blue-300 text-base mb-2">How a Transition Table Becomes a Transition Diagram:</h4>
+                        <ol class="list-decimal pl-5 space-y-2 text-slate-300">
+                            <li><strong>Draw Circles (Nodes):</strong> Draw one circle for each state (e.g., <code>00</code>, <code>01</code>, <code>10</code>, <code>11</code>).</li>
+                            <li><strong>Draw Arrows (Directed Edges):</strong> Look at row <code>00</code>. If input <code>x = 0</code> sends the circuit to Next State <code>10</code> with output <code>z = 1</code>, draw an arrow starting at circle <code>00</code> and pointing to circle <code>10</code>.</li>
+                            <li><strong>Label the Arrow (<span class="mono text-amber-300">Input / Output</span>):</strong> Write <span class="mono font-bold text-white">0 / 1</span> on that arrow (meaning: <em>when input is 0, output is 1</em>).</li>
+                            <li><strong>Self-Loops:</strong> If Next State equals Present State (e.g., <code>11 &rarr; 11</code>), draw a curved arrow looping back into the same circle.</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- SECTION 10.2: REPRESENTATION OF SEQUENTIAL CIRCUITS (FIG 10.1)        -->
+            <!-- ===================================================================== -->
+            <section id="sec-10-2" class="card-section bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-8 page-break">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-700">Section 10.2 &bull; Textbook Figure 10.1, Table 10.1, Table 10.2, Fig 10.2 &amp; 10.3</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-1">10.2 Representation of Sequential Circuits (Complete Walkthrough of Fig. 10.1)</h2>
+                </div>
+
+                <!-- Part A: Easy Bangla -->
+                <div class="bn-block mb-6 bg-blue-50/50 border-l-4 border-blue-700 rounded-r-xl p-5 bangla text-slate-800 space-y-2 text-sm">
+                    <h3 class="text-lg font-bold text-blue-950">Part A: সহজ বাংলায় Figure 10.1-এর সম্পূর্ণ ব্যাখ্যা</h3>
+                    <p>
+                        বইয়ের <strong>Figure 10.1</strong>-এ দুটি D Flip-Flop (<code>FF1</code> ও <code>FF2</code>), দুটি বাহ্যিক ইনপুট (<code>x<sub>1</sub></code> ও <code>x<sub>2</sub></code>) এবং একটি বাহ্যিক আউটপুট (<code>z</code>) রয়েছে।
+                    </p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>ধাপ ১ (Excitation Equations):</strong> চিত্র দেখে গেটগুলোর আউটপুট লিখি: <code>D1<sub>n</sub> = x<sub>2</sub> + Q2'<sub>n</sub></code> (OR গেট) এবং <code>D2<sub>n</sub> = Q1<sub>n</sub>&middot;Q2<sub>n</sub></code> (নিচের AND গেট)।</li>
+                        <li><strong>ধাপ ২ (Next-State Equations):</strong> যেহেতু D Flip-Flop-এ <code>Q<sub>n+1</sub> = D<sub>n</sub></code>, তাই <code>Q1<sub>n+1</sub> = x<sub>2</sub> + Q2'<sub>n</sub></code> এবং <code>Q2<sub>n+1</sub> = Q1<sub>n</sub>&middot;Q2<sub>n</sub></code>। আর উপরের AND গেট থেকে আউটপুট: <code>z = x<sub>1</sub>&middot;Q2<sub>n</sub></code>।</li>
+                        <li><strong>ধাপ ৩ (কিভাবে Table 10.1 পূরণ হলো?):</strong> ধরো Present State <code>Q1<sub>n</sub>Q2<sub>n</sub> = 01</code> এবং ইনপুট <code>x<sub>1</sub>x<sub>2</sub> = 11</code>। তাহলে <code>Q1<sub>n</sub>=0, Q2<sub>n</sub>=1, x<sub>1</sub>=1, x<sub>2</sub>=1</code>। মান বসালে: <code>Q1<sub>n+1</sub> = 1 + 0 = 1</code>, <code>Q2<sub>n+1</sub> = 0 &middot; 1 = 0</code> (অর্থাৎ Next State = <code>10</code>) এবং <code>z = 1 &middot; 1 = 1</code>। এভাবে ১৬টি ঘর পূরণ করা হয়েছে!</li>
+                    </ul>
+                </div>
+
+                <!-- Circuit SVG + Equations -->
+                <div class="grid lg:grid-cols-2 gap-6 items-center mb-6">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                        <span class="text-xs font-bold text-slate-600 uppercase mb-2">Textbook Figure 10.1 Logic Diagram</span>
+                        <svg viewBox="0 0 430 250" class="w-full max-w-md h-auto">
+                            <!-- Inputs x1, x2 -->
+                            <text x="12" y="34" font-size="13" font-weight="bold">x<tspan dy="3" font-size="9">1</tspan></text>
+                            <line x1="30" y1="30" x2="145" y2="30" stroke="#0f172a" stroke-width="1.8"/>
+                            <text x="12" y="74" font-size="13" font-weight="bold">x<tspan dy="3" font-size="9">2</tspan></text>
+                            <line x1="30" y1="70" x2="145" y2="70" stroke="#0f172a" stroke-width="1.8"/>
+
+                            <!-- Top AND Gate (Output z = x1 * Q2) -->
+                            <path d="M 145 22 L 170 22 A 14 14 0 0 1 170 50 L 145 50 Z" fill="#fff" stroke="#0f172a" stroke-width="1.8"/>
+                            <line x1="184" y1="36" x2="380" y2="36" stroke="#0f172a" stroke-width="1.8"/>
+                            <text x="388" y="40" font-size="13" font-weight="bold" fill="#047857">z = x<tspan dy="3" font-size="9">1</tspan><tspan dy="-3">Q2</tspan></text>
+
+                            <!-- Middle OR Gate (D1 = x2 + Q2') -->
+                            <path d="M 143 62 Q 153 76 143 90 Q 170 90 185 76 Q 170 62 143 62 Z" fill="#fff" stroke="#0f172a" stroke-width="1.8"/>
+                            <polyline points="185,76 235,76 235,112 260,112" fill="none" stroke="#1e3a8a" stroke-width="1.8"/>
+
+                            <!-- Bottom AND Gate (D2 = Q1 * Q2) -->
+                            <path d="M 145 106 L 170 106 A 14 14 0 0 1 170 134 L 145 134 Z" fill="#fff" stroke="#0f172a" stroke-width="1.8"/>
+                            <polyline points="184,120 220,120 220,185 260,185" fill="none" stroke="#1e3a8a" stroke-width="1.8"/>
+
+                            <!-- FF1 -->
+                            <rect x="260" y="98" width="85" height="62" rx="6" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2"/>
+                            <text x="302" y="132" text-anchor="middle" font-size="12" font-weight="bold">FF1</text>
+                            <text x="267" y="116" font-size="10" font-weight="bold">D1</text>
+                            <text x="327" y="116" font-size="10" font-weight="bold">Q1</text>
+                            <text x="325" y="152" font-size="10" font-weight="bold" class="overline">Q1</text>
+
+                            <!-- FF2 -->
+                            <rect x="260" y="172" width="85" height="62" rx="6" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2"/>
+                            <text x="302" y="206" text-anchor="middle" font-size="12" font-weight="bold">FF2</text>
+                            <text x="267" y="190" font-size="10" font-weight="bold">D2</text>
+                            <text x="327" y="190" font-size="10" font-weight="bold">Q2</text>
+                            <text x="325" y="226" font-size="10" font-weight="bold" class="overline">Q2</text>
+
+                            <!-- Feedback Q1 to Bottom AND -->
+                            <polyline points="345,112 370,112 370,164 115,164 115,126 145,126" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+                            <!-- Feedback Q2 to Top AND and Bottom AND -->
+                            <polyline points="345,186 385,186 385,12 95,12 95,114 145,114" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+                            <line x1="95" y1="42" x2="145" y2="42" stroke="#dc2626" stroke-width="1.5"/>
+                            <circle cx="95" cy="42" r="2.5" fill="#dc2626"/>
+                            <!-- Feedback Q2' to Middle OR -->
+                            <polyline points="345,222 398,222 398,242 75,242 75,83 146,83" fill="none" stroke="#059669" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+
+                    <div class="space-y-3 text-xs sm:text-sm">
+                        <div class="bg-slate-900 text-white p-4 rounded-xl mono">
+                            <div class="text-xs font-sans text-blue-300 font-bold uppercase mb-1">1. Excitation &amp; Next-State Equations:</div>
+                            <div>D1<sub>n</sub> = Q1<sub>n+1</sub> = x<sub>2</sub> + Q2'<sub>n</sub></div>
+                            <div>D2<sub>n</sub> = Q2<sub>n+1</sub> = Q1<sub>n</sub> &middot; Q2<sub>n</sub></div>
+                            <div class="text-emerald-300 mt-1">Output Equation: z = x<sub>1</sub> &middot; Q2<sub>n</sub></div>
+                        </div>
+
+                        <!-- Table 10.1 -->
+                        <div>
+                            <div class="font-bold text-slate-900 text-xs mb-1">2. Transition Table (Textbook Table 10.1):</div>
+                            <table class="w-full text-center text-xs mono border border-slate-300">
+                                <thead class="bg-slate-800 text-white">
+                                    <tr>
+                                        <th class="p-1.5 border" rowspan="2">Present<br>Q1<sub>n</sub>Q2<sub>n</sub></th>
+                                        <th class="p-1.5 border" colspan="4">Next State Q1<sub>n+1</sub>Q2<sub>n+1</sub> (x<sub>1</sub>x<sub>2</sub>)</th>
+                                        <th class="p-1.5 border" colspan="4">Output z (x<sub>1</sub>x<sub>2</sub>)</th>
+                                    </tr>
+                                    <tr class="bg-slate-700">
+                                        <th class="p-1 border">00</th><th class="p-1 border">01</th><th class="p-1 border">11</th><th class="p-1 border">10</th>
+                                        <th class="p-1 border">00</th><th class="p-1 border">01</th><th class="p-1 border">11</th><th class="p-1 border">10</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="p-1.5 border font-bold">00</td><td class="p-1 border">10</td><td class="p-1 border">10</td><td class="p-1 border">10</td><td class="p-1 border">10</td><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border">0</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-1.5 border font-bold">01</td><td class="p-1 border">00</td><td class="p-1 border">10</td><td class="p-1 border text-blue-700 font-bold">10</td><td class="p-1 border">00</td><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border text-emerald-700 font-bold">1</td><td class="p-1 border">1</td></tr>
+                                    <tr><td class="p-1.5 border font-bold">11</td><td class="p-1 border">01</td><td class="p-1 border">11</td><td class="p-1 border">11</td><td class="p-1 border">01</td><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border">1</td><td class="p-1 border">1</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-1.5 border font-bold">10</td><td class="p-1 border">10</td><td class="p-1 border">10</td><td class="p-1 border">10</td><td class="p-1 border">10</td><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border">0</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table 10.2 -->
+                        <div>
+                            <div class="font-bold text-slate-900 text-xs mb-1">3. State Table (Textbook Table 10.2 with A=00, B=01, C=11, D=10):</div>
+                            <table class="w-full text-center text-xs mono border border-slate-300">
+                                <thead class="bg-slate-800 text-white">
+                                    <tr>
+                                        <th class="p-1.5 border">Present State</th>
+                                        <th class="p-1.5 border">x<sub>1</sub>x<sub>2</sub> = 00</th>
+                                        <th class="p-1.5 border">x<sub>1</sub>x<sub>2</sub> = 01</th>
+                                        <th class="p-1.5 border">x<sub>1</sub>x<sub>2</sub> = 11</th>
+                                        <th class="p-1.5 border">x<sub>1</sub>x<sub>2</sub> = 10</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="p-1.5 border font-bold">A (00)</td><td class="p-1 border">D, 0</td><td class="p-1 border">D, 0</td><td class="p-1 border">D, 0</td><td class="p-1 border">D, 0</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-1.5 border font-bold">B (01)</td><td class="p-1 border">A, 0</td><td class="p-1 border">D, 0</td><td class="p-1 border">D, 1</td><td class="p-1 border">A, 1</td></tr>
+                                    <tr><td class="p-1.5 border font-bold">C (11)</td><td class="p-1 border">B, 0</td><td class="p-1 border">C, 0</td><td class="p-1 border">C, 1</td><td class="p-1 border">B, 1</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-1.5 border font-bold">D (10)</td><td class="p-1 border">D, 0</td><td class="p-1 border">D, 0</td><td class="p-1 border">D, 0</td><td class="p-1 border">D, 0</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- SECTION 10.3: ANALYSIS PROCEDURE (FIG 10.4 STEP-BY-STEP)              -->
+            <!-- ===================================================================== -->
+            <section id="sec-10-3" class="card-section bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-8 page-break">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-700">Section 10.3 &bull; Textbook Figure 10.4, Table 10.3 &amp; Figure 10.5</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-1">10.3 Analysis Procedure of Sequential Circuits (Complete Step-by-Step of Fig. 10.4)</h2>
+                </div>
+
+                <!-- Part A: Easy Bangla -->
+                <div class="bn-block mb-6 bg-blue-50/50 border-l-4 border-blue-700 rounded-r-xl p-5 bangla text-slate-800 space-y-2 text-sm">
+                    <h3 class="text-lg font-bold text-blue-950">Part A: সহজ বাংলায় Analysis বা সার্কিট বিশ্লেষণের ৪টি ধাপ</h3>
+                    <p>
+                        <strong>Analysis (বিশ্লেষণ)</strong> মানে হলো তোমাকে একটি আঁকা সার্কিট ডায়াগ্রাম দেওয়া থাকবে, আর তোমাকে বের করতে হবে সার্কিটটি কী কাজ করে (অর্থাৎ Transition Table ও Transition Diagram আঁকতে হবে)। এটি ঠিক Design-এর উল্টো প্রক্রিয়া!
+                    </p>
+                    <ol class="list-decimal pl-5 space-y-1.5">
+                        <li><strong>ধাপ ১:</strong> চিত্র দেখে প্রতিটি Flip-Flop-এর ইনপুট সমীকরণ (Excitation Equations) এবং বাইরের আউটপুট সমীকরণ (Output Equations) লেখো।</li>
+                        <li><strong>ধাপ ২:</strong> Flip-Flop-এর Characteristic Equation-এ (যেমন JK-এর ক্ষেত্রে <code>Q<sub>n+1</sub> = J&middot;Q'<sub>n</sub> + K'&middot;Q<sub>n</sub></code>) ধাপ ১-এর মান বসিয়ে Boolean Algebra দিয়ে সরল করো।</li>
+                        <li><strong>ধাপ ৩:</strong> সরলকৃত Next-State ও Output সমীকরণে মান বসিয়ে Transition Table পূরণ করো।</li>
+                        <li><strong>ধাপ ৪:</strong> Transition Table দেখে তীর চিহ্ন দিয়ে Transition Diagram আঁকো।</li>
+                    </ol>
+                </div>
+
+                <!-- Detailed Boolean Simplification of Figure 10.4 -->
+                <div class="en-block space-y-5">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-5">
+                        <h3 class="font-bold text-slate-900 text-base mb-2">Step 1 &amp; Step 2: Every Boolean Algebra Step Explained for Figure 10.4</h3>
+                        <div class="grid md:grid-cols-2 gap-4 text-xs sm:text-sm">
+                            <div class="bg-white p-4 rounded-lg border border-slate-200 mono space-y-1.5">
+                                <div class="font-sans font-bold text-blue-900">1. Excitation &amp; Output Equations from Gates:</div>
+                                <div>J1<sub>n</sub> = Q2'<sub>n</sub></div>
+                                <div>K1<sub>n</sub> = x&middot;Q1'<sub>n</sub> + x'&middot;Q2<sub>n</sub></div>
+                                <div>J2<sub>n</sub> = x&middot;Q1'<sub>n</sub></div>
+                                <div>K2<sub>n</sub> = x'&middot;Q1'<sub>n</sub> + x'&middot;Q1<sub>n</sub> = x'(Q1'<sub>n</sub> + Q1<sub>n</sub>) = <strong>x'</strong></div>
+                                <div class="pt-1 border-t border-slate-200 text-emerald-800">
+                                    z<sub>1</sub> = x&middot;Q1<sub>n</sub> + x'&middot;Q1'<sub>n</sub><br>
+                                    z<sub>2</sub> = x'&middot;Q1'<sub>n</sub> + x'&middot;Q1<sub>n</sub> = <strong>x'</strong>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-lg border border-slate-200 mono space-y-1.5">
+                                <div class="font-sans font-bold text-blue-900">2. Next-State Equation Derivation (JK Characteristic: Q<sub>n+1</sub> = JQ' + K'Q):</div>
+                                <div>Q1<sub>n+1</sub> = J1<sub>n</sub>Q1'<sub>n</sub> + K1'<sub>n</sub>Q1<sub>n</sub></div>
+                                <div class="text-slate-600">&nbsp;&nbsp;= Q2'<sub>n</sub>Q1'<sub>n</sub> + (xQ1'<sub>n</sub> + x'Q2<sub>n</sub>)' &middot; Q1<sub>n</sub></div>
+                                <div class="text-slate-600">&nbsp;&nbsp;= Q1'<sub>n</sub>Q2'<sub>n</sub> + (x' + Q1<sub>n</sub>)(x + Q2'<sub>n</sub>)Q1<sub>n</sub> <span class="font-sans text-[11px] text-blue-700">[De Morgan's Law]</span></div>
+                                <div class="text-slate-600">&nbsp;&nbsp;= Q1'<sub>n</sub>Q2'<sub>n</sub> + (x'Q2'<sub>n</sub> + xQ1<sub>n</sub> + Q1<sub>n</sub>Q2'<sub>n</sub>)Q1<sub>n</sub></div>
+                                <div class="text-slate-600">&nbsp;&nbsp;= Q1'<sub>n</sub>Q2'<sub>n</sub> + x'Q1<sub>n</sub>Q2'<sub>n</sub> + xQ1<sub>n</sub> + Q1<sub>n</sub>Q2'<sub>n</sub></div>
+                                <div class="text-slate-600">&nbsp;&nbsp;= Q1'<sub>n</sub>Q2'<sub>n</sub> + Q1<sub>n</sub>Q2'<sub>n</sub>(x' + 1) + xQ1<sub>n</sub> <span class="font-sans text-[11px] text-blue-700">[x' + 1 = 1]</span></div>
+                                <div class="text-slate-600">&nbsp;&nbsp;= Q2'<sub>n</sub>(Q1'<sub>n</sub> + Q1<sub>n</sub>) + xQ1<sub>n</sub> <span class="font-sans text-[11px] text-blue-700">[Q1' + Q1 = 1]</span></div>
+                                <div class="font-bold text-blue-900">&nbsp;&nbsp;= Q2'<sub>n</sub> + xQ1<sub>n</sub></div>
+                                <div class="pt-1 border-t border-slate-200 font-bold text-blue-900">
+                                    Q2<sub>n+1</sub> = J2<sub>n</sub>Q2'<sub>n</sub> + K2'<sub>n</sub>Q2<sub>n</sub> = xQ1'<sub>n</sub>Q2'<sub>n</sub> + xQ2<sub>n</sub>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 & Step 4: Table 10.3 and Figure 10.5 -->
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div>
+                            <div class="font-bold text-slate-900 text-sm mb-2">Step 3: Transition Table (Textbook Table 10.3)</div>
+                            <table class="w-full text-center text-xs mono border border-slate-300">
+                                <thead class="bg-slate-900 text-white">
+                                    <tr>
+                                        <th class="p-2 border" rowspan="2">Present State<br>Q1<sub>n</sub>Q2<sub>n</sub></th>
+                                        <th class="p-2 border" colspan="2">Next State Q1<sub>n+1</sub>Q2<sub>n+1</sub></th>
+                                        <th class="p-2 border" colspan="2">Outputs z<sub>1</sub>z<sub>2</sub></th>
+                                    </tr>
+                                    <tr class="bg-slate-800">
+                                        <th class="p-1.5 border">x = 0</th><th class="p-1.5 border">x = 1</th>
+                                        <th class="p-1.5 border">x = 0</th><th class="p-1.5 border">x = 1</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="p-2 border font-bold">00</td><td class="p-2 border">10</td><td class="p-2 border">11</td><td class="p-2 border">11</td><td class="p-2 border">00</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2 border font-bold">01</td><td class="p-2 border">01</td><td class="p-2 border">00</td><td class="p-2 border">11</td><td class="p-2 border">00</td></tr>
+                                    <tr><td class="p-2 border font-bold">11</td><td class="p-2 border">11</td><td class="p-2 border">00</td><td class="p-2 border">01</td><td class="p-2 border">10</td></tr>
+                                    <tr class="bg-slate-50"><td class="p-2 border font-bold">10</td><td class="p-2 border">10</td><td class="p-2 border">10</td><td class="p-2 border">01</td><td class="p-2 border">10</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="text-xs text-slate-600 mt-2">
+                                <em>Note:</em> Look at state <strong>10</strong> (bottom row): whether <code>x=0</code> or <code>x=1</code>, Next State is always <code>10</code>! Once the circuit enters state <code>10</code>, it stays locked in state <code>10</code> forever.
+                            </p>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                            <span class="text-xs font-bold text-slate-600 uppercase mb-2">Step 4: Transition Diagram (Figure 10.5)</span>
+                            <svg viewBox="0 0 360 220" class="w-full max-w-sm h-auto">
+                                <defs>
+                                    <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                        <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e3a8a"/>
+                                    </marker>
+                                </defs>
+                                <!-- States -->
+                                <circle cx="65" cy="110" r="22" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2"/><text x="65" y="115" text-anchor="middle" font-size="13" font-weight="bold">00</text>
+                                <circle cx="180" cy="42" r="22" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2"/><text x="180" y="47" text-anchor="middle" font-size="13" font-weight="bold">01</text>
+                                <circle cx="295" cy="110" r="22" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2"/><text x="295" y="115" text-anchor="middle" font-size="13" font-weight="bold">11</text>
+                                <circle cx="180" cy="178" r="22" fill="#e2e8f0" stroke="#334155" stroke-width="2"/><text x="180" y="183" text-anchor="middle" font-size="13" font-weight="bold">10</text>
+
+                                <!-- 01 -> 00 (1/00) and Self loop on 01 (0/11) -->
+                                <path d="M 159 48 Q 105 60 80 90" fill="none" stroke="#1e3a8a" stroke-width="1.6" marker-end="url(#arr2)"/>
+                                <text x="98" y="60" font-size="11" font-weight="bold" fill="#1e3a8a">1/00</text>
+                                <path d="M 172 21 C 165 0, 195 0, 188 21" fill="none" stroke="#1e3a8a" stroke-width="1.6" marker-end="url(#arr2)"/>
+                                <text x="208" y="15" font-size="11" font-weight="bold" fill="#1e3a8a">0/11</text>
+
+                                <!-- 00 <-> 11 -->
+                                <path d="M 87 104 Q 180 82 273 104" fill="none" stroke="#1e3a8a" stroke-width="1.6" marker-end="url(#arr2)"/>
+                                <text x="180" y="88" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e3a8a">1/00</text>
+                                <path d="M 273 116 Q 180 138 87 116" fill="none" stroke="#1e3a8a" stroke-width="1.6" marker-end="url(#arr2)"/>
+                                <text x="180" y="138" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e3a8a">1/10</text>
+
+                                <!-- 11 self loop (0/01) -->
+                                <path d="M 315 100 C 342 90, 342 130, 315 120" fill="none" stroke="#1e3a8a" stroke-width="1.6" marker-end="url(#arr2)"/>
+                                <text x="342" y="114" font-size="11" font-weight="bold" fill="#1e3a8a">0/01</text>
+
+                                <!-- 00 -> 10 (0/11) -->
+                                <path d="M 80 130 Q 105 162 158 174" fill="none" stroke="#1e3a8a" stroke-width="1.6" marker-end="url(#arr2)"/>
+                                <text x="95" y="168" font-size="11" font-weight="bold" fill="#1e3a8a">0/11</text>
+
+                                <!-- 10 self loop (0/01, 1/10) -->
+                                <path d="M 192 197 C 215 218, 145 218, 168 197" fill="none" stroke="#334155" stroke-width="1.6" marker-end="url(#arr2)"/>
+                                <text x="235" y="205" font-size="11" font-weight="bold" fill="#334155">0/01, 1/10</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- HIGHEST PRIORITY: SECTION 10.4.1 STATE REDUCTION                      -->
+            <!-- ===================================================================== -->
+            <section id="sec-10-4-1" class="card-section bg-white rounded-2xl shadow-md border-2 border-blue-700 p-6 sm:p-8 mb-8 page-break">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="px-2.5 py-1 rounded bg-blue-700 text-white text-xs font-bold uppercase tracking-wider">Highest Priority &bull; Section 10.4.1</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900 mt-2">10.4.1 State Reduction (Every Intermediate Step from Table 10.4 to Table 10.8)</h2>
+                </div>
+
+                <!-- Part A: Easy Bangla -->
+                <div class="bn-block mb-6 bg-blue-50/50 border-l-4 border-blue-700 rounded-r-xl p-5 bangla text-slate-800 space-y-3 text-sm">
+                    <h3 class="text-lg font-bold text-blue-950">Part A: সহজ বাংলায় State Reduction-এর নিয়ম</h3>
+                    <p>
+                        <strong>১. State Reduction কী এবং কেন করি?</strong><br>
+                        অনেক সময় ডিজাইন করার সময় সার্কিটে প্রয়োজনের চেয়ে বেশি State তৈরি হয়ে যায়। দুটি স্টেট যদি হুবহু একই কাজ করে, তবে একটিকে বাদ দিলে সার্কিটের বাইরের কাজের কোনো পরিবর্তন হয় না, কিন্তু <strong>Flip-Flop এবং Gate-এর সংখ্যা ও খরচ কমে যায়</strong>। একে State Reduction বলে।
+                    </p>
+                    <p>
+                        <strong>২. দুটি স্টেট কখন Equivalent (সমতুল্য) হয়? (২টি শর্তই পূরণ হতে হবে):</strong><br>
+                        ধরো দুটি স্টেট <code>E</code> এবং <code>G</code>। এদের তুলনা করার নিয়ম:<br>
+                        &bull; <strong>শর্ত ১:</strong> প্রতিটি ইনপুটের (<code>x=0</code> এবং <code>x=1</code>) জন্য দুজনের <strong>Output একদম সমান</strong> হতে হবে।<br>
+                        &bull; <strong>শর্ত ২:</strong> প্রতিটি ইনপুটের জন্য দুজনকে <strong>একই Next State</strong>-এ (অথবা সমতুল্য Next State-এ) যেতে হবে।
+                    </p>
+                    <p>
+                        <strong>৩. বাদ দেওয়ার ও প্রতিস্থাপনের নিয়ম:</strong><br>
+                        যদি <code>E</code> এবং <code>G</code> সমতুল্য প্রমাণিত হয়, তবে নিচের স্টেটটি (<code>G</code>) টেবিল থেকে কেটে বাদ দেবো এবং পুরো টেবিলের যেখানে যেখানে <code>G</code> লেখা ছিল, তা মুছে তার জায়গায় <strong><code>E</code></strong> বসিয়ে দেবো! এরপর আবার ওপর থেকে চেক করব নতুন কোনো জোড়া সমতুল্য হলো কি না।
+                    </p>
+                </div>
+
+                <!-- Step-by-Step Intermediate Tables (Table 10.4 -> 10.5 -> 10.6 -> 10.7 -> 10.8) -->
+                <div class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-5">
+                        <!-- Table 10.4 -->
+                        <div class="border border-slate-300 rounded-xl p-4 bg-slate-50">
+                            <span class="text-xs font-bold text-blue-700 uppercase">Step 1: Original State Table (Table 10.4)</span>
+                            <p class="text-xs text-slate-600 mb-2">Compare rows: Notice <strong>E</strong> and <strong>G</strong> both go to <code>A,0</code> (for x=0) and <code>F,1</code> (for x=1). Thus <strong>E &equiv; G</strong>!</p>
+                            <table class="w-full text-center text-xs mono bg-white border border-slate-300">
+                                <thead class="bg-slate-900 text-white">
+                                    <tr><th class="p-1.5 border">Present State</th><th class="p-1.5 border">Next, z (x=0)</th><th class="p-1.5 border">Next, z (x=1)</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="p-1.5 border font-bold">A</td><td class="p-1.5 border">A, 0</td><td class="p-1.5 border">B, 0</td></tr>
+                                    <tr><td class="p-1.5 border font-bold">B</td><td class="p-1.5 border">C, 0</td><td class="p-1.5 border">D, 0</td></tr>
+                                    <tr><td class="p-1.5 border font-bold">C</td><td class="p-1.5 border">A, 0</td><td class="p-1.5 border">D, 0</td></tr>
+                                    <tr><td class="p-1.5 border font-bold">D</td><td class="p-1.5 border">E, 0</td><td class="p-1.5 border">F, 1</td></tr>
+                                    <tr class="bg-emerald-50"><td class="p-1.5 border font-bold text-emerald-800">E</td><td class="p-1.5 border font-bold">A, 0</td><td class="p-1.5 border font-bold">F, 1</td></tr>
+                                    <tr><td class="p-1.5 border font-bold">F</td><td class="p-1.5 border">G, 0</td><td class="p-1.5 border">F, 1</td></tr>
+                                    <tr class="bg-emerald-50"><td class="p-1.5 border font-bold text-emerald-800">G</td><td class="p-1.5 border font-bold">A, 0</td><td class="p-1.5 border font-bold">F, 1</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table 10.5 & 10.6 -->
+                        <div class="border border-slate-300 rounded-xl p-4 bg-slate-50">
+                            <span class="text-xs font-bold text-blue-700 uppercase">Step 2: Remove G &amp; Replace G &rarr; E (Tables 10.5 &amp; 10.6)</span>
+                            <p class="text-xs text-slate-600 mb-2">Cross out row <strong>G</strong>. In row F, <code>G,0</code> becomes <strong><code>E,0</code></strong>. Now look at <strong>D</strong> and <strong>F</strong>: both have <code>E,0</code> and <code>F,1</code>! Thus <strong>D &equiv; F</strong>!</p>
+                            <table class="w-full text-center text-xs mono bg-white border border-slate-300">
+                                <thead class="bg-slate-900 text-white">
+                                    <tr><th class="p-1.5 border">Present State</th><th class="p-1.5 border">Next, z (x=0)</th><th class="p-1.5 border">Next, z (x=1)</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="p-1.5 border font-bold">A</td><td class="p-1.5 border">A, 0</td><td class="p-1.5 border">B, 0</td></tr>
+                                    <tr><td class="p-1.5 border font-bold">B</td><td class="p-1.5 border">C, 0</td><td class="p-1.5 border">D, 0</td></tr>
+                                    <tr><td class="p-1.5 border font-bold">C</td><td class="p-1.5 border">A, 0</td><td class="p-1.5 border">D, 0</td></tr>
+                                    <tr class="bg-blue-50"><td class="p-1.5 border font-bold text-blue-800">D</td><td class="p-1.5 border font-bold">E, 0</td><td class="p-1.5 border font-bold">F, 1</td></tr>
+                                    <tr><td class="p-1.5 border font-bold">E</td><td class="p-1.5 border">A, 0</td><td class="p-1.5 border">F, 1</td></tr>
+                                    <tr class="bg-blue-50"><td class="p-1.5 border font-bold text-blue-800">F</td><td class="p-1.5 border font-bold text-emerald-700">E, 0 (was G)</td><td class="p-1.5 border font-bold">F, 1</td></tr>
+                                    <tr class="bg-red-50 line-through text-red-500"><td class="p-1.5 border">G</td><td class="p-1.5 border">A, 0</td><td class="p-1.5 border">F, 1</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Table 10.7 & Table 10.8 -->
+                    <div class="border-2 border-emerald-600/40 rounded-xl p-4 bg-emerald-50/30">
+                        <span class="text-xs font-bold text-emerald-800 uppercase">Step 3: Remove F, Replace All F &rarr; D &rArr; Final Reduced Table (Table 10.8)</span>
+                        <p class="text-xs text-slate-700 mb-3">Cross out row <strong>F</strong>. Replace every occurrence of <code>F</code> in rows D and E with <strong><code>D</code></strong>. Check all 5 remaining states (A, B, C, D, E): no two rows are identical anymore. Reduction is complete (7 states &rarr; 5 states)!</p>
+                        <table class="w-full max-w-lg mx-auto text-center text-xs sm:text-sm mono bg-white border border-slate-300">
+                            <thead class="bg-slate-900 text-white">
+                                <tr><th class="p-2 border">Present State</th><th class="p-2 border">Next State, Output z (x=0)</th><th class="p-2 border">Next State, Output z (x=1)</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-2 border font-bold">A</td><td class="p-2 border">A, 0</td><td class="p-2 border">B, 0</td></tr>
+                                <tr class="bg-slate-50"><td class="p-2 border font-bold">B</td><td class="p-2 border">C, 0</td><td class="p-2 border">D, 0</td></tr>
+                                <tr><td class="p-2 border font-bold">C</td><td class="p-2 border">A, 0</td><td class="p-2 border">D, 0</td></tr>
+                                <tr class="bg-slate-50"><td class="p-2 border font-bold">D</td><td class="p-2 border">E, 0</td><td class="p-2 border font-bold text-blue-700">D, 1</td></tr>
+                                <tr><td class="p-2 border font-bold">E</td><td class="p-2 border">A, 0</td><td class="p-2 border font-bold text-blue-700">D, 1</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Part B: Exam-Ready English -->
+                <div class="en-block mt-5 bg-slate-100 p-4 rounded-xl border border-slate-300 text-sm">
+                    <strong>Part B: Exam-Ready Definition (5 Marks):</strong><br>
+                    <strong>State Reduction</strong> is the systematic process of reducing the number of states in a state table without altering the external input-output behavior of the sequential circuit. <strong>Theorem of State Equivalence:</strong> Two states are said to be <em>equivalent</em> if, for each possible input combination, they produce the exact same output and transition either to the same next state or to equivalent next states. When two states are equivalent, one is eliminated and all references to it are replaced by its equivalent partner.
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- SECTION 10.4.2: STATE ASSIGNMENT                                      -->
+            <!-- ===================================================================== -->
+            <section id="sec-10-4-2" class="card-section bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-700">Section 10.4.2 &bull; Textbook Tables 10.9 &amp; 10.10</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-1">10.4.2 State Assignment, Flip-Flop Count &amp; Unused States</h2>
+                </div>
+
+                <!-- Part A: Easy Bangla -->
+                <div class="bn-block mb-6 bg-blue-50/50 border-l-4 border-blue-700 rounded-r-xl p-5 bangla text-slate-800 space-y-2 text-sm">
+                    <h3 class="text-lg font-bold text-blue-950">Part A: সহজ বাংলায় State Assignment ও Flip-Flop সংখ্যা নির্ণয়</h3>
+                    <p>
+                        <strong>১. State Assignment কী?</strong> বাস্তব হার্ডওয়্যারে ফ্লিপ-ফ্লপ <code>A, B, C</code> চেনে না—সে কেবল <code>0</code> আর <code>1</code> চেনে। তাই প্রতিটি প্রতীকী স্টেটকে (A, B, C, D, E) একটি করে অনন্য বাইনারি কোড (যেমন <code>001, 010</code>) দেওয়াকে <strong>State Assignment</strong> বলে।
+                    </p>
+                    <p>
+                        <strong>২. কয়টি Flip-Flop লাগবে তার সূত্র:</strong><br>
+                        যদি মোট স্টেটের সংখ্যা <strong>N</strong> হয় এবং Flip-Flop লাগে <strong>m</strong> টি, তবে সূত্র হলো: <span class="mono font-bold text-blue-900">2<sup>m-1</sup> &lt; N &le; 2<sup>m</sup></span> (অথবা <code>2<sup>m</sup> &ge; N</code>)।<br>
+                        &bull; উদাহরণ: Table 10.8-এ মোট স্টেট <code>N = 5</code> টি। ২টি ফ্লিপ-ফ্লপ নিলে <code>2<sup>2</sup> = 4</code> টি স্টেট হয় (যা ৫-এর কম)। তাই <strong><code>m = 3</code> টি Flip-Flop</strong> নিতে হবে, যাতে <code>2<sup>3</sup> = 8</code> টি বাইনারি কোড (<code>000</code> থেকে <code>111</code>) পাওয়া যায়।
+                    </p>
+                    <p>
+                        <strong>৩. Unused States ও Don't Care:</strong> ৮টি কোডের মধ্যে ৫টি কোড (<code>001</code> থেকে <code>101</code>) ব্যবহৃত হলো, আর বাকি <strong>৩টি কোড (<code>000, 110, 111</code>) অব্যবহৃত (Unused)</strong> রয়ে গেল। K-Map করার সময় এই অব্যবহৃত স্টেটগুলোকে <strong>Don't Care (X)</strong> ধরা হয়, যাতে লজিক গেট আরও সরল হয়!
+                    </p>
+                </div>
+
+                <!-- Tables 10.9 and 10.10 -->
+                <div class="en-block grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Textbook Table 10.9: Three Possible Binary Assignments</h4>
+                        <table class="w-full text-center text-xs mono border border-slate-300">
+                            <thead class="bg-slate-900 text-white">
+                                <tr>
+                                    <th class="p-2 border">State</th>
+                                    <th class="p-2 border">Assignment 1</th>
+                                    <th class="p-2 border">Assignment 2</th>
+                                    <th class="p-2 border">Assignment 3 (Typo in PDF)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-2 border font-bold">A</td><td class="p-2 border bg-blue-50 font-bold">001</td><td class="p-2 border">000</td><td class="p-2 border">000</td></tr>
+                                <tr class="bg-slate-50"><td class="p-2 border font-bold">B</td><td class="p-2 border bg-blue-50 font-bold">010</td><td class="p-2 border">010</td><td class="p-2 border">100</td></tr>
+                                <tr><td class="p-2 border font-bold">C</td><td class="p-2 border bg-blue-50 font-bold">011</td><td class="p-2 border">011</td><td class="p-2 border">010</td></tr>
+                                <tr class="bg-slate-50"><td class="p-2 border font-bold">D</td><td class="p-2 border bg-blue-50 font-bold">100</td><td class="p-2 border">101</td><td class="p-2 border">101</td></tr>
+                                <tr><td class="p-2 border font-bold">E</td><td class="p-2 border bg-blue-50 font-bold">101</td><td class="p-2 border">111</td><td class="p-2 border">011</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Textbook Table 10.10: Reduced Transition Table (Using Assignment 1)</h4>
+                        <table class="w-full text-center text-xs mono border border-slate-300">
+                            <thead class="bg-slate-900 text-white">
+                                <tr>
+                                    <th class="p-2 border" rowspan="2">Present State<br>Q1 Q2 Q3</th>
+                                    <th class="p-2 border" colspan="2">Next State</th>
+                                    <th class="p-2 border" colspan="2">Output z</th>
+                                </tr>
+                                <tr class="bg-slate-800">
+                                    <th class="p-1.5 border">x=0</th><th class="p-1.5 border">x=1</th>
+                                    <th class="p-1.5 border">x=0</th><th class="p-1.5 border">x=1</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-1.5 border font-bold">001 (A)</td><td class="p-1.5 border">001</td><td class="p-1.5 border">010</td><td class="p-1.5 border">0</td><td class="p-1.5 border">0</td></tr>
+                                <tr class="bg-slate-50"><td class="p-1.5 border font-bold">010 (B)</td><td class="p-1.5 border">011</td><td class="p-1.5 border">100</td><td class="p-1.5 border">0</td><td class="p-1.5 border">0</td></tr>
+                                <tr><td class="p-1.5 border font-bold">011 (C)</td><td class="p-1.5 border">001</td><td class="p-1.5 border">100</td><td class="p-1.5 border">0</td><td class="p-1.5 border">0</td></tr>
+                                <tr class="bg-slate-50"><td class="p-1.5 border font-bold">100 (D)</td><td class="p-1.5 border">101</td><td class="p-1.5 border">100</td><td class="p-1.5 border">0</td><td class="p-1.5 border">1</td></tr>
+                                <tr><td class="p-1.5 border font-bold">101 (E)</td><td class="p-1.5 border">001</td><td class="p-1.5 border">100</td><td class="p-1.5 border">0</td><td class="p-1.5 border">1</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- SECTION 10.5 MASTER BLUEPRINT: 15-STEP DESIGN PROCEDURE & K-MAP RULES -->
+            <!-- ===================================================================== -->
+            <section id="sec-10-5-master" class="card-section bg-white rounded-2xl shadow-md border-2 border-blue-700 p-6 sm:p-8 mb-8 page-break">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="px-2.5 py-1 rounded bg-blue-700 text-white text-xs font-bold uppercase tracking-wider">Highest Priority &bull; Section 10.5 Master Blueprint</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900 mt-2">10.5 Complete 15-Step Sequential Circuit Design Blueprint, Excitation &amp; K-Map Rules</h2>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-5">
+                        <h3 class="font-bold text-slate-900 text-base mb-3">Exact 15-Step Design Sequence (Why &amp; How)</h3>
+                        <ol class="list-decimal pl-5 space-y-1.5 text-xs text-slate-700">
+                            <li><strong>Understand Word Problem:</strong> Identify what sequence or behavior must be detected/counted.</li>
+                            <li><strong>Identify Inputs &amp; Outputs:</strong> Name external inputs (e.g., <code>x</code>) and outputs (e.g., <code>z</code>).</li>
+                            <li><strong>Draw State Diagram:</strong> Create circles for states and directed arrows labeled <code>input/output</code>.</li>
+                            <li><strong>Prepare State Table:</strong> Convert the state diagram into a tabular form.</li>
+                            <li><strong>Perform State Reduction:</strong> Eliminate equivalent states (if outputs are not taken directly from FFs).</li>
+                            <li><strong>Calculate Flip-Flop Count (m):</strong> Choose smallest <code>m</code> such that <code>2<sup>m</sup> &ge; Number of States</code>.</li>
+                            <li><strong>Assign Binary Values:</strong> Map each symbolic state (A, B...) to a unique <code>m</code>-bit binary code.</li>
+                            <li><strong>Prepare Transition Table:</strong> Replace state letters with their binary codes.</li>
+                            <li><strong>Choose Flip-Flop Type:</strong> Select D, T, JK, or SR flip-flops as specified.</li>
+                            <li><strong>Prepare Excitation Table:</strong> Compare Present State <code>Q<sub>n</sub></code> &rarr; Next State <code>Q<sub>n+1</sub></code> bit-by-bit using the FF's excitation rules.</li>
+                            <li><strong>Transfer to K-Maps:</strong> Create one K-map per FF input (e.g., J1, K1, J2, K2) and one per output (z). Include unused states as <code>X</code>.</li>
+                            <li><strong>Simplify FF Input Equations:</strong> Group <code>1</code>s (and helpful <code>X</code>s) in sizes of 8, 4, 2, or 1 using Gray Code (<code>00, 01, 11, 10</code>).</li>
+                            <li><strong>Derive Output Equation:</strong> Simplify output <code>z</code> via K-map.</li>
+                            <li><strong>Draw Logic Diagram:</strong> Draw flip-flops, connect CK, and wire gates to FF inputs &amp; output.</li>
+                            <li><strong>Verify Design:</strong> Check unused states to confirm self-starting behavior.</li>
+                        </ol>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Excitation Reference -->
+                        <div class="bg-slate-900 text-white rounded-xl p-4">
+                            <h4 class="font-bold text-blue-300 text-sm mb-2">Excitation Table Quick Reference (Used in Step 10)</h4>
+                            <table class="w-full text-center text-xs mono border border-slate-700">
+                                <thead class="bg-slate-800 text-blue-200">
+                                    <tr>
+                                        <th class="p-1.5 border border-slate-700">Transition<br>Q(n) &rarr; Q(n+1)</th>
+                                        <th class="p-1.5 border border-slate-700">S &nbsp; R</th>
+                                        <th class="p-1.5 border border-slate-700">J &nbsp; K</th>
+                                        <th class="p-1.5 border border-slate-700">D</th>
+                                        <th class="p-1.5 border border-slate-700">T</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="p-1.5 border border-slate-700">0 &rarr; 0</td><td class="p-1.5 border border-slate-700">0 &nbsp; X</td><td class="p-1.5 border border-slate-700">0 &nbsp; X</td><td class="p-1.5 border border-slate-700">0</td><td class="p-1.5 border border-slate-700">0</td></tr>
+                                    <tr class="bg-slate-800/60"><td class="p-1.5 border border-slate-700">0 &rarr; 1</td><td class="p-1.5 border border-slate-700 text-amber-300 font-bold">1 &nbsp; 0</td><td class="p-1.5 border border-slate-700 text-amber-300 font-bold">1 &nbsp; X</td><td class="p-1.5 border border-slate-700 text-amber-300 font-bold">1</td><td class="p-1.5 border border-slate-700 text-amber-300 font-bold">1</td></tr>
+                                    <tr><td class="p-1.5 border border-slate-700">1 &rarr; 0</td><td class="p-1.5 border border-slate-700 text-amber-300 font-bold">0 &nbsp; 1</td><td class="p-1.5 border border-slate-700 text-amber-300 font-bold">X &nbsp; 1</td><td class="p-1.5 border border-slate-700">0</td><td class="p-1.5 border border-slate-700 text-amber-300 font-bold">1</td></tr>
+                                    <tr class="bg-slate-800/60"><td class="p-1.5 border border-slate-700">1 &rarr; 1</td><td class="p-1.5 border border-slate-700">X &nbsp; 0</td><td class="p-1.5 border border-slate-700">X &nbsp; 0</td><td class="p-1.5 border border-slate-700 text-amber-300 font-bold">1</td><td class="p-1.5 border border-slate-700">0</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- K-Map Golden Rules -->
+                        <div class="bg-amber-50 border border-amber-300 rounded-xl p-4 text-xs text-slate-800 space-y-1.5">
+                            <h4 class="font-bold text-amber-950 text-sm">K-Map Placement &amp; Grouping Rules (Steps 11–12):</h4>
+                            <p>&bull; <strong>Gray Code Order:</strong> Always label 2-variable axes as <code>00, 01, 11, 10</code> (never 10 before 11!).</p>
+                            <p>&bull; <strong>Minterm Index Formula:</strong> For variables <code>(Q1, Q2, x)</code>, minterm index = <code>4&middot;Q1 + 2&middot;Q2 + 1&middot;x</code>. Example: Row <code>Q1Q2 = 10</code> and <code>x = 1</code> is binary <code>101 = minterm 5</code>.</p>
+                            <p>&bull; <strong>Grouping Sizes:</strong> Form the largest possible rectangular/wrap-around groups of <strong>8 (Octet), 4 (Quad), 2 (Pair), or 1 (Single)</strong>. Use <code>X</code>s only to enlarge a group containing at least one <code>1</code>.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- TEXTBOOK EXAMPLE 1: JK DESIGN FROM TRANSITION DIAGRAM (FIG 10.6)      -->
+            <!-- ===================================================================== -->
+            <section id="sec-ex1" class="card-section bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-8 page-break">
+                <div class="border-b border-slate-200 pb-4 mb-5">
+                    <span class="px-2.5 py-0.5 rounded bg-slate-900 text-white text-xs font-bold">Section 10.5 &bull; Textbook Example 1 (Pages 11–14)</span>
+                    <h3 class="text-xl font-extrabold text-slate-900 mt-1">Example 1: Sequential Circuit Design with JK Flip-Flops (From Figure 10.6)</h3>
+                </div>
+
+                <div class="bn-block mb-5 bg-blue-50/50 border-l-4 border-blue-700 rounded-r-xl p-4 bangla text-sm text-slate-800">
+                    <strong>সহজ বাংলায় বুঝি:</strong> Figure 10.6 ডায়াগ্রামে তীরের ওপর শুধু <code>0</code> বা <code>1</code> লেখা আছে (কোনো <code>/z</code> নেই)—এর মানে এখানে আলাদা কোনো আউটপুট পিন নেই, ফ্লিপ-ফ্লপের স্টেটগুলোই (<code>00, 01, 10, 11</code>) আউটপুট। তাই স্টেট রিডাকশন করা যাবে না। ২টি JK Flip-Flop (<code>FF1, FF2</code>) নিয়ে আমরা ৪টি সমীকরণ বের করব: <code>J1, K1, J2, K2</code>।
+                </div>
+
+                <!-- Transition & Excitation Table (Table 10.11 & 10.12) -->
+                <div class="overflow-x-auto mb-5">
+                    <table class="w-full text-center text-xs mono border border-slate-300">
+                        <thead class="bg-slate-900 text-white">
+                            <tr>
+                                <th class="p-2 border" rowspan="2">Present State<br>Q1<sub>n</sub> Q2<sub>n</sub></th>
+                                <th class="p-2 border" colspan="2">Next State Q1<sub>n+1</sub>Q2<sub>n+1</sub></th>
+                                <th class="p-2 border bg-blue-950" colspan="2">FF Inputs for x = 0</th>
+                                <th class="p-2 border bg-emerald-950" colspan="2">FF Inputs for x = 1</th>
+                            </tr>
+                            <tr class="bg-slate-800">
+                                <th class="p-1.5 border">x = 0</th><th class="p-1.5 border">x = 1</th>
+                                <th class="p-1.5 border">J1<sub>n</sub> K1<sub>n</sub></th><th class="p-1.5 border">J2<sub>n</sub> K2<sub>n</sub></th>
+                                <th class="p-1.5 border">J1<sub>n</sub> K1<sub>n</sub></th><th class="p-1.5 border">J2<sub>n</sub> K2<sub>n</sub></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-2 border font-bold">0 0</td>
+                                <td class="p-2 border">0 0</td><td class="p-2 border">0 1</td>
+                                <td class="p-2 border">0 X</td><td class="p-2 border">0 X</td>
+                                <td class="p-2 border">0 X</td><td class="p-2 border text-blue-700 font-bold">1 X</td>
+                            </tr>
+                            <tr class="bg-slate-50">
+                                <td class="p-2 border font-bold">0 1</td>
+                                <td class="p-2 border">1 0</td><td class="p-2 border">0 1</td>
+                                <td class="p-2 border text-blue-700 font-bold">1 X</td><td class="p-2 border text-red-700 font-bold">X 1</td>
+                                <td class="p-2 border">0 X</td><td class="p-2 border">X 0</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border font-bold">1 1</td>
+                                <td class="p-2 border">0 0</td><td class="p-2 border">1 1</td>
+                                <td class="p-2 border text-red-700 font-bold">X 1</td><td class="p-2 border text-red-700 font-bold">X 1</td>
+                                <td class="p-2 border">X 0</td><td class="p-2 border">X 0</td>
+                            </tr>
+                            <tr class="bg-slate-50">
+                                <td class="p-2 border font-bold">1 0</td>
+                                <td class="p-2 border">1 0</td><td class="p-2 border">1 1</td>
+                                <td class="p-2 border">X 0</td><td class="p-2 border">0 X</td>
+                                <td class="p-2 border">X 0</td><td class="p-2 border text-blue-700 font-bold">1 X</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- K-Maps for Example 1 -->
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+                    <!-- J1 -->
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col items-center">
+                        <div class="text-xs font-bold mb-1">J1<sub>n</sub> = Q2<sub>n</sub>x'</div>
+                        <table class="kmap-table mono text-xs bg-white">
+                            <tr><th class="kmap-corner"><span class="absolute bottom-0.5 left-1 text-[10px]">Q1</span><span class="absolute top-0.5 right-1 text-[10px]">Q2x</span></th><th>00</th><th>01</th><th>11</th><th>10</th></tr>
+                            <tr><th>0</th><td>0</td><td>0</td><td>0</td><td class="grp-blue">1</td></tr>
+                            <tr><th>1</th><td>X</td><td>X</td><td>X</td><td class="grp-blue">X</td></tr>
+                        </table>
+                    </div>
+                    <!-- K1 -->
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col items-center">
+                        <div class="text-xs font-bold mb-1">K1<sub>n</sub> = Q2<sub>n</sub>x'</div>
+                        <table class="kmap-table mono text-xs bg-white">
+                            <tr><th class="kmap-corner"><span class="absolute bottom-0.5 left-1 text-[10px]">Q1</span><span class="absolute top-0.5 right-1 text-[10px]">Q2x</span></th><th>00</th><th>01</th><th>11</th><th>10</th></tr>
+                            <tr><th>0</th><td>X</td><td>X</td><td>X</td><td class="grp-red">X</td></tr>
+                            <tr><th>1</th><td>0</td><td>0</td><td>0</td><td class="grp-red">1</td></tr>
+                        </table>
+                    </div>
+                    <!-- J2 -->
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col items-center">
+                        <div class="text-xs font-bold mb-1">J2<sub>n</sub> = x</div>
+                        <table class="kmap-table mono text-xs bg-white">
+                            <tr><th class="kmap-corner"><span class="absolute bottom-0.5 left-1 text-[10px]">Q1</span><span class="absolute top-0.5 right-1 text-[10px]">Q2x</span></th><th>00</th><th>01</th><th>11</th><th>10</th></tr>
+                            <tr><th>0</th><td>0</td><td class="grp-blue">1</td><td class="grp-blue">X</td><td>0</td></tr>
+                            <tr><th>1</th><td>0</td><td class="grp-blue">1</td><td class="grp-blue">X</td><td>0</td></tr>
+                        </table>
+                    </div>
+                    <!-- K2 -->
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col items-center">
+                        <div class="text-xs font-bold mb-1">K2<sub>n</sub> = Q1'<sub>n</sub>x' + Q1<sub>n</sub>x</div>
+                        <table class="kmap-table mono text-xs bg-white">
+                            <tr><th class="kmap-corner"><span class="absolute bottom-0.5 left-1 text-[10px]">Q1</span><span class="absolute top-0.5 right-1 text-[10px]">Q2x</span></th><th>00</th><th>01</th><th>11</th><th>10</th></tr>
+                            <tr><th>0</th><td class="grp-blue">X</td><td>X</td><td>0</td><td class="grp-blue">1</td></tr>
+                            <tr><th>1</th><td>X</td><td class="grp-red">X</td><td class="grp-red">1</td><td>0</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-slate-700">
+                    <strong>Important Verification Note on K1<sub>n</sub>:</strong> In Table 10.12 (row 11, x=0 &rarr; 00), Q1 goes <code>1 &rarr; 0</code> when <code>Q1=1, Q2=1, x=0</code> (cell 110), so <strong>K1<sub>n</sub> = Q2<sub>n</sub>x'</strong>. (Note: Page 13 text prints <code>K1<sub>n</sub> = Q2<sub>n</sub>x</code>, which is a minor typo in the book's text compared to its own K-map on page 13!).
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- TEXTBOOK EXAMPLE 2: SR DESIGN FROM TABLE 10.4 (PAGES 13-16)           -->
+            <!-- ===================================================================== -->
+            <section id="sec-ex2" class="card-section bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-8">
+                <div class="border-b border-slate-200 pb-4 mb-5">
+                    <span class="px-2.5 py-0.5 rounded bg-slate-900 text-white text-xs font-bold">Section 10.5 &bull; Textbook Example 2 (Pages 13–16)</span>
+                    <h3 class="text-xl font-extrabold text-slate-900 mt-1">Example 2: SR Flip-Flop Design from State Table 10.4 (With 3 Unused States)</h3>
+                </div>
+
+                <div class="bn-block mb-4 bg-blue-50/50 border-l-4 border-blue-700 rounded-r-xl p-4 bangla text-sm text-slate-800">
+                    <strong>সহজ বাংলায় মূল বিষয়:</strong> Table 10.4-কে আগেই আমরা রিডিউস করে ৫টি স্টেটে (<code>001, 010, 011, 100, 101</code>) এনেছি (Table 10.10)। এখানে ৩টি SR Flip-Flop লাগবে, তাই <code>000, 110, 111</code> এই ৩টি Unused State-এর জন্য <code>x=0</code> এবং <code>x=1</code> মিলে মোট ৬টি Minterm (<strong>0, 1, 12, 13, 14, 15</strong>) সব K-Map-এ <strong>Don't Care (X)</strong> বসবে!
+                </div>
+
+                <!-- Table 10.13 -->
+                <div class="overflow-x-auto mb-4">
+                    <table class="w-full text-center text-xs mono border border-slate-300">
+                        <thead class="bg-slate-900 text-white">
+                            <tr>
+                                <th class="p-1.5 border" rowspan="2">Present<br>Q1 Q2 Q3</th>
+                                <th class="p-1.5 border" colspan="2">Next State</th>
+                                <th class="p-1.5 border bg-blue-950" colspan="3">FF Inputs (x = 0)</th>
+                                <th class="p-1.5 border bg-emerald-950" colspan="3">FF Inputs (x = 1)</th>
+                                <th class="p-1.5 border" colspan="2">Output z</th>
+                            </tr>
+                            <tr class="bg-slate-800">
+                                <th class="p-1 border">x=0</th><th class="p-1 border">x=1</th>
+                                <th class="p-1 border">S1 R1</th><th class="p-1 border">S2 R2</th><th class="p-1 border">S3 R3</th>
+                                <th class="p-1 border">S1 R1</th><th class="p-1 border">S2 R2</th><th class="p-1 border">S3 R3</th>
+                                <th class="p-1 border">x=0</th><th class="p-1 border">x=1</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="p-1.5 border font-bold">0 0 1</td><td class="p-1 border">001</td><td class="p-1 border">010</td><td class="p-1 border">0 X</td><td class="p-1 border">0 X</td><td class="p-1 border">X 0</td><td class="p-1 border">0 X</td><td class="p-1 border font-bold text-blue-700">1 0</td><td class="p-1 border font-bold text-red-700">0 1</td><td class="p-1 border">0</td><td class="p-1 border">0</td></tr>
+                            <tr class="bg-slate-50"><td class="p-1.5 border font-bold">0 1 0</td><td class="p-1 border">011</td><td class="p-1 border">100</td><td class="p-1 border">0 X</td><td class="p-1 border">X 0</td><td class="p-1 border font-bold text-blue-700">1 0</td><td class="p-1 border font-bold text-blue-700">1 0</td><td class="p-1 border font-bold text-red-700">0 1</td><td class="p-1 border">0 X</td><td class="p-1 border">0</td><td class="p-1 border">0</td></tr>
+                            <tr><td class="p-1.5 border font-bold">0 1 1</td><td class="p-1 border">001</td><td class="p-1 border">100</td><td class="p-1 border">0 X</td><td class="p-1 border font-bold text-red-700">0 1</td><td class="p-1 border">X 0</td><td class="p-1 border font-bold text-blue-700">1 0</td><td class="p-1 border font-bold text-red-700">0 1</td><td class="p-1 border font-bold text-red-700">0 1</td><td class="p-1 border">0</td><td class="p-1 border">0</td></tr>
+                            <tr class="bg-slate-50"><td class="p-1.5 border font-bold">1 0 0</td><td class="p-1 border">101</td><td class="p-1 border">100</td><td class="p-1 border">X 0</td><td class="p-1 border">0 X</td><td class="p-1 border font-bold text-blue-700">1 0</td><td class="p-1 border">X 0</td><td class="p-1 border">0 X</td><td class="p-1 border">0 X</td><td class="p-1 border">0</td><td class="p-1 border font-bold text-emerald-700">1</td></tr>
+                            <tr><td class="p-1.5 border font-bold">1 0 1</td><td class="p-1 border">001</td><td class="p-1 border">100</td><td class="p-1 border font-bold text-red-700">0 1</td><td class="p-1 border">0 X</td><td class="p-1 border">X 0</td><td class="p-1 border">X 0</td><td class="p-1 border">0 X</td><td class="p-1 border font-bold text-red-700">0 1</td><td class="p-1 border">0</td><td class="p-1 border font-bold text-emerald-700">1</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Simplified Equations for Example 2 -->
+                <div class="bg-slate-900 text-white rounded-xl p-4 mono text-xs sm:text-sm grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div>S1<sub>n</sub> = Q2<sub>n</sub>x</div>
+                    <div>R1<sub>n</sub> = Q3<sub>n</sub>x'</div>
+                    <div>S2<sub>n</sub> = Q1'<sub>n</sub>Q2'<sub>n</sub>x</div>
+                    <div>R2<sub>n</sub> = Q2<sub>n</sub>x + Q2<sub>n</sub>Q3<sub>n</sub></div>
+                    <div>S3<sub>n</sub> = x'</div>
+                    <div>R3<sub>n</sub> = x</div>
+                    <div class="text-emerald-300 font-bold sm:col-span-2">Output: z = Q1<sub>n</sub>x</div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- TEXTBOOK EXAMPLE 3: SEQUENCE DETECTOR FOR "0010" (PAGES 16-19)        -->
+            <!-- ===================================================================== -->
+            <section id="sec-ex3" class="card-section bg-white rounded-2xl shadow-sm border-2 border-blue-700 p-6 sm:p-8 mb-8 page-break">
+                <div class="border-b border-slate-200 pb-4 mb-5">
+                    <span class="px-2.5 py-0.5 rounded bg-blue-700 text-white text-xs font-bold">Section 10.5 &bull; Textbook Example 3 (Pages 16–19) &bull; Classic 8-Mark Exam Problem</span>
+                    <h3 class="text-xl font-extrabold text-slate-900 mt-1">Example 3: Design of a Sequence Detector for "0010" (Overlapping)</h3>
+                </div>
+
+                <!-- Part A: Easy Bangla -->
+                <div class="bn-block mb-5 bg-blue-50/50 border-l-4 border-blue-700 rounded-r-xl p-5 bangla text-sm text-slate-800 space-y-2">
+                    <h4 class="font-bold text-blue-950 text-base">Part A: সহজ বাংলায় "0010" Sequence Detector কীভাবে আঁকব?</h4>
+                    <p>
+                        <strong>প্রশ্ন:</strong> একটি সিকোয়েনশিয়াল সার্কিট ডিজাইন করো যার ১টি ইনপুট <code>x</code> এবং ১টি আউটপুট <code>z</code>। ইনপুটে পরপর <strong><code>0010</code></strong> আসলে আউটপুট <code>z = 1</code> হবে, অন্যথায় <code>0</code> হবে। (যেমন ইনপুট <code>0100100100</code> হলে আউটপুট হবে <code>0000010010</code>—অর্থাৎ শেষের <code>0</code> নতুন সিকোয়েন্সের প্রথম <code>0</code> হিসেবে পুনরায় ব্যবহৃত বা Overlap হতে পারে!)।
+                    </p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>ধাপ ১ (State Diagram):</strong> শুরুতে Reset/Initial State <strong>A</strong> ধরি (যখন কোনো দরকারি বিট আসেনি, যেমন <code>11</code>)। ইনপুট <code>0</code> পেলে প্রথম বিট মিলে গেল &rarr; <strong>State B</strong>। আরেকটি <code>0</code> পেলে <code>00</code> মিলে গেল &rarr; <strong>State D</strong>। এরপর <code>1</code> পেলে <code>001</code> মিলে গেল &rarr; <strong>State E</strong>। এরপর <code>0</code> পেলে পুরো <strong><code>0010</code></strong> মিলে গেল &rarr; আউটপুট <strong><code>z = 1</code></strong> দিয়ে <strong>State F</strong>-এ যায়!</li>
+                        <li><strong>ধাপ ২ (State Reduction — Table 10.14 &rarr; 10.16):</strong> স্টেট টেবিল বানালে দেখা যায় <strong>A &equiv; C</strong> এবং <strong>B &equiv; F</strong>! তাই ৬টি স্টেট কমে ৪টি স্টেটে (<strong>A, B, D, E</strong>) নেমে আসে।</li>
+                        <li><strong>ধাপ ৩ (Assignment &amp; Equations):</strong> ৪টি স্টেটের জন্য ২টি JK Flip-Flop নিয়ে <code>A=00, B=01, D=11, E=10</code> ধরলে K-Map থেকে পাই: <strong>J1 = Q2&middot;x'</strong>, <strong>K1 = Q2'</strong>, <strong>J2 = x'</strong>, <strong>K2 = x</strong>, এবং <strong>z = Q1&middot;Q2'&middot;x'</strong>।</li>
+                    </ul>
+                </div>
+
+                <!-- Tables 10.14, 10.16, 10.18 -->
+                <div class="grid md:grid-cols-2 gap-5 mb-5">
+                    <div>
+                        <div class="font-bold text-slate-900 text-xs mb-1">1. Initial State Table (Table 10.14) &rarr; Notice A&equiv;C and B&equiv;F:</div>
+                        <table class="w-full text-center text-xs mono border border-slate-300">
+                            <thead class="bg-slate-900 text-white">
+                                <tr><th class="p-1.5 border">Present State</th><th class="p-1.5 border">Next, z (x=0)</th><th class="p-1.5 border">Next, z (x=1)</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-blue-50"><td class="p-1.5 border font-bold">A</td><td class="p-1.5 border">B, 0</td><td class="p-1.5 border">A, 0</td></tr>
+                                <tr class="bg-emerald-50"><td class="p-1.5 border font-bold">B</td><td class="p-1.5 border">D, 0</td><td class="p-1.5 border">C, 0</td></tr>
+                                <tr class="bg-blue-50"><td class="p-1.5 border font-bold">C (&equiv;A)</td><td class="p-1.5 border">B, 0</td><td class="p-1.5 border">A, 0</td></tr>
+                                <tr><td class="p-1.5 border font-bold">D</td><td class="p-1.5 border">D, 0</td><td class="p-1.5 border">E, 0</td></tr>
+                                <tr><td class="p-1.5 border font-bold">E</td><td class="p-1.5 border font-bold text-red-700">F, 1</td><td class="p-1.5 border">A, 0</td></tr>
+                                <tr class="bg-emerald-50"><td class="p-1.5 border font-bold">F (&equiv;B)</td><td class="p-1.5 border">D, 0</td><td class="p-1.5 border">C, 0</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <div class="font-bold text-slate-900 text-xs mb-1">2. Reduced &amp; Assigned Excitation Table (Table 10.18: A=00, B=01, D=11, E=10):</div>
+                        <table class="w-full text-center text-xs mono border border-slate-300">
+                            <thead class="bg-slate-900 text-white">
+                                <tr>
+                                    <th class="p-1.5 border">Q1Q2</th>
+                                    <th class="p-1.5 border">Next (x=0,1)</th>
+                                    <th class="p-1.5 border">J1K1 J2K2 (x=0)</th>
+                                    <th class="p-1.5 border">J1K1 J2K2 (x=1)</th>
+                                    <th class="p-1.5 border">z (0,1)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-1.5 border font-bold">00 (A)</td><td class="p-1.5 border">01, 00</td><td class="p-1.5 border">0X &nbsp; 1X</td><td class="p-1.5 border">0X &nbsp; 0X</td><td class="p-1.5 border">0, 0</td></tr>
+                                <tr class="bg-slate-50"><td class="p-1.5 border font-bold">01 (B)</td><td class="p-1.5 border">11, 00</td><td class="p-1.5 border">1X &nbsp; X0</td><td class="p-1.5 border">0X &nbsp; X1</td><td class="p-1.5 border">0, 0</td></tr>
+                                <tr><td class="p-1.5 border font-bold">11 (D)</td><td class="p-1.5 border">11, 10</td><td class="p-1.5 border">X0 &nbsp; X0</td><td class="p-1.5 border">X0 &nbsp; X1</td><td class="p-1.5 border">0, 0</td></tr>
+                                <tr class="bg-slate-50"><td class="p-1.5 border font-bold">10 (E)</td><td class="p-1.5 border">01, 00</td><td class="p-1.5 border">X1 &nbsp; 1X</td><td class="p-1.5 border">X1 &nbsp; 0X</td><td class="p-1.5 border font-bold text-emerald-700">1, 0</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Final Equations & Circuit Diagram for Example 3 -->
+                <div class="grid md:grid-cols-2 gap-6 items-center">
+                    <div class="bg-slate-900 text-white p-5 rounded-xl mono text-xs sm:text-sm space-y-2">
+                        <div class="font-sans text-blue-300 font-bold uppercase text-xs">Final Simplified Equations (Figure 10.12):</div>
+                        <div>J1<sub>n</sub> = Q2<sub>n</sub> &middot; x'</div>
+                        <div>K1<sub>n</sub> = Q2'<sub>n</sub></div>
+                        <div>J2<sub>n</sub> = x'</div>
+                        <div>K2<sub>n</sub> = x</div>
+                        <div class="pt-2 border-t border-slate-700 text-emerald-300 font-bold">Output: z = Q1<sub>n</sub> &middot; Q2'<sub>n</sub> &middot; x'</div>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                        <span class="text-xs font-bold text-slate-600 uppercase mb-2">Final Logic Diagram (Textbook Figure 10.13)</span>
+                        <svg viewBox="0 0 410 195" class="w-full max-w-md h-auto">
+                            <!-- Input x and Inverter -->
+                            <text x="10" y="25" font-size="13" font-weight="bold">x</text>
+                            <line x1="25" y1="21" x2="175" y2="21" stroke="#0f172a" stroke-width="1.8"/>
+                            <polygon points="45,28 45,42 58,35" fill="#fff" stroke="#0f172a" stroke-width="1.6"/>
+                            <circle cx="61" cy="35" r="2.5" fill="#fff" stroke="#0f172a" stroke-width="1.6"/>
+                            <line x1="35" y1="21" x2="35" y2="35" stroke="#0f172a" stroke-width="1.6"/><line x1="35" y1="35" x2="45" y2="35" stroke="#0f172a" stroke-width="1.6"/>
+                            <line x1="64" y1="35" x2="325" y2="35" stroke="#2563eb" stroke-width="1.6"/>
+
+                            <!-- AND Gate for J1 = Q2 * x' -->
+                            <path d="M 85 55 L 105 55 A 12 12 0 0 1 105 79 L 85 79 Z" fill="#fff" stroke="#0f172a" stroke-width="1.6"/>
+                            <line x1="75" y1="35" x2="75" y2="62" stroke="#2563eb" stroke-width="1.6"/><line x1="75" y1="62" x2="85" y2="62" stroke="#2563eb" stroke-width="1.6"/>
+                            <polyline points="117,67 125,67 125,102 135,102" fill="none" stroke="#0f172a" stroke-width="1.6"/>
+
+                            <!-- FF1 -->
+                            <rect x="135" y="90" width="75" height="65" rx="6" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2"/>
+                            <text x="172" y="126" text-anchor="middle" font-size="11" font-weight="bold">FF1</text>
+                            <text x="141" y="106" font-size="9" font-weight="bold">J1</text>
+                            <text x="141" y="148" font-size="9" font-weight="bold">K1</text>
+                            <text x="195" y="106" font-size="9" font-weight="bold">Q1</text>
+
+                            <!-- FF2 -->
+                            <rect x="245" y="90" width="75" height="65" rx="6" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2"/>
+                            <text x="282" y="126" text-anchor="middle" font-size="11" font-weight="bold">FF2</text>
+                            <text x="251" y="106" font-size="9" font-weight="bold">J2</text>
+                            <text x="251" y="148" font-size="9" font-weight="bold">K2</text>
+                            <text x="303" y="106" font-size="9" font-weight="bold">Q2</text>
+                            <text x="301" y="148" font-size="9" font-weight="bold" class="overline">Q2</text>
+
+                            <!-- J2 = x', K2 = x -->
+                            <polyline points="232,35 232,102 245,102" fill="none" stroke="#2563eb" stroke-width="1.6"/>
+                            <polyline points="175,21 175,78 222,78 222,144 245,144" fill="none" stroke="#0f172a" stroke-width="1.6"/>
+
+                            <!-- Feedback Q2 to J1 AND Gate -->
+                            <polyline points="320,102 332,102 332,48 68,48 68,72 85,72" fill="none" stroke="#dc2626" stroke-width="1.4"/>
+
+                            <!-- Feedback Q2' to K1 and Output AND Gate -->
+                            <polyline points="320,144 345,144 345,175 118,175 118,144 135,144" fill="none" stroke="#059669" stroke-width="1.4"/>
+
+                            <!-- Output AND Gate z = Q1 * Q2' * x' -->
+                            <path d="M 355 25 L 375 25 A 14 14 0 0 1 375 53 L 355 53 Z" fill="#fff" stroke="#0f172a" stroke-width="1.6"/>
+                            <line x1="325" y1="35" x2="355" y2="35" stroke="#2563eb" stroke-width="1.6"/>
+                            <polyline points="210,102 216,102 216,28 355,28" fill="none" stroke="#0f172a" stroke-width="1.4"/>
+                            <polyline points="345,144 345,46 355,46" fill="none" stroke="#059669" stroke-width="1.4"/>
+                            <line x1="389" y1="39" x2="405" y2="39" stroke="#047857" stroke-width="2"/>
+                            <text x="396" y="33" font-size="12" font-weight="bold" fill="#047857">z</text>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- SECTION 10.5.1: MASTER RESET, UNUSED STATES & SELF-STARTING CIRCUITS  -->
+            <!-- ===================================================================== -->
+            <section id="sec-reset-self" class="card-section bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-8">
+                <div class="border-b border-slate-200 pb-4 mb-5">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-700">Section 10.5.1 &bull; Textbook Figures 10.14 &amp; 10.15, Table 10.19</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-1">Initial States, Master Reset (RST), Unused States &amp; Self-Starting Circuits</h2>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bn-block bg-blue-50/50 border-l-4 border-blue-700 rounded-r-xl p-5 bangla text-sm text-slate-800 space-y-2.5">
+                        <h3 class="font-bold text-blue-950 text-base">Part A: সহজ বাংলায় ব্যাখ্যা</h3>
+                        <p>
+                            <strong>১. Initial State ও Master Reset (RST):</strong> সার্কিটে প্রথম পাওয়ার অন করলে ফ্লিপ-ফ্লপগুলো কোন অবস্থায় থাকবে তা আগে থেকে জানা থাকে না (হয়তো একটি Invalid বা Unused স্টেটে চালু হতে পারে!)। তাই ক্লক শুরু হওয়ার আগে সব ফ্লিপ-ফ্লপকে একটি নির্দিষ্ট শুরুর অবস্থায় আনতে <strong>Master Reset (RST)</strong> ইনপুট ব্যবহার করা হয়। এটি <strong>Asynchronous</strong> (ক্লকের তোয়াক্কা করে না)—ফ্লিপ-ফ্লপের <code>Preset (Pr)</code> এবং <code>Clear (Cr)</code> পিনের মাধ্যমে কাজ করে। যেমন Figure 10.14-এ <code>RST = 0</code> দিলে সার্কিট সরাসরি বৈধ শুরুর স্টেট <code>001</code>-এ চলে আসে (FF1 ও FF2 ক্লিয়ার হয়ে 0 হয়, এবং FF3 প্রিসেট হয়ে 1 হয়)।
+                        </p>
+                        <p>
+                            <strong>২. Self-Starting ও Self-Correcting Circuit কী?</strong><br>
+                            যদি কোনো দুর্ঘটনা বা নয়েজের কারণে সার্কিট একটি <strong>Unused (Invalid) State</strong>-এ ঢুকে পড়ে (যেমন Example 2-এ <code>000, 110, 111</code>), এবং ১ বা ২টি ক্লক পালসের মধ্যেই নিজে থেকেই একটি <strong>Valid State</strong>-এ ফিরে এসে স্বাভাবিকভাবে চলতে শুরু করে, তবে সেই সার্কিটকে <strong>Self-Starting</strong> এবং <strong>Self-Correcting Circuit</strong> বলে।
+                        </p>
+                    </div>
+
+                    <div class="en-block bg-slate-50 border border-slate-200 rounded-xl p-5 text-sm text-slate-700 space-y-3">
+                        <h3 class="font-bold text-slate-900 text-base">Part B: Exam-Ready English Answer (5 Marks)</h3>
+                        <p>
+                            <strong>Master Reset (Asynchronous Initialization):</strong> When power is initially turned on, flip-flops settle into unpredictable states. A <strong>Master Reset (RST)</strong> signal is applied asynchronously to the <em>Preset (Pr)</em> and <em>Clear (Cr)</em> pins before clocked operation begins to force the circuit into a known valid initial state (e.g., setting <code>Q1Q2Q3 = 001</code> when <code>RST = 0</code> in Figure 10.14, and enabling normal operation when <code>RST = 1</code>).
+                        </p>
+                        <p>
+                            <strong>Self-Starting &amp; Self-Correcting Circuit:</strong> A sequential circuit is said to be <em>self-starting</em> (and <em>self-correcting</em>) if, upon entering any unused/invalid state (such as <code>000, 110, 111</code> in Table 10.19), it automatically transitions into one of the valid operational states within a finite number of clock pulses without getting trapped in an invalid loop.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- COMPLETE SOLUTIONS TO TEXTBOOK EXERCISES 10.1 TO 10.11                -->
+            <!-- ===================================================================== -->
+            <section id="sec-exercises" class="card-section bg-white rounded-2xl shadow-md border-2 border-emerald-700 p-6 sm:p-8 mb-8 page-break">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="px-2.5 py-1 rounded bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider">Complete Textbook Solutions &bull; Pages 22–24</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900 mt-2">Solved Textbook Exercises (Exercises 10.1 – 10.11)</h2>
+                    <p class="text-xs text-slate-500 mt-1">Including verification of all handwritten pencil equations on Page 22!</p>
+                </div>
+
+                <div class="space-y-6 text-xs sm:text-sm">
+                    <!-- Exercise 10.1 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70">
+                        <h4 class="font-bold text-slate-900 text-base">Exercise 10.1 (Figure 10.16 — SR Flip-Flop Analysis)</h4>
+                        <p class="text-slate-600 mb-2"><strong>What it asks:</strong> Obtain (a) state equations, (b) transition table, (c) state table, and (d) state diagram.</p>
+                        <div class="bg-white p-3.5 rounded-lg border border-slate-200 mono text-xs space-y-1">
+                            <div><strong>Excitation &amp; Outputs (verified with page 22 pencil circles):</strong></div>
+                            <div>S1 = S2 = x<sub>1</sub>x<sub>2</sub> &nbsp;|&nbsp; R1 = x'<sub>2</sub>Q1 &nbsp;|&nbsp; R2 = x'<sub>1</sub>Q2 &nbsp;|&nbsp; z<sub>1</sub> = Q1, &nbsp; z<sub>2</sub> = Q2</div>
+                            <div><strong>(a) Next-State Equations (using Q<sub>n+1</sub> = S + R'Q):</strong></div>
+                            <div class="text-blue-900 font-bold">Q1<sub>n+1</sub> = x<sub>1</sub>x<sub>2</sub> + (x'<sub>2</sub>Q1)'Q1 = x<sub>1</sub>x<sub>2</sub> + (x<sub>2</sub> + Q1')Q1 = x<sub>1</sub>x<sub>2</sub> + x<sub>2</sub>Q1 = x<sub>2</sub>(x<sub>1</sub> + Q1)</div>
+                            <div class="text-blue-900 font-bold">Q2<sub>n+1</sub> = x<sub>1</sub>x<sub>2</sub> + (x'<sub>1</sub>Q2)'Q2 = x<sub>1</sub>x<sub>2</sub> + (x<sub>1</sub> + Q2')Q2 = x<sub>1</sub>x<sub>2</sub> + x<sub>1</sub>Q2 = x<sub>1</sub>(x<sub>2</sub> + Q2)</div>
+                            <div class="font-sans text-slate-600 pt-1"><strong>Common Mistake:</strong> Forgetting that <code>Q1'&middot;Q1 = 0</code> when expanding <code>(x<sub>2</sub> + Q1')Q1</code>.</div>
+                        </div>
+                    </div>
+
+                    <!-- Exercise 10.2 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70">
+                        <h4 class="font-bold text-slate-900 text-base">Exercise 10.2 (Figure 10.17 — SR Flip-Flops with Feedback Output z)</h4>
+                        <div class="bg-white p-3.5 rounded-lg border border-slate-200 mono text-xs space-y-1">
+                            <div><strong>Excitation &amp; Output (matching page 22 handwritten notes):</strong></div>
+                            <div>z = Q2 &nbsp;|&nbsp; S1 = x<sub>1</sub> &nbsp;|&nbsp; R1 = x'<sub>1</sub>z = x'<sub>1</sub>Q2 &nbsp;|&nbsp; S2 = x<sub>1</sub>x'<sub>2</sub>z + x<sub>1</sub>Q1z = x<sub>1</sub>Q2(x'<sub>2</sub> + Q1) &nbsp;|&nbsp; R2 = x<sub>1</sub>Q2'</div>
+                            <div class="text-blue-900 font-bold">Q1<sub>n+1</sub> = x<sub>1</sub> + (x'<sub>1</sub>Q2)'Q1 = x<sub>1</sub> + (x<sub>1</sub> + Q2')Q1 = x<sub>1</sub> + Q1Q2'</div>
+                            <div class="text-blue-900 font-bold">Q2<sub>n+1</sub> = x<sub>1</sub>Q2(x'<sub>2</sub> + Q1) + (x<sub>1</sub>Q2')'Q2 = x<sub>1</sub>Q2(x'<sub>2</sub> + Q1) + (x'<sub>1</sub> + Q2)Q2 = Q2</div>
+                        </div>
+                    </div>
+
+                    <!-- Exercise 10.3 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70">
+                        <h4 class="font-bold text-slate-900 text-base">Exercise 10.3 (Figure 10.18 — JK Flip-Flops)</h4>
+                        <div class="bg-white p-3.5 rounded-lg border border-slate-200 mono text-xs space-y-1">
+                            <div><strong>Excitation &amp; Output (matching page 22 handwritten labels):</strong></div>
+                            <div>J2 = x, &nbsp; K2 = x' &rArr; <strong>Q2<sub>n+1</sub> = x</strong> (acts as a D flip-flop!)</div>
+                            <div>J1 = Q2, &nbsp; K1 = Q2' &rArr; <strong>Q1<sub>n+1</sub> = Q2</strong></div>
+                            <div class="text-emerald-800 font-bold">Output: z = x'Q1 + Q2'Q1 + xQ1' = Q1(x' + Q2') + xQ1'</div>
+                        </div>
+                    </div>
+
+                    <!-- Exercise 10.4 & 10.6 -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70">
+                            <h4 class="font-bold text-slate-900">Exercise 10.4 (Equation-to-Table Analysis)</h4>
+                            <p class="text-xs text-slate-700 mt-1">
+                                Given 3 equations in 4 variables (<code>Q1, Q2, x1, x2</code>). Build a 4-row (<code>00, 01, 10, 11</code>) &times; 4-column (<code>x1x2 = 00, 01, 10, 11</code>) Transition Table by substituting each combination directly into <code>Q1<sub>n+1</sub></code>, <code>Q2<sub>n+1</sub></code>, and <code>z</code>.
+                            </p>
+                        </div>
+
+                        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70">
+                            <h4 class="font-bold text-slate-900">Exercise 10.6 (JK Equations Analysis)</h4>
+                            <p class="text-xs text-slate-700 mt-1 mono">
+                                Q1<sub>n+1</sub> = (xQ2 + y'Q2')Q1' + (x' + y + Q2)Q1<br>
+                                Q2<sub>n+1</sub> = xQ1'Q2' + (x' + y)Q1'Q2
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Exercise 10.5: Serial Binary Adder -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70">
+                        <h4 class="font-bold text-slate-900 text-base">Exercise 10.5 (Figure 10.19 — Full Adder + D Flip-Flop = Serial Adder)</h4>
+                        <p class="text-xs text-slate-700 mb-2">
+                            <strong>Concept:</strong> A Full Adder adds external inputs <code>A</code> and <code>B</code> with the previous carry <code>Z = Q(n)</code>. The new carry <code>C</code> goes into <code>D</code>, so <strong><code>Q(n+1) = C = AB + AQ(n) + BQ(n)</code></strong>, and external output <strong><code>S = A &oplus; B &oplus; Q(n)</code></strong>.
+                        </p>
+                        <table class="w-full max-w-xl text-center text-xs mono border border-slate-300 bg-white">
+                            <thead class="bg-slate-900 text-white">
+                                <tr>
+                                    <th class="p-1.5 border" rowspan="2">Present State Q(n)</th>
+                                    <th class="p-1.5 border" colspan="4">Next State Q(n+1) = Carry (AB)</th>
+                                    <th class="p-1.5 border" colspan="4">Output S = Sum (AB)</th>
+                                </tr>
+                                <tr class="bg-slate-800">
+                                    <th class="p-1 border">00</th><th class="p-1 border">01</th><th class="p-1 border">10</th><th class="p-1 border">11</th>
+                                    <th class="p-1 border">00</th><th class="p-1 border">01</th><th class="p-1 border">10</th><th class="p-1 border">11</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-1.5 border font-bold">0</td><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border font-bold text-blue-700">1</td><td class="p-1 border">0</td><td class="p-1 border">1</td><td class="p-1 border">1</td><td class="p-1 border">0</td></tr>
+                                <tr class="bg-slate-50"><td class="p-1.5 border font-bold">1</td><td class="p-1 border">0</td><td class="p-1 border font-bold text-blue-700">1</td><td class="p-1 border font-bold text-blue-700">1</td><td class="p-1 border font-bold text-blue-700">1</td><td class="p-1 border">1</td><td class="p-1 border">0</td><td class="p-1 border">0</td><td class="p-1 border">1</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Exercises 10.7 & 10.8: Sequence Detector 0110 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70">
+                        <h4 class="font-bold text-slate-900 text-base">Exercises 10.7 &amp; 10.8 (Design Overlapping Sequence Detector for "0110" using SR &amp; JK FFs)</h4>
+                        <p class="text-xs text-slate-700 mb-2">
+                            <strong>State Definition (4 States, 2 Flip-Flops):</strong> <strong>A (00)</strong> = Reset/Initial; <strong>B (01)</strong> = Received <code>0</code>; <strong>C (11)</strong> = Received <code>01</code>; <strong>D (10)</strong> = Received <code>011</code>. When in state D and <code>x = 0</code> arrives, sequence <code>0110</code> is complete &rArr; output <strong><code>z = 1</code></strong> and transition to <strong>B (01)</strong> (since trailing <code>0</code> overlaps as first bit of next <code>0110</code>!).
+                        </p>
+                        <div class="grid md:grid-cols-2 gap-4 text-xs mono">
+                            <div class="bg-white p-3 rounded-lg border border-slate-200">
+                                <div class="font-sans font-bold text-blue-900 mb-1">Exercise 10.7 Final SR Equations:</div>
+                                <div>S1 = Q2 &middot; x &nbsp;|&nbsp; R1 = Q1 &middot; x'</div>
+                                <div>S2 = Q1' &middot; x' &nbsp;|&nbsp; R2 = Q1 &middot; Q2 &middot; x + Q1 &middot; Q2' &middot; x'</div>
+                                <div class="text-emerald-800 font-bold">z = Q1 &middot; Q2' &middot; x'</div>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border border-slate-200">
+                                <div class="font-sans font-bold text-blue-900 mb-1">Exercise 10.8 Final JK Equations:</div>
+                                <div>J1 = Q2 &middot; x &nbsp;|&nbsp; K1 = x'</div>
+                                <div>J2 = x' &nbsp;|&nbsp; K2 = Q1 &middot; x + Q1' &middot; x' = Q1 &oplus; x</div>
+                                <div class="text-emerald-800 font-bold">z = Q1 &middot; Q2' &middot; x'</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exercises 10.9 & 10.10: State Reduction -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70">
+                            <h4 class="font-bold text-slate-900">Exercise 10.9 (Minimal State Table for Table 10.20)</h4>
+                            <p class="text-xs text-slate-700 mt-1">
+                                <strong>Step-by-step reduction:</strong><br>
+                                1. <strong>A</strong> (<code>G,0 | B,0</code>) and <strong>H</strong> (<code>G,0 | B,0</code>) are identical &rArr; Remove <strong>H</strong>, replace <code>H &rarr; A</code>.<br>
+                                2. Now row <strong>C</strong> has (<code>A,1 | E,0</code>) which matches row <strong>I</strong> (<code>A,1 | E,0</code>) &rArr; Remove <strong>I</strong>, replace <code>I &rarr; C</code>.<br>
+                                3. Remaining <strong>7 minimal states</strong>: <code>A, B, C, D, E, F, G</code>.
+                            </p>
+                        </div>
+
+                        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70">
+                            <h4 class="font-bold text-slate-900">Exercise 10.10 (Minimal State Table for Table 10.21)</h4>
+                            <p class="text-xs text-slate-700 mt-1">
+                                <strong>Step-by-step reduction:</strong><br>
+                                1. <strong>C</strong> (<code>D,0 | E,0</code>) and <strong>F</strong> (<code>D,0 | E,0</code>) are identical &rArr; Remove <strong>F</strong>, replace <code>F &rarr; C</code>.<br>
+                                2. <strong>E</strong> (<code>B,0 | C,0</code>) and <strong>G</strong> (<code>B,0 | C,0</code>) are identical &rArr; Remove <strong>G</strong>, replace <code>G &rarr; E</code>.<br>
+                                3. Remaining <strong>5 minimal states</strong>: <code>A, B, C, D, E</code>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Exercise 10.11: T Flip-Flop Design -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70">
+                        <h4 class="font-bold text-slate-900 text-base">Exercise 10.11 (Figure 10.20 — Design with 3 T Flip-Flops)</h4>
+                        <p class="text-xs text-slate-700 mb-2">
+                            <strong>Concept:</strong> Figure 10.20 has <strong>5 used states</strong> (<code>000, 001, 010, 011, 100</code>) and <strong>3 unused states</strong> (<code>101, 110, 111</code> &rarr; 6 don't-care minterms: <code>10, 11, 12, 13, 14, 15</code>). For T Flip-Flops, <code>T<sub>i</sub> = Q<sub>i</sub>(n) &oplus; Q<sub>i</sub>(n+1)</code> (<code>T=1</code> whenever the bit flips!).
+                        </p>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 mono text-xs">
+                            <strong>Final Simplified T-Flip-Flop &amp; Output Equations:</strong><br>
+                            T1 = Q1&middot;x' + Q2'&middot;Q3&middot;x + Q2&middot;Q3'&middot;x<br>
+                            T2 = Q3'&middot;x' + Q1&middot;x + Q2&middot;Q3&middot;x<br>
+                            T3 = Q2'&middot;Q3'&middot;x' + Q1&middot;x + Q3&middot;x<br>
+                            <span class="text-emerald-800 font-bold">Output: z = x &middot; (Q1'&middot;Q3' + Q2) = Q1'Q3'x + Q2x</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // Sync Mobile Drawer Navigation with Desktop Links
+        const desktopNav = document.getElementById('desktopNavLinks');
+        const mobileNav = document.getElementById('mobileNavLinks');
+        if (desktopNav && mobileNav) {
+            mobileNav.innerHTML = desktopNav.innerHTML;
+            mobileNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.getElementById('mobileDrawer').classList.add('hidden');
+                });
+            });
+        }
+
+        // Mobile Drawer Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+        const mobileDrawer = document.getElementById('mobileDrawer');
+
+        if (mobileMenuBtn && mobileDrawer) {
+            mobileMenuBtn.addEventListener('click', () => mobileDrawer.classList.remove('hidden'));
+        }
+        if (closeDrawerBtn && mobileDrawer) {
+            closeDrawerBtn.addEventListener('click', () => mobileDrawer.classList.add('hidden'));
+        }
+
+        // Bilingual Filter Switcher (Both / Bangla Only / English Only)
+        function setViewMode(mode) {
+            const bnBlocks = document.querySelectorAll('.bn-block');
+            const enBlocks = document.querySelectorAll('.en-block');
+            const buttons = {
+                both: document.getElementById('btn-both'),
+                bn: document.getElementById('btn-bn'),
+                en: document.getElementById('btn-en')
+            };
+
+            Object.keys(buttons).forEach(key => {
+                if (buttons[key]) {
+                    if (key === mode) {
+                        buttons[key].classList.add('bg-blue-600', 'text-white');
+                        buttons[key].classList.remove('text-slate-300');
+                    } else {
+                        buttons[key].classList.remove('bg-blue-600', 'text-white');
+                        buttons[key].classList.add('text-slate-300');
+                    }
+                }
+            });
+
+            bnBlocks.forEach(el => el.style.display = (mode === 'en') ? 'none' : 'block');
+            enBlocks.forEach(el => el.style.display = (mode === 'bn') ? 'none' : 'block');
+        }
+    </script>
+</body>
+</html>
