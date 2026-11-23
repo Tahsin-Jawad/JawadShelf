@@ -1,5 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, Circle, Plus, Trash2, Calendar, AlertCircle, Sparkles, Clock } from 'lucide-react';
+import {
+  CheckCircle2,
+  Circle,
+  Plus,
+  Trash2,
+  Calendar,
+  AlertCircle,
+  Sparkles,
+  Clock,
+  Bell,
+  BellRing,
+} from 'lucide-react';
+import {
+  requestNotificationPermission,
+  sendStudyNotification,
+} from '../utils/notifications';
 
 interface Task {
   id: string;
@@ -21,7 +36,7 @@ const QUICK_TASK_SUGGESTIONS = [
   'Revise Slide/Notes',
   'Watch Online Lecture',
   'Prepare Quiz Topics',
-  'Practice Lab Codes'
+  'Practice Lab Codes',
 ];
 
 const QUICK_EXAM_SUGGESTIONS = [
@@ -29,7 +44,7 @@ const QUICK_EXAM_SUGGESTIONS = [
   'Midterm Exam',
   'Final Exam',
   'Lab Final',
-  'Assignment Deadline'
+  'Assignment Deadline',
 ];
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
@@ -67,9 +82,22 @@ export const DailyTracker: React.FC = () => {
     }
   });
 
+  const [notifEnabled, setNotifEnabled] = useState<boolean>(
+    'Notification' in window && Notification.permission === 'granted'
+  );
+
   const [newTaskText, setNewTaskText] = useState('');
   const [newExamTitle, setNewExamTitle] = useState('');
   const [newExamDate, setNewExamDate] = useState('');
+
+  const getDaysLeft = (dateString: string) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const examDate = new Date(dateString);
+    examDate.setHours(0, 0, 0, 0);
+    const diffTime = examDate.getTime() - today.getTime();
+    return Math.ceil(diffTime / ONE_DAY_MS);
+  };
 
   useEffect(() => {
     const now = Date.now();
@@ -92,6 +120,70 @@ export const DailyTracker: React.FC = () => {
     localStorage.setItem('jawad_shelf_exams', JSON.stringify(validExams));
   }, [exams]);
 
+  const buildReminderSummary = () => {
+    const pendingTasks = tasks.filter((t) => !t.completed);
+    const upcomingExams = exams.filter((e) => {
+      const diff = getDaysLeft(e.date);
+      return diff >= 0 && diff <= 3;
+    });
+
+    const messages: string[] = [];
+
+    if (pendingTasks.length > 0) {
+      const taskNames = pendingTasks.map((t) => t.text).join(', ');
+      messages.push(`Pending (${pendingTasks.length}): ${taskNames}`);
+    }
+
+    if (upcomingExams.length > 0) {
+      const examNames = upcomingExams
+        .map((e) => {
+          const days = getDaysLeft(e.date);
+          const tag = days === 0 ? 'Today' : `in ${days}d`;
+          return `${e.title} (${tag})`;
+        })
+        .join(', ');
+      messages.push(`Exams: ${examNames}`);
+    }
+
+    return messages.join('\n');
+  };
+
+  // দিনে একবার অটোমেটিক ডেইলি রিমাইন্ডার পাঠানো
+  useEffect(() => {
+    if (!notifEnabled) return;
+
+    const todayStr = new Date().toDateString();
+    const lastNotified = localStorage.getItem('jawad_shelf_last_notified');
+    if (lastNotified === todayStr) return;
+
+    const summary = buildReminderSummary();
+    if (summary) {
+      sendStudyNotification('Jawad Shelf — Daily Study Reminder', summary);
+      localStorage.setItem('jawad_shelf_last_notified', todayStr);
+    }
+  }, [notifEnabled, tasks, exams]);
+
+  const handleEnableNotifications = async () => {
+    const granted = await requestNotificationPermission();
+    setNotifEnabled(granted);
+
+    if (granted) {
+      const summary = buildReminderSummary();
+      sendStudyNotification(
+        'Jawad Shelf — Reminders Active',
+        summary || 'You will receive alerts for pending tasks and upcoming exams.'
+      );
+    }
+  };
+
+  const handleTestNotification = () => {
+    const summary = buildReminderSummary();
+    sendStudyNotification(
+      'Jawad Shelf — Study Check-in',
+      summary || 'All caught up! No pending tasks or urgent exams right now.'
+    );
+  };
+
   const addTask = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     const text = newTaskText.trim();
@@ -99,7 +191,7 @@ export const DailyTracker: React.FC = () => {
 
     const newTask: Task = {
       id: Date.now().toString(),
-      text: text,
+      text,
       completed: false,
       createdAt: Date.now(),
     };
@@ -136,15 +228,6 @@ export const DailyTracker: React.FC = () => {
     setExams(exams.filter((e) => e.id !== id));
   };
 
-  const getDaysLeft = (dateString: string) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const examDate = new Date(dateString);
-    examDate.setHours(0, 0, 0, 0);
-    const diffTime = examDate.getTime() - today.getTime();
-    return Math.ceil(diffTime / ONE_DAY_MS);
-  };
-
   const getTimeLeftText = (createdAt: number) => {
     const elapsed = Date.now() - createdAt;
     const remainingMs = ONE_DAY_MS - elapsed;
@@ -154,10 +237,46 @@ export const DailyTracker: React.FC = () => {
   };
 
   const completedCount = tasks.filter((t) => t.completed).length;
-  const progressPercentage = tasks.length > 0 ? Math.round((completedCount / tasks.length) * 100) : 0;
+  const progressPercentage =
+    tasks.length > 0 ? Math.round((completedCount / tasks.length) * 100) : 0;
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
+      {/* Reminder Banner */}
+      <div className="bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-500/20 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-indigo-600 text-white rounded-xl">
+            {notifEnabled ? <BellRing className="w-4 h-4" /> : <Bell className="w-4 h-4" />}
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+              {notifEnabled ? 'Daily Reminders Active' : 'Enable Study Reminders'}
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              {notifEnabled
+                ? 'Alerts enabled for unfinished tasks and exams within 3 days.'
+                : 'Get device notifications for pending tasks and upcoming exam dates.'}
+            </p>
+          </div>
+        </div>
+
+        {notifEnabled ? (
+          <button
+            onClick={handleTestNotification}
+            className="px-3.5 py-1.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-medium rounded-xl transition-colors shrink-0"
+          >
+            Send Test Alert
+          </button>
+        ) : (
+          <button
+            onClick={handleEnableNotifications}
+            className="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium rounded-xl transition-colors shrink-0"
+          >
+            Turn On Alerts
+          </button>
+        )}
+      </div>
+
       {/* Daily Tasks Section */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm transition-colors">
         <div className="flex justify-between items-center mb-4">
@@ -175,7 +294,6 @@ export const DailyTracker: React.FC = () => {
           </span>
         </div>
 
-        {/* Progress Bar */}
         {tasks.length > 0 && (
           <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full mb-6 overflow-hidden">
             <div
@@ -201,7 +319,6 @@ export const DailyTracker: React.FC = () => {
           </button>
         </form>
 
-        {/* Quick Suggestions Fill Input */}
         <div className="flex flex-wrap items-center gap-1.5 mb-6">
           <span className="text-xs text-slate-400 dark:text-slate-500 flex items-center gap-1 mr-1">
             <Sparkles className="w-3 h-3 text-amber-500" /> Suggestions:
@@ -218,7 +335,6 @@ export const DailyTracker: React.FC = () => {
           ))}
         </div>
 
-        {/* Task List */}
         <div className="space-y-2">
           {tasks.length === 0 ? (
             <p className="text-slate-400 dark:text-slate-500 text-center py-6 text-sm">
@@ -304,7 +420,6 @@ export const DailyTracker: React.FC = () => {
           </button>
         </form>
 
-        {/* Quick Suggestions for Exams */}
         <div className="flex flex-wrap items-center gap-1.5 mb-6">
           <span className="text-xs text-slate-400 dark:text-slate-500 flex items-center gap-1 mr-1">
             <Sparkles className="w-3 h-3 text-amber-500" /> Quick Add:
@@ -321,7 +436,6 @@ export const DailyTracker: React.FC = () => {
           ))}
         </div>
 
-        {/* Exam List */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {exams.length === 0 ? (
             <p className="text-slate-400 dark:text-slate-500 text-center py-6 text-sm col-span-full">
