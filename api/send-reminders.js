@@ -1,7 +1,7 @@
-const webpush = require('web-push');
-const { createClient } = require('@supabase/supabase-js');
+import webpush from 'web-push';
+import { createClient } from '@supabase/supabase-js';
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   try {
     const supabaseUrl = process.env.VITE_SUPABASE_URL;
     const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
@@ -101,4 +101,4 @@ module.exports = async function handler(req, res) {
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
-};
+}
