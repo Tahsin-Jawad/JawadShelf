@@ -2,19 +2,33 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import webpush from 'web-push';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL!,
-  process.env.VITE_SUPABASE_ANON_KEY!
-);
-
-webpush.setVapidDetails(
-  'mailto:admin@jawadshelf.app',
-  process.env.VITE_VAPID_PUBLIC_KEY!,
-  process.env.VAPID_PRIVATE_KEY!
-);
-
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
+    const supabaseUrl = process.env.VITE_SUPABASE_URL;
+    const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
+    const vapidPublicKey = process.env.VITE_VAPID_PUBLIC_KEY;
+    const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY;
+
+    if (!supabaseUrl || !supabaseKey || !vapidPublicKey || !vapidPrivateKey) {
+      return res.status(500).json({
+        error: 'Missing environment variables on Vercel',
+        missing: {
+          VITE_SUPABASE_URL: !supabaseUrl,
+          VITE_SUPABASE_ANON_KEY: !supabaseKey,
+          VITE_VAPID_PUBLIC_KEY: !vapidPublicKey,
+          VAPID_PRIVATE_KEY: !vapidPrivateKey,
+        },
+      });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    webpush.setVapidDetails(
+      'mailto:admin@jawadshelf.app',
+      vapidPublicKey,
+      vapidPrivateKey
+    );
+
     const { data: devices, error } = await supabase
       .from('device_reminders')
       .select('*');
@@ -25,8 +39,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const now = Date.now();
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const bdOffsetMs = 6 * 60 * 60 * 1000;
+    const bdToday = new Date(now + bdOffsetMs);
+    bdToday.setUTCHours(0, 0, 0, 0);
 
     let sentCount = 0;
 
@@ -39,10 +54,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       );
 
       const upcomingExams = exams.filter((e: any) => {
-        const examDate = new Date(e.date);
-        examDate.setHours(0, 0, 0, 0);
+        const examDate = new Date(`${e.date}T00:00:00Z`);
         const diffDays = Math.ceil(
-          (examDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+          (examDate.getTime() - bdToday.getTime()) / (1000 * 60 * 60 * 24)
         );
         return diffDays >= 0 && diffDays <= 3;
       });
