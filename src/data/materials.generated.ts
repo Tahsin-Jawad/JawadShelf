@@ -35,6 +35,24 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 1416396
       },
       {
+        "id": "10_indexing.pdf",
+        "title": "10 Indexing",
+        "filename": "10_indexing.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20302/Chapters/10_indexing.pdf",
+        "sizeInBytes": 1773147
+      },
+      {
+        "id": "11_Transaction.pdf",
+        "title": "11 Transaction",
+        "filename": "11_Transaction.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20302/Chapters/11_Transaction.pdf",
+        "sizeInBytes": 1352581
+      },
+      {
         "id": "2.DBMS_Archi_Schema.pdf",
         "title": "2.DBMS Archi Schema",
         "filename": "2.DBMS_Archi_Schema.pdf",
@@ -89,6 +107,15 @@ export const generatedCourses: CourseData[] = [
         "sizeInBytes": 1796180
       },
       {
+        "id": "7.ERD to Schema.pdf",
+        "title": "7.ERD To Schema",
+        "filename": "7.ERD to Schema.pdf",
+        "type": "PDF",
+        "extension": "pdf",
+        "url": "/materials/CSE%20302/Chapters/7.ERD%20to%20Schema.pdf",
+        "sizeInBytes": 721613
+      },
+      {
         "id": "Lecture 5_practice.pdf",
         "title": "Lecture 5 Practice",
         "filename": "Lecture 5_practice.pdf",
@@ -99,6 +126,24 @@ export const generatedCourses: CourseData[] = [
       }
     ],
     "others": [
+      {
+        "id": "ch 10.html",
+        "title": "Ch 10",
+        "filename": "ch 10.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/CSE%20302/Others/ch%2010.html",
+        "sizeInBytes": 96329
+      },
+      {
+        "id": "ch 11.html",
+        "title": "Ch 11",
+        "filename": "ch 11.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/CSE%20302/Others/ch%2011.html",
+        "sizeInBytes": 126168
+      },
       {
         "id": "ch 3.html",
         "title": "Ch 3",
@@ -125,6 +170,15 @@ export const generatedCourses: CourseData[] = [
         "extension": "html",
         "url": "/materials/CSE%20302/Others/CH%206.html",
         "sizeInBytes": 94509
+      },
+      {
+        "id": "ch 7.html",
+        "title": "Ch 7",
+        "filename": "ch 7.html",
+        "type": "HTML",
+        "extension": "html",
+        "url": "/materials/CSE%20302/Others/ch%207.html",
+        "sizeInBytes": 80249
       },
       {
         "id": "LAB 1-2-3.html",

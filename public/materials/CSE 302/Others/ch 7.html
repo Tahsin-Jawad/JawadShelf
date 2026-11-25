@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSE-302: Chapter 7 — ER Diagram to Relational Schema (Complete Bilingual Study Guide)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Hind Siliguri', 'sans-serif'],
+            bangla: ['Hind Siliguri', 'Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', 'Hind Siliguri', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    .bangla-text {
+      font-family: 'Hind Siliguri', sans-serif;
+      line-height: 1.75;
+    }
+    .code-font {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .slide-badge {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    }
+    .pk-underline {
+      text-decoration: underline;
+      font-weight: 700;
+    }
+    .partial-underline {
+      text-decoration: underline dashed;
+      font-weight: 700;
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background-color: #ffffff !important;
+      }
+      .page-card {
+        break-inside: avoid;
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-blue-200 selection:text-blue-900">
+
+  <!-- Sticky Navigation Header -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl slide-badge text-white flex items-center justify-center font-bold text-base shadow">
+          ERD
+        </div>
+        <div>
+          <h1 class="font-bold text-slate-900 text-sm sm:text-base leading-tight">CSE-302: Database Management System</h1>
+          <p class="text-xs text-slate-500">Chapter 7: ER Diagram to Relational Schema (Slides 1–19)</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="toggleSidebar()" class="lg:hidden px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+          Contents
+        </button>
+        <button onclick="window.print()" class="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-sm transition">
+          Print / Save PDF
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
+
+    <!-- Sidebar Table of Contents -->
+    <aside id="sidebar" class="hidden lg:block lg:w-80 shrink-0 no-print">
+      <div class="sticky top-24 bg-white rounded-2xl border border-slate-200 shadow-sm p-5 max-h-[calc(100vh-7rem)] overflow-y-auto">
+        <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+          <h2 class="font-bold text-slate-800 text-sm uppercase tracking-wider">Page-by-Page Index</h2>
+          <span class="text-xs bg-blue-100 text-blue-700 font-semibold px-2 py-0.5 rounded-full">19 Slides</span>
+        </div>
+
+        <nav class="space-y-1 text-xs">
+          <a href="#slides-1-5" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 1–5:</span> Design Phases, Data Model &amp; ERD vs Schema
+          </a>
+          <a href="#slides-6-7" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 6–7:</span> Strong Entity Set &amp; Weak Entity Set
+          </a>
+          <a href="#slides-8-10" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 8–10:</span> Composite, Multivalued &amp; Derived Attributes
+          </a>
+          <a href="#slides-11-14" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 11–14:</span> 1:1, 1:N, M:N &amp; Recursive Relationships
+          </a>
+          <a href="#slide-17" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slide 17:</span> Identifying Relationship Set (Loan &amp; Payment)
+          </a>
+          <a href="#slides-15-16-18-19" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 15, 16, 18, 19:</span> Complete Solved Full-Scale ERD Problems
+          </a>
+          <a href="#practice-revision" class="block px-3 py-2 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 font-semibold mt-2">
+            Exam Prep: Extra Practice, Rules Table &amp; 5–8 Marks Answers
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Study Content -->
+    <main class="flex-1 min-w-0 space-y-10">
+
+      <!-- Hero Banner -->
+      <section class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-xl">
+        <div class="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold mb-4">
+          <span>Slide 1 • Course: CSE-302 Database Management System</span>
+          <span>•</span>
+          <span>Topic: ER Diagram to Relational Schema</span>
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-3">
+          Chapter 7: ER Diagram to Relational Schema Conversion
+        </h1>
+        <p class="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">
+          A complete, beginner-friendly bilingual study guide following every page (Slides 1–19) in exact order. Includes easy Bangla step-by-step intuition, crisp SVG diagrams, exam-ready English answers, and full solutions for every ERD exercise in the PDF.
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-white/10 text-xs">
+          <div class="bg-white/5 rounded-xl p-3">
+            <div class="text-blue-300 font-semibold">Explanation Style</div>
+            <div class="text-white font-bold mt-0.5">Easy Bangla + Exam English</div>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3">
+            <div class="text-emerald-300 font-semibold">Slide Coverage</div>
+            <div class="text-white font-bold mt-0.5">All 19 Pages Included</div>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3">
+            <div class="text-amber-300 font-semibold">Visual Diagrams</div>
+            <div class="text-white font-bold mt-0.5">Clean SVG ERD &amp; Schemas</div>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3">
+            <div class="text-purple-300 font-semibold">Full Problem Solutions</div>
+            <div class="text-white font-bold mt-0.5">Slides 15, 16, 18 &amp; 19 Solved</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 1 - 5: DESIGN PHASES, SCHEMA & DATA MODEL, ERD VS SCHEMA -->
+      <!-- ===================================================================== -->
+      <section id="slides-1-5" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 1, 2, 3, 4 &amp; 5</span>
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Conceptual to Logical Design</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">1. Database Design Phases, Schema, Data Model &amp; ERD vs Relational Schema</h2>
+
+        <!-- Slide 2 Flowchart SVG -->
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col items-center">
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Database Design Phases (Slide 2)</p>
+          <svg viewBox="0 0 760 95" class="w-full max-w-3xl h-auto">
+            <defs>
+              <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e3a8a" />
+              </marker>
+            </defs>
+            <rect x="8" y="18" width="160" height="58" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="2" />
+            <text x="88" y="42" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0c4a6e">User Requirements</text>
+            <text x="88" y="58" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0c4a6e">Specification</text>
+
+            <line x1="168" y1="47" x2="198" y2="47" stroke="#1e3a8a" stroke-width="2.2" marker-end="url(#arr)" />
+
+            <rect x="202" y="18" width="165" height="58" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2" />
+            <text x="284" y="42" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1e3a8a">Conceptual-design</text>
+            <text x="284" y="58" text-anchor="middle" font-size="11" font-weight="600" fill="#1d4ed8">Phase (ER Diagram)</text>
+
+            <line x1="367" y1="47" x2="397" y2="47" stroke="#1e3a8a" stroke-width="2.2" marker-end="url(#arr)" />
+
+            <rect x="401" y="18" width="165" height="58" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2" />
+            <text x="483" y="42" text-anchor="middle" font-size="11.5" font-weight="700" fill="#92400e">Logical-design</text>
+            <text x="483" y="58" text-anchor="middle" font-size="11" font-weight="600" fill="#b45309">Phase (Relational Schema)</text>
+
+            <line x1="566" y1="47" x2="596" y2="47" stroke="#1e3a8a" stroke-width="2.2" marker-end="url(#arr)" />
+
+            <rect x="600" y="18" width="152" height="58" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2" />
+            <text x="676" y="42" text-anchor="middle" font-size="11.5" font-weight="700" fill="#14532d">Physical-design</text>
+            <text x="676" y="58" text-anchor="middle" font-size="11" font-weight="600" fill="#15803d">Phase (Relational DB)</text>
+          </svg>
+        </div>
+
+        <!-- Bangla Explanation -->
+        <div class="bg-emerald-50/70 border-l-4 border-emerald-500 rounded-r-2xl p-5 space-y-3">
+          <h3 class="font-bold text-emerald-900 text-base">সহজ বাংলায় ব্যাখ্যা (Slides 2, 3, 4 &amp; 5)</h3>
+          <p class="bangla-text text-sm text-slate-800">
+            <strong>১. কেন ER Diagram থেকে Relational Schema-তে রূপান্তর (Conversion) প্রয়োজন? (Slide 2):</strong>
+            <br>বাস্তব জীবনে একটি সফটওয়্যার বা ডাটাবেজ তৈরির শুরুতে ক্লায়েন্টের চাহিদা শুনে আমরা কাগজে-কলমে একটি নকশা আঁকি, যাকে <strong>Conceptual Design বা ER Diagram</strong> বলে। কিন্তু MySQL, Oracle বা PostgreSQL-এর মতো আসল ডাটাবেজ সফটওয়্যার সরাসরি ছবি (আয়তক্ষেত্র, ডিম্বাকৃতি, ডায়মন্ড) বুঝতে পারে না—তারা শুধু <strong>টেবিল (Tables / Relations)</strong> বোঝে! তাই ER Diagram-কে টেবিলের কাঠামো বা <strong>Relational Schema</strong>-তে রূপান্তর করা অপরিহার্য।
+          </p>
+          <p class="bangla-text text-sm text-slate-800">
+            <strong>২. Database Schema vs Data Model (Slide 3):</strong>
+            <br>• <strong>Database Schema:</strong> ডাটাবেজের সামগ্রিক নকশা বা কাঠামো (টেবিলের নাম, কলামের নাম, ডাটা টাইপ ইত্যাদি) বর্ণনা করে।
+            <br>• <strong>Data Model:</strong> ডাটা, ডাটার মধ্যকার সম্পর্ক এবং শর্তাবলি বর্ণনা করার টুলস ও নিয়মের সমষ্টি। যেমন: <strong>ER Model</strong> (High-level conceptual data model) এবং <strong>Relational Model</strong> (Record-based logical data model)।
+          </p>
+          <p class="bangla-text text-sm text-slate-800">
+            <strong>৩. ER Diagram vs Relational Schema-এর পার্থক্য ও Slide 5 উদাহরণ (Slides 4 &amp; 5):</strong>
+            <br>ER ডায়াগ্রামে থাকে <strong>Entity Set</strong> (আয়তক্ষেত্র), <strong>Relationship Set</strong> (ডায়মন্ড) ও <strong>Attributes</strong> (উপবৃত্ত), এবং এটি <strong>Mapping Cardinality</strong> (যেমন 1:1, 1:N, M:N) দেখায়। অপরদিকে Relational Schema-তে থাকে <strong>Relations (Tables)</strong>, <strong>Tuples (Rows)</strong>, <strong>Attributes (Columns)</strong>, <strong>Primary Key (PK)</strong> এবং <strong>Foreign Key (FK)</strong>।
+          </p>
+        </div>
+
+        <!-- Slide 5 Diagram & Schema Reproduction -->
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
+          <h3 class="font-bold text-slate-900 text-sm">Slide 5 Example: Student — Enrolls (N:1) — Department</h3>
+          <div class="grid lg:grid-cols-2 gap-6 items-center">
+            <!-- ERD SVG -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200">
+              <div class="text-xs font-bold text-blue-800 mb-2">ER Diagram (Conceptual):</div>
+              <svg viewBox="0 0 460 155" class="w-full h-auto">
+                <!-- Student Attributes -->
+                <ellipse cx="45" cy="40" rx="40" ry="18" fill="#fff" stroke="#334155" stroke-width="1.5" />
+                <text x="45" y="44" text-anchor="middle" font-size="10" font-weight="700" text-decoration="underline">student_id</text>
+                <line x1="70" y1="54" x2="95" y2="95" stroke="#334155" stroke-width="1.5" />
+
+                <ellipse cx="105" cy="24" rx="46" ry="18" fill="#fff" stroke="#334155" stroke-width="1.5" />
+                <text x="105" y="28" text-anchor="middle" font-size="10">student_name</text>
+                <line x1="112" y1="42" x2="115" y2="95" stroke="#334155" stroke-width="1.5" />
+
+                <ellipse cx="175" cy="36" rx="34" ry="18" fill="#fff" stroke="#334155" stroke-width="1.5" />
+                <text x="175" y="40" text-anchor="middle" font-size="10">address</text>
+                <line x1="160" y1="52" x2="135" y2="95" stroke="#334155" stroke-width="1.5" />
+
+                <ellipse cx="220" cy="66" rx="30" ry="16" fill="#fff" stroke="#334155" stroke-width="1.5" />
+                <text x="220" y="70" text-anchor="middle" font-size="10">email</text>
+                <line x1="192" y1="74" x2="155" y2="98" stroke="#334155" stroke-width="1.5" />
+
+                <!-- Student Entity -->
+                <rect x="75" y="95" width="85" height="36" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2" />
+                <text x="117" y="117" text-anchor="middle" font-size="12" font-weight="700">student</text>
+
+                <!-- Many-to-One Crow's Foot / Line -->
+                <line x1="160" y1="113" x2="205" y2="113" stroke="#334155" stroke-width="1.8" />
+                <!-- Crow foot at student side (Many) -->
+                <line x1="160" y1="113" x2="172" y2="105" stroke="#334155" stroke-width="1.8" />
+                <line x1="160" y1="113" x2="172" y2="121" stroke="#334155" stroke-width="1.8" />
+
+                <!-- Enrolls Diamond -->
+                <polygon points="245,91 285,113 245,135 205,113" fill="#fef3c7" stroke="#d97706" stroke-width="2" />
+                <text x="245" y="117" text-anchor="middle" font-size="11" font-weight="700">enrolls</text>
+
+                <!-- One side bar at department -->
+                <line x1="285" y1="113" x2="345" y2="113" stroke="#334155" stroke-width="1.8" />
+                <line x1="335" y1="104" x2="335" y2="122" stroke="#334155" stroke-width="1.8" />
+
+                <!-- Department Entity -->
+                <rect x="345" y="95" width="95" height="36" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2" />
+                <text x="392" y="117" text-anchor="middle" font-size="12" font-weight="700">department</text>
+
+                <!-- Dept Attributes -->
+                <ellipse cx="355" cy="40" rx="34" ry="18" fill="#fff" stroke="#334155" stroke-width="1.5" />
+                <text x="355" y="44" text-anchor="middle" font-size="10" font-weight="700" text-decoration="underline">dept_id</text>
+                <line x1="365" y1="58" x2="380" y2="95" stroke="#334155" stroke-width="1.5" />
+
+                <ellipse cx="422" cy="36" rx="36" ry="18" fill="#fff" stroke="#334155" stroke-width="1.5" />
+                <text x="422" y="40" text-anchor="middle" font-size="10">dept_name</text>
+                <line x1="415" y1="54" x2="402" y2="95" stroke="#334155" stroke-width="1.5" />
+              </svg>
+            </div>
+
+            <!-- Relational Schema Box -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-3">
+              <div class="text-xs font-bold text-emerald-800">Converted Relational Schema (Logical):</div>
+              <div class="grid grid-cols-2 gap-3 text-xs code-font">
+                <div class="border-2 border-slate-800 rounded-lg overflow-hidden">
+                  <div class="bg-slate-800 text-white px-3 py-1 font-bold">student</div>
+                  <div class="p-2.5 space-y-1">
+                    <div class="pk-underline text-blue-900">student_id</div>
+                    <div>student_name</div>
+                    <div>email</div>
+                    <div>address</div>
+                    <div class="text-rose-700 font-bold">dept_id (FK)</div>
+                  </div>
+                </div>
+                <div class="border-2 border-slate-800 rounded-lg overflow-hidden h-fit">
+                  <div class="bg-slate-800 text-white px-3 py-1 font-bold">department</div>
+                  <div class="p-2.5 space-y-1">
+                    <div class="pk-underline text-blue-900">dept_id</div>
+                    <div>dept_name</div>
+                  </div>
+                </div>
+              </div>
+              <p class="bangla-text text-xs text-slate-700">
+                <strong>কেন <code class="code-font">dept_id (FK)</code> student টেবিলে গেল?</strong> কারণ অনেক ছাত্র (Many side) একটি ডিপার্টমেন্টে (One side) ভর্তি হয়। Many-to-One সম্পর্কে <strong>One পাশের Primary Key-টি Many পাশের টেবিলে Foreign Key হিসেবে বসে</strong>।
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Exam English Answer -->
+        <div class="bg-blue-50/70 border-l-4 border-blue-600 rounded-r-2xl p-5 space-y-2">
+          <h3 class="font-bold text-blue-950 text-base">Exam-Ready English Answer: ER Diagram vs Relational Schema (5 Marks)</h3>
+          <div class="overflow-x-auto bg-white rounded-xl border border-blue-200">
+            <table class="w-full text-xs sm:text-sm text-left border-collapse">
+              <thead class="bg-blue-900 text-white">
+                <tr>
+                  <th class="p-2.5">Basis</th>
+                  <th class="p-2.5">ER Diagram (Conceptual Model)</th>
+                  <th class="p-2.5">Relational Schema (Logical Model)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                <tr><td class="p-2.5 font-bold">Design Phase</td><td class="p-2.5">Created during the Conceptual-design phase.</td><td class="p-2.5">Created during the Logical-design phase.</td></tr>
+                <tr><td class="p-2.5 font-bold">Main Components</td><td class="p-2.5">Entity Sets, Relationship Sets, and Attributes.</td><td class="p-2.5">Relations (Tables), Tuples (Rows), and Attributes (Columns).</td></tr>
+                <tr><td class="p-2.5 font-bold">Keys &amp; Links</td><td class="p-2.5">Uses Primary Keys and Partial Keys; links via diamonds.</td><td class="p-2.5">Uses Primary Keys (PK) and Foreign Keys (FK) to link tables.</td></tr>
+                <tr><td class="p-2.5 font-bold">Cardinality</td><td class="p-2.5">Explicitly describes Mapping Cardinality (1:1, 1:N, M:N).</td><td class="p-2.5">Does not directly describe Mapping Cardinality.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 6 & 7: STRONG ENTITY SET & WEAK ENTITY SET -->
+      <!-- ===================================================================== -->
+      <section id="slides-6-7" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 6 &amp; 7</span>
+          <span class="text-xs font-semibold text-amber-600 uppercase tracking-wider">Entity Conversion Rules</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">2. Converting Strong Entity Set (Slide 6) &amp; Weak Entity Set (Slide 7)</h2>
+
+        <div class="grid lg:grid-cols-2 gap-6">
+          <!-- Slide 6: Strong Entity Set -->
+          <div class="border border-blue-200 rounded-2xl p-5 bg-blue-50/20 space-y-3">
+            <h3 class="font-bold text-blue-950 text-lg">A. Strong Entity Set (Slide 6)</h3>
+            <p class="bangla-text text-xs sm:text-sm text-slate-800">
+              <strong>Strong Entity কী?</strong> যে Entity-র নিজস্ব Primary Key আছে এবং সে অন্য কোনো Entity-র ওপর নির্ভরশীল নয়, তাকে Strong Entity বলে।
+              <br><strong>Conversion Rule:</strong> Strong Entity-র নামে একটি টেবিল বানাও, তার সব Simple Attribute গুলোকে কলাম বানাও এবং আন্ডারলাইন করা অ্যাট্রিবিউটগুলোকে <strong>Primary Key</strong> ঘোষণা করো।
+              <br><strong>Slide 6 Example (<code class="code-font">location</code>):</strong> এখানে <code class="code-font">latitude</code> এবং <code class="code-font">longitude</code> একসাথে মিলে Composite Primary Key গঠন করেছে।
+            </p>
+            <div class="bg-white border border-slate-200 rounded-xl p-3 text-xs code-font">
+              <div class="font-bold text-blue-800 mb-1">ER Entity: location (<u>latitude</u>, <u>longitude</u>, description, last_visited)</div>
+              <div class="border-2 border-slate-800 rounded-lg overflow-hidden w-64 mt-2">
+                <div class="bg-slate-800 text-white px-3 py-1 font-bold">location</div>
+                <div class="p-2.5 space-y-0.5">
+                  <div class="pk-underline">latitude</div>
+                  <div class="pk-underline">longitude</div>
+                  <div>description</div>
+                  <div>last_visited</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 7: Weak Entity Set -->
+          <div class="border border-purple-200 rounded-2xl p-5 bg-purple-50/20 space-y-3">
+            <h3 class="font-bold text-purple-950 text-lg">B. Weak Entity Set (Slide 7)</h3>
+            <p class="bangla-text text-xs sm:text-sm text-slate-800">
+              <strong>Weak Entity কী?</strong> যে Entity-র নিজস্ব সম্পূর্ণ Primary Key থাকে না (শুধু একটি আংশিক কী বা <strong>Discriminator / Partial Key</strong> থাকে যা ড্যাশ লাইন দিয়ে আন্ডারলাইন করা থাকে) এবং যে নিজের অস্তিত্বের জন্য Strong (Owner) Entity-র ওপর নির্ভরশীল, তাকে Weak Entity বলে (ডাবল আয়তক্ষেত্র দিয়ে আঁকা হয়)।
+              <br><strong>Conversion Rule:</strong> Weak Entity-র জন্য একটি টেবিল বানাও। এতে থাকবে:
+              <br>১) Weak Entity-র নিজস্ব সব অ্যাট্রিবিউট (Partial key সহ), এবং
+              <br>২) তার Owner (Strong) Entity গুলোর <strong>Primary Key</strong> (যা এখানে <strong>Foreign Key</strong> হিসেবে আসবে)।
+              <br>৩) টেবিলের নতুন <strong>Primary Key</strong> হবে = <strong>Partial Key + Owner-এর Primary Key(s)</strong>!
+            </p>
+            <div class="bg-white border border-slate-200 rounded-xl p-3 text-xs code-font space-y-2">
+              <div class="font-bold text-purple-900">Slide 7 Example: student + assignment → submission (Weak)</div>
+              <div class="grid grid-cols-3 gap-2">
+                <div class="border border-slate-700 rounded p-2">
+                  <div class="font-bold border-b mb-1">student</div>
+                  <div class="pk-underline">username</div>
+                </div>
+                <div class="border-2 border-purple-800 rounded p-2 bg-purple-50/40">
+                  <div class="font-bold border-b mb-1">submission</div>
+                  <div class="pk-underline">version</div>
+                  <div class="pk-underline text-rose-700">username (FK)</div>
+                  <div class="pk-underline text-rose-700">shortname (FK)</div>
+                  <div>submit_date</div>
+                  <div>data</div>
+                </div>
+                <div class="border border-slate-700 rounded p-2">
+                  <div class="font-bold border-b mb-1">assignment</div>
+                  <div class="pk-underline">shortname</div>
+                  <div>due_date</div>
+                  <div>url</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 8, 9 & 10: COMPOSITE, MULTIVALUED & DERIVED ATTRIBUTES -->
+      <!-- ===================================================================== -->
+      <section id="slides-8-10" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 8, 9 &amp; 10</span>
+          <span class="text-xs font-semibold text-amber-600 uppercase tracking-wider">Attribute Conversion Rules</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">3. Converting Special Attributes (Composite, Multivalued &amp; Derived)</h2>
+
+        <div class="grid lg:grid-cols-3 gap-5">
+          <!-- Slide 8: Composite Attribute -->
+          <div class="border border-blue-200 rounded-2xl p-4 bg-blue-50/20 flex flex-col justify-between space-y-3">
+            <div class="space-y-2">
+              <span class="text-xs font-bold bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full">Slide 8</span>
+              <h3 class="font-bold text-slate-900 text-base">Composite Attribute</h3>
+              <p class="bangla-text text-xs text-slate-800">
+                <strong>কী?</strong> যে অ্যাট্রিবিউটকে আরও ছোট ছোট অংশে ভাগ করা যায়, যেমন <code class="code-font font-bold">(address)</code>-কে ভাগ করলে পাওয়া যায় <code class="code-font">street, city, state, zipcode</code>।
+                <br><strong>নিয়ম:</strong> মূল টেবিলে প্যারেন্ট অ্যাট্রিবিউট <code class="code-font">address</code>-এর নামে কোনো কলাম হবে না; বরং তার <strong>সাব-অ্যাট্রিবিউটগুলো (Component attributes)</strong> আলাদা আলাদা কলাম হিসেবে যুক্ত হবে।
+              </p>
+            </div>
+            <div class="bg-white border border-slate-300 rounded-xl p-3 text-xs code-font">
+              <div class="font-bold bg-slate-800 text-white px-2 py-1 rounded-t">customer</div>
+              <div class="p-2 border border-t-0 border-slate-800 rounded-b space-y-0.5">
+                <div class="pk-underline">cust_id</div>
+                <div>name</div>
+                <div class="text-blue-700 font-semibold">street</div>
+                <div class="text-blue-700 font-semibold">city</div>
+                <div class="text-blue-700 font-semibold">state</div>
+                <div class="text-blue-700 font-semibold">zipcode</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 9: Multivalued Attribute -->
+          <div class="border border-amber-200 rounded-2xl p-4 bg-amber-50/20 flex flex-col justify-between space-y-3">
+            <div class="space-y-2">
+              <span class="text-xs font-bold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full">Slide 9</span>
+              <h3 class="font-bold text-slate-900 text-base">Multivalued Attribute (Double Oval)</h3>
+              <p class="bangla-text text-xs text-slate-800">
+                <strong>কী?</strong> একজন কাস্টমারের একাধিক ঠিকানা বা একাধিক ফোন নম্বর থাকতে পারে (Double oval দিয়ে আঁকা হয়)। একটি সেলে একাধিক মান রাখা Relational Model-এ (1NF) নিষিদ্ধ।
+                <br><strong>নিয়ম:</strong> এর জন্য <strong>সম্পূর্ণ আলাদা একটি নতুন টেবিল</strong> (<code class="code-font">cust_addr</code>) বানাতে হবে! সেখানে মূল টেবিলের PK (<code class="code-font">cust_id</code>) যাবে <strong>FK</strong> হিসেবে এবং সবগুলো কলাম মিলে হবে <strong>Composite PK</strong>।
+              </p>
+            </div>
+            <div class="bg-white border border-slate-300 rounded-xl p-3 text-xs code-font space-y-2">
+              <div class="border border-slate-800 rounded p-2">
+                <div class="font-bold border-b mb-1">customer</div>
+                <div class="pk-underline">cust_id</div>
+                <div>name</div>
+              </div>
+              <div class="border-2 border-amber-700 rounded p-2 bg-amber-50/40">
+                <div class="font-bold border-b mb-1">cust_addr (New Table)</div>
+                <div class="pk-underline">street</div>
+                <div class="pk-underline">city</div>
+                <div class="pk-underline">state</div>
+                <div class="pk-underline">zipcode</div>
+                <div class="pk-underline text-rose-700">cust_id (FK)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 10: Derived Attribute -->
+          <div class="border border-rose-200 rounded-2xl p-4 bg-rose-50/20 flex flex-col justify-between space-y-3">
+            <div class="space-y-2">
+              <span class="text-xs font-bold bg-rose-100 text-rose-800 px-2.5 py-0.5 rounded-full">Slide 10</span>
+              <h3 class="font-bold text-slate-900 text-base">Derived Attribute (Dashed Oval)</h3>
+              <p class="bangla-text text-xs text-slate-800">
+                <strong>কী?</strong> যে অ্যাট্রিবিউটের মান অন্য অ্যাট্রিবিউট থেকে হিসাব করে বের করা যায় (Dashed oval)। যেমন: জন্মতারিখ (<code class="code-font">dob</code>) থেকে বয়স (<code class="code-font">age</code>) হিসাব করা যায়।
+                <br><strong>নিয়ম:</strong> Derived Attribute-কে Relational Schema-তে <strong>অন্তর্ভুক্ত করা হয় না (Ignored / Omitted)</strong>! কারণ বয়স প্রতিদিন বদলায়, তাই ডাটাবেজে শুধু <code class="code-font">dob</code> সংরক্ষণ করা হয়।
+              </p>
+            </div>
+            <div class="bg-white border border-slate-300 rounded-xl p-3 text-xs code-font">
+              <div class="font-bold bg-slate-800 text-white px-2 py-1 rounded-t">student</div>
+              <div class="p-2 border border-t-0 border-slate-800 rounded-b space-y-0.5">
+                <div class="pk-underline">stu_id</div>
+                <div>name</div>
+                <div>email</div>
+                <div>dob</div>
+                <div class="text-rose-600 line-through">age (Omitted!)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 11 - 14 & 17: RELATIONSHIPS (1:1, 1:N, M:N, RECURSIVE, IDENTIFYING) -->
+      <!-- ===================================================================== -->
+      <section id="slides-11-14" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 11, 12, 13, 14 &amp; 17</span>
+          <span class="text-xs font-semibold text-rose-600 uppercase tracking-wider">Relationship Conversion Rules</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">4. Converting Relationship Sets (1:1, 1:N, M:N, Recursive &amp; Identifying)</h2>
+
+        <div class="space-y-5">
+          <!-- Slide 11: One-to-One (1:1) -->
+          <div class="border border-slate-200 rounded-2xl p-5 bg-slate-50/50 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-blue-950 text-base">A. One-to-One (1:1) Relationship Set (Slide 11)</h3>
+              <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full font-semibold">FK in Either Table (Nullable)</span>
+            </div>
+            <p class="bangla-text text-xs sm:text-sm text-slate-800">
+              <strong>নিয়ম:</strong> 1:1 সম্পর্কে কোনো নতুন টেবিল বানানোর দরকার নেই। যেকোনো একটি টেবিলের Primary Key অপর টেবিলে <strong>Foreign Key (FK)</strong> হিসেবে যোগ করলেই চলবে (সাধারণত যে পাশে Total participation বা কম NULL হওয়ার সম্ভাবনা থাকে সে পাশে রাখা ভালো)। Slide 11-এ <code class="code-font">loan</code>-এর PK (<code class="code-font">loan_id</code>) <code class="code-font">customer</code> টেবিলে <strong>Nullable FK</strong> হিসেবে রাখা হয়েছে (কারণ সব কাস্টমারের লোন নাও থাকতে পারে)।
+            </p>
+            <div class="grid sm:grid-cols-2 gap-3 text-xs code-font">
+              <div class="bg-white border-2 border-slate-800 rounded-lg p-3">
+                <div class="font-bold border-b pb-1 mb-1">customer</div>
+                <div class="pk-underline">cust_id</div>
+                <div>name, street_address, city</div>
+                <div class="text-rose-700 font-bold">loan_id (FK, Nullable)</div>
+              </div>
+              <div class="bg-white border-2 border-slate-800 rounded-lg p-3 h-fit">
+                <div class="font-bold border-b pb-1 mb-1">loan</div>
+                <div class="pk-underline">loan_id</div>
+                <div>amount</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 12: One-to-Many (1:N / N:1) -->
+          <div class="border border-slate-200 rounded-2xl p-5 bg-slate-50/50 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-blue-950 text-base">B. One-to-Many (1:N / N:1) Relationship Set (Slide 12)</h3>
+              <span class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-semibold">PK of "1" Side → FK in "Many" Side</span>
+            </div>
+            <p class="bangla-text text-xs sm:text-sm text-slate-800">
+              <strong>নিয়ম (খুবই গুরুত্বপূর্ণ!):</strong> 1:N সম্পর্কেও আলাদা টেবিল বানানোর দরকার নেই। এখানে <strong>"One (1)" পাশের টেবিলের Primary Key-টি "Many (N)" পাশের টেবিলে Foreign Key হিসেবে যাবে</strong>।
+              <br><strong>কেন উল্টোটা হয় না?</strong> Slide 12-এ একটি লোনের অধীনে অনেক কাস্টমার থাকতে পারে (<code class="code-font">customer</code> পাশে Crow's foot / Many, আর <code class="code-font">loan</code> পাশে One)। তাই <code class="code-font">loan</code>-এর PK (<code class="code-font">loan_no</code>) গিয়ে বসেছে <code class="code-font">customer</code> টেবিলে! উল্টোটা করলে একটি লোনের রো-তে একাধিক কাস্টমারের আইডি রাখতে হতো, যা অসম্ভব।
+            </p>
+            <div class="grid sm:grid-cols-2 gap-3 text-xs code-font">
+              <div class="bg-white border-2 border-slate-800 rounded-lg p-3">
+                <div class="font-bold border-b pb-1 mb-1">customer (Many Side)</div>
+                <div class="pk-underline">cust_id</div>
+                <div>cust_name, cust_street, cust_city</div>
+                <div class="text-rose-700 font-bold">loan_no (FK, Nullable)</div>
+              </div>
+              <div class="bg-white border-2 border-slate-800 rounded-lg p-3 h-fit">
+                <div class="font-bold border-b pb-1 mb-1">loan (One Side)</div>
+                <div class="pk-underline">loan_no</div>
+                <div>amount</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 13: Many-to-Many (M:N) -->
+          <div class="border border-amber-300 rounded-2xl p-5 bg-amber-50/30 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-amber-950 text-base">C. Many-to-Many (M:N) Relationship Set (Slide 13)</h3>
+              <span class="text-xs bg-amber-200 text-amber-950 px-2.5 py-0.5 rounded-full font-bold">Creates a NEW Junction Table!</span>
+            </div>
+            <p class="bangla-text text-xs sm:text-sm text-slate-800">
+              <strong>নিয়ম:</strong> M:N সম্পর্কে (যেমন: একজন কাস্টমার অনেকগুলো লোন নিতে পারে, আবার একটি লোন যৌথভাবে একাধিক কাস্টমারের নামে থাকতে পারে) <strong>অবশ্যই সম্পর্কের নামে একটি নতুন টেবিল (<code class="code-font">borrower</code>) তৈরি করতে হবে</strong>!
+              <br>এই নতুন টেবিলে থাকবে: উভয় টেবিলের Primary Key (<code class="code-font">cust_id</code> ও <code class="code-font">loan_id</code>) যা একসাথে টেবিলটির <strong>Composite Primary Key</strong> এবং আলাদাভাবে <strong>Foreign Key</strong> হিসেবে কাজ করবে। এছাড়া সম্পর্কের নিজস্ব কোনো অ্যাট্রিবিউট থাকলে (যেমন <code class="code-font">access_date</code>) সেটিও এই নতুন টেবিলে বসবে।
+            </p>
+            <div class="grid sm:grid-cols-3 gap-3 text-xs code-font">
+              <div class="bg-white border border-slate-800 rounded-lg p-3 h-fit">
+                <div class="font-bold border-b pb-1 mb-1">customer</div>
+                <div class="pk-underline">cust_id</div>
+                <div>cust_name, cust_street, cust_city</div>
+              </div>
+              <div class="bg-white border-2 border-amber-700 rounded-lg p-3">
+                <div class="font-bold border-b pb-1 mb-1 text-amber-900">borrower (New Table)</div>
+                <div class="pk-underline text-rose-700">cust_id (FK)</div>
+                <div class="pk-underline text-rose-700">loan_id (FK)</div>
+                <div>access_date</div>
+              </div>
+              <div class="bg-white border border-slate-800 rounded-lg p-3 h-fit">
+                <div class="font-bold border-b pb-1 mb-1">loan</div>
+                <div class="pk-underline">loan_id</div>
+                <div>amount</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 14 & Slide 17 Side-by-Side -->
+          <div id="slide-17" class="grid lg:grid-cols-2 gap-5">
+            <!-- Slide 14: Recursive Relationship -->
+            <div class="border border-purple-200 rounded-2xl p-5 bg-purple-50/20 space-y-3">
+              <h3 class="font-bold text-purple-950 text-base">D. Recursive Relationship Set (Slide 14)</h3>
+              <p class="bangla-text text-xs sm:text-sm text-slate-800">
+                <strong>কী?</strong> যখন কোনো Entity নিজের সাথেই সম্পর্ক তৈরি করে। যেমন: একজন <code class="code-font">employee</code> (worker) আরেকজন <code class="code-font">employee</code> (manager)-এর অধীনে কাজ করে (<code class="code-font">works_for</code>)।
+                <br><strong>নিয়ম:</strong> একই টেবিলের Primary Key (<code class="code-font">emp_id</code>) ওই টেবিলেই একটি নতুন নামে (Role name ব্যবহার করে, যেমন <code class="code-font">works_for_emp_id</code>) <strong>Self-referencing Foreign Key</strong> হিসেবে যুক্ত হয়।
+              </p>
+              <div class="bg-white border-2 border-purple-800 rounded-lg p-3 text-xs code-font">
+                <div class="font-bold border-b pb-1 mb-1">employee</div>
+                <div class="pk-underline">emp_id</div>
+                <div>name</div>
+                <div class="text-rose-700 font-bold">works_for_emp_id (FK → employee.emp_id)</div>
+              </div>
+            </div>
+
+            <!-- Slide 17: Identifying Relationship Set -->
+            <div class="border border-teal-200 rounded-2xl p-5 bg-teal-50/20 space-y-3">
+              <h3 class="font-bold text-teal-950 text-base">E. Identifying Relationship Set (Slide 17)</h3>
+              <p class="bangla-text text-xs sm:text-sm text-slate-800">
+                <strong>কী?</strong> যে ডাবল-ডায়মন্ড সম্পর্ক (<code class="code-font">loan-payment</code>) একটি Weak Entity (<code class="code-font">payment</code>)-কে তার Owner Strong Entity (<code class="code-font">loan</code>)-এর সাথে যুক্ত করে।
+                <br><strong>নিয়ম:</strong> Identifying Relationship-এর জন্য <strong>আলাদা কোনো টেবিল বানাতে হয় না</strong>! Owner-এর PK (<code class="code-font">loan_no</code>) সরাসরি Weak Entity টেবিল (<code class="code-font">payment</code>)-এ গিয়ে Partial Key (<code class="code-font">payment_no</code>)-এর সাথে মিলে Composite PK গঠন করে।
+              </p>
+              <div class="grid grid-cols-2 gap-2 text-xs code-font">
+                <div class="bg-white border border-slate-800 rounded-lg p-2.5 h-fit">
+                  <div class="font-bold border-b pb-1 mb-1">loan</div>
+                  <div class="pk-underline">loan_no</div>
+                  <div>amount</div>
+                </div>
+                <div class="bg-white border-2 border-teal-800 rounded-lg p-2.5">
+                  <div class="font-bold border-b pb-1 mb-1">payment</div>
+                  <div class="pk-underline">payment_no</div>
+                  <div class="pk-underline text-rose-700">loan_no (FK)</div>
+                  <div>payment_date</div>
+                  <div>payment_amount</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 15, 16, 18 & 19: FULL-SCALE SOLVED ERD PROBLEMS -->
+      <!-- ===================================================================== -->
+      <section id="slides-15-16-18-19" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-8">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 15, 16, 18 &amp; 19</span>
+          <span class="text-xs font-semibold text-rose-600 uppercase tracking-wider">Complete Exam Solutions</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">5. Step-by-Step Solutions to All Full-Scale ERD Exercises in the PDF</h2>
+
+        <!-- PROBLEM 1: SLIDE 15 (CAR - CUSTOMER - EMPLOYEE - INVOICE) -->
+        <div class="border-2 border-blue-200 rounded-2xl p-5 sm:p-6 bg-blue-50/20 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-lg font-bold text-blue-950">Solved Exercise 1 (Slide 15): Car Dealership ERD → Relational Schema</h3>
+            <span class="text-xs bg-blue-700 text-white px-2.5 py-0.5 rounded-full font-semibold">Slide 15 Complete Solution</span>
+          </div>
+          <p class="bangla-text text-xs sm:text-sm text-slate-800">
+            <strong>ER ডায়াগ্রাম বিশ্লেষণ (Slide 15):</strong>
+            <br>১. <strong>Entities:</strong> <code class="code-font">CAR</code> (PK: <code class="code-font">Car_ID</code>, <code class="code-font">Serial_Number</code>, এবং Composite attribute <code class="code-font">Model</code> যার অংশ <code class="code-font">Model_No, Color, Year</code>), <code class="code-font">CUSTOMER</code> (PK: <code class="code-font">CustomerID</code>, <code class="code-font">Name, PhoneNumber, Address, Country, City</code>), <code class="code-font">EMPLOYEE</code> (PK: <code class="code-font">EmpID</code>, <code class="code-font">Name, Address</code>, এবং Multivalued attribute <code class="code-font">Qualification</code>), এবং <code class="code-font">INVOICE</code> (PK: <code class="code-font">InvoiceID</code>, <code class="code-font">Date</code>)।
+            <br>২. <strong>Relationships:</strong>
+              <br>• <code class="code-font">CUSTOMER (1) — has — (0..N) CAR</code>: One-to-Many হওয়ায় <code class="code-font">CustomerID (FK)</code> যাবে <code class="code-font">CAR</code> টেবিলে।
+              <br>• <code class="code-font">EMPLOYEE (1) — Sell — (0..N) CAR</code>: One-to-Many হওয়ায় <code class="code-font">EmpID (FK)</code> যাবে <code class="code-font">CAR</code> টেবিলে।
+              <br>• <code class="code-font">CUSTOMER (1) — has — (N) INVOICE</code> এবং <code class="code-font">EMPLOYEE (1) — has — (N) INVOICE</code>: উভয়ই 1:N হওয়ায় <code class="code-font">CustomerID (FK)</code> ও <code class="code-font">EmpID (FK)</code> যাবে <code class="code-font">INVOICE</code> টেবিলে।
+              <br>• <code class="code-font">EMPLOYEE</code>-এর Multivalued attribute <code class="code-font">Qualification</code>-এর জন্য আলাদা টেবিল <code class="code-font">EMPLOYEE_QUALIFICATION</code> তৈরি হবে।
+          </p>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs code-font">
+            <div class="bg-white border-2 border-slate-800 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1 text-blue-900">CAR</div>
+              <div class="pk-underline">Car_ID</div>
+              <div>Serial_Number</div>
+              <div>Model_No, Color, Year</div>
+              <div class="text-rose-700 font-bold">CustomerID (FK)</div>
+              <div class="text-rose-700 font-bold">EmpID (FK)</div>
+            </div>
+            <div class="bg-white border-2 border-slate-800 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1 text-blue-900">CUSTOMER</div>
+              <div class="pk-underline">CustomerID</div>
+              <div>Name, PhoneNumber</div>
+              <div>Address, Country, City</div>
+            </div>
+            <div class="bg-white border-2 border-slate-800 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1 text-blue-900">EMPLOYEE</div>
+              <div class="pk-underline">EmpID</div>
+              <div>Name, Address</div>
+            </div>
+            <div class="bg-white border-2 border-amber-700 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1 text-amber-900">EMPLOYEE_QUALIFICATION</div>
+              <div class="pk-underline text-rose-700">EmpID (FK)</div>
+              <div class="pk-underline">Qualification</div>
+            </div>
+            <div class="bg-white border-2 border-slate-800 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1 text-blue-900">INVOICE</div>
+              <div class="pk-underline">InvoiceID</div>
+              <div>Date</div>
+              <div class="text-rose-700 font-bold">CustomerID (FK)</div>
+              <div class="text-rose-700 font-bold">EmpID (FK)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROBLEM 2: SLIDE 16 (CONTEST - USER - PROBLEM) -->
+        <div class="border-2 border-purple-200 rounded-2xl p-5 sm:p-6 bg-purple-50/20 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-lg font-bold text-purple-950">Solved Exercise 2 (Slide 16): Online Judge (Contest – User – Problem) ERD</h3>
+            <span class="text-xs bg-purple-700 text-white px-2.5 py-0.5 rounded-full font-semibold">Slide 16 Complete Solution</span>
+          </div>
+          <p class="bangla-text text-xs sm:text-sm text-slate-800">
+            <strong>ER ডায়াগ্রাম বিশ্লেষণ (Slide 16):</strong>
+            <br>১. <strong>Contest (PK: <code class="code-font">id</code>):</strong> <code class="code-font">start_time, duration, min_rating, max_rating</code> আছে। <code class="code-font">end_time</code> Dashed oval (Derived attribute) হওয়ায় বাদ যাবে। <code class="code-font">setter</code> সম্পর্কটি 1:1 হওয়ায় <code class="code-font">setter_username (FK)</code> Contest টেবিলে বসবে।
+            <br>২. <strong>User (PK: <code class="code-font">username</code>):</strong> Composite attribute <code class="code-font">name</code> ভেঙে <code class="code-font">first_name, last_name</code> হবে; <code class="code-font">age</code> Derived হওয়ায় বাদ যাবে; <code class="code-font">dob, rating</code> থাকবে।
+            <br>৩. <strong>Problem (PK: <code class="code-font">id</code>):</strong> <code class="code-font">statement, time_limit, category</code> থাকবে। <code class="code-font">contest_problem</code> সম্পর্কটি Contest (1) থেকে Problem (N) হওয়ায় <code class="code-font">contest_id (FK)</code> Problem টেবিলে বসবে। আর Multivalued attribute <code class="code-font">test_case</code>-এর জন্য আলাদা টেবিল <code class="code-font">problem_test_case</code> হবে।
+            <br>৪. <strong>Many-to-Many Relationships:</strong> <code class="code-font">participation (N:N)</code>-এর জন্য নতুন টেবিল (অ্যাট্রিবিউট: <code class="code-font">point, rank</code>) এবং <code class="code-font">submission (N:N)</code>-এর জন্য নতুন টেবিল (অ্যাট্রিবিউট: <code class="code-font">verdict, sub_time</code>) তৈরি হবে।
+          </p>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs code-font">
+            <div class="bg-white border-2 border-slate-800 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1 text-purple-900">Contest</div>
+              <div class="pk-underline">id</div>
+              <div>start_time, duration</div>
+              <div>min_rating, max_rating</div>
+              <div class="text-rose-700 font-bold">setter_username (FK)</div>
+            </div>
+            <div class="bg-white border-2 border-slate-800 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1 text-purple-900">User</div>
+              <div class="pk-underline">username</div>
+              <div>first_name, last_name</div>
+              <div>dob, rating</div>
+            </div>
+            <div class="bg-white border-2 border-slate-800 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1 text-purple-900">Problem</div>
+              <div class="pk-underline">id</div>
+              <div>statement, time_limit, category</div>
+              <div class="text-rose-700 font-bold">contest_id (FK)</div>
+            </div>
+            <div class="bg-white border-2 border-amber-700 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1 text-amber-900">problem_test_case</div>
+              <div class="pk-underline text-rose-700">problem_id (FK)</div>
+              <div class="pk-underline">test_case</div>
+            </div>
+            <div class="bg-white border-2 border-emerald-700 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1 text-emerald-900">participation (M:N)</div>
+              <div class="pk-underline text-rose-700">contest_id (FK)</div>
+              <div class="pk-underline text-rose-700">username (FK)</div>
+              <div>point, rank</div>
+            </div>
+            <div class="bg-white border-2 border-emerald-700 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1 text-emerald-900">submission (M:N)</div>
+              <div class="pk-underline text-rose-700">problem_id (FK)</div>
+              <div class="pk-underline text-rose-700">username (FK)</div>
+              <div>verdict, sub_time</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROBLEM 3: SLIDE 18 (PLAYER - TEAM - GAME - REFEREE - GLOSSARY - PICTURE) -->
+        <div class="border-2 border-emerald-200 rounded-2xl p-5 sm:p-6 bg-emerald-50/20 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-lg font-bold text-emerald-950">Solved Exercise 3 (Slide 18): Sports Tournament ERD → Relational Schema</h3>
+            <span class="text-xs bg-emerald-700 text-white px-2.5 py-0.5 rounded-full font-semibold">Slide 18 Complete Solution</span>
+          </div>
+          <p class="bangla-text text-xs sm:text-sm text-slate-800">
+            <strong>ER ডায়াগ্রাম বিশ্লেষণ (Slide 18):</strong>
+            <br>• <strong>PLAYER (PK: <code class="code-font">Pid</code>):</strong> <code class="code-font">Basic_inf</code> Multivalued হওয়ায় আলাদা টেবিল <code class="code-font">PLAYER_BASIC_INF</code> হবে। <code class="code-font">IN (N:1)</code> সম্পর্কের কারণে <code class="code-font">Tid (FK)</code> PLAYER টেবিলে যাবে।
+            <br>• <strong>OPPOSE (M:N Recursive on PLAYER):</strong> একজন প্লেয়ার অনেক প্লেয়ারের বিপক্ষে খেলে, তাই আলাদা টেবিল <code class="code-font">OPPOSE(Pid1, Pid2)</code> হবে।
+            <br>• <strong>TEAM (PK: <code class="code-font">Tid</code>):</strong> <code class="code-font">Pid</code> (Captain/Player ref) আছে, এবং <code class="code-font">T_inf</code> Multivalued হওয়ায় আলাদা টেবিল <code class="code-font">TEAM_INF</code> হবে।
+            <br>• <strong>PICTURE (PK: <code class="code-font">Pic_id</code>):</strong> <code class="code-font">USE (1:1)</code> সম্পর্কে যুক্ত থাকায় <code class="code-font">Pid (FK)</code> ও <code class="code-font">Tid (FK)</code> এবং <code class="code-font">Pic</code> থাকবে।
+            <br>• <strong>GLOSSARY (PK: <code class="code-font">Gid</code>):</strong> PLAYER (1) — USED (N) এবং TEAM (1) — USED (N) হওয়ায় <code class="code-font">Pid (FK)</code> ও <code class="code-font">Tid (FK)</code> GLOSSARY টেবিলে যাবে।
+            <br>• <strong>REFEREE (PK: <code class="code-font">Pid</code>) &amp; GAME (PK: <code class="code-font">Game_id</code>):</strong> <code class="code-font">GUIDE (3:N)</code> এবং <code class="code-font">PARTICIPATE (2:N)</code> যেহেতু Many-to-Many (যেমন প্রতিটি খেলায় ২টি টিম ও ৩ জন রেফারি, এবং ১টি টিম/রেফারি অনেক খেলায় থাকে), তাই <code class="code-font">PARTICIPATE(Tid, Game_id)</code> এবং <code class="code-font">GUIDE(Referee_Pid, Game_id)</code> দুটি আলাদা টেবিল হবে।
+          </p>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs code-font">
+            <div class="bg-white border border-slate-800 rounded-lg p-2.5">
+              <div class="font-bold border-b mb-1">PLAYER</div>
+              <div class="pk-underline">Pid</div>
+              <div class="text-rose-700 font-bold">Tid (FK)</div>
+            </div>
+            <div class="bg-white border border-amber-700 rounded-lg p-2.5">
+              <div class="font-bold border-b mb-1">PLAYER_BASIC_INF</div>
+              <div class="pk-underline text-rose-700">Pid (FK)</div>
+              <div class="pk-underline">Basic_inf</div>
+            </div>
+            <div class="bg-white border border-emerald-700 rounded-lg p-2.5">
+              <div class="font-bold border-b mb-1">OPPOSE (M:N)</div>
+              <div class="pk-underline text-rose-700">Pid_1 (FK)</div>
+              <div class="pk-underline text-rose-700">Pid_2 (FK)</div>
+            </div>
+            <div class="bg-white border border-slate-800 rounded-lg p-2.5">
+              <div class="font-bold border-b mb-1">TEAM</div>
+              <div class="pk-underline">Tid</div>
+              <div>Pid</div>
+            </div>
+            <div class="bg-white border border-amber-700 rounded-lg p-2.5">
+              <div class="font-bold border-b mb-1">TEAM_INF</div>
+              <div class="pk-underline text-rose-700">Tid (FK)</div>
+              <div class="pk-underline">T_inf</div>
+            </div>
+            <div class="bg-white border border-slate-800 rounded-lg p-2.5">
+              <div class="font-bold border-b mb-1">PICTURE</div>
+              <div class="pk-underline">Pic_id</div>
+              <div class="text-rose-700">Pid (FK), Tid (FK)</div>
+              <div>Pic</div>
+            </div>
+            <div class="bg-white border border-slate-800 rounded-lg p-2.5">
+              <div class="font-bold border-b mb-1">GLOSSARY</div>
+              <div class="pk-underline">Gid</div>
+              <div class="text-rose-700">Pid (FK), Tid (FK)</div>
+            </div>
+            <div class="bg-white border border-slate-800 rounded-lg p-2.5">
+              <div class="font-bold border-b mb-1">GAME &amp; REFEREE</div>
+              <div>GAME(<span class="pk-underline">Game_id</span>)</div>
+              <div>REFEREE(<span class="pk-underline">Pid</span>, R_inf)</div>
+            </div>
+            <div class="bg-white border border-emerald-700 rounded-lg p-2.5 sm:col-span-2">
+              <div class="font-bold border-b mb-1">PARTICIPATE &amp; GUIDE (M:N)</div>
+              <div>PARTICIPATE(<span class="pk-underline text-rose-700">Tid</span>, <span class="pk-underline text-rose-700">Game_id</span>)</div>
+              <div>GUIDE(<span class="pk-underline text-rose-700">Referee_Pid</span>, <span class="pk-underline text-rose-700">Game_id</span>)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROBLEM 4: SLIDE 19 (MASTER ABSTRACT ERD: e1, e2, e3, e4, e5) -->
+        <div class="border-2 border-slate-800 rounded-2xl p-5 sm:p-6 bg-slate-50 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-lg font-bold text-slate-900">Solved Exercise 4 (Slide 19): Master Abstract ERD (All Rules Combined!)</h3>
+            <span class="text-xs bg-slate-900 text-white px-2.5 py-0.5 rounded-full font-bold">Slide 19 — Ultimate Exam Test</span>
+          </div>
+          <p class="bangla-text text-xs sm:text-sm text-slate-800">
+            স্লাইড ১৯-এ একটি মাত্র ডায়াগ্রামে এই অধ্যায়ের <strong>সবগুলো নিয়ম</strong> একসাথে পরীক্ষা করা হয়েছে! প্রতিটি টেবিল কীভাবে তৈরি হলো তা মিলিয়ে নাও:
+            <br>১. <strong><code class="code-font">e1</code> (Strong Entity):</strong> PK হলো <code class="code-font">a, b</code>। সাধারণ অ্যাট্রিবিউট <code class="code-font">c</code>। <code class="code-font">d</code> Dashed oval (Derived) হওয়ায় বাদ গেছে। <code class="code-font">r1</code> হলো <code class="code-font">e1</code> ও <code class="code-font">e2</code>-এর মধ্যে <strong>1:1</strong> সম্পর্ক, তাই <code class="code-font">e2</code>-এর PK (<code class="code-font">f</code>) এখানে <strong>FK</strong> হিসেবে বসেছে।
+            <br>২. <strong><code class="code-font">e1_e</code> (Multivalued Attribute <code class="code-font">e</code>):</strong> <code class="code-font">e1</code>-এর ডাবল ওভাল <code class="code-font">e</code>-এর জন্য নতুন টেবিল <code class="code-font">e1_e(e, a, b)</code> যেখানে <code class="code-font">a, b</code> হলো FK এবং তিনটি মিলে Composite PK।
+            <br>৩. <strong><code class="code-font">e2</code> (Strong Entity):</strong> PK = <code class="code-font">f</code>, সাধারণ কলাম <code class="code-font">g</code>।
+            <br>৪. <strong><code class="code-font">e3</code> (Composite Attribute + 1:N):</strong> PK = <code class="code-font">u</code>। Composite attribute <code class="code-font">(k)</code> ভেঙে <code class="code-font">l, m, n</code> হয়েছে। <code class="code-font">r2</code> হলো <code class="code-font">e1 (1)</code> থেকে <code class="code-font">e3 (N)</code> সম্পর্ক, তাই <code class="code-font">e1</code>-এর PK (<code class="code-font">a, b</code>) এখানে <strong>FK</strong> হিসেবে এসেছে।
+            <br>৫. <strong><code class="code-font">r3</code> (M:N Relationship with Attribute <code class="code-font">o</code>):</strong> <code class="code-font">e1 (N)</code> এবং <code class="code-font">e4 (N)</code>-এর মধ্যে M:N সম্পর্ক হওয়ায় নতুন টেবিল <code class="code-font">r3</code> তৈরি হয়েছে যাতে <code class="code-font">a, b (FK)</code>, <code class="code-font">p, q (FK)</code> এবং সম্পর্কের অ্যাট্রিবিউট <code class="code-font">o</code> আছে।
+            <br>৬. <strong><code class="code-font">e4</code> (Recursive 1:N Relationship <code class="code-font">r4</code>):</strong> PK = <code class="code-font">p, q</code>, সাধারণ কলাম <code class="code-font">r</code>। Recursive 1:N সম্পর্ক <code class="code-font">r4</code>-এর জন্য নিজের PK (<code class="code-font">p, q</code>) আবার <code class="code-font">role2_p, role2_q (FK)</code> নামে একই টেবিলে যুক্ত হয়েছে।
+            <br>৭. <strong><code class="code-font">e5</code> (Weak Entity via Identifying Relationship <code class="code-font">r5</code>):</strong> এর Partial Key হলো <code class="code-font">partial_key</code>, সাধারণ কলাম <code class="code-font">s</code>, এবং Owner <code class="code-font">e1</code>-এর PK (<code class="code-font">a, b</code>) এখানে <strong>FK</strong> হিসেবে যুক্ত হয়ে Composite PK গঠন করেছে।
+          </p>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs code-font">
+            <div class="bg-white border-2 border-slate-800 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1">e1</div>
+              <div class="pk-underline">a</div>
+              <div class="pk-underline">b</div>
+              <div>c</div>
+              <div class="text-rose-700 font-bold">f (FK → e2.f)</div>
+            </div>
+            <div class="bg-white border-2 border-amber-700 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1">e1_e (Multivalued)</div>
+              <div class="pk-underline">e</div>
+              <div class="pk-underline text-rose-700">a (FK)</div>
+              <div class="pk-underline text-rose-700">b (FK)</div>
+            </div>
+            <div class="bg-white border-2 border-slate-800 rounded-xl p-3 h-fit">
+              <div class="font-bold border-b pb-1 mb-1">e2</div>
+              <div class="pk-underline">f</div>
+              <div>g</div>
+            </div>
+            <div class="bg-white border-2 border-slate-800 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1">e3</div>
+              <div class="pk-underline">u</div>
+              <div>l, m, n</div>
+              <div class="text-rose-700 font-bold">a, b (FK → e1)</div>
+            </div>
+            <div class="bg-white border-2 border-emerald-700 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1">r3 (M:N Table)</div>
+              <div class="pk-underline text-rose-700">a, b (FK → e1)</div>
+              <div class="pk-underline text-rose-700">p, q (FK → e4)</div>
+              <div>o</div>
+            </div>
+            <div class="bg-white border-2 border-purple-800 rounded-xl p-3">
+              <div class="font-bold border-b pb-1 mb-1">e4 (Recursive)</div>
+              <div class="pk-underline">p, q</div>
+              <div>r</div>
+              <div class="text-rose-700 font-bold">role2_p, role2_q (FK)</div>
+            </div>
+            <div class="bg-white border-2 border-teal-800 rounded-xl p-3 sm:col-span-2">
+              <div class="font-bold border-b pb-1 mb-1">e5 (Weak Entity)</div>
+              <div class="pk-underline">partial_key</div>
+              <div class="pk-underline text-rose-700">a, b (FK → e1)</div>
+              <div>s</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- PRACTICE EXERCISES, SUMMARY RULES TABLE & 5-8 MARKS EXAM ANSWERS -->
+      <!-- ===================================================================== -->
+      <section id="practice-revision" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-8">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full">Exam Mastery Zone</span>
+          <h2 class="text-2xl font-bold text-slate-900 mt-2">6. Quick Revision Cheat-Sheet, Practice Problems &amp; Exam Answers</h2>
+        </div>
+
+        <!-- Master Rules Summary Table -->
+        <div class="overflow-x-auto border border-slate-200 rounded-2xl">
+          <table class="w-full text-xs sm:text-sm text-left border-collapse">
+            <thead class="bg-slate-900 text-white">
+              <tr>
+                <th class="p-3">ER Model Component</th>
+                <th class="p-3">Relational Schema Conversion Rule</th>
+                <th class="p-3">Key Assignment (PK / FK)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr>
+                <td class="p-3 font-bold">Strong Entity Set</td>
+                <td class="p-3">Create a separate table with all simple attributes.</td>
+                <td class="p-3">Entity's key becomes <strong>PK</strong>.</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">Weak Entity Set</td>
+                <td class="p-3">Create a table with its attributes + Owner's PK.</td>
+                <td class="p-3"><strong>PK</strong> = Partial Key + Owner's PK (also <strong>FK</strong>).</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">Composite Attribute</td>
+                <td class="p-3">Include only simple component attributes as columns.</td>
+                <td class="p-3">Parent composite name is omitted.</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">Multivalued Attribute</td>
+                <td class="p-3">Create a <strong>new separate table</strong> for the attribute.</td>
+                <td class="p-3"><strong>Composite PK</strong> = Entity PK (FK) + Attribute.</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">Derived Attribute</td>
+                <td class="p-3">Do <strong>not</strong> include in any relational table.</td>
+                <td class="p-3">Computed dynamically when queried.</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">1:1 Relationship</td>
+                <td class="p-3">No new table; add PK of one side into the other side.</td>
+                <td class="p-3">Added key acts as <strong>FK</strong> (often Nullable).</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">1:N Relationship</td>
+                <td class="p-3">No new table; add PK of <strong>"1" side</strong> to <strong>"N" side</strong>.</td>
+                <td class="p-3">Added key acts as <strong>FK</strong> in the "N" table.</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">M:N Relationship</td>
+                <td class="p-3">Create a <strong>new relationship table</strong> + its attributes.</td>
+                <td class="p-3"><strong>Composite PK</strong> = Both entity PKs (each is <strong>FK</strong>).</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">Recursive Relationship</td>
+                <td class="p-3">Add a renamed copy of the entity's PK to the same table (for 1:N) or new table (for M:N).</td>
+                <td class="p-3">Renamed column acts as self-referencing <strong>FK</strong>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Extra Practice Problems with Solutions -->
+        <div class="grid md:grid-cols-2 gap-5">
+          <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/60 space-y-2 text-xs">
+            <div class="font-bold text-blue-900 text-sm">Practice Problem A: University (Teacher, Course, Student)</div>
+            <p class="text-slate-700">
+              <strong>Scenario:</strong> A <code class="code-font">Teacher(<u>tid</u>, tname, phone_no [multivalued])</code> teaches many <code class="code-font">Course(<u>cid</u>, title, credit)</code> (1:N). A <code class="code-font">Student(<u>sid</u>, sname, dob, age [derived])</code> enrolls in many Courses (M:N) with a <code class="code-font">grade</code>.
+            </p>
+            <div class="bg-white p-3 rounded-xl border border-slate-200 code-font space-y-1">
+              <div>• <strong>Teacher</strong>(<span class="pk-underline">tid</span>, tname)</div>
+              <div>• <strong>Teacher_Phone</strong>(<span class="pk-underline text-rose-700">tid (FK)</span>, <span class="pk-underline">phone_no</span>)</div>
+              <div>• <strong>Course</strong>(<span class="pk-underline">cid</span>, title, credit, <span class="text-rose-700 font-bold">tid (FK)</span>)</div>
+              <div>• <strong>Student</strong>(<span class="pk-underline">sid</span>, sname, dob) <span class="text-slate-400">// age omitted</span></div>
+              <div>• <strong>Enrolls</strong>(<span class="pk-underline text-rose-700">sid (FK)</span>, <span class="pk-underline text-rose-700">cid (FK)</span>, grade)</div>
+            </div>
+          </div>
+
+          <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/60 space-y-2 text-xs">
+            <div class="font-bold text-emerald-900 text-sm">Practice Problem B: E-Commerce (Customer, Order, Order_Item)</div>
+            <p class="text-slate-700">
+              <strong>Scenario:</strong> A <code class="code-font">Customer(<u>cust_id</u>, name(fname, lname))</code> places many <code class="code-font">Order(<u>order_id</u>, order_date)</code> (1:N). Each Order has weak entity <code class="code-font">Order_Item(<u>item_no [partial]</u>, qty, price)</code>.
+            </p>
+            <div class="bg-white p-3 rounded-xl border border-slate-200 code-font space-y-1">
+              <div>• <strong>Customer</strong>(<span class="pk-underline">cust_id</span>, fname, lname)</div>
+              <div>• <strong>Order</strong>(<span class="pk-underline">order_id</span>, order_date, <span class="text-rose-700 font-bold">cust_id (FK)</span>)</div>
+              <div>• <strong>Order_Item</strong>(<span class="pk-underline">item_no</span>, <span class="pk-underline text-rose-700">order_id (FK)</span>, qty, price)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8-Mark Exam Answer -->
+        <div class="bg-blue-50/70 border-l-4 border-blue-600 rounded-r-2xl p-5 space-y-2">
+          <h3 class="font-bold text-blue-950 text-base">Exam-Ready English Answer: Rules for Converting ER Diagram to Relational Schema (8 Marks)</h3>
+          <p class="text-xs sm:text-sm text-slate-800 leading-relaxed">
+            Converting a conceptual ER Diagram into a logical Relational Schema follows seven standard rules:
+            <br><strong>1. Strong Entity Set:</strong> Create a relation (table) containing all simple attributes of the entity, designating its primary key as the table's Primary Key (PK).
+            <br><strong>2. Weak Entity Set:</strong> Create a relation containing all attributes of the weak entity plus the Primary Key of its identifying owner entity as a Foreign Key (FK). The PK is the combination of the owner's PK and the weak entity's partial key.
+            <br><strong>3. Composite Attributes:</strong> Flatten composite attributes by including only their simple sub-attributes as columns in the relation.
+            <br><strong>4. Multivalued Attributes:</strong> Create a separate new relation containing the multivalued attribute and the PK of the owner entity (as FK); together they form a composite PK.
+            <br><strong>5. Derived Attributes:</strong> Omit derived attributes from the schema since their values can be computed dynamically.
+            <br><strong>6. Binary Relationships (1:1, 1:N, M:N):</strong> For <strong>1:1</strong>, place the PK of one entity as an FK in the other. For <strong>1:N</strong>, place the PK of the "1" side as an FK in the "N" side table. For <strong>M:N</strong>, create a new junction table containing the PKs of both participating entities (forming a composite PK) along with any descriptive attributes of the relationship.
+            <br><strong>7. Recursive Relationships:</strong> Include a renamed copy of the entity's PK within the same relation as a self-referencing Foreign Key (for 1:1 or 1:N) or create a separate relation (for M:N).
+          </p>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="text-center text-xs text-slate-500 py-6 border-t border-slate-200">
+        CSE-302 Database Management System • Chapter 7: ER Diagram to Relational Schema (Complete Bilingual Study Note) • Ready for Browser Viewing &amp; Printing
+      </footer>
+
+    </main>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar.classList.contains('hidden')) {
+        sidebar.classList.remove('hidden');
+        sidebar.classList.add('fixed', 'inset-0', 'z-50', 'bg-slate-900/50', 'p-4', 'flex', 'justify-center', 'items-start');
+      } else {
+        sidebar.classList.add('hidden');
+        sidebar.classList.remove('fixed', 'inset-0', 'z-50', 'bg-slate-900/50', 'p-4', 'flex', 'justify-center', 'items-start');
+      }
+    }
+
+    document.querySelectorAll('#sidebar a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 1024) {
+          const sidebar = document.getElementById('sidebar');
+          sidebar.classList.add('hidden');
+          sidebar.classList.remove('fixed', 'inset-0', 'z-50', 'bg-slate-900/50', 'p-4', 'flex', 'justify-center', 'items-start');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

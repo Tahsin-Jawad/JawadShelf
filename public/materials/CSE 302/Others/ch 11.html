@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSE-302: Chapter 11 — Transaction (Complete Bilingual Study Guide)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Hind Siliguri', 'sans-serif'],
+            bangla: ['Hind Siliguri', 'Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', 'Hind Siliguri', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    .bangla-text {
+      font-family: 'Hind Siliguri', sans-serif;
+      line-height: 1.75;
+    }
+    .code-font {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .slide-badge {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background-color: #ffffff !important;
+      }
+      .page-card {
+        break-inside: avoid;
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-blue-200 selection:text-blue-900">
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl slide-badge text-white flex items-center justify-center font-bold text-lg shadow">
+          DB
+        </div>
+        <div>
+          <h1 class="font-bold text-slate-900 text-sm sm:text-base leading-tight">CSE-302: Database Systems</h1>
+          <p class="text-xs text-slate-500">Chapter 11: Transaction • Complete Study Guide (Slides 1–31)</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="toggleSidebar()" class="lg:hidden px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+          Contents
+        </button>
+        <button onclick="window.print()" class="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-sm transition">
+          Print / Save PDF
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
+
+    <!-- Sidebar Table of Contents -->
+    <aside id="sidebar" class="hidden lg:block lg:w-80 shrink-0 no-print">
+      <div class="sticky top-24 bg-white rounded-2xl border border-slate-200 shadow-sm p-5 max-h-[calc(100vh-7rem)] overflow-y-auto">
+        <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+          <h2 class="font-bold text-slate-800 text-sm uppercase tracking-wider">Page-by-Page Index</h2>
+          <span class="text-xs bg-blue-100 text-blue-700 font-semibold px-2 py-0.5 rounded-full">31 Slides</span>
+        </div>
+
+        <nav class="space-y-1 text-xs">
+          <a href="#slide-1-3" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 1–3:</span> Transaction Basics, Read/Write, Commit & Rollback
+          </a>
+          <a href="#slide-4-7" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 4–7:</span> ACID Properties (Atomicity, Consistency, Isolation, Durability)
+          </a>
+          <a href="#slide-8-9" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 8–9:</span> Isolation Case Studies (Rs 5000 & Rs 8000 Trace Tables)
+          </a>
+          <a href="#slide-10-11" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 10–11:</span> Transaction States & State Transition Diagram
+          </a>
+          <a href="#slide-12-13" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 12–13:</span> Concurrent Executions & Classification of Schedules
+          </a>
+          <a href="#slide-14-17" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 14–17:</span> Serial vs Parallel/Non-Serial (Schedules A, B, C, D)
+          </a>
+          <a href="#slide-18-21" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 18–21:</span> Numerical Schedules (1, 2, 3 & Inconsistent Schedule)
+          </a>
+          <a href="#slide-22-25" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 22–25:</span> Serializable Schedule, Conflicts & Swapping (Schedule 3 → 6)
+          </a>
+          <a href="#slide-26-28" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 26–28:</span> Precedence Graph, Cycle Detection & Topological Sort
+          </a>
+          <a href="#slide-29" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slide 29:</span> Solved Cyclic Example (Schedule S1 — Not Serializable)
+          </a>
+          <a href="#slide-30-31" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 30–31:</span> Solved Acyclic Example (T1, T2, T3 on X, Y, Z)
+          </a>
+          <a href="#exam-prep" class="block px-3 py-2 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 font-semibold mt-2">
+            Exam Prep: Practice Problems, Mistakes & Revision Tables
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Study Content -->
+    <main class="flex-1 min-w-0 space-y-10">
+
+      <!-- Hero Banner -->
+      <section class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold mb-4">
+          <span>Slide 1 • Course: CSE-302 Database Systems</span>
+          <span>•</span>
+          <span>Lecturer: Antu Chowdhury, Dept. of CSE</span>
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-3">
+          Chapter 11: Transaction Management &amp; Serializability
+        </h1>
+        <p class="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">
+          Complete, zero-skip bilingual study guide covering every slide (Pages 1–31), every schedule table, step-by-step numerical traces, conflict rules, precedence graphs, topological sorting, and 5–8 mark exam answers.
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-white/10 text-xs">
+          <div class="bg-white/5 rounded-xl p-3">
+            <div class="text-blue-300 font-semibold">Language Format</div>
+            <div class="text-white font-bold mt-0.5">Easy Bangla + Exam English</div>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3">
+            <div class="text-emerald-300 font-semibold">Coverage</div>
+            <div class="text-white font-bold mt-0.5">100% Slides (Page 1 to 31)</div>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3">
+            <div class="text-amber-300 font-semibold">Diagrams &amp; Tables</div>
+            <div class="text-white font-bold mt-0.5">All Schedules &amp; Graphs</div>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3">
+            <div class="text-purple-300 font-semibold">Exam Focus</div>
+            <div class="text-white font-bold mt-0.5">5 &amp; 8 Marks Ready Answers</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 1 - 3: TRANSACTION BASICS -->
+      <!-- ===================================================================== -->
+      <section id="slide-1-3" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 1, 2 &amp; 3</span>
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Core Foundation</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">1. What is a Transaction? (ট্রানজ্যাকশন কী?)</h2>
+
+        <!-- Bangla Explanation -->
+        <div class="bg-emerald-50/70 border-l-4 border-emerald-500 rounded-r-2xl p-5 space-y-3">
+          <h3 class="font-bold text-emerald-900 text-base flex items-center gap-2">
+            <span>সহজ বাংলায় ব্যাখ্যা (Absolute Basics)</span>
+          </h3>
+          <p class="bangla-text text-slate-800 text-sm sm:text-base">
+            <strong>Transaction (ট্রানজ্যাকশন) কী?</strong> ডাটাবেজে কোনো একটি নির্দিষ্ট পূর্ণাঙ্গ কাজ সম্পন্ন করার জন্য এক বা একাধিক অপারেশনের (যেমন: ডাটা পড়া বা Read, ডাটা পরিবর্তন করা বা Write) সমষ্টিকে একটি <strong>Logical Unit of Work</strong> বা <strong>Transaction</strong> বলে।
+          </p>
+          <p class="bangla-text text-slate-800 text-sm sm:text-base">
+            <strong>বাস্তব জীবনের উদাহরণ (Real-Life Example):</strong> ধরো তুমি বিকাশ (bKash) বা ব্যাংক অ্যাপ দিয়ে তোমার অ্যাকাউন্ট <strong>A</strong> থেকে তোমার বন্ধুর অ্যাকাউন্ট <strong>B</strong>-তে <strong>$50</strong> পাঠাচ্ছ। বাইরে থেকে মনে হয় এটি একটি মাত্র কাজ ("টাকা পাঠানো")। কিন্তু কম্পিউটারের ভেতরে এই কাজটি করতে ৭টি ধাপ লাগে:
+          </p>
+          <ol class="bangla-text list-decimal list-inside text-slate-800 text-sm space-y-1 bg-white/80 p-4 rounded-xl border border-emerald-200">
+            <li><code class="code-font font-semibold text-blue-700">read(A)</code> — হার্ডডিস্ক থেকে অ্যাকাউন্ট A-এর বর্তমান ব্যালেন্স কম্পিউটারের মেমোরিতে (RAM/Buffer) আনা।</li>
+            <li><code class="code-font font-semibold text-blue-700">A := A - 50</code> — মেমোরিতে থাকা A-এর ব্যালেন্স থেকে ৫০ ডলার বিয়োগ করা।</li>
+            <li><code class="code-font font-semibold text-blue-700">write(A)</code> — নতুন ব্যালেন্সটি ডাটাবেজে অ্যাকাউন্ট A-এর জায়গায় সেভ করা।</li>
+            <li><code class="code-font font-semibold text-blue-700">read(B)</code> — ডাটাবেজ থেকে অ্যাকাউন্ট B-এর বর্তমান ব্যালেন্স মেমোরিতে আনা।</li>
+            <li><code class="code-font font-semibold text-blue-700">B := B + 50</code> — মেমোরিতে থাকা B-এর ব্যালেন্সের সাথে ৫০ ডলার যোগ করা।</li>
+            <li><code class="code-font font-semibold text-blue-700">write(B)</code> — নতুন ব্যালেন্সটি ডাটাবেজে অ্যাকাউন্ট B-এর জায়গায় সেভ করা।</li>
+            <li><code class="code-font font-semibold text-emerald-700">Commit</code> — পুরো লেনদেনটি স্থায়ীভাবে ডাটাবেজে নিশ্চিত (Permanent) করা।</li>
+          </ol>
+          <p class="bangla-text text-slate-800 text-sm">
+            <strong>মূল অপারেশন ও কমান্ডসমূহ (Slide 3):</strong>
+            <br>• <strong>Read Operation (<code class="code-font">read(X)</code>):</strong> ডাটাবেজ থেকে ডাটা আইটেম X-এর মান প্রোগ্রামের লোকাল ভেরিয়েবলে নিয়ে আসা।
+            <br>• <strong>Write Operation (<code class="code-font">write(X)</code>):</strong> লোকাল ভেরিয়েবলের পরিবর্তিত মান ডাটাবেজের X-এ লিখে দেওয়া।
+            <br>• <strong>COMMIT:</strong> ট্রানজ্যাকশনের সব কাজ সফলভাবে শেষ হলে পরিবর্তনগুলো স্থায়ীভাবে সেভ করা।
+            <br>• <strong>ROLLBACK:</strong> মাঝপথে কোনো ত্রুটি (Error) হলে ট্রানজ্যাকশনের করা সব পরিবর্তন বাতিল করে ডাটাবেজকে আগের অবস্থায় ফিরিয়ে নেওয়া।
+          </p>
+          <p class="bangla-text text-slate-800 text-sm">
+            <strong>ডাটাবেজে ট্রানজ্যাকশন পরিচালনার ২টি প্রধান চ্যালেঞ্জ (Slide 3):</strong>
+            <br>১. <strong>Failures:</strong> হার্ডওয়্যার নষ্ট হওয়া, বিদ্যুৎ চলে যাওয়া বা সিস্টেম ক্র্যাশ করা।
+            <br>২. <strong>Concurrent Execution:</strong> একই সময়ে একাধিক ইউজার বা একাধিক ট্রানজ্যাকশন একসাথে ডাটাবেজ ব্যবহার করা।
+          </p>
+        </div>
+
+        <!-- English Exam Answer -->
+        <div class="bg-blue-50/70 border-l-4 border-blue-600 rounded-r-2xl p-5 space-y-3">
+          <h3 class="font-bold text-blue-950 text-base">Exam-Ready English Answer (5 Marks)</h3>
+          <p class="text-slate-800 text-sm leading-relaxed">
+            <strong>Definition of Transaction:</strong> A <strong>transaction</strong> is a unit of program execution that accesses and possibly updates various data items in a database. In DBMS, it consists of a sequence of one or more database operations (such as read, write, update, or delete) executed as a single logical unit of work.
+          </p>
+          <div class="grid sm:grid-cols-2 gap-3 text-xs sm:text-sm">
+            <div class="bg-white p-3.5 rounded-xl border border-blue-200">
+              <strong class="text-blue-800 block mb-1">1. Read &amp; Write Operations</strong>
+              <ul class="list-disc list-inside text-slate-700 space-y-1">
+                <li><strong>Read(X):</strong> Transfers data item X from the database to a local buffer in main memory.</li>
+                <li><strong>Write(X):</strong> Transfers the updated data item X from the local buffer back to the database.</li>
+              </ul>
+            </div>
+            <div class="bg-white p-3.5 rounded-xl border border-blue-200">
+              <strong class="text-blue-800 block mb-1">2. COMMIT &amp; ROLLBACK</strong>
+              <ul class="list-disc list-inside text-slate-700 space-y-1">
+                <li><strong>COMMIT:</strong> Permanently saves all changes made by the transaction into the database.</li>
+                <li><strong>ROLLBACK:</strong> Undoes all partial changes made by a failed transaction and restores the database to its previous consistent state.</li>
+              </ul>
+            </div>
+          </div>
+          <p class="text-slate-800 text-sm">
+            <strong>Two Main Issues in Transaction Management:</strong> (1) Handling various system/hardware failures, and (2) Managing concurrent execution of multiple transactions safely.
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 4 - 7: ACID PROPERTIES -->
+      <!-- ===================================================================== -->
+      <section id="slide-4-7" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 4, 5, 6 &amp; 7</span>
+          <span class="text-xs font-semibold text-amber-600 uppercase tracking-wider">High Priority Exam Topic</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">2. ACID Properties of a Transaction (ACID বৈশিষ্ট্যসমূহ)</h2>
+
+        <p class="bangla-text text-slate-700 text-sm sm:text-base">
+          ডাটাবেজের ডাটা যেন কখনো ভুল বা অসামঞ্জস্যপূর্ণ (Inconsistent) না হয়, সেজন্য প্রতিটি ট্রানজ্যাকশনকে অবশ্যই ৪টি নিয়ম বা বৈশিষ্ট্য মেনে চলতে হয়। এদের প্রথম অক্ষর মিলিয়ে সংক্ষেপে <strong>ACID</strong> বলা হয়: <strong>A</strong>tomicity, <strong>C</strong>onsistency, <strong>I</strong>solation, এবং <strong>D</strong>urability।
+        </p>
+
+        <!-- 4 ACID Cards -->
+        <div class="grid md:grid-cols-2 gap-5">
+
+          <!-- A: Atomicity -->
+          <div class="rounded-2xl border border-rose-200 bg-rose-50/40 p-5 space-y-3">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-xl bg-rose-600 text-white font-extrabold flex items-center justify-center text-lg">A</span>
+              <div>
+                <h3 class="font-bold text-slate-900 text-lg">Atomicity ("All or Nothing")</h3>
+                <p class="text-xs text-rose-700 font-semibold">Slide 5 &amp; Slide 6</p>
+              </div>
+            </div>
+            <div class="bangla-text text-sm text-slate-800 space-y-2">
+              <p><strong>সহজ বাংলা সংজ্ঞা:</strong> একটি ট্রানজ্যাকশনের ভেতরের সবগুলো কাজ হয় সম্পূর্ণরূপে সফলভাবে সম্পন্ন হবে, অথবা একটিও হবে না। মাঝপথে অর্ধেক কাজ হয়ে থেমে থাকা যাবে না।</p>
+              <p><strong>ব্যাংক উদাহরণ (Slide 6):</strong> ধরো A থেকে B-তে $50 পাঠানোর সময় ধাপ ৩ (<code class="code-font">write(A)</code> — অর্থাৎ A থেকে $50 কাটা হয়ে গেছে) সম্পন্ন হওয়ার পর কিন্তু ধাপ ৬ (<code class="code-font">write(B)</code> — অর্থাৎ B-তে $50 যোগ হওয়ার) আগেই কারেন্ট চলে গেল বা সার্ভার ক্র্যাশ করল। তাহলে A-এর টাকা কাটা গেল কিন্তু B টাকা পেল না — মাঝখান থেকে $50 হারিয়ে গেল! Atomicity নিশ্চিত করে যে, এমন হলে সিস্টেম A-এর টাকা ফেরত দিয়ে দেবে (Rollback করবে)।</p>
+              <p><strong>ভঙ্গ হলে (Violated) কী হয়?</strong> ডাটাবেজে আংশিক আপডেট থেকে যায় এবং টাকা বা ডাটা হারিয়ে যায়।</p>
+            </div>
+            <div class="bg-white p-3 rounded-xl border border-rose-200 text-xs text-slate-700">
+              <strong>Exam English:</strong> <em>Atomicity</em> states that either all operations of a transaction are properly reflected in the database or none are. If a transaction fails mid-way (e.g., after <code class="code-font">write(A)</code> and before <code class="code-font">write(B)</code>), the system rolls back its partial updates so no money is lost.
+            </div>
+          </div>
+
+          <!-- C: Consistency -->
+          <div class="rounded-2xl border border-amber-200 bg-amber-50/40 p-5 space-y-3">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-xl bg-amber-600 text-white font-extrabold flex items-center justify-center text-lg">C</span>
+              <div>
+                <h3 class="font-bold text-slate-900 text-lg">Consistency (সামঞ্জস্যতা)</h3>
+                <p class="text-xs text-amber-700 font-semibold">Slide 5 &amp; Slide 7</p>
+              </div>
+            </div>
+            <div class="bangla-text text-sm text-slate-800 space-y-2">
+              <p><strong>সহজ বাংলা সংজ্ঞা:</strong> ট্রানজ্যাকশন শুরু হওয়ার আগে ডাটাবেজ যেমন সঠিক নিয়মে (Consistent state) ছিল, ট্রানজ্যাকশন শেষ হওয়ার পরেও ডাটাবেজকে সঠিক নিয়মে থাকতে হবে।</p>
+              <p><strong>ব্যাংক উদাহরণ (Slide 7):</strong> ট্রানজ্যাকশন শুরুর আগে ধরো A = $1000 এবং B = $2000। মোট টাকা = $3000। A থেকে B-তে $50 পাঠানোর পর A = $950 এবং B = $2050 হবে। মোট টাকা এখনো $3000। অর্থাৎ:
+                <br><code class="code-font bg-white px-2 py-0.5 rounded border border-amber-300 text-amber-900 font-semibold">A(before) + B(before) = A(after) + B(after)</code>
+              </p>
+              <p><strong>ভঙ্গ হলে (Violated) কী হয়?</strong> ডাটাবেজের গাণিতিক বা লজিক্যাল নিয়ম ভেঙে যায় এবং ভুল ব্যালেন্স তৈরি হয়।</p>
+            </div>
+            <div class="bg-white p-3 rounded-xl border border-amber-200 text-xs text-slate-700">
+              <strong>Exam English:</strong> <em>Consistency</em> ensures that execution of a transaction in isolation preserves the consistency of the database. In a fund transfer from A to B, the sum <code class="code-font">A + B</code> must remain unchanged before and after the transaction.
+            </div>
+          </div>
+
+          <!-- I: Isolation -->
+          <div class="rounded-2xl border border-blue-200 bg-blue-50/40 p-5 space-y-3">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-xl bg-blue-600 text-white font-extrabold flex items-center justify-center text-lg">I</span>
+              <div>
+                <h3 class="font-bold text-slate-900 text-lg">Isolation (স্বতন্ত্রতা)</h3>
+                <p class="text-xs text-blue-700 font-semibold">Slide 5, 8 &amp; 9</p>
+              </div>
+            </div>
+            <div class="bangla-text text-sm text-slate-800 space-y-2">
+              <p><strong>সহজ বাংলা সংজ্ঞা:</strong> যখন একাধিক ট্রানজ্যাকশন (যেমন T1 ও T2) একই সময়ে চলে, তখন একটি ট্রানজ্যাকশন যেন অন্য ট্রানজ্যাকশনের অসমাপ্ত (Intermediate) ফলাফল দেখতে না পায়। প্রতিটি ট্রানজ্যাকশন মনে করবে সে একাই সিস্টেমে চলছে।</p>
+              <p><strong>বাস্তব উদাহরণ:</strong> তুমি কাউকে টাকা পাঠাচ্ছ (T1), ঠিক সেই মুহূর্তে আরেকজন তোমার ব্যালেন্স চেক করছে বা টাকা কাটছে (T2)। T1 পুরোপুরি শেষ হওয়ার আগে T2 যেন মাঝখানের অসম্পূর্ণ ব্যালেন্স দেখতে না পায়।</p>
+              <p><strong>ভঙ্গ হলে (Violated) কী হয়?</strong> এক ট্রানজ্যাকশন অন্যটির কাঁচা ডাটা পড়ে ভুল হিসাব করে ফেলে (Dirty Read / Lost Update সমস্যা হয় — যা Slide 9-এ দেখানো হয়েছে)।</p>
+            </div>
+            <div class="bg-white p-3 rounded-xl border border-blue-200 text-xs text-slate-700">
+              <strong>Exam English:</strong> <em>Isolation</em> ensures that when multiple transactions execute concurrently, each transaction <code class="code-font">Ti</code> is unaware of other concurrent transactions <code class="code-font">Tj</code> and cannot see their intermediate results.
+            </div>
+          </div>
+
+          <!-- D: Durability -->
+          <div class="rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5 space-y-3">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-xl bg-emerald-600 text-white font-extrabold flex items-center justify-center text-lg">D</span>
+              <div>
+                <h3 class="font-bold text-slate-900 text-lg">Durability (স্থায়িত্ব)</h3>
+                <p class="text-xs text-emerald-700 font-semibold">Slide 5</p>
+              </div>
+            </div>
+            <div class="bangla-text text-sm text-slate-800 space-y-2">
+              <p><strong>সহজ বাংলা সংজ্ঞা:</strong> কোনো ট্রানজ্যাকশন একবার সফলভাবে সম্পন্ন (Commit) হয়ে গেলে, তার করা পরিবর্তনগুলো স্থায়ীভাবে হার্ডডিস্কে সেভ হয়ে যাবে। এরপর বিদ্যুৎ চলে গেলেও বা সিস্টেম ক্র্যাশ করলেও সেই ডাটা আর কখনো মুছে যাবে না।</p>
+              <p><strong>বাস্তব উদাহরণ:</strong> এটিএম বুথ থেকে টাকা তোলার পর "Transaction Successful" মেসেজ দেখানোর এক সেকেন্ড পর এটিএম মেশিনের কারেন্ট চলে গেলেও ব্যাংকের সার্ভারে তোমার ব্যালেন্স আপডেট করা ডাটা স্থায়ীভাবে থেকে যাবে।</p>
+              <p><strong>ভঙ্গ হলে (Violated) কী হয়?</strong> সফল লেনদেনের রেকর্ড হারিয়ে যাবে, যা ব্যাংক বা যেকোনো সিস্টেমের জন্য ভয়াবহ বিপর্যয়।</p>
+            </div>
+            <div class="bg-white p-3 rounded-xl border border-emerald-200 text-xs text-slate-700">
+              <strong>Exam English:</strong> <em>Durability</em> guarantees that once a transaction completes successfully (commits), the changes it has made to the database persist permanently, even if there are subsequent system or hardware failures.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Complete 8-Mark Exam Answer Box for ACID -->
+        <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 sm:p-6 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-blue-300 text-base">Complete 8-Mark Exam Answer: Explain ACID Properties with Bank Transfer Example</h3>
+            <span class="text-xs bg-blue-600 px-2.5 py-0.5 rounded-full font-semibold">8 Marks</span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            To preserve the integrity of data, a DBMS must ensure four properties of transactions, known as <strong>ACID properties</strong>:
+            <br><strong>1. Atomicity:</strong> Either all operations of a transaction are reflected in the database, or none are. Consider transferring $50 from account A to B (<code class="code-font text-amber-300">read(A); A:=A-50; write(A); read(B); B:=B+50; write(B);</code>). If a failure occurs after <code class="code-font text-amber-300">write(A)</code> and before <code class="code-font text-amber-300">write(B)</code>, $50 would be lost. Atomicity ensures the database rolls back partial updates on failure.
+            <br><strong>2. Consistency:</strong> Execution of a transaction in isolation preserves the consistency of the database. Here, the total sum <code class="code-font text-amber-300">A + B</code> before the transfer must equal <code class="code-font text-amber-300">A + B</code> after the transfer.
+            <br><strong>3. Isolation:</strong> Even if multiple transactions run concurrently, each transaction executes as if it were the only one running in the system, hiding intermediate results from other transactions.
+            <br><strong>4. Durability:</strong> After a transaction successfully commits, its updates remain permanent in non-volatile storage even if a power outage or system crash occurs immediately afterward.
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 8 - 9: ISOLATION DETAILED TRACE TABLES -->
+      <!-- ===================================================================== -->
+      <section id="slide-8-9" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 8 &amp; 9</span>
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Isolation Numerical Proof</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">3. Isolation Case Studies (Slide 8 vs Slide 9)</h2>
+
+        <p class="bangla-text text-slate-800 text-sm sm:text-base">
+          স্লাইড ৮ এবং ৯-এ দুটি ট্রানজ্যাকশন <strong>T1</strong> এবং <strong>T2</strong> দেখানো হয়েছে। শুরুতে <strong>A = Rs 5000</strong> এবং <strong>B = Rs 8000</strong>।
+          <br>• <strong>সর্বমোট প্রাথমিক টাকা:</strong> <code class="code-font font-bold">5000 + 8000 = Rs 13,000</code>।
+          <br>• <strong>T1-এর কাজ:</strong> অ্যাকাউন্ট A থেকে <strong>Rs 750</strong> বিয়োগ করে অ্যাকাউন্ট B-তে যোগ করা।
+          <br>• <strong>T2-এর কাজ:</strong> অ্যাকাউন্ট A-এর ব্যালেন্সের <strong>20% (0.2)</strong> হিসাব করে A থেকে বিয়োগ করা এবং B-তে যোগ করা।
+          <br>চলো দেখি কখন Isolation বজায় থাকে (Slide 8) আর কখন Isolation ভেঙে গিয়ে ডাটা নষ্ট হয় (Slide 9)!
+        </p>
+
+        <div class="grid lg:grid-cols-2 gap-6">
+          <!-- Slide 8 Table -->
+          <div class="border border-emerald-200 rounded-2xl overflow-hidden bg-emerald-50/20">
+            <div class="bg-emerald-700 text-white px-4 py-3">
+              <h3 class="font-bold text-sm">Slide 8: Serial/Isolated Execution (Consistency Preserved)</h3>
+              <p class="text-xs text-emerald-100">Initial: A = 5000, B = 8000 (Sum = 13000)</p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-left border-collapse">
+                <thead class="bg-emerald-100 text-emerald-950 font-bold">
+                  <tr>
+                    <th class="p-2.5 border-b border-emerald-200">T1</th>
+                    <th class="p-2.5 border-b border-emerald-200">T2</th>
+                    <th class="p-2.5 border-b border-emerald-200">Description / Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-emerald-100 code-font">
+                  <tr><td class="p-2 font-semibold text-blue-700">Read(A)</td><td class="p-2"></td><td class="p-2">Rs 5000</td></tr>
+                  <tr><td class="p-2 font-semibold text-blue-700">A := A - 750</td><td class="p-2"></td><td class="p-2">Rs 4250</td></tr>
+                  <tr><td class="p-2 font-semibold text-blue-700">Write(A)</td><td class="p-2"></td><td class="p-2 font-bold">Store to A = 4250</td></tr>
+                  <tr><td class="p-2"></td><td class="p-2 font-semibold text-purple-700">Read(A)</td><td class="p-2">Rs 4250 (Reads updated A)</td></tr>
+                  <tr><td class="p-2"></td><td class="p-2 font-semibold text-purple-700">temp := A * 0.2</td><td class="p-2">4250 * 0.2 = Rs 850</td></tr>
+                  <tr><td class="p-2"></td><td class="p-2 font-semibold text-purple-700">A := A - temp</td><td class="p-2">4250 - 850 = Rs 3400</td></tr>
+                  <tr><td class="p-2"></td><td class="p-2 font-semibold text-purple-700">Write(A)</td><td class="p-2 font-bold">Store in A = 3400</td></tr>
+                  <tr><td class="p-2 font-semibold text-blue-700">Read(B)</td><td class="p-2"></td><td class="p-2">Rs 8000</td></tr>
+                  <tr><td class="p-2 font-semibold text-blue-700">B := B + 750</td><td class="p-2"></td><td class="p-2">Rs 8750</td></tr>
+                  <tr><td class="p-2 font-semibold text-blue-700">Write(B)</td><td class="p-2"></td><td class="p-2 font-bold">Store to B = 8750</td></tr>
+                  <tr><td class="p-2"></td><td class="p-2 font-semibold text-purple-700">Read(B)</td><td class="p-2">Rs 8750 (Reads updated B)</td></tr>
+                  <tr><td class="p-2"></td><td class="p-2 font-semibold text-purple-700">B := B + temp</td><td class="p-2">8750 + 850 = Rs 9600</td></tr>
+                  <tr><td class="p-2"></td><td class="p-2 font-semibold text-purple-700">Write(B)</td><td class="p-2 font-bold">Store in B = 9600</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="p-3.5 bg-emerald-100/70 text-xs text-emerald-950 space-y-1">
+              <p><strong>Final Values:</strong> A = Rs 3400, B = Rs 9600.</p>
+              <p><strong>Total Sum:</strong> <code class="code-font font-bold">3400 + 9600 = Rs 13,000</code> (Consistent! কারণ T2 সবসময় T1-এর <code class="code-font">Write</code> করার পরে <code class="code-font">Read</code> করেছে)।</p>
+            </div>
+          </div>
+
+          <!-- Slide 9 Table -->
+          <div class="border border-rose-200 rounded-2xl overflow-hidden bg-rose-50/20">
+            <div class="bg-rose-700 text-white px-4 py-3">
+              <h3 class="font-bold text-sm">Slide 9: Uncontrolled Concurrency (Isolation Violated!)</h3>
+              <p class="text-xs text-rose-100">Initial: A = 5000, B = 8000 (Sum = 13000)</p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-left border-collapse">
+                <thead class="bg-rose-100 text-rose-950 font-bold">
+                  <tr>
+                    <th class="p-2.5 border-b border-rose-200">T1</th>
+                    <th class="p-2.5 border-b border-rose-200">T2</th>
+                    <th class="p-2.5 border-b border-rose-200">Description / Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-rose-100 code-font">
+                  <tr><td class="p-2 font-semibold text-blue-700">Read(A)</td><td class="p-2"></td><td class="p-2">Rs 5000</td></tr>
+                  <tr><td class="p-2 font-semibold text-blue-700">A := A - 750</td><td class="p-2"></td><td class="p-2">Rs 4250 (Not written yet!)</td></tr>
+                  <tr><td class="p-2"></td><td class="p-2 font-semibold text-purple-700">Read(A)</td><td class="p-2 text-rose-700 font-bold">Rs 5000 (Stale read!)</td></tr>
+                  <tr><td class="p-2"></td><td class="p-2 font-semibold text-purple-700">temp := A * 0.2</td><td class="p-2">5000 * 0.2 = Rs 1000</td></tr>
+                  <tr><td class="p-2"></td><td class="p-2 font-semibold text-purple-700">A := A - temp</td><td class="p-2">5000 - 1000 = Rs 4000</td></tr>
+                  <tr><td class="p-2"></td><td class="p-2 font-semibold text-purple-700">Write(A)</td><td class="p-2 font-bold">Store to A = 4000</td></tr>
+                  <tr><td class="p-2"></td><td class="p-2 font-semibold text-purple-700">Read(B)</td><td class="p-2">Rs 8000</td></tr>
+                  <tr><td class="p-2 font-semibold text-blue-700">Write(A)</td><td class="p-2"></td><td class="p-2 text-rose-700 font-bold">Overwrites A = 4250!</td></tr>
+                  <tr><td class="p-2 font-semibold text-blue-700">Read(B)</td><td class="p-2"></td><td class="p-2">Rs 8000</td></tr>
+                  <tr><td class="p-2 font-semibold text-blue-700">B := B + 750</td><td class="p-2"></td><td class="p-2">Rs 8750</td></tr>
+                  <tr><td class="p-2 font-semibold text-blue-700">Write(B)</td><td class="p-2"></td><td class="p-2 font-bold">Store to B = 8750</td></tr>
+                  <tr><td class="p-2"></td><td class="p-2 font-semibold text-purple-700">B := B + temp</td><td class="p-2">8000 + 1000 = Rs 9000</td></tr>
+                  <tr><td class="p-2"></td><td class="p-2 font-semibold text-purple-700">Write(B)</td><td class="p-2 text-rose-700 font-bold">Overwrites B = 9000!</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="p-3.5 bg-rose-100/70 text-xs text-rose-950 space-y-1">
+              <p><strong>Final Values:</strong> A = Rs 4250, B = Rs 9000.</p>
+              <p><strong>Total Sum:</strong> <code class="code-font font-bold">4250 + 9000 = Rs 13,250</code> (Inconsistent! Rs 250 বেশি তৈরি হয়ে গেছে কারণ T1 ও T2 একে অপরের আপডেট ওভাররাইট করেছে — <em>Lost Update Anomaly</em>)।</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 10 - 11: TRANSACTION STATES -->
+      <!-- ===================================================================== -->
+      <section id="slide-10-11" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 10 &amp; 11</span>
+          <span class="text-xs font-semibold text-amber-600 uppercase tracking-wider">Diagram + Theory (5–8 Marks)</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">4. Transaction States &amp; State Transition Diagram</h2>
+
+        <!-- Crisp SVG Diagram reproducing Slide 11 -->
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-6 flex flex-col items-center">
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Transaction State Diagram (Slide 11)</p>
+          <svg viewBox="0 0 760 320" class="w-full max-w-3xl h-auto" role="img" aria-label="Transaction State Diagram">
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e293b" />
+              </marker>
+            </defs>
+
+            <!-- Edges -->
+            <!-- Active to Partially Committed -->
+            <line x1="175" y1="135" x2="318" y2="75" stroke="#1e293b" stroke-width="2.5" marker-end="url(#arrow)" />
+            <text x="200" y="90" font-size="11" fill="#0369a1" font-weight="600">Final statement executed</text>
+
+            <!-- Partially Committed to Committed -->
+            <line x1="445" y1="65" x2="578" y2="65" stroke="#1e293b" stroke-width="2.5" marker-end="url(#arrow)" />
+            <text x="462" y="53" font-size="11" fill="#15803d" font-weight="600">Commit succeeds</text>
+
+            <!-- Active to Failed -->
+            <line x1="175" y1="185" x2="318" y2="245" stroke="#1e293b" stroke-width="2.5" marker-end="url(#arrow)" />
+            <text x="185" y="238" font-size="11" fill="#b91c1c" font-weight="600">Error / Crash</text>
+
+            <!-- Partially Committed to Failed -->
+            <line x1="380" y1="115" x2="380" y2="202" stroke="#1e293b" stroke-width="2.5" marker-end="url(#arrow)" />
+            <text x="390" y="162" font-size="11" fill="#b91c1c" font-weight="600">Disk write fails</text>
+
+            <!-- Failed to Aborted -->
+            <line x1="445" y1="255" x2="578" y2="255" stroke="#1e293b" stroke-width="2.5" marker-end="url(#arrow)" />
+            <text x="465" y="243" font-size="11" fill="#7e22ce" font-weight="600">Rollback completes</text>
+
+            <!-- Nodes -->
+            <!-- Active -->
+            <g transform="translate(120,160)">
+              <ellipse cx="0" cy="0" rx="62" ry="42" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5" />
+              <text x="0" y="5" text-anchor="middle" font-size="15" font-weight="700" fill="#1e3a8a">active</text>
+            </g>
+
+            <!-- Partially Committed -->
+            <g transform="translate(380,65)">
+              <ellipse cx="0" cy="0" rx="68" ry="46" fill="#fef3c7" stroke="#d97706" stroke-width="2.5" />
+              <text x="0" y="-4" text-anchor="middle" font-size="14" font-weight="700" fill="#92400e">partially</text>
+              <text x="0" y="14" text-anchor="middle" font-size="14" font-weight="700" fill="#92400e">committed</text>
+            </g>
+
+            <!-- Committed -->
+            <g transform="translate(645,65)">
+              <ellipse cx="0" cy="0" rx="62" ry="42" fill="#dcfce7" stroke="#16a34a" stroke-width="2.5" />
+              <text x="0" y="5" text-anchor="middle" font-size="15" font-weight="700" fill="#14532d">committed</text>
+            </g>
+
+            <!-- Failed -->
+            <g transform="translate(380,255)">
+              <ellipse cx="0" cy="0" rx="62" ry="42" fill="#fee2e2" stroke="#dc2626" stroke-width="2.5" />
+              <text x="0" y="5" text-anchor="middle" font-size="15" font-weight="700" fill="#7f1d1d">failed</text>
+            </g>
+
+            <!-- Aborted -->
+            <g transform="translate(645,255)">
+              <ellipse cx="0" cy="0" rx="62" ry="42" fill="#f3e8ff" stroke="#9333ea" stroke-width="2.5" />
+              <text x="0" y="5" text-anchor="middle" font-size="15" font-weight="700" fill="#581c87">aborted</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Bangla Explanation of States -->
+        <div class="bg-emerald-50/70 border-l-4 border-emerald-500 rounded-r-2xl p-5 space-y-3">
+          <h3 class="font-bold text-emerald-900 text-base">সহজ বাংলায় প্রতিটি State ও Transition-এর ব্যাখ্যা</h3>
+          <ul class="bangla-text space-y-2.5 text-sm text-slate-800">
+            <li><strong>১. Active (সক্রিয় অবস্থা):</strong> এটি ট্রানজ্যাকশনের শুরুর অবস্থা (Initial State)। ট্রানজ্যাকশনটি যখন তার <code class="code-font">read</code> ও <code class="code-font">write</code> অপারেশনগুলো চালাতে থাকে, তখন সে Active অবস্থায় থাকে।</li>
+            <li><strong>২. Partially Committed (আংশিক সম্পন্ন):</strong> ট্রানজ্যাকশনের একদম শেষ স্টেটমেন্টটি (Final statement) এক্সিকিউট হওয়ার পরপরই সে এই অবস্থায় আসে। কিন্তু সাবধান! এই অবস্থায় ডাটা এখনো মেইন মেমোরিতে (RAM/Buffer) আছে, হার্ডডিস্কে স্থায়ীভাবে লেখা হয়নি। তাই এখনো হার্ডডিস্ক ক্র্যাশ করলে ট্রানজ্যাকশনটি ব্যর্থ (Failed) হতে পারে!</li>
+            <li><strong>৩. Committed (স্থায়ীভাবে সম্পন্ন):</strong> যখন মেমোরির সব ডাটা নিরাপদে হার্ডডিস্কে (Non-volatile storage) সেভ হয়ে যায়, তখন ট্রানজ্যাকশনটি Committed অবস্থায় পৌঁছায়। এই অবস্থায় আসার পর আর কখনো Rollback করা সম্ভব নয়।</li>
+            <li><strong>৪. Failed (ব্যর্থ অবস্থা):</strong> Active অথবা Partially Committed অবস্থায় থাকা অবস্থায় যদি কোনো ত্রুটি ধরা পড়ে (যেমন: বিদ্যুৎ চলে যাওয়া, হার্ডডিস্ক ফুল হয়ে যাওয়া, বা লজিক্যাল এরর) এবং স্বাভাবিক কাজ চালানো সম্ভব না হয়, তখন ট্রানজ্যাকশনটি Failed অবস্থায় চলে যায়।</li>
+            <li><strong>৫. Aborted (বাতিলকৃত অবস্থা):</strong> ট্রানজ্যাকশন Failed হওয়ার পর সিস্টেম <code class="code-font">ROLLBACK</code> চালায়, অর্থাৎ ট্রানজ্যাকশনটি যা যা পরিবর্তন করেছিল সব মুছে দিয়ে ডাটাবেজকে একদম শুরুর অবস্থায় ফিরিয়ে আনে। Rollback শেষ হলে ট্রানজ্যাকশনটি Aborted অবস্থায় আসে।</li>
+          </ul>
+          <div class="bg-white rounded-xl p-4 border border-emerald-200 bangla-text text-sm text-slate-800">
+            <strong>Aborted হওয়ার পর সিস্টেমের সামনে ২টি অপশন থাকে (Slide 10):</strong>
+            <br>১. <strong>Restart the transaction (পুনরায় চালু করা):</strong> যদি ব্যর্থতাটি হার্ডওয়্যার বা সাময়িক সিস্টেম ত্রুটির কারণে হয়ে থাকে (কোনো অভ্যন্তরীণ লজিক্যাল ভুল বা Internal Logical Error না থাকে), তবে ট্রানজ্যাকশনটিকে নতুন করে আবার শুরু করা যায়।
+            <br>২. <strong>Kill the transaction (চিরতরে বন্ধ করা):</strong> যদি প্রোগ্রামের ভেতরের লজিক্যাল ভুলের কারণে (যেমন: ভুল অ্যাকাউন্ট নম্বর বা পর্যাপ্ত ব্যালেন্স না থাকা) ব্যর্থ হয়, তবে ট্রানজ্যাকশনটিকে পুরোপুরি বাতিল (Kill) করে দেওয়া হয়।
+          </div>
+        </div>
+
+        <!-- Exam English Answer -->
+        <div class="bg-blue-50/70 border-l-4 border-blue-600 rounded-r-2xl p-5 space-y-2">
+          <h3 class="font-bold text-blue-950 text-base">Exam-Ready English Answer (5–6 Marks)</h3>
+          <p class="text-slate-800 text-sm leading-relaxed">
+            A transaction passes through five distinct states during its lifecycle:
+            <br><strong>1. Active:</strong> The initial state; the transaction remains in this state while executing its read and write operations.
+            <br><strong>2. Partially Committed:</strong> Entered after the final statement of the transaction has been executed, though updates may still reside in volatile memory.
+            <br><strong>3. Failed:</strong> Entered after discovering that normal execution can no longer proceed due to hardware/software failure or logical errors.
+            <br><strong>4. Aborted:</strong> Entered after the transaction has been rolled back and the database is restored to its state prior to the start of the transaction. After abortion, the DBMS has two options: (a) <em>Restart</em> the transaction (only if there is no internal logical error), or (b) <em>Kill</em> the transaction.
+            <br><strong>5. Committed:</strong> Entered after successful completion and permanent storage of updates on disk.
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 12 - 17: CONCURRENT EXECUTIONS & SCHEDULES -->
+      <!-- ===================================================================== -->
+      <section id="slide-12-13" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 12, 13, 14, 15, 16 &amp; 17</span>
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Concurrency &amp; Schedules</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">5. Concurrent Executions &amp; Types of Schedules</h2>
+
+        <!-- Slide 12 & 13 Bangla -->
+        <div class="bg-emerald-50/70 border-l-4 border-emerald-500 rounded-r-2xl p-5 space-y-3">
+          <h3 class="font-bold text-emerald-900 text-base">সহজ বাংলায় ব্যাখ্যা (Slides 12 &amp; 13)</h3>
+          <p class="bangla-text text-slate-800 text-sm">
+            <strong>Concurrent Execution কী এবং কেন প্রয়োজন? (Slide 12):</strong> ডাটাবেজে একসাথে একাধিক ট্রানজ্যাকশন চালানোকে Concurrent Execution বলে। এর ২টি বড় সুবিধা আছে:
+            <br>১. <strong>Increased processor and disk utilization (উচ্চ Throughput):</strong> যখন একটি ট্রানজ্যাকশন হার্ডডিস্ক থেকে ডাটা পড়ার জন্য অপেক্ষা করে, তখন CPU বসে না থেকে অন্য ট্রানজ্যাকশনের কাজ করতে পারে। এতে প্রতি সেকেন্ডে বেশি কাজ (Throughput) হয়।
+            <br>২. <strong>Reduced average response time (কম অপেক্ষার সময়):</strong> কোনো ছোট ট্রানজ্যাকশনকে (যেমন ব্যালেন্স চেক) একটি বিশাল লম্বা ট্রানজ্যাকশন শেষ হওয়ার জন্য ঘণ্টার পর ঘণ্টা অপেক্ষা করতে হয় না।
+          </p>
+          <p class="bangla-text text-slate-800 text-sm">
+            <strong>Schedule কী? (Slide 13):</strong> একাধিক ট্রানজ্যাকশনের অপারেশনগুলো সময়ের সাথে কোন ক্রমে (Chronological execution sequence) নির্বাহ হবে, তার তালিকাকে <strong>Schedule</strong> বলে।
+            <br>• <strong>T1, T2:</strong> ট্রানজ্যাকশন ১ এবং ট্রানজ্যাকশন ২।
+            <br>• <strong>R(A) বা read(A):</strong> ডাটা আইটেম A পড়া। <strong>W(A) বা write(A):</strong> ডাটা আইটেম A লেখা।
+            <br>• <strong>Interleaving (ইন্টারলিভিং):</strong> একটি ট্রানজ্যাকশন শেষ হওয়ার আগেই মাঝখানে অন্য ট্রানজ্যাকশনের কিছু অপারেশন ঢুকিয়ে পর্যায়ক্রমে চালানোকে Interleaving বলে।
+          </p>
+        </div>
+
+        <!-- Slide 13 Hierarchy SVG -->
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col items-center">
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Classification of Schedule (Slide 13)</p>
+          <svg viewBox="0 0 600 170" class="w-full max-w-xl h-auto">
+            <defs>
+              <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#334155" />
+              </marker>
+            </defs>
+            <rect x="220" y="10" width="160" height="42" rx="10" fill="#1e3a8a" />
+            <text x="300" y="36" text-anchor="middle" fill="#ffffff" font-weight="700" font-size="15">Schedule</text>
+
+            <line x1="260" y1="52" x2="100" y2="105" stroke="#334155" stroke-width="2" marker-end="url(#arrow2)" />
+            <line x1="300" y1="52" x2="300" y2="105" stroke="#334155" stroke-width="2" marker-end="url(#arrow2)" />
+            <line x1="340" y1="52" x2="500" y2="105" stroke="#334155" stroke-width="2" marker-end="url(#arrow2)" />
+
+            <rect x="20" y="108" width="160" height="46" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2" />
+            <text x="100" y="136" text-anchor="middle" fill="#1e3a8a" font-weight="700" font-size="13">Serial Schedule</text>
+
+            <rect x="220" y="108" width="160" height="46" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2" />
+            <text x="300" y="136" text-anchor="middle" fill="#92400e" font-weight="700" font-size="13">Non-serial Schedule</text>
+
+            <rect x="420" y="108" width="160" height="46" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2" />
+            <text x="500" y="136" text-anchor="middle" fill="#14532d" font-weight="700" font-size="13">Serializable Schedule</text>
+          </svg>
+        </div>
+
+        <!-- Slides 14, 15, 16, 17 Schedules A, B, C, D -->
+        <div id="slide-14-17" class="space-y-4">
+          <h3 class="text-lg font-bold text-slate-900">Slides 14–17: Serial Schedules (A &amp; B) vs Non-Serial Schedules (C &amp; D)</h3>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Schedule A (Slide 14) -->
+            <div class="border border-blue-200 rounded-2xl overflow-hidden bg-white">
+              <div class="bg-blue-800 text-white px-3 py-2 text-xs font-bold">
+                Schedule A (Slide 14) • Serial (T1 → T2)
+              </div>
+              <table class="w-full text-xs code-font">
+                <thead class="bg-blue-50 text-blue-900">
+                  <tr><th class="p-2 text-left">T1</th><th class="p-2 text-left">T2</th></tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td class="p-1.5">read(A);</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">A := A - N</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">write(A);</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">read(B);</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">B := B + N</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">write(B);</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5"></td><td class="p-1.5">read(A);</td></tr>
+                  <tr><td class="p-1.5"></td><td class="p-1.5">A := A + M</td></tr>
+                  <tr><td class="p-1.5"></td><td class="p-1.5">write(A);</td></tr>
+                </tbody>
+              </table>
+              <p class="p-2.5 bg-blue-50/60 text-[11px] text-slate-700 bangla-text">
+                <strong>ব্যাখ্যা:</strong> আগে T1 পুরোপুরি শেষ হয়েছে, তারপর T2 শুরু হয়েছে। এটি সবসময় Consistent।
+              </p>
+            </div>
+
+            <!-- Schedule B (Slide 15) -->
+            <div class="border border-blue-200 rounded-2xl overflow-hidden bg-white">
+              <div class="bg-blue-800 text-white px-3 py-2 text-xs font-bold">
+                Schedule B (Slide 15) • Serial (T2 → T1)
+              </div>
+              <table class="w-full text-xs code-font">
+                <thead class="bg-blue-50 text-blue-900">
+                  <tr><th class="p-2 text-left">T1</th><th class="p-2 text-left">T2</th></tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td class="p-1.5"></td><td class="p-1.5">read(A);</td></tr>
+                  <tr><td class="p-1.5"></td><td class="p-1.5">A := A + M</td></tr>
+                  <tr><td class="p-1.5"></td><td class="p-1.5">write(A);</td></tr>
+                  <tr><td class="p-1.5">read(A);</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">A := A - N;</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">write(A);</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">read(B);</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">B := B + N</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">write(B);</td><td class="p-1.5"></td></tr>
+                </tbody>
+              </table>
+              <p class="p-2.5 bg-blue-50/60 text-[11px] text-slate-700 bangla-text">
+                <strong>ব্যাখ্যা:</strong> আগে T2 পুরোপুরি শেষ হয়েছে, তারপর T1 শুরু হয়েছে। এটিও Serial ও Consistent।
+              </p>
+            </div>
+
+            <!-- Schedule C (Slide 16) -->
+            <div class="border border-amber-200 rounded-2xl overflow-hidden bg-white">
+              <div class="bg-amber-700 text-white px-3 py-2 text-xs font-bold">
+                Schedule C (Slide 16) • Non-Serial (Parallel)
+              </div>
+              <table class="w-full text-xs code-font">
+                <thead class="bg-amber-50 text-amber-900">
+                  <tr><th class="p-2 text-left">T1</th><th class="p-2 text-left">T2</th></tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td class="p-1.5">read(A);</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">A := A - N;</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5"></td><td class="p-1.5">read(A);</td></tr>
+                  <tr><td class="p-1.5"></td><td class="p-1.5">A := A + M;</td></tr>
+                  <tr><td class="p-1.5">write(A);</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">read(B);</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5"></td><td class="p-1.5">write(A);</td></tr>
+                  <tr><td class="p-1.5">B := B + N;</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">write(B);</td><td class="p-1.5"></td></tr>
+                </tbody>
+              </table>
+              <p class="p-2.5 bg-amber-50/60 text-[11px] text-slate-700 bangla-text">
+                <strong>ব্যাখ্যা:</strong> T1 এবং T2-এর কাজগুলো Interleaved (মিশ্রিত) অবস্থায় চলছে। তাই এটি Non-Serial।
+              </p>
+            </div>
+
+            <!-- Schedule D (Slide 17) -->
+            <div class="border border-amber-200 rounded-2xl overflow-hidden bg-white">
+              <div class="bg-amber-700 text-white px-3 py-2 text-xs font-bold">
+                Schedule D (Slide 17) • Non-Serial (Parallel)
+              </div>
+              <table class="w-full text-xs code-font">
+                <thead class="bg-amber-50 text-amber-900">
+                  <tr><th class="p-2 text-left">T1</th><th class="p-2 text-left">T2</th></tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td class="p-1.5">read(A);</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">A := A - N;</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">write(A);</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5"></td><td class="p-1.5">read(A);</td></tr>
+                  <tr><td class="p-1.5"></td><td class="p-1.5">A := A + M</td></tr>
+                  <tr><td class="p-1.5"></td><td class="p-1.5">write(A);</td></tr>
+                  <tr><td class="p-1.5">read(B);</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">B := B + N;</td><td class="p-1.5"></td></tr>
+                  <tr><td class="p-1.5">write(B);</td><td class="p-1.5"></td></tr>
+                </tbody>
+              </table>
+              <p class="p-2.5 bg-amber-50/60 text-[11px] text-slate-700 bangla-text">
+                <strong>ব্যাখ্যা:</strong> T1-এর B-এর কাজ করার আগেই T2-এর A-এর কাজ ঢুকে পড়েছে। এটিও Non-Serial।
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 18 - 21: SCHEDULES 1, 2, 3 & INCONSISTENT SCHEDULE -->
+      <!-- ===================================================================== -->
+      <section id="slide-18-21" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 18, 19, 20 &amp; 21</span>
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Step-by-Step Numerical Trace</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">6. Detailed Numerical Analysis of Schedules (Slides 18–21)</h2>
+
+        <div class="bg-slate-100 rounded-2xl p-4 text-sm text-slate-800 space-y-1">
+          <p><strong>Problem Setup (Slides 18–21):</strong> ধরি, প্রাথমিক মান <strong>A = $1000</strong> এবং <strong>B = $2000</strong> (মোট <strong>A + B = $3000</strong>)।</p>
+          <p>• <strong>T1:</strong> অ্যাকাউন্ট A থেকে <strong>$50</strong> অ্যাকাউন্ট B-তে পাঠায়।</p>
+          <p>• <strong>T2:</strong> অ্যাকাউন্ট A-এর ব্যালেন্সের <strong>10% (<code class="code-font">A * 0.1</code>)</strong> অ্যাকাউন্ট B-তে পাঠায়।</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Schedule 1 (Slide 18) -->
+          <div class="border border-blue-200 rounded-2xl overflow-hidden">
+            <div class="bg-blue-900 text-white px-4 py-2.5 flex justify-between items-center">
+              <span class="font-bold text-sm">Schedule (1) — Slide 18</span>
+              <span class="text-xs bg-blue-700 px-2 py-0.5 rounded">Serial: T1 → T2</span>
+            </div>
+            <div class="p-4 text-xs space-y-2">
+              <table class="w-full code-font border-collapse">
+                <thead class="bg-slate-100">
+                  <tr><th class="p-1.5 text-left">T1</th><th class="p-1.5 text-left">T2</th><th class="p-1.5 text-left">Calculation (A=1000, B=2000)</th></tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td class="p-1">read(A)</td><td></td><td class="p-1">A = 1000</td></tr>
+                  <tr><td class="p-1">A := A - 50</td><td></td><td class="p-1">A = 950</td></tr>
+                  <tr><td class="p-1">write(A)</td><td></td><td class="p-1 font-bold">DB: A = 950</td></tr>
+                  <tr><td class="p-1">read(B)</td><td></td><td class="p-1">B = 2000</td></tr>
+                  <tr><td class="p-1">B := B + 50</td><td></td><td class="p-1">B = 2050</td></tr>
+                  <tr><td class="p-1">write(B)</td><td></td><td class="p-1 font-bold">DB: B = 2050</td></tr>
+                  <tr><td class="p-1 text-emerald-700 font-bold">commit</td><td></td><td class="p-1 text-emerald-700">T1 done (A+B = 3000)</td></tr>
+                  <tr><td></td><td class="p-1">read(A)</td><td class="p-1">A = 950</td></tr>
+                  <tr><td></td><td class="p-1">temp := A * 0.1</td><td class="p-1">temp = 95</td></tr>
+                  <tr><td></td><td class="p-1">A := A - temp</td><td class="p-1">A = 950 - 95 = 855</td></tr>
+                  <tr><td></td><td class="p-1">write(A)</td><td class="p-1 font-bold">DB: A = 855</td></tr>
+                  <tr><td></td><td class="p-1">read(B)</td><td class="p-1">B = 2050</td></tr>
+                  <tr><td></td><td class="p-1">B := B + temp</td><td class="p-1">B = 2050 + 95 = 2145</td></tr>
+                  <tr><td></td><td class="p-1">write(B)</td><td class="p-1 font-bold">DB: B = 2145</td></tr>
+                  <tr><td></td><td class="p-1 text-emerald-700 font-bold">commit</td><td class="p-1 text-emerald-700">T2 done</td></tr>
+                </tbody>
+              </table>
+              <div class="bg-blue-50 p-2.5 rounded-lg text-blue-950 font-medium">
+                Result: <strong>A = 855, B = 2145</strong>. Sum = <strong>3000</strong> (Consistent &amp; Serial).
+              </div>
+            </div>
+          </div>
+
+          <!-- Schedule 2 (Slide 19) -->
+          <div class="border border-blue-200 rounded-2xl overflow-hidden">
+            <div class="bg-blue-900 text-white px-4 py-2.5 flex justify-between items-center">
+              <span class="font-bold text-sm">Schedule (2) — Slide 19</span>
+              <span class="text-xs bg-blue-700 px-2 py-0.5 rounded">Serial: T2 → T1</span>
+            </div>
+            <div class="p-4 text-xs space-y-2">
+              <table class="w-full code-font border-collapse">
+                <thead class="bg-slate-100">
+                  <tr><th class="p-1.5 text-left">T1</th><th class="p-1.5 text-left">T2</th><th class="p-1.5 text-left">Calculation (A=1000, B=2000)</th></tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td></td><td class="p-1">read(A)</td><td class="p-1">A = 1000</td></tr>
+                  <tr><td></td><td class="p-1">temp := A * 0.1</td><td class="p-1">temp = 100</td></tr>
+                  <tr><td></td><td class="p-1">A := A - temp</td><td class="p-1">A = 900</td></tr>
+                  <tr><td></td><td class="p-1">write(A)</td><td class="p-1 font-bold">DB: A = 900</td></tr>
+                  <tr><td></td><td class="p-1">read(B)</td><td class="p-1">B = 2000</td></tr>
+                  <tr><td></td><td class="p-1">B := B + temp</td><td class="p-1">B = 2100</td></tr>
+                  <tr><td></td><td class="p-1">write(B)</td><td class="p-1 font-bold">DB: B = 2100</td></tr>
+                  <tr><td></td><td class="p-1 text-emerald-700 font-bold">commit</td><td class="p-1 text-emerald-700">T2 done (A+B = 3000)</td></tr>
+                  <tr><td class="p-1">read(A)</td><td></td><td class="p-1">A = 900</td></tr>
+                  <tr><td class="p-1">A := A - 50</td><td></td><td class="p-1">A = 850</td></tr>
+                  <tr><td class="p-1">write(A)</td><td></td><td class="p-1 font-bold">DB: A = 850</td></tr>
+                  <tr><td class="p-1">read(B)</td><td></td><td class="p-1">B = 2100</td></tr>
+                  <tr><td class="p-1">B := B + 50</td><td></td><td class="p-1">B = 2150</td></tr>
+                  <tr><td class="p-1">write(B)</td><td></td><td class="p-1 font-bold">DB: B = 2150</td></tr>
+                  <tr><td class="p-1 text-emerald-700 font-bold">commit</td><td></td><td class="p-1 text-emerald-700">T1 done</td></tr>
+                </tbody>
+              </table>
+              <div class="bg-blue-50 p-2.5 rounded-lg text-blue-950 font-medium">
+                Result: <strong>A = 850, B = 2150</strong>. Sum = <strong>3000</strong> (Consistent &amp; Serial).
+              </div>
+            </div>
+          </div>
+
+          <!-- Schedule 3 (Slide 20) -->
+          <div class="border border-emerald-300 rounded-2xl overflow-hidden">
+            <div class="bg-emerald-800 text-white px-4 py-2.5 flex justify-between items-center">
+              <span class="font-bold text-sm">Schedule (3) — Slide 20</span>
+              <span class="text-xs bg-emerald-600 px-2 py-0.5 rounded">Non-Serial, Equivalent to S1</span>
+            </div>
+            <div class="p-4 text-xs space-y-2">
+              <table class="w-full code-font border-collapse">
+                <thead class="bg-slate-100">
+                  <tr><th class="p-1.5 text-left">T1</th><th class="p-1.5 text-left">T2</th><th class="p-1.5 text-left">Calculation (A=1000, B=2000)</th></tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td class="p-1">read(A)</td><td></td><td class="p-1">A = 1000</td></tr>
+                  <tr><td class="p-1">A := A - 50</td><td></td><td class="p-1">A = 950</td></tr>
+                  <tr><td class="p-1">write(A)</td><td></td><td class="p-1 font-bold">DB: A = 950</td></tr>
+                  <tr><td></td><td class="p-1">read(A)</td><td class="p-1">A = 950 (Reads updated A)</td></tr>
+                  <tr><td></td><td class="p-1">temp := A * 0.1</td><td class="p-1">temp = 95</td></tr>
+                  <tr><td></td><td class="p-1">A := A - temp</td><td class="p-1">A = 855</td></tr>
+                  <tr><td></td><td class="p-1">write(A)</td><td class="p-1 font-bold">DB: A = 855</td></tr>
+                  <tr><td class="p-1">read(B)</td><td></td><td class="p-1">B = 2000</td></tr>
+                  <tr><td class="p-1">B := B + 50</td><td></td><td class="p-1">B = 2050</td></tr>
+                  <tr><td class="p-1">write(B)</td><td></td><td class="p-1 font-bold">DB: B = 2050</td></tr>
+                  <tr><td class="p-1 text-emerald-700 font-bold">commit</td><td></td><td class="p-1">T1 commits</td></tr>
+                  <tr><td></td><td class="p-1">read(B)</td><td class="p-1">B = 2050 (Reads updated B)</td></tr>
+                  <tr><td></td><td class="p-1">B := B + temp</td><td class="p-1">B = 2145</td></tr>
+                  <tr><td></td><td class="p-1">write(B)</td><td class="p-1 font-bold">DB: B = 2145</td></tr>
+                  <tr><td></td><td class="p-1 text-emerald-700 font-bold">commit</td><td class="p-1">T2 commits</td></tr>
+                </tbody>
+              </table>
+              <div class="bg-emerald-50 p-2.5 rounded-lg text-emerald-950 font-medium">
+                Result: <strong>A = 855, B = 2145</strong>. Sum = <strong>3000</strong>! Although Non-Serial, it produces the exact same result as Schedule (1). Hence <strong>Serializable</strong>!
+              </div>
+            </div>
+          </div>
+
+          <!-- Bad Schedule (Slide 21) -->
+          <div class="border border-rose-300 rounded-2xl overflow-hidden">
+            <div class="bg-rose-800 text-white px-4 py-2.5 flex justify-between items-center">
+              <span class="font-bold text-sm">Inconsistent Schedule — Slide 21</span>
+              <span class="text-xs bg-rose-600 px-2 py-0.5 rounded">Non-Serializable (Bad!)</span>
+            </div>
+            <div class="p-4 text-xs space-y-2">
+              <table class="w-full code-font border-collapse">
+                <thead class="bg-slate-100">
+                  <tr><th class="p-1.5 text-left">T1</th><th class="p-1.5 text-left">T2</th><th class="p-1.5 text-left">Calculation (A=1000, B=2000)</th></tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td class="p-1">read(A)</td><td></td><td class="p-1">A = 1000</td></tr>
+                  <tr><td class="p-1">A := A - 50</td><td></td><td class="p-1">A = 950 (Not written!)</td></tr>
+                  <tr><td></td><td class="p-1">read(A)</td><td class="p-1 text-rose-700 font-bold">A = 1000 (Wrong!)</td></tr>
+                  <tr><td></td><td class="p-1">temp := A * 0.1</td><td class="p-1">temp = 100</td></tr>
+                  <tr><td></td><td class="p-1">A := A - temp</td><td class="p-1">A = 900</td></tr>
+                  <tr><td></td><td class="p-1">write(A)</td><td class="p-1 font-bold">DB: A = 900</td></tr>
+                  <tr><td></td><td class="p-1">read(B)</td><td class="p-1">B = 2000</td></tr>
+                  <tr><td class="p-1">write(A)</td><td></td><td class="p-1 text-rose-700 font-bold">Overwrites DB: A = 950!</td></tr>
+                  <tr><td class="p-1">read(B)</td><td></td><td class="p-1">B = 2000</td></tr>
+                  <tr><td class="p-1">B := B + 50</td><td></td><td class="p-1">B = 2050</td></tr>
+                  <tr><td class="p-1">write(B)</td><td></td><td class="p-1 font-bold">DB: B = 2050</td></tr>
+                  <tr><td class="p-1 font-bold">commit</td><td></td><td class="p-1">T1 commits</td></tr>
+                  <tr><td></td><td class="p-1">B := B + temp</td><td class="p-1">B = 2000 + 100 = 2100</td></tr>
+                  <tr><td></td><td class="p-1">write(B)</td><td class="p-1 text-rose-700 font-bold">Overwrites DB: B = 2100!</td></tr>
+                  <tr><td></td><td class="p-1 font-bold">commit</td><td class="p-1">T2 commits</td></tr>
+                </tbody>
+              </table>
+              <div class="bg-rose-50 p-2.5 rounded-lg text-rose-950 font-medium">
+                Result: <strong>A = 950, B = 2100</strong>. Sum = <strong>3050 ≠ 3000</strong>! Does <strong>NOT</strong> preserve <code class="code-font">(A + B)</code>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 22 - 25: SERIALIZABILITY & CONFLICTING INSTRUCTIONS -->
+      <!-- ===================================================================== -->
+      <section id="slide-22-25" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 22, 23, 24 &amp; 25</span>
+          <span class="text-xs font-semibold text-amber-600 uppercase tracking-wider">Core Problem-Solving Rules</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">7. Serializable Schedule, Conflicting Instructions &amp; Swapping</h2>
+
+        <!-- Bangla Theory -->
+        <div class="bg-emerald-50/70 border-l-4 border-emerald-500 rounded-r-2xl p-5 space-y-3">
+          <h3 class="font-bold text-emerald-900 text-base">সহজ বাংলায় ব্যাখ্যা: Serializable Schedule ও Conflict কী?</h3>
+          <p class="bangla-text text-slate-800 text-sm">
+            <strong>Serializable Schedule কী? (Slide 22):</strong> যদি কোনো একটি Non-serial (সমান্তরাল) Schedule-এর ফলাফল কোনো একটি Serial Schedule-এর ফলাফলের সাথে হুবহু মিলে যায় (Equivalent হয়), তবে সেই Non-serial Schedule-টিকে <strong>Serializable Schedule</strong> বলে। এটি ২ প্রকার: (১) <strong>Conflict Serializability</strong> এবং (২) <strong>View Serializability</strong>।
+          </p>
+          <p class="bangla-text text-slate-800 text-sm">
+            <strong>Conflicting Instructions (সংঘর্ষপূর্ণ অপারেশন) চেনার ৩টি শর্ত (Slide 23):</strong>
+            দুটি অপারেশন <code class="code-font">Ii</code> এবং <code class="code-font">Ij</code> তখনই পরস্পর <strong>Conflicting</strong> হবে যখন নিচের <strong>৩টি শর্তই একসাথে পূরণ হবে</strong>:
+          </p>
+          <div class="grid sm:grid-cols-3 gap-3 text-xs sm:text-sm bangla-text">
+            <div class="bg-white p-3 rounded-xl border border-emerald-200">
+              <strong class="text-emerald-800">শর্ত ১: Different Transactions</strong>
+              <p>অপারেশন দুটি অবশ্যই <strong>ভিন্ন দুটি ট্রানজ্যাকশনের</strong> (যেমন একটি T1-এর, অন্যটি T2-এর) হতে হবে। একই ট্রানজ্যাকশনের দুটি অপারেশন কখনো Conflict করে না।</p>
+            </div>
+            <div class="bg-white p-3 rounded-xl border border-emerald-200">
+              <strong class="text-emerald-800">শর্ত ২: Same Data Item</strong>
+              <p>অপারেশন দুটি অবশ্যই <strong>একই ডাটা আইটেমের</strong> (যেমন উভয়ই A-এর ওপর, বা উভয়ই Q-এর ওপর) কাজ করতে হবে। <code class="code-font">read(A)</code> এবং <code class="code-font">write(B)</code>-এর মধ্যে কোনো Conflict নেই।</p>
+            </div>
+            <div class="bg-white p-3 rounded-xl border border-emerald-200">
+              <strong class="text-emerald-800">শর্ত ৩: At least one is WRITE</strong>
+              <p>দুটির মধ্যে <strong>অন্তত একটি অপারেশন অবশ্যই Write</strong> হতে হবে। দুটিই যদি Read হয়, তবে তাদের ক্রম পাল্টালেও মানের কোনো পরিবর্তন হয় না, তাই কোনো Conflict নেই।</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Cases Table from Slide 23 -->
+        <div class="overflow-x-auto border border-slate-200 rounded-2xl">
+          <table class="w-full text-xs sm:text-sm text-left border-collapse">
+            <thead class="bg-slate-900 text-white">
+              <tr>
+                <th class="p-3">#</th>
+                <th class="p-3">Instruction Ii (in Ti)</th>
+                <th class="p-3">Instruction Ij (in Tj)</th>
+                <th class="p-3">Status</th>
+                <th class="p-3">Why? (বাংলায় কারণ)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr class="bg-emerald-50/40">
+                <td class="p-3 font-bold">1</td>
+                <td class="p-3 code-font">Ii = read(Q)</td>
+                <td class="p-3 code-font">Ij = read(Q)</td>
+                <td class="p-3"><span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs">No Conflict</span></td>
+                <td class="p-3 bangla-text">উভয়ই Read করছে, কেউ ডাটা বদলাচ্ছে না। তাই আগে-পরে হলে সমস্যা নেই।</td>
+              </tr>
+              <tr class="bg-rose-50/40">
+                <td class="p-3 font-bold">2</td>
+                <td class="p-3 code-font">Ii = read(Q)</td>
+                <td class="p-3 code-font">Ij = write(Q)</td>
+                <td class="p-3"><span class="px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 font-bold text-xs">Conflict (R-W)</span></td>
+                <td class="p-3 bangla-text">Ti আগে পড়লে পুরনো মান পাবে, আর Tj আগে লিখলে Ti নতুন মান পাবে। তাই ক্রম বদলানো যাবে না।</td>
+              </tr>
+              <tr class="bg-rose-50/40">
+                <td class="p-3 font-bold">3</td>
+                <td class="p-3 code-font">Ii = write(Q)</td>
+                <td class="p-3 code-font">Ij = read(Q)</td>
+                <td class="p-3"><span class="px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 font-bold text-xs">Conflict (W-R)</span></td>
+                <td class="p-3 bangla-text">Ti লেখার পর Tj পড়লে আপডেট মান পাবে, আগে পড়লে পুরনো মান পাবে।</td>
+              </tr>
+              <tr class="bg-rose-50/40">
+                <td class="p-3 font-bold">4</td>
+                <td class="p-3 code-font">Ii = write(Q)</td>
+                <td class="p-3 code-font">Ij = write(Q)</td>
+                <td class="p-3"><span class="px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 font-bold text-xs">Conflict (W-W)</span></td>
+                <td class="p-3 bangla-text">শেষে যে Write করবে ডাটাবেজে তার মানই থেকে যাবে। তাই ক্রম বদলালে ফাইনাল মান বদলে যাবে।</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Slide 24 & 25 Swapping Demonstration -->
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
+          <h3 class="font-bold text-slate-900 text-base">Slides 24 &amp; 25: Converting Schedule 3 into Serial Schedule 6 by Swapping</h3>
+          <p class="bangla-text text-sm text-slate-700">
+            <strong>Conflict Serializable-এর সংজ্ঞা (Slide 24):</strong> যেসব অপারেশন Non-conflicting (যেমন ভিন্ন ডাটা আইটেম A ও B-এর ওপর কাজ করছে), তাদের জায়গা অদল-বদল (Swap) করে যদি একটি Non-serial schedule-কে একটি Serial schedule-এ রূপান্তর করা যায়, তবে তাকে <strong>Conflict Serializable</strong> বলে। নিচে Slide 25-এর উদাহরণ দেখো:
+          </p>
+
+          <div class="grid md:grid-cols-3 gap-4 items-center text-xs code-font">
+            <div class="bg-white border border-slate-200 rounded-xl p-3">
+              <div class="font-bold text-blue-800 mb-2 border-b pb-1">Schedule 3 (Non-Serial)</div>
+              <div class="space-y-1">
+                <div>T1: read(A)</div>
+                <div>T1: write(A)</div>
+                <div class="text-purple-700">T2: read(A)</div>
+                <div class="text-purple-700">T2: write(A)</div>
+                <div class="bg-amber-100 px-1 rounded">T1: read(B)  ← Swap up!</div>
+                <div class="bg-amber-100 px-1 rounded">T1: write(B) ← Swap up!</div>
+                <div class="text-purple-700">T2: read(B)</div>
+                <div class="text-purple-700">T2: write(B)</div>
+              </div>
+            </div>
+
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-slate-800 bangla-text">
+              <strong class="text-amber-900 block mb-1">কেন Swap করা বৈধ?</strong>
+              <p>T1-এর <code class="code-font">read(B), write(B)</code> কাজ করে <strong>B</strong>-এর ওপর, আর T2-এর <code class="code-font">read(A), write(A)</code> কাজ করে <strong>A</strong>-এর ওপর। ডাটা আইটেম ভিন্ন হওয়ায় এদের মধ্যে কোনো Conflict নেই! তাই T1-এর B-এর কাজগুলোকে উপরে তুলে আনা যায়।</p>
+            </div>
+
+            <div class="bg-white border border-emerald-300 rounded-xl p-3">
+              <div class="font-bold text-emerald-800 mb-2 border-b pb-1">Schedule 6 (Serial: T1 → T2)</div>
+              <div class="space-y-1">
+                <div>T1: read(A)</div>
+                <div>T1: write(A)</div>
+                <div class="text-emerald-700 font-bold">T1: read(B)</div>
+                <div class="text-emerald-700 font-bold">T1: write(B)</div>
+                <div class="text-purple-700">T2: read(A)</div>
+                <div class="text-purple-700">T2: write(A)</div>
+                <div class="text-purple-700">T2: read(B)</div>
+                <div class="text-purple-700">T2: write(B)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 26 - 28: PRECEDENCE GRAPH & TOPOLOGICAL SORT -->
+      <!-- ===================================================================== -->
+      <section id="slide-26-28" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 26, 27 &amp; 28</span>
+          <span class="text-xs font-semibold text-rose-600 uppercase tracking-wider">Most Important Problem-Solving Section</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">8. Testing for Serializability: Precedence Graph &amp; Topological Sort</h2>
+
+        <!-- Step-by-Step Bangla Guide -->
+        <div class="bg-emerald-50/70 border-l-4 border-emerald-500 rounded-r-2xl p-5 space-y-3">
+          <h3 class="font-bold text-emerald-900 text-base">পরীক্ষায় Precedence Graph আঁকার ৬টি সহজ ধাপ (Step-by-Step)</h3>
+          <p class="bangla-text text-sm text-slate-800">
+            বড় কোনো Schedule-কে বারবার Swap করে পরীক্ষা করা অনেক সময়সাপেক্ষ। তাই আমরা <strong>Precedence Graph (বা Serialization Graph) <code class="code-font">G = (V, E)</code></strong> এঁকে মাত্র ১ মিনিটে বলে দিতে পারি Schedule-টি Conflict Serializable কি না!
+          </p>
+          <ol class="bangla-text list-decimal list-inside space-y-2 text-sm text-slate-800 bg-white p-4 rounded-xl border border-emerald-200">
+            <li><strong>ধাপ ১ (Vertices / Nodes আঁকা):</strong> Schedule-এ যতগুলো ট্রানজ্যাকশন আছে (যেমন T1, T2, T3), প্রত্যেকের জন্য একটি করে বৃত্ত বা <strong>Node</strong> আঁকো।</li>
+            <li><strong>ধাপ ২ (Conflicting Pairs খোঁজা):</strong> উপর থেকে নিচে প্রতিটি অপারেশনের সাথে নিচের অন্য ট্রানজ্যাকশনের অপারেশন তুলনা করো। একই ডাটা আইটেমে (যেমন X, Y, Z) কমপক্ষে একটি <code class="code-font">Write</code> থাকলে সেটিই Conflict।</li>
+            <li><strong>ধাপ ৩ (Directed Edge বা তীর চিহ্ন আঁকা — Slide 26):</strong> যদি <code class="code-font">Ti</code> আগে এবং <code class="code-font">Tj</code> পরে একই ডাটা আইটেম Q-এর ওপর নিচের যেকোনো একটি Conflict করে, তবে <strong><code class="code-font">Ti → Tj</code></strong> (Ti থেকে Tj-এর দিকে) একটি তীর চিহ্ন (Directed Edge) আঁকো:
+              <br>• <code class="code-font">Ti: write(Q)</code> এর পরে <code class="code-font">Tj: read(Q)</code> হলে <code class="code-font">Ti → Tj</code>
+              <br>• <code class="code-font">Ti: read(Q)</code> এর পরে <code class="code-font">Tj: write(Q)</code> হলে <code class="code-font">Ti → Tj</code>
+              <br>• <code class="code-font">Ti: write(Q)</code> এর পরে <code class="code-font">Tj: write(Q)</code> হলে <code class="code-font">Ti → Tj</code>
+            </li>
+            <li><strong>ধাপ ৪ (<code class="code-font">Ti → Tj</code> এর অর্থ কী? — Slide 27):</strong> এর অর্থ হলো, সমতুল্য Serial Schedule-এ অবশ্যই <strong>Ti-কে Tj-এর আগে</strong> সম্পন্ন হতে হবে।</li>
+            <li><strong>ধাপ ৫ (Cycle Detection — Slide 27):</strong> গ্রাফটি ভালো করে দেখো। যদি তীর চিহ্ন ধরে ঘুরে আবার আগের নোডে ফিরে আসা যায় (যেমন <code class="code-font">T1 → T2 → T1</code> বা <code class="code-font">T1 → T2 → T3 → T1</code>), তবে গ্রাফে <strong>Cycle</strong> আছে।
+              <br>• <strong>Cycle থাকলে:</strong> Schedule-টি <strong>NOT Conflict Serializable</strong>।
+              <br>• <strong>Cycle না থাকলে (Acyclic):</strong> Schedule-টি <strong>Conflict Serializable</strong>।
+            </li>
+            <li><strong>ধাপ ৬ (Topological Sorting — Slide 28):</strong> গ্রাফে Cycle না থাকলে, তীর চিহ্নের দিক মেনে নোডগুলোকে একটি সরলরেখায় সাজানোকে <strong>Topological Sorting</strong> বলে। যে নোডে কোনো তীর ঢুকছে না (In-degree = 0), তাকে সবার আগে বসাতে হয়। এটিই আমাদের কাঙ্ক্ষিত Serial Order!</li>
+          </ol>
+        </div>
+
+        <!-- Slide 28 Topological Sorting Visual -->
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
+          <h3 class="font-bold text-slate-900 text-sm mb-3">Slide 28: Topological Sorting Example (Multiple Valid Serial Orders)</h3>
+          <div class="grid md:grid-cols-3 gap-4 items-center">
+            <!-- Diamond Graph (a) -->
+            <div class="bg-white p-3 rounded-xl border border-slate-200 flex flex-col items-center">
+              <span class="text-xs font-bold text-slate-600 mb-1">(a) Acyclic Precedence Graph</span>
+              <svg viewBox="0 0 240 190" class="w-48 h-auto">
+                <defs>
+                  <marker id="arr-sm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e293b" />
+                  </marker>
+                </defs>
+                <line x1="105" y1="42" x2="62" y2="78" stroke="#1e293b" stroke-width="2" marker-end="url(#arr-sm)" />
+                <line x1="135" y1="42" x2="178" y2="78" stroke="#1e293b" stroke-width="2" marker-end="url(#arr-sm)" />
+                <line x1="62" y1="112" x2="105" y2="148" stroke="#1e293b" stroke-width="2" marker-end="url(#arr-sm)" />
+                <line x1="178" y1="112" x2="135" y2="148" stroke="#1e293b" stroke-width="2" marker-end="url(#arr-sm)" />
+
+                <circle cx="120" cy="30" r="20" fill="#dbeafe" stroke="#2563eb" stroke-width="2" />
+                <text x="120" y="35" text-anchor="middle" font-size="13" font-weight="700">Ti</text>
+
+                <circle cx="48" cy="95" r="20" fill="#dbeafe" stroke="#2563eb" stroke-width="2" />
+                <text x="48" y="100" text-anchor="middle" font-size="13" font-weight="700">Tj</text>
+
+                <circle cx="192" cy="95" r="20" fill="#dbeafe" stroke="#2563eb" stroke-width="2" />
+                <text x="192" y="100" text-anchor="middle" font-size="13" font-weight="700">Tk</text>
+
+                <circle cx="120" cy="160" r="20" fill="#dbeafe" stroke="#2563eb" stroke-width="2" />
+                <text x="120" y="165" text-anchor="middle" font-size="13" font-weight="700">Tm</text>
+              </svg>
+            </div>
+
+            <!-- Linear Order (b) -->
+            <div class="bg-white p-4 rounded-xl border border-emerald-200 text-center space-y-2">
+              <span class="text-xs font-bold text-emerald-800 block">(b) Topological Order 1</span>
+              <div class="code-font text-sm font-bold text-slate-900 bg-emerald-50 py-2 px-3 rounded-lg">
+                Ti → Tj → Tk → Tm
+              </div>
+              <p class="bangla-text text-xs text-slate-600">Ti সবার আগে, তারপর Tj, তারপর Tk, এবং সবার শেষে Tm।</p>
+            </div>
+
+            <!-- Linear Order (c) -->
+            <div class="bg-white p-4 rounded-xl border border-emerald-200 text-center space-y-2">
+              <span class="text-xs font-bold text-emerald-800 block">(c) Topological Order 2</span>
+              <div class="code-font text-sm font-bold text-slate-900 bg-emerald-50 py-2 px-3 rounded-lg">
+                Ti → Tk → Tj → Tm
+              </div>
+              <p class="bangla-text text-xs text-slate-600">যেহেতু Tj ও Tk-এর মধ্যে কোনো তীর নেই, তাই Tk আগে ও Tj পরে বসলেও সঠিক!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDE 29: SOLVED CYCLIC EXAMPLE (SCHEDULE S1) -->
+      <!-- ===================================================================== -->
+      <section id="slide-29" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slide 29</span>
+          <span class="text-xs font-semibold text-rose-600 uppercase tracking-wider">Solved Cyclic Problem</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">9. Solved Example 1: Schedule S1 (Slide 29 — Cyclic Case)</h2>
+
+        <div class="grid lg:grid-cols-12 gap-6 items-start">
+          <!-- Schedule S1 Table -->
+          <div class="lg:col-span-6 border border-slate-200 rounded-2xl overflow-hidden">
+            <div class="bg-slate-900 text-white px-4 py-2.5 text-xs font-bold">
+              Schedule S1 (Slide 29)
+            </div>
+            <table class="w-full text-xs code-font border-collapse">
+              <thead class="bg-slate-100 text-slate-900">
+                <tr>
+                  <th class="p-2 text-left">Step</th>
+                  <th class="p-2 text-left">T1</th>
+                  <th class="p-2 text-left">T2</th>
+                  <th class="p-2 text-left">T3</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr><td class="p-1.5 text-slate-400">1</td><td class="p-1.5 text-blue-700 font-semibold">Read(A)</td><td></td><td></td></tr>
+                <tr><td class="p-1.5 text-slate-400">2</td><td class="p-1.5">A := f1(A)</td><td></td><td></td></tr>
+                <tr><td class="p-1.5 text-slate-400">3</td><td class="p-1.5 text-blue-700 font-bold">Write(A)</td><td></td><td></td></tr>
+                <tr><td class="p-1.5 text-slate-400">4</td><td></td><td class="p-1.5 text-purple-700 font-semibold">Read(B)</td><td></td></tr>
+                <tr><td class="p-1.5 text-slate-400">5</td><td></td><td class="p-1.5">B := f2(B)</td><td></td></tr>
+                <tr><td class="p-1.5 text-slate-400">6</td><td></td><td class="p-1.5 text-purple-700 font-bold">Write(B)</td><td></td></tr>
+                <tr><td class="p-1.5 text-slate-400">7</td><td></td><td></td><td class="p-1.5 text-amber-700 font-semibold">Read(C)</td></tr>
+                <tr><td class="p-1.5 text-slate-400">8</td><td></td><td></td><td class="p-1.5">C := f3(C)</td></tr>
+                <tr><td class="p-1.5 text-slate-400">9</td><td></td><td></td><td class="p-1.5 text-amber-700 font-bold">Write(C)</td></tr>
+                <tr><td class="p-1.5 text-slate-400">10</td><td></td><td class="p-1.5 text-purple-700 font-semibold">Read(A)</td><td></td></tr>
+                <tr><td class="p-1.5 text-slate-400">11</td><td></td><td class="p-1.5">A := f4(A)</td><td></td></tr>
+                <tr><td class="p-1.5 text-slate-400">12</td><td></td><td class="p-1.5 text-purple-700 font-bold">Write(A)</td><td></td></tr>
+                <tr><td class="p-1.5 text-slate-400">13</td><td class="p-1.5 text-blue-700 font-semibold">Read(C)</td><td></td><td></td></tr>
+                <tr><td class="p-1.5 text-slate-400">14</td><td class="p-1.5">C := f5(C)</td><td></td><td></td></tr>
+                <tr><td class="p-1.5 text-slate-400">15</td><td class="p-1.5 text-blue-700 font-bold">Write(C)</td><td></td><td></td></tr>
+                <tr><td class="p-1.5 text-slate-400">16</td><td></td><td></td><td class="p-1.5 text-amber-700 font-semibold">Read(B)</td></tr>
+                <tr><td class="p-1.5 text-slate-400">17</td><td></td><td></td><td class="p-1.5">B := f6(B)</td></tr>
+                <tr><td class="p-1.5 text-slate-400">18</td><td></td><td></td><td class="p-1.5 text-amber-700 font-bold">Write(B)</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Step-by-Step Edge Discovery + SVG Graph -->
+          <div class="lg:col-span-6 space-y-4">
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col items-center">
+              <span class="text-xs font-bold text-rose-700 uppercase tracking-wider mb-2">Precedence Graph for S1 (Contains Cycle!)</span>
+              <svg viewBox="0 0 300 220" class="w-64 h-auto">
+                <defs>
+                  <marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#dc2626" />
+                  </marker>
+                </defs>
+                <!-- T1 -> T2 -->
+                <line x1="132" y1="54" x2="76" y2="148" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arr-red)" />
+                <text x="72" y="95" font-size="11" font-weight="700" fill="#dc2626">on A</text>
+
+                <!-- T2 -> T3 -->
+                <line x1="88" y1="170" x2="212" y2="170" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arr-red)" />
+                <text x="150" y="190" text-anchor="middle" font-size="11" font-weight="700" fill="#dc2626">on B</text>
+
+                <!-- T3 -> T1 -->
+                <line x1="224" y1="148" x2="168" y2="54" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arr-red)" />
+                <text x="225" y="95" font-size="11" font-weight="700" fill="#dc2626">on C</text>
+
+                <!-- Nodes -->
+                <circle cx="150" cy="36" r="24" fill="#fee2e2" stroke="#dc2626" stroke-width="2.5" />
+                <text x="150" y="41" text-anchor="middle" font-size="14" font-weight="800" fill="#7f1d1d">T1</text>
+
+                <circle cx="64" cy="170" r="24" fill="#fee2e2" stroke="#dc2626" stroke-width="2.5" />
+                <text x="64" y="175" text-anchor="middle" font-size="14" font-weight="800" fill="#7f1d1d">T2</text>
+
+                <circle cx="236" cy="170" r="24" fill="#fee2e2" stroke="#dc2626" stroke-width="2.5" />
+                <text x="236" y="175" text-anchor="middle" font-size="14" font-weight="800" fill="#7f1d1d">T3</text>
+              </svg>
+            </div>
+
+            <div class="bg-rose-50 border-l-4 border-rose-600 rounded-r-2xl p-4 space-y-2 text-xs sm:text-sm">
+              <h3 class="font-bold text-rose-900">Step-by-Step Edge Identification (কীভাবে প্রতিটি Edge বের হলো):</h3>
+              <ul class="bangla-text space-y-1.5 text-slate-800">
+                <li><strong>১. ডাটা আইটেম A-এর ওপর Conflict:</strong> Step 3-এ <code class="code-font font-bold">T1: Write(A)</code> হয়েছে, এবং পরে Step 10-এ <code class="code-font font-bold">T2: Read(A)</code> ও Step 12-এ <code class="code-font font-bold">T2: Write(A)</code> হয়েছে। যেহেতু T1 আগে এবং T2 পরে, তাই Edge হবে: <strong><code class="code-font text-rose-700">T1 → T2</code></strong>।</li>
+                <li><strong>২. ডাটা আইটেম B-এর ওপর Conflict:</strong> Step 6-এ <code class="code-font font-bold">T2: Write(B)</code> হয়েছে, এবং পরে Step 16-এ <code class="code-font font-bold">T3: Read(B)</code> ও Step 18-এ <code class="code-font font-bold">T3: Write(B)</code> হয়েছে। যেহেতু T2 আগে এবং T3 পরে, তাই Edge হবে: <strong><code class="code-font text-rose-700">T2 → T3</code></strong>।</li>
+                <li><strong>৩. ডাটা আইটেম C-এর ওপর Conflict:</strong> Step 9-এ <code class="code-font font-bold">T3: Write(C)</code> হয়েছে, এবং পরে Step 13-এ <code class="code-font font-bold">T1: Read(C)</code> ও Step 15-এ <code class="code-font font-bold">T1: Write(C)</code> হয়েছে। যেহেতু T3 আগে এবং T1 পরে, তাই Edge হবে: <strong><code class="code-font text-rose-700">T3 → T1</code></strong>।</li>
+              </ul>
+              <div class="bg-white p-3 rounded-xl border border-rose-200 font-semibold text-rose-900">
+                Conclusion: The graph contains a cycle <strong>T1 → T2 → T3 → T1</strong>. Therefore, Schedule S1 is <strong>NOT Conflict Serializable</strong>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDE 30 & 31: SOLVED ACYCLIC EXAMPLE (X, Y, Z) -->
+      <!-- ===================================================================== -->
+      <section id="slide-30-31" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 30 &amp; 31</span>
+          <span class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Solved Acyclic Problem + Topological Sort</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">10. Solved Example 2: Slide 30 Problem (Acyclic Case)</h2>
+        <p class="text-sm text-slate-700 font-medium">
+          <strong>Slide 30 Question:</strong> <em>"Check this schedule is conflict serializable or not. If yes, then find the serial order?"</em>
+        </p>
+
+        <div class="grid lg:grid-cols-12 gap-6 items-start">
+          <!-- Slide 30 Table -->
+          <div class="lg:col-span-5 border border-slate-200 rounded-2xl overflow-hidden">
+            <div class="bg-slate-900 text-white px-4 py-2.5 text-xs font-bold">
+              Given Schedule (Slide 30)
+            </div>
+            <table class="w-full text-xs code-font border-collapse">
+              <thead class="bg-slate-100 text-slate-900">
+                <tr>
+                  <th class="p-2 text-left">Step</th>
+                  <th class="p-2 text-left">T1</th>
+                  <th class="p-2 text-left">T2</th>
+                  <th class="p-2 text-left">T3</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr><td class="p-2 text-slate-400">1</td><td class="p-2 font-bold text-blue-700">R(X)</td><td></td><td></td></tr>
+                <tr><td class="p-2 text-slate-400">2</td><td></td><td></td><td class="p-2 font-bold text-amber-700">R(Y)</td></tr>
+                <tr><td class="p-2 text-slate-400">3</td><td></td><td class="p-2 font-bold text-purple-700">R(Y)</td><td></td></tr>
+                <tr><td class="p-2 text-slate-400">4</td><td></td><td></td><td class="p-2 font-bold text-amber-700">R(X)</td></tr>
+                <tr><td class="p-2 text-slate-400">5</td><td></td><td class="p-2 font-bold text-purple-700">R(Z)</td><td></td></tr>
+                <tr><td class="p-2 text-slate-400">6</td><td></td><td></td><td class="p-2 font-bold text-amber-700">W(Y)</td></tr>
+                <tr><td class="p-2 text-slate-400">7</td><td></td><td class="p-2 font-bold text-purple-700">W(Z)</td><td></td></tr>
+                <tr><td class="p-2 text-slate-400">8</td><td class="p-2 font-bold text-blue-700">R(Z)</td><td></td><td></td></tr>
+                <tr><td class="p-2 text-slate-400">9</td><td class="p-2 font-bold text-blue-700">W(X)</td><td></td><td></td></tr>
+                <tr><td class="p-2 text-slate-400">10</td><td class="p-2 font-bold text-blue-700">W(Z)</td><td></td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Step-by-Step Analysis + SVG Graph -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="bg-emerald-50/70 border-l-4 border-emerald-600 rounded-r-2xl p-4 space-y-2 text-xs sm:text-sm">
+              <h3 class="font-bold text-emerald-950">Step-by-Step Conflict Analysis (X, Y, Z ধরে আলাদাভাবে চেক করি):</h3>
+              <ul class="bangla-text space-y-1.5 text-slate-800">
+                <li><strong>১. Data Item X-এর Conflict গুলো দেখি:</strong>
+                  <br>• Step 1-এ <code class="code-font">T1: R(X)</code> এবং Step 4-এ <code class="code-font">T3: R(X)</code> → দুটোই Read, তাই কোনো Conflict নেই!
+                  <br>• Step 4-এ <code class="code-font">T3: R(X)</code>-এর পরে Step 9-এ <code class="code-font">T1: W(X)</code> আছে (R-W Conflict)। যেহেতু T3 আগে এবং T1 পরে, তাই Edge: <strong><code class="code-font text-emerald-800">T3 → T1</code></strong>।
+                </li>
+                <li><strong>২. Data Item Y-এর Conflict গুলো দেখি:</strong>
+                  <br>• Step 2-এ <code class="code-font">T3: R(Y)</code> এবং Step 3-এ <code class="code-font">T2: R(Y)</code> → দুটোই Read, তাই কোনো Conflict নেই!
+                  <br>• Step 3-এ <code class="code-font">T2: R(Y)</code>-এর পরে Step 6-এ <code class="code-font">T3: W(Y)</code> আছে (R-W Conflict)। যেহেতু T2 আগে এবং T3 পরে, তাই Edge: <strong><code class="code-font text-emerald-800">T2 → T3</code></strong>।
+                </li>
+                <li><strong>৩. Data Item Z-এর Conflict গুলো দেখি:</strong>
+                  <br>• Step 5-এ <code class="code-font">T2: R(Z)</code> এবং Step 7-এ <code class="code-font">T2: W(Z)</code>-এর পরে Step 8-এ <code class="code-font">T1: R(Z)</code> ও Step 10-এ <code class="code-font">T1: W(Z)</code> আছে (R-W, W-R, W-W Conflicts)। যেহেতু T2 আগে এবং T1 পরে, তাই Edge: <strong><code class="code-font text-emerald-800">T2 → T1</code></strong>।
+                </li>
+              </ul>
+            </div>
+
+            <!-- Precedence Graph SVG -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-around gap-4">
+              <div class="text-center">
+                <span class="text-xs font-bold text-slate-600 block mb-1">Precedence Graph (No Cycle!)</span>
+                <svg viewBox="0 0 280 170" class="w-60 h-auto">
+                  <defs>
+                    <marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#15803d" />
+                    </marker>
+                  </defs>
+                  <!-- T2 -> T3 -->
+                  <line x1="72" y1="85" x2="188" y2="42" stroke="#15803d" stroke-width="2.5" marker-end="url(#arr-green)" />
+                  <text x="120" y="50" font-size="11" font-weight="700" fill="#15803d">on Y</text>
+
+                  <!-- T2 -> T1 -->
+                  <line x1="72" y1="95" x2="188" y2="132" stroke="#15803d" stroke-width="2.5" marker-end="url(#arr-green)" />
+                  <text x="120" y="132" font-size="11" font-weight="700" fill="#15803d">on Z</text>
+
+                  <!-- T3 -> T1 -->
+                  <line x1="215" y1="58" x2="215" y2="114" stroke="#15803d" stroke-width="2.5" marker-end="url(#arr-green)" />
+                  <text x="242" y="90" font-size="11" font-weight="700" fill="#15803d">on X</text>
+
+                  <!-- Nodes -->
+                  <circle cx="50" cy="90" r="22" fill="#dcfce7" stroke="#16a34a" stroke-width="2.5" />
+                  <text x="50" y="95" text-anchor="middle" font-size="14" font-weight="800" fill="#14532d">T2</text>
+
+                  <circle cx="215" cy="34" r="22" fill="#dcfce7" stroke="#16a34a" stroke-width="2.5" />
+                  <text x="215" y="39" text-anchor="middle" font-size="14" font-weight="800" fill="#14532d">T3</text>
+
+                  <circle cx="215" cy="140" r="22" fill="#dcfce7" stroke="#16a34a" stroke-width="2.5" />
+                  <text x="215" y="145" text-anchor="middle" font-size="14" font-weight="800" fill="#14532d">T1</text>
+                </svg>
+              </div>
+
+              <div class="space-y-2 text-xs sm:text-sm max-w-xs">
+                <div class="bg-emerald-100 text-emerald-950 p-3 rounded-xl font-bold">
+                  1. Conflict Serializable? YES (Acyclic / No Cycle).
+                </div>
+                <div class="bg-blue-100 text-blue-950 p-3 rounded-xl font-bold">
+                  2. Equivalent Serial Order (Topological Sort):
+                  <div class="code-font text-base mt-1 text-blue-800">T2 → T3 → T1</div>
+                </div>
+                <p class="bangla-text text-xs text-slate-600">
+                  <strong>ব্যাখ্যা:</strong> T2-তে কোনো তীর ঢুকছে না (In-degree = 0), তাই T2 প্রথম। এরপর T3-এর সব পূর্বশর্ত পূরণ হওয়ায় T3 দ্বিতীয়। এবং T1-এ T2 ও T3 উভয় থেকে তীর এসেছে বলে T1 সবার শেষে।
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- EXAM PREPARATION, PRACTICE EXERCISES & REVISION -->
+      <!-- ===================================================================== -->
+      <section id="exam-prep" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-8">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full">Exam Mastery Zone</span>
+          <h2 class="text-2xl font-bold text-slate-900 mt-2">11. Practice Exercises, Common Mistakes &amp; Quick Revision</h2>
+        </div>
+
+        <!-- Practice Exercises -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-bold text-slate-900">A. Practice Problems with Full Solutions</h3>
+
+          <!-- Practice 1 -->
+          <div class="border border-slate-200 rounded-2xl p-5 bg-slate-50/60 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-bold text-blue-900 text-sm">Practice Problem 1: Conflict Identification &amp; Serializability</span>
+              <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full font-semibold">Exam Standard</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-800 code-font bg-white p-3 rounded-xl border border-slate-200">
+              Schedule S: R1(A); R2(A); R1(B); R2(B); R3(B); W1(A); W2(B);
+            </p>
+            <div class="text-xs sm:text-sm text-slate-700 space-y-1.5">
+              <p><strong>Step-by-Step Solution:</strong></p>
+              <p>• <strong>On Data Item A:</strong> <code class="code-font">R2(A)</code> happens before <code class="code-font">W1(A)</code> → Edge: <strong><code class="code-font text-blue-700">T2 → T1</code></strong>. (Note: <code class="code-font">R1(A)</code> and <code class="code-font">W1(A)</code> belong to the same transaction T1, so no self-edge).</p>
+              <p>• <strong>On Data Item B:</strong> <code class="code-font">R1(B)</code> happens before <code class="code-font">W2(B)</code> → Edge: <strong><code class="code-font text-blue-700">T1 → T2</code></strong>. Also <code class="code-font">R3(B)</code> happens before <code class="code-font">W2(B)</code> → Edge: <strong><code class="code-font text-blue-700">T3 → T2</code></strong>.</p>
+              <p>• <strong>Cycle Check:</strong> Edges <code class="code-font font-bold text-rose-700">T2 → T1</code> and <code class="code-font font-bold text-rose-700">T1 → T2</code> form a cycle of length 2 (<code class="code-font">T1 → T2 → T1</code>).</p>
+              <p class="font-bold text-rose-800">Answer: Since a cycle exists, Schedule S is NOT Conflict Serializable.</p>
+            </div>
+          </div>
+
+          <!-- Practice 2 -->
+          <div class="border border-slate-200 rounded-2xl p-5 bg-slate-50/60 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-bold text-emerald-900 text-sm">Practice Problem 2: Precedence Graph &amp; Topological Sorting</span>
+              <span class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-semibold">Exam Standard</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-800 code-font bg-white p-3 rounded-xl border border-slate-200">
+              Schedule S': R1(X); W1(X); R2(X); W2(X); R3(Y); W3(Y); R1(Y); W1(Y);
+            </p>
+            <div class="text-xs sm:text-sm text-slate-700 space-y-1.5">
+              <p><strong>Step-by-Step Solution:</strong></p>
+              <p>• <strong>On Data Item X:</strong> <code class="code-font">R1(X), W1(X)</code> occur before <code class="code-font">R2(X), W2(X)</code> → Edge: <strong><code class="code-font text-emerald-700">T1 → T2</code></strong>.</p>
+              <p>• <strong>On Data Item Y:</strong> <code class="code-font">R3(Y), W3(Y)</code> occur before <code class="code-font">R1(Y), W1(Y)</code> → Edge: <strong><code class="code-font text-emerald-700">T3 → T1</code></strong>.</p>
+              <p>• <strong>Cycle Check:</strong> Directed edges are <code class="code-font">T3 → T1 → T2</code>. No cycle exists (Acyclic).</p>
+              <p class="font-bold text-emerald-800">Answer: Schedule S' IS Conflict Serializable. Unique Equivalent Serial Order: <code class="code-font">T3 → T1 → T2</code>.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Common Exam Mistakes -->
+        <div class="bg-rose-50/70 border border-rose-200 rounded-2xl p-5 space-y-2">
+          <h3 class="font-bold text-rose-900 text-base">B. Common Exam Mistakes to Avoid (পরীক্ষায় যে ভুলগুলো করবে না)</h3>
+          <ul class="bangla-text list-disc list-inside text-xs sm:text-sm text-slate-800 space-y-1.5">
+            <li><strong>ভুল ১ (Read-Read কে Conflict ধরা):</strong> <code class="code-font">R1(X)</code> এবং <code class="code-font">R2(X)</code>-এর মধ্যে কখনোই কোনো Edge আঁকবে না। কমপক্ষে একটি <code class="code-font">W</code> থাকতেই হবে।</li>
+            <li><strong>ভুল ২ (একই ট্রানজ্যাকশনের ভেতর Edge আঁকা):</strong> <code class="code-font">R1(X)</code> এবং <code class="code-font">W1(X)</code> একই ট্রানজ্যাকশন T1-এর অংশ। নিজের দিকে নিজে তীর (Self-loop) কখনো আঁকবে না।</li>
+            <li><strong>ভুল ৩ (তীরের দিক উল্টো করে দেওয়া):</strong> যদি <code class="code-font">T2</code> আগে এবং <code class="code-font">T1</code> পরে কাজ করে, তবে তীর অবশ্যই <code class="code-font">T2 → T1</code> হবে (আগে যে কাজ করেছে তার থেকে পরের জনের দিকে)।</li>
+            <li><strong>ভুল ৪ (Topological Sort-এ ভুল ক্রম):</strong> <code class="code-font">T2 → T1</code> থাকলে সিরিয়াল অর্ডারে <code class="code-font">T2</code> আগে বসবে, <code class="code-font">T1</code> পরে বসবে।</li>
+          </ul>
+        </div>
+
+        <!-- Quick Revision Table -->
+        <div>
+          <h3 class="text-lg font-bold text-slate-900 mb-3">C. One-Glance Quick Revision Table</h3>
+          <div class="overflow-x-auto border border-slate-200 rounded-2xl">
+            <table class="w-full text-xs sm:text-sm text-left border-collapse">
+              <thead class="bg-slate-900 text-white">
+                <tr>
+                  <th class="p-3">Concept</th>
+                  <th class="p-3">Key Rule / Formula</th>
+                  <th class="p-3">Exam Identification</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                <tr>
+                  <td class="p-3 font-bold">Atomicity</td>
+                  <td class="p-3">All or Nothing (Managed by Recovery System)</td>
+                  <td class="p-3">Rollback on crash between <code class="code-font">write(A)</code> &amp; <code class="code-font">write(B)</code></td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-bold">Consistency</td>
+                  <td class="p-3"><code class="code-font">A(before) + B(before) = A(after) + B(after)</code></td>
+                  <td class="p-3">Total sum of balances remains constant</td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-bold">Partially Committed</td>
+                  <td class="p-3">After final statement executes, before disk flush</td>
+                  <td class="p-3">Can still transition to <strong>Failed</strong> state</td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-bold">Conflict Condition</td>
+                  <td class="p-3">Different Tx + Same Data Item + At least one Write</td>
+                  <td class="p-3"><code class="code-font">R-W, W-R, W-W</code> (Not <code class="code-font">R-R</code>)</td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-bold">Conflict Serializability</td>
+                  <td class="p-3">Precedence Graph <code class="code-font">G=(V,E)</code> must be <strong>Acyclic</strong></td>
+                  <td class="p-3">No cycle → Serializable; Cycle → Not Serializable</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 5-Mark Short Notes Summary -->
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-blue-50/70 border border-blue-200 rounded-2xl p-4 space-y-2">
+            <h4 class="font-bold text-blue-950 text-sm">5-Mark Exam Answer: Serial vs Non-Serial Schedule</h4>
+            <p class="text-xs text-slate-800 leading-relaxed">
+              <strong>Serial Schedule:</strong> A schedule in which transactions execute one after another without any interleaving of operations. It always preserves database consistency, but suffers from low CPU/disk utilization and high waiting time.
+              <br><strong>Non-Serial Schedule:</strong> A schedule where operations of multiple concurrent transactions are interleaved. It increases system throughput and reduces response time, though it requires concurrency control (serializability) to preserve consistency.
+            </p>
+          </div>
+          <div class="bg-blue-50/70 border border-blue-200 rounded-2xl p-4 space-y-2">
+            <h4 class="font-bold text-blue-950 text-sm">5-Mark Exam Answer: Testing Conflict Serializability</h4>
+            <p class="text-xs text-slate-800 leading-relaxed">
+              Conflict serializability of a schedule <code class="code-font">S</code> is tested using a directed <strong>Precedence Graph</strong> <code class="code-font">G = (V, E)</code>, where <code class="code-font">V</code> is the set of transactions and <code class="code-font">E</code> is the set of directed edges. A directed edge <code class="code-font">Ti → Tj</code> is drawn if <code class="code-font">Ti</code> executes a conflicting operation (<code class="code-font">W-R</code>, <code class="code-font">R-W</code>, or <code class="code-font">W-W</code>) on a data item <code class="code-font">Q</code> before <code class="code-font">Tj</code>. If <code class="code-font">G</code> contains a cycle, <code class="code-font">S</code> is not conflict serializable. If <code class="code-font">G</code> is acyclic, <code class="code-font">S</code> is conflict serializable and the equivalent serial order is found by <strong>topological sorting</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="text-center text-xs text-slate-500 py-6 border-t border-slate-200">
+        CSE-302 Database Systems • Chapter 11: Transaction (Complete Bilingual Study Note) • Ready for Browser Viewing &amp; Printing
+      </footer>
+
+    </main>
+  </div>
+
+  <script>
+    // Mobile sidebar toggle
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar.classList.contains('hidden')) {
+        sidebar.classList.remove('hidden');
+        sidebar.classList.add('fixed', 'inset-0', 'z-50', 'bg-slate-900/50', 'p-4', 'flex', 'justify-center', 'items-start');
+      } else {
+        sidebar.classList.add('hidden');
+        sidebar.classList.remove('fixed', 'inset-0', 'z-50', 'bg-slate-900/50', 'p-4', 'flex', 'justify-center', 'items-start');
+      }
+    }
+
+    // Close mobile sidebar when clicking any navigation link
+    document.querySelectorAll('#sidebar a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 1024) {
+          const sidebar = document.getElementById('sidebar');
+          sidebar.classList.add('hidden');
+          sidebar.classList.remove('fixed', 'inset-0', 'z-50', 'bg-slate-900/50', 'p-4', 'flex', 'justify-center', 'items-start');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

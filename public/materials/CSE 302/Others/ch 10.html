@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSE-302: Chapter 10 — Indexing &amp; B+ Tree (Complete Bilingual Study Guide)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Hind Siliguri', 'sans-serif'],
+            bangla: ['Hind Siliguri', 'Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', 'Hind Siliguri', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    .bangla-text {
+      font-family: 'Hind Siliguri', sans-serif;
+      line-height: 1.75;
+    }
+    .code-font {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .slide-badge {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background-color: #ffffff !important;
+      }
+      .page-card {
+        break-inside: avoid;
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-blue-200 selection:text-blue-900">
+
+  <!-- Sticky Header -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl slide-badge text-white flex items-center justify-center font-bold text-lg shadow">
+          B+
+        </div>
+        <div>
+          <h1 class="font-bold text-slate-900 text-sm sm:text-base leading-tight">CSE-302: Database Systems</h1>
+          <p class="text-xs text-slate-500">Chapter 10: Indexing &amp; B+ Tree Creation (Slides 1–40)</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="toggleSidebar()" class="lg:hidden px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+          Contents
+        </button>
+        <button onclick="window.print()" class="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-sm transition">
+          Print / Save PDF
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
+
+    <!-- Sidebar Table of Contents -->
+    <aside id="sidebar" class="hidden lg:block lg:w-80 shrink-0 no-print">
+      <div class="sticky top-24 bg-white rounded-2xl border border-slate-200 shadow-sm p-5 max-h-[calc(100vh-7rem)] overflow-y-auto">
+        <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+          <h2 class="font-bold text-slate-800 text-sm uppercase tracking-wider">Page-by-Page Index</h2>
+          <span class="text-xs bg-blue-100 text-blue-700 font-semibold px-2 py-0.5 rounded-full">40 Slides</span>
+        </div>
+
+        <nav class="space-y-1 text-xs">
+          <a href="#slides-1-5" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 1–5:</span> Indexing Basics, I/O Cost, Storage &amp; Search Key
+          </a>
+          <a href="#slides-6-10" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 6–10:</span> Ordered Index, Primary Index (Dense vs Sparse)
+          </a>
+          <a href="#slides-11-15" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 11–15:</span> Clustering Index &amp; Secondary Index
+          </a>
+          <a href="#slides-16-22" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 16–22:</span> B+ Tree Structure, Properties, Leaf &amp; Non-leaf Nodes
+          </a>
+          <a href="#slides-23-28" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 23–28:</span> B+ Tree Insertion Part 1 (Insert 1, 4, 7, 10, 17, 21)
+          </a>
+          <a href="#slides-29-36" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 29–36:</span> B+ Tree Insertion Part 2 (Insert 31, 25, 19, 20 &amp; Root Split)
+          </a>
+          <a href="#slides-37-40" class="block px-3 py-2 rounded-lg hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-medium">
+            <span class="font-bold text-blue-600">Slides 37–40:</span> B+ Tree Insertion Part 3 (Insert 28, 42 &amp; Final Linked Tree)
+          </a>
+          <a href="#practice-exam" class="block px-3 py-2 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 font-semibold mt-2">
+            Exam Mastery: Solved Exercises, Validation Rules &amp; Revision
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Study Content -->
+    <main class="flex-1 min-w-0 space-y-10">
+
+      <!-- Hero Banner -->
+      <section class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-xl">
+        <div class="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold mb-4">
+          <span>Slide 1 • Course: CSE-302 Database Systems</span>
+          <span>•</span>
+          <span>Lecturer: Antu Chowdhury, Dept. of CSE</span>
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-3">
+          Chapter 10: Indexing &amp; B+ Tree Index Files
+        </h1>
+        <p class="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">
+          Complete, zero-skip bilingual study guide following every page (Slides 1–40). Includes easy Bangla intuition, exam-ready English answers, comparison tables, and every single intermediate diagram of the B+ Tree insertion walkthrough.
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-white/10 text-xs">
+          <div class="bg-white/5 rounded-xl p-3">
+            <div class="text-blue-300 font-semibold">Language Format</div>
+            <div class="text-white font-bold mt-0.5">Easy Bangla + Exam English</div>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3">
+            <div class="text-emerald-300 font-semibold">Coverage</div>
+            <div class="text-white font-bold mt-0.5">All 40 Slides in Exact Order</div>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3">
+            <div class="text-amber-300 font-semibold">B+ Tree Walkthrough</div>
+            <div class="text-white font-bold mt-0.5">Order n = 4 (12 Keys Traced)</div>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3">
+            <div class="text-purple-300 font-semibold">Exam Focus</div>
+            <div class="text-white font-bold mt-0.5">5 &amp; 8 Marks Ready Answers</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 1 - 5: INDEXING BASICS & STORAGE -->
+      <!-- ===================================================================== -->
+      <section id="slides-1-5" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 1, 2, 3, 4 &amp; 5</span>
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Fundamentals &amp; Storage</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">1. Introduction to Indexing, I/O Cost &amp; Basic Concepts</h2>
+
+        <!-- Bangla Explanation -->
+        <div class="bg-emerald-50/70 border-l-4 border-emerald-500 rounded-r-2xl p-5 space-y-3">
+          <h3 class="font-bold text-emerald-900 text-base">সহজ বাংলায় ব্যাখ্যা (Slides 2–5)</h3>
+          <p class="bangla-text text-slate-800 text-sm sm:text-base">
+            <strong>১. Indexing কী? (Slide 2):</strong> ডাটাবেজ টেবিলের লক্ষ-কোটি রো (Row) প্রতিটি একে একে না খুঁজে খুব দ্রুত নির্দিষ্ট ডাটা খুঁজে বের করার পদ্ধতিকে <strong>Indexing</strong> বলে।
+            <br><strong>বাস্তব জীবনের উদাহরণ (Slide 5):</strong> একটি ৫০০ পৃষ্ঠার বইয়ের শুরুতে যেমন <strong>সূচিপত্র (Table of Contents / Index)</strong> থাকে—যেখান থেকে আমরা সরাসরি জানতে পারি কোন টপিক কত নম্বর পৃষ্ঠায় আছে—ঠিক তেমনি ডাটাবেজের সূচিপত্রই হলো <strong>Index File</strong>। লাইব্রেরিতে লেখকের নাম অনুযায়ী কার্ড ক্যাটালগ (Author catalog) খুঁজে বই বের করাও Indexing-এর উদাহরণ।
+          </p>
+          <p class="bangla-text text-slate-800 text-sm sm:text-base">
+            <strong>২. Why Indexing? এবং I/O Cost কী? (Slide 3):</strong>
+            <br>• <strong>I/O Cost (Input/Output Cost):</strong> ডাটাবেজ থেকে কোনো রেকর্ড খোঁজা বা আপডেট করার সময় হার্ডডিস্ক থেকে কতবার ডাটা পড়তে (Disk Read) বা লিখতে (Disk Write) হয়, সেই সংখ্যাকে <strong>I/O Cost</strong> বলে। হার্ডডিস্ক থেকে ডাটা পড়া অনেক ধীরগতির কাজ। Indexing ব্যবহার করলে অল্প কয়েকটি ব্লক পড়েই কাঙ্ক্ষিত রেকর্ড পাওয়া যায়, ফলে <strong>I/O Cost অনেক কমে যায়</strong>।
+            <br>• <strong>Primary Storage vs Secondary Storage (Slide 3):</strong>
+              <br>— <em>Primary Storage (যেমন: RAM / Main Memory):</em> CPU সরাসরি এর ওপর কাজ করতে পারে। এটি খুব দ্রুতগতির, কিন্তু দামি এবং আকারে ছোট।
+              <br>— <em>Secondary Storage (যেমন: Hard Disk / SSD):</em> এর ধারণক্ষমতা অনেক বড়, দাম কম, কিন্তু গতি ধীর। CPU সরাসরি হার্ডডিস্কের ডাটা প্রসেস করতে পারে না; আগে হার্ডডিস্ক থেকে ডাটা কপি করে Primary Storage (RAM)-এ আনতে হয়।
+          </p>
+          <p class="bangla-text text-slate-800 text-sm sm:text-base">
+            <strong>৩. সব ডাটা কেন Main Memory (RAM)-এ রাখা যায় না? (Slide 4):</strong>
+            <br>১) <strong>Cost and Size:</strong> RAM-এর দাম হার্ডডিস্কের তুলনায় অনেক বেশি এবং এর জায়গা সীমিত (তাই টেরাবাইট বা পেটাবাইট ডাটা রাখা সম্ভব নয়)।
+            <br>২) <strong>Volatile (অস্থায়ী মেমোরি):</strong> RAM হলো Volatile—অর্থাৎ কম্পিউটার বন্ধ হলে বা কারেন্ট চলে গেলে RAM-এর সব ডাটা চিরতরে মুছে যায়! তাই স্থায়ীভাবে ডাটা রাখতে Secondary Storage-ই ব্যবহার করতে হয়।
+          </p>
+          <p class="bangla-text text-slate-800 text-sm sm:text-base">
+            <strong>৪. Search Key এবং Index File-এর গঠন (Slide 5):</strong>
+            <br>• <strong>Search Key:</strong> যে কলাম বা অ্যাট্রিবিউটের মান ব্যবহার করে আমরা ফাইলে রেকর্ড খুঁজি, তাকে <strong>Search Key</strong> বলে (যেমন: Student ID বা Instructor Name)।
+            <br>• <strong>Index File &amp; Index Entry:</strong> Index File মূল ডাটা ফাইলের চেয়ে আকারে অনেক ছোট হয়। এর প্রতিটি রেকর্ডের (Index Entry) দুটি অংশ থাকে:
+          </p>
+
+          <!-- Visual Diagram of Index Entry -->
+          <div class="bg-white p-4 rounded-xl border border-emerald-200 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div class="flex border-2 border-blue-700 rounded-lg overflow-hidden text-xs font-bold code-font shadow-sm">
+              <div class="bg-blue-100 text-blue-950 px-5 py-2.5 border-r-2 border-blue-700">search-key</div>
+              <div class="bg-amber-100 text-amber-950 px-5 py-2.5">pointer</div>
+            </div>
+            <span class="bangla-text text-xs text-slate-700">← প্রতিটি <strong>Index Entry</strong>-তে একটি Search Key এবং মূল রেকর্ডের ঠিকানা (Pointer) থাকে।</span>
+          </div>
+        </div>
+
+        <!-- Exam English Answer -->
+        <div class="bg-blue-50/70 border-l-4 border-blue-600 rounded-r-2xl p-5 space-y-2.5">
+          <h3 class="font-bold text-blue-950 text-base">Exam-Ready English Answer (5 Marks)</h3>
+          <p class="text-slate-800 text-sm leading-relaxed">
+            <strong>Definition of Indexing:</strong> Indexing is a data structure technique used in DBMS to quickly locate and access records in a database file without scanning every row sequentially.
+            <br><strong>Why Indexing is Needed (I/O Cost):</strong> Database files are stored on secondary storage (disk), which cannot be operated directly by the CPU and must be copied into primary storage (main memory). <strong>I/O cost</strong> refers to the number of disk read/write operations required to retrieve or update data. Indexing significantly reduces this I/O cost.
+            <br><strong>Why Not Store Everything in Main Memory?</strong> (1) Main memory is expensive and limited in size, and (2) Main memory is <strong>volatile</strong>, meaning all data is lost when power is turned off.
+            <br><strong>Search Key &amp; Index File:</strong> A <em>search key</em> is an attribute or set of attributes used to look up records. An <em>index file</em> consists of compact records called <em>index entries</em> of the form <code class="code-font font-bold">&lt;search-key, pointer&gt;</code>, making the index file much smaller than the original data file.
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 6 - 10: INDEXING METHODS, ORDERED, PRIMARY (DENSE VS SPARSE) -->
+      <!-- ===================================================================== -->
+      <section id="slides-6-10" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 6, 7, 8, 9 &amp; 10</span>
+          <span class="text-xs font-semibold text-amber-600 uppercase tracking-wider">Primary Index: Dense vs Sparse</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">2. Indexing Methods: Ordered Index &amp; Primary Index (Dense vs Sparse)</h2>
+
+        <!-- Slide 6 Hierarchy SVG -->
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col items-center">
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Classification of Indexing Methods (Slide 6)</p>
+          <svg viewBox="0 0 720 220" class="w-full max-w-3xl h-auto">
+            <defs>
+              <marker id="arr-idx" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#334155" />
+              </marker>
+            </defs>
+            <!-- Top Node -->
+            <rect x="275" y="10" width="170" height="40" rx="8" fill="#ec4899" />
+            <text x="360" y="35" text-anchor="middle" fill="#ffffff" font-weight="700" font-size="14">Indexing methods</text>
+
+            <!-- Level 1 Lines -->
+            <line x1="320" y1="50" x2="90" y2="95" stroke="#334155" stroke-width="2" marker-end="url(#arr-idx)" />
+            <line x1="345" y1="50" x2="270" y2="95" stroke="#334155" stroke-width="2" marker-end="url(#arr-idx)" />
+            <line x1="375" y1="50" x2="450" y2="95" stroke="#334155" stroke-width="2" marker-end="url(#arr-idx)" />
+            <line x1="400" y1="50" x2="630" y2="95" stroke="#334155" stroke-width="2" marker-end="url(#arr-idx)" />
+
+            <!-- Level 1 Boxes -->
+            <rect x="15" y="98" width="150" height="40" rx="8" fill="#1d4ed8" />
+            <text x="90" y="123" text-anchor="middle" fill="#ffffff" font-weight="600" font-size="13">Ordered indices</text>
+
+            <rect x="195" y="98" width="150" height="40" rx="8" fill="#1d4ed8" />
+            <text x="270" y="123" text-anchor="middle" fill="#ffffff" font-weight="600" font-size="13">Primary Index</text>
+
+            <rect x="375" y="98" width="150" height="40" rx="8" fill="#1d4ed8" />
+            <text x="450" y="123" text-anchor="middle" fill="#ffffff" font-weight="600" font-size="13">Clustering Index</text>
+
+            <rect x="555" y="98" width="150" height="40" rx="8" fill="#1d4ed8" />
+            <text x="630" y="123" text-anchor="middle" fill="#ffffff" font-weight="600" font-size="13">Secondary Index</text>
+
+            <!-- Level 2 Lines under Primary Index -->
+            <line x1="250" y1="138" x2="185" y2="175" stroke="#334155" stroke-width="2" marker-end="url(#arr-idx)" />
+            <line x1="290" y1="138" x2="355" y2="175" stroke="#334155" stroke-width="2" marker-end="url(#arr-idx)" />
+
+            <!-- Level 2 Boxes -->
+            <rect x="115" y="178" width="140" height="36" rx="8" fill="#15803d" />
+            <text x="185" y="201" text-anchor="middle" fill="#ffffff" font-weight="600" font-size="12">Dense index</text>
+
+            <rect x="285" y="178" width="140" height="36" rx="8" fill="#15803d" />
+            <text x="355" y="201" text-anchor="middle" fill="#ffffff" font-weight="600" font-size="12">Sparse index</text>
+          </svg>
+        </div>
+
+        <!-- Bangla Explanation of Ordered, Primary, Dense & Sparse -->
+        <div class="bg-emerald-50/70 border-l-4 border-emerald-500 rounded-r-2xl p-5 space-y-3">
+          <h3 class="font-bold text-emerald-900 text-base">সহজ বাংলায় ব্যাখ্যা (Slides 7–10)</h3>
+          <p class="bangla-text text-sm text-slate-800">
+            <strong>১. Ordered Index (Slide 7):</strong> যে ইনডেক্সে Search Key-এর মানগুলো ছোট থেকে বড় (Sorted order) সাজানো থাকে, তাকে Ordered Index বলে।
+            <br><strong>২. Primary Index (Slide 8):</strong> যখন মূল ডাটা টেবিলটি তার <strong>Primary Key</strong> অনুযায়ী সাজানো (Sorted) থাকে এবং সেই Primary Key-এর ওপর ভিত্তি করে ইনডেক্স তৈরি করা হয়, তখন তাকে <strong>Primary Index</strong> বলে। যেহেতু Primary Key প্রতিটি রেকর্ডের জন্য অনন্য (Unique), তাই এখানে ১:১ (1:1) সম্পর্ক থাকে। এটি ২ প্রকার: <strong>Dense Index</strong> এবং <strong>Sparse Index</strong>।
+          </p>
+
+          <div class="grid md:grid-cols-2 gap-5 pt-2">
+            <!-- Dense Index Card -->
+            <div class="bg-white rounded-2xl border border-blue-200 p-4 space-y-2.5">
+              <h4 class="font-bold text-blue-900 text-base">Dense Index (Slide 9)</h4>
+              <p class="bangla-text text-xs sm:text-sm text-slate-800">
+                <strong>সংজ্ঞা:</strong> মূল টেবিলের <strong>প্রতিটি</strong> Search-key মানের জন্য ইনডেক্স ফাইলে একটি করে এন্ট্রি থাকলে তাকে Dense Index বলে। অর্থাৎ মূল টেবিলে ১২টি রেকর্ড থাকলে ইনডেক্স টেবিলেও ১২টি রেকর্ড থাকবে।
+                <br><strong>সুবিধা:</strong> খুব দ্রুত সরাসরি রেকর্ডে পৌঁছানো যায় (১ ধাপেই ঠিকানা পাওয়া যায়)।
+                <br><strong>অসুবিধা:</strong> ইনডেক্স ফাইলের আকার বড় হয় এবং নতুন রেকর্ড যোগ/মুছলে সব এন্ট্রি আপডেট করতে হয়।
+              </p>
+              <!-- Mini Diagram -->
+              <div class="bg-blue-50/60 p-2.5 rounded-xl text-[11px] code-font">
+                <div class="font-bold text-blue-900 mb-1">Slide 9 Example (Every ID in Index):</div>
+                <div>Index [10101] ──▶ [10101 | Srinivasan | Comp. Sci. | 65000]</div>
+                <div>Index [12121] ──▶ [12121 | Wu         | Finance    | 90000]</div>
+                <div>Index [15151] ──▶ [15151 | Mozart     | Music      | 40000]</div>
+                <div class="text-slate-500">... (All 12 instructor IDs have index entries)</div>
+              </div>
+            </div>
+
+            <!-- Sparse Index Card -->
+            <div class="bg-white rounded-2xl border border-emerald-200 p-4 space-y-2.5">
+              <h4 class="font-bold text-emerald-900 text-base">Sparse Index (Slide 10)</h4>
+              <p class="bangla-text text-xs sm:text-sm text-slate-800">
+                <strong>সংজ্ঞা:</strong> মূল টেবিলের সব রেকর্ডের জন্য নয়, বরং <strong>কিছু নির্দিষ্ট</strong> (যেমন প্রতিটি ব্লকের প্রথম) Search-key মানের জন্য ইনডেক্স এন্ট্রি থাকলে তাকে Sparse Index বলে। শর্ত হলো: মূল ফাইলটি অবশ্যই Search Key অনুযায়ী সাজানো থাকতে হবে।
+                <br><strong>কীভাবে কাজ করে (Slide 10)?</strong> ধরো আমরা <strong>K = 22222 (Einstein)</strong> খুঁজছি, কিন্তু ইনডেক্সে শুধু <strong>10101, 32343, 76766</strong> আছে। সিস্টেম প্রথমে 22222-এর চেয়ে ছোট বা সমান সবচেয়ে বড় মান <strong>10101</strong> খুঁজে তার পয়েন্টার ধরে মূল টেবিলে যাবে, এবং সেখান থেকে নিচে স্ক্যান (Sequential search) করে 22222 বের করবে!
+                <br><strong>সুবিধা:</strong> ইনডেক্স ফাইল খুব ছোট হয় এবং মেমোরি কম লাগে।
+              </p>
+              <!-- Mini Diagram -->
+              <div class="bg-emerald-50/60 p-2.5 rounded-xl text-[11px] code-font">
+                <div class="font-bold text-emerald-900 mb-1">Slide 10 Example (Only 3 entries for 12 rows):</div>
+                <div>Index [10101] ──▶ [10101 | Srinivasan] → (scan down to 22222)</div>
+                <div>Index [32343] ──▶ [32343 | El Said]</div>
+                <div>Index [76766] ──▶ [76766 | Crick]</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dense vs Sparse Comparison Table -->
+        <div class="overflow-x-auto border border-slate-200 rounded-2xl">
+          <table class="w-full text-xs sm:text-sm text-left border-collapse">
+            <thead class="bg-slate-900 text-white">
+              <tr>
+                <th class="p-3">Feature</th>
+                <th class="p-3">Dense Index</th>
+                <th class="p-3">Sparse Index</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr>
+                <td class="p-3 font-bold">Index Entries</td>
+                <td class="p-3">Contains an index entry for <strong>every</strong> search-key value in the file.</td>
+                <td class="p-3">Contains index entries for <strong>only some</strong> search-key values (e.g., one per block).</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">Size &amp; Space</td>
+                <td class="p-3">Requires more storage space (larger index file).</td>
+                <td class="p-3">Requires much less space and maintenance overhead.</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">Search Speed</td>
+                <td class="p-3">Faster lookup (direct pointer to exact record).</td>
+                <td class="p-3">Slightly slower (requires sequential scan inside the target block).</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">File Ordering Requirement</td>
+                <td class="p-3">Can work even if data records are not sequentially ordered (in secondary dense index).</td>
+                <td class="p-3"><strong>Strictly requires</strong> the data file to be physically sorted on the search key.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 11 - 15: CLUSTERING INDEX & SECONDARY INDEX -->
+      <!-- ===================================================================== -->
+      <section id="slides-11-15" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 11, 12, 13, 14 &amp; 15</span>
+          <span class="text-xs font-semibold text-amber-600 uppercase tracking-wider">Clustering vs Secondary Index</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">3. Clustering Index &amp; Secondary Index (Slides 11–15)</h2>
+
+        <!-- Bangla Explanation -->
+        <div class="bg-emerald-50/70 border-l-4 border-emerald-500 rounded-r-2xl p-5 space-y-4">
+          <h3 class="font-bold text-emerald-900 text-base">সহজ বাংলায় ব্যাখ্যা: Clustering Index ও Secondary Index</h3>
+
+          <div class="space-y-2 bangla-text text-sm text-slate-800">
+            <p>
+              <strong>১. Clustering Index কী? (Slides 11, 12 &amp; 13):</strong>
+              <br>ধরো আমাদের টেবিলটি Primary Key (ID) অনুযায়ী সাজানো নয়, বরং একটি <strong>Non-key attribute</strong> (যেমন: <code class="code-font font-bold">dept_name</code> বা <code class="code-font font-bold">Dept_ID</code>) অনুযায়ী শারীরিকভাবে সাজানো (Physically Sorted) আছে! অর্থাৎ Biology ডিপার্টমেন্টের সব শিক্ষক একসাথে, তারপর Comp. Sci.-এর সব শিক্ষক একসাথে, তারপর Elec. Eng.-এর সব শিক্ষক একসাথে।
+              <br>• এখানে <code class="code-font">dept_name</code> কোনো Primary Key নয় (কারণ একাধিক শিক্ষকের ডিপার্টমেন্ট একই হতে পারে — Non-unique key)।
+              <br>• প্রতিটি ইউনিক ডিপার্টমেন্টের নামের জন্য ইনডেক্স টেবিলে মাত্র <strong>একটি করে এন্ট্রি</strong> থাকে যা ওই ডিপার্টমেন্টের <strong>প্রথম রেকর্ডটিকে</strong> নির্দেশ করে। যদি একটি ব্লকে সব রেকর্ড না ধরে, তবে <strong>Block-level pointer</strong> দিয়ে পরের ব্লকগুলো যুক্ত থাকে (Slide 11 &amp; 13)।
+            </p>
+            <p>
+              <strong>২. Secondary Index কী? (Slides 14 &amp; 15):</strong>
+              <br>মূল ডাটা টেবিলটি সাধারণত Primary Key (যেমন ID: 10101, 12121, 15151...) অনুযায়ী সাজানো থাকে। এখন তুমি যদি এমন একটি কলামের ওপর সার্চ করতে চাও যা দিয়ে টেবিলটি সাজানো <strong>নয়</strong> (যেমন: <code class="code-font font-bold">salary</code> — 40000, 60000, 62000...), তবে মূল টেবিলের সাজানো ক্রম নষ্ট না করে আলাদা একটি সাজানো ইনডেক্স তৈরি করা হয়—একেই <strong>Secondary Index</strong> বলে।
+              <br>• <strong>কীভাবে কাজ করে (Slide 15)?</strong> যেহেতু একই বেতন (যেমন <strong>80000</strong>) একাধিক শিক্ষকের (Singh, Kim) থাকতে পারে এবং মূল টেবিলে তারা ছড়িয়ে-ছিটিয়ে আছে, তাই Secondary Index-এর এন্ট্রিটি সরাসরি রেকর্ডে না গিয়ে মাঝখানের একটি <strong>Intermediate Layer (Bucket of record pointers)</strong>-এ পয়েন্ট করে। সেই বাকেটে 80000 বেতন পাওয়া সব শিক্ষকের ঠিকানা (Pointers) জমা থাকে!
+              <br>• <strong>মনে রাখার কৌশল:</strong> Secondary Index সবসময় <strong>Dense</strong> হতে হয় (কারণ মূল টেবিলটি ওই কলাম অনুযায়ী সাজানো নেই)।
+            </p>
+          </div>
+
+          <!-- Slide 12 & Slide 15 Visual Diagrams -->
+          <div class="grid lg:grid-cols-2 gap-4 pt-2">
+            <!-- Slide 12 Clustering Diagram -->
+            <div class="bg-white border border-purple-200 rounded-2xl p-4">
+              <div class="font-bold text-purple-900 text-xs mb-2">Slide 12: Clustering Index on <code class="code-font">dept_name</code> (Data Sorted by Dept)</div>
+              <div class="text-[11px] code-font space-y-1 text-slate-800">
+                <div class="bg-purple-50 p-1.5 rounded"><strong>[Biology]</strong> ───▶ [76766 | Crick | <strong>Biology</strong> | 72000]</div>
+                <div class="bg-purple-50 p-1.5 rounded"><strong>[Comp. Sci.]</strong> ─▶ [10101 | Srinivasan | <strong>Comp. Sci.</strong> | 65000]<br><span class="pl-16 text-slate-500">↳ followed physically by 45565 (Katz), 83821 (Brandt)</span></div>
+                <div class="bg-purple-50 p-1.5 rounded"><strong>[Elec. Eng.]</strong> ─▶ [98345 | Kim | <strong>Elec. Eng.</strong> | 80000]</div>
+                <div class="bg-purple-50 p-1.5 rounded"><strong>[Finance]</strong> ───▶ [12121 | Wu | <strong>Finance</strong> | 90000] + 76543 (Singh)</div>
+              </div>
+            </div>
+
+            <!-- Slide 15 Secondary Index Diagram -->
+            <div class="bg-white border border-amber-200 rounded-2xl p-4">
+              <div class="font-bold text-amber-900 text-xs mb-2">Slide 15: Secondary Index on <code class="code-font">salary</code> (Data Sorted by ID)</div>
+              <div class="text-[11px] code-font space-y-1 text-slate-800">
+                <div class="bg-amber-50 p-1.5 rounded"><strong>[40000]</strong> ─▶ [Bucket] ─▶ Row 3: [15151 | Mozart | <strong>40000</strong>]</div>
+                <div class="bg-amber-50 p-1.5 rounded"><strong>[65000]</strong> ─▶ [Bucket] ─▶ Row 1: [10101 | Srinivasan | <strong>65000</strong>]</div>
+                <div class="bg-amber-50 p-1.5 rounded"><strong>[80000]</strong> ─▶ [Bucket with 2 pointers]<br><span class="pl-12 text-amber-800">├─▶ Row 9:  [76543 | Singh | <strong>80000</strong>]</span><br><span class="pl-12 text-amber-800">└─▶ Row 12: [98345 | Kim   | <strong>80000</strong>]</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Primary vs Clustering vs Secondary Comparison Table -->
+        <div class="overflow-x-auto border border-slate-200 rounded-2xl">
+          <table class="w-full text-xs sm:text-sm text-left border-collapse">
+            <thead class="bg-slate-900 text-white">
+              <tr>
+                <th class="p-3">Criteria</th>
+                <th class="p-3">Primary Index</th>
+                <th class="p-3">Clustering Index</th>
+                <th class="p-3">Secondary Index</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr>
+                <td class="p-3 font-bold">Attribute Type</td>
+                <td class="p-3">Built on <strong>Primary Key</strong> (Unique values).</td>
+                <td class="p-3">Built on <strong>Non-key attribute</strong> (Duplicate values allowed).</td>
+                <td class="p-3">Built on <strong>Non-ordering attribute</strong> (Candidate key or non-key).</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">Physical Ordering of Data File</td>
+                <td class="p-3">Data file is <strong>physically sorted</strong> on this Primary Key.</td>
+                <td class="p-3">Data file is <strong>physically sorted</strong> on this Non-key field.</td>
+                <td class="p-3">Data file is <strong>NOT sorted</strong> on this field (sorted by another key).</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">Dense or Sparse?</td>
+                <td class="p-3">Can be either <strong>Dense</strong> or <strong>Sparse</strong>.</td>
+                <td class="p-3">Usually <strong>Sparse</strong> (one entry per distinct key value).</td>
+                <td class="p-3">Must be <strong>Dense</strong> (uses pointer buckets for duplicates).</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold">Number per Table</td>
+                <td class="p-3">At most <strong>1</strong> per table.</td>
+                <td class="p-3">At most <strong>1</strong> per table (mutually exclusive with Primary).</td>
+                <td class="p-3">Can have <strong>many</strong> secondary indexes per table.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 16 - 22: B+ TREE STRUCTURE & PROPERTIES -->
+      <!-- ===================================================================== -->
+      <section id="slides-16-22" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 16, 17, 18, 19, 20, 21 &amp; 22</span>
+          <span class="text-xs font-semibold text-rose-600 uppercase tracking-wider">B+ Tree Architecture &amp; Formulas</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">4. B+ Tree Index Files: Structure, Nodes &amp; Mathematical Properties</h2>
+
+        <!-- Bangla Absolute Zero Explanation -->
+        <div class="bg-emerald-50/70 border-l-4 border-emerald-500 rounded-r-2xl p-5 space-y-3">
+          <h3 class="font-bold text-emerald-900 text-base">একদম শূন্য থেকে B+ Tree কী এবং কেন? (Slides 16–22)</h3>
+          <p class="bangla-text text-sm text-slate-800">
+            সাধারণ Sequential Index ফাইল বড় হতে থাকলে তাতে নতুন রেকর্ড ইনসার্ট বা ডিলিট করা খুব ধীরগতির হয়ে যায়। এই সমস্যা সমাধানে <strong>B+ Tree</strong> ব্যবহৃত হয়, যা একটি স্বয়ংক্রিয়ভাবে ব্যালেন্সড (Self-balancing) Multi-level Tree Index।
+          </p>
+          <ul class="bangla-text list-disc list-inside text-sm text-slate-800 space-y-2 bg-white p-4 rounded-xl border border-emerald-200">
+            <li><strong>Root Node (মূল নোড):</strong> গাছের একদম উপরের নোড, যেখান থেকে যেকোনো সার্চ শুরু হয়।</li>
+            <li><strong>Internal / Non-leaf Node (অভ্যন্তরীণ নোড — Slide 20):</strong> Root এবং Leaf-এর মাঝখানের নোডগুলো। এরা শুধু পথনির্দেশক (Routing/Guide) হিসেবে কাজ করে—অর্থাৎ কোন দিকে গেলে কাঙ্ক্ষিত ডাটা পাওয়া যাবে তা বলে দেয়। এদের কোনো ডাটা রেকর্ডের সাথে সরাসরি পয়েন্টার থাকে না।</li>
+            <li><strong>Leaf Node (পাতা নোড — Slide 21):</strong> গাছের একদম নিচের স্তরের নোডগুলো। <strong>সব আসল Search Key এবং ডাটা রেকর্ডের পয়েন্টার শুধু Leaf Node-এ থাকে!</strong> এছাড়া প্রতিটি Leaf Node-এর ডানপাশে একটি পয়েন্টার থাকে যা পাশের (পরবর্তী) Leaf Node-কে যুক্ত করে (Linked List-এর মতো), যাতে রেঞ্জ কুয়েরি (যেমন: ১০ থেকে ৫০ পর্যন্ত সব ডাটা দেখাও) খুব দ্রুত করা যায়।</li>
+            <li><strong>কেন সব Leaf Node একই লেভেলে (Same Level) থাকে? (Slide 18):</strong> কারণ B+ Tree একটি Balanced Tree। Root থেকে যেকোনো Leaf Node-এ যেতে সমান সংখ্যক ধাপ (Disk I/O) লাগে, ফলে প্রতিটি সার্চের সময় সমান ও অত্যন্ত দ্রুত হয়।</li>
+          </ul>
+        </div>
+
+        <!-- Slide 18, 19, 20, 21 Formulas & Node Anatomy -->
+        <div class="grid lg:grid-cols-2 gap-6">
+          <!-- Rules Box (Slide 18 & 22) -->
+          <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 space-y-3">
+            <h3 class="font-bold text-blue-300 text-base">B+ Tree Rules for Order = <code class="code-font text-amber-300">n</code> (Slide 18 &amp; 22)</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-left border-collapse">
+                <thead class="border-b border-slate-700 text-blue-200">
+                  <tr>
+                    <th class="py-2 pr-2">Node Type</th>
+                    <th class="py-2 px-2">Minimum</th>
+                    <th class="py-2 pl-2">Maximum</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 code-font">
+                  <tr>
+                    <td class="py-2.5 font-sans font-semibold text-white">Non-leaf (Internal) Children</td>
+                    <td class="py-2.5 text-emerald-300">&lceil;n / 2&rceil;</td>
+                    <td class="py-2.5 text-amber-300">n</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 font-sans font-semibold text-white">Non-leaf (Internal) Keys</td>
+                    <td class="py-2.5 text-emerald-300">&lceil;n / 2&rceil; - 1</td>
+                    <td class="py-2.5 text-amber-300">n - 1</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 font-sans font-semibold text-white">Leaf Node Keys (Values)</td>
+                    <td class="py-2.5 text-emerald-300">&lceil;(n - 1) / 2&rceil;</td>
+                    <td class="py-2.5 text-amber-300">n - 1</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 font-sans font-semibold text-white">Root Node (when not leaf)</td>
+                    <td class="py-2.5 text-emerald-300">2 children (1 key)</td>
+                    <td class="py-2.5 text-amber-300">n children (n-1 keys)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-xs text-slate-300 pt-1">
+              <strong>Slide 22 Check (n = 6):</strong> Leaf keys = <code class="code-font">&lceil;5/2&rceil; = 3</code> to <code class="code-font">5</code>. Non-leaf children = <code class="code-font">&lceil;6/2&rceil; = 3</code> to <code class="code-font">6</code>.
+            </p>
+          </div>
+
+          <!-- Slide 20 & 21 Visual SVG -->
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-3">
+            <h3 class="font-bold text-slate-900 text-sm">Node Routing &amp; Leaf Structure (Slides 19, 20 &amp; 21)</h3>
+            <svg viewBox="0 0 420 215" class="w-full h-auto">
+              <defs>
+                <marker id="arr-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e3a8a" />
+                </marker>
+              </defs>
+              <!-- Non-leaf Node (Slide 20) -->
+              <text x="10" y="16" font-size="11" font-weight="700" fill="#1e3a8a">Non-Leaf Node Routing (Slide 20):</text>
+              <rect x="95" y="24" width="230" height="34" rx="4" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2" />
+              <line x1="120" y1="24" x2="120" y2="58" stroke="#1d4ed8" stroke-width="1.5" />
+              <line x1="175" y1="24" x2="175" y2="58" stroke="#1d4ed8" stroke-width="1.5" />
+              <line x1="195" y1="24" x2="195" y2="58" stroke="#1d4ed8" stroke-width="1.5" />
+              <line x1="250" y1="24" x2="250" y2="58" stroke="#1d4ed8" stroke-width="1.5" />
+              <line x1="270" y1="24" x2="270" y2="58" stroke="#1d4ed8" stroke-width="1.5" />
+
+              <text x="147" y="46" text-anchor="middle" font-size="13" font-weight="700">120</text>
+              <text x="222" y="46" text-anchor="middle" font-size="13" font-weight="700">150</text>
+              <text x="297" y="46" text-anchor="middle" font-size="13" font-weight="700">180</text>
+
+              <!-- 4 Routing Arrows -->
+              <line x1="107" y1="58" x2="55" y2="92" stroke="#1e3a8a" stroke-width="1.8" marker-end="url(#arr-b)" />
+              <line x1="185" y1="58" x2="155" y2="92" stroke="#1e3a8a" stroke-width="1.8" marker-end="url(#arr-b)" />
+              <line x1="260" y1="58" x2="275" y2="92" stroke="#1e3a8a" stroke-width="1.8" marker-end="url(#arr-b)" />
+              <line x1="315" y1="58" x2="365" y2="92" stroke="#1e3a8a" stroke-width="1.8" marker-end="url(#arr-b)" />
+
+              <text x="45" y="106" text-anchor="middle" font-size="10" font-weight="700" fill="#1d4ed8">k &lt; 120</text>
+              <text x="155" y="106" text-anchor="middle" font-size="10" font-weight="700" fill="#1d4ed8">120 &le; k &lt; 150</text>
+              <text x="275" y="106" text-anchor="middle" font-size="10" font-weight="700" fill="#1d4ed8">150 &le; k &lt; 180</text>
+              <text x="370" y="106" text-anchor="middle" font-size="10" font-weight="700" fill="#1d4ed8">k &ge; 180</text>
+
+              <!-- Leaf Node (Slide 21) -->
+              <text x="10" y="132" font-size="11" font-weight="700" fill="#15803d">Leaf Node Structure (Slide 21):</text>
+              <rect x="85" y="142" width="190" height="34" rx="4" fill="#dcfce7" stroke="#16a34a" stroke-width="2" />
+              <line x1="145" y1="142" x2="145" y2="176" stroke="#16a34a" stroke-width="1.5" />
+              <line x1="205" y1="142" x2="205" y2="176" stroke="#16a34a" stroke-width="1.5" />
+              <line x1="245" y1="142" x2="245" y2="176" stroke="#16a34a" stroke-width="1.5" />
+
+              <text x="115" y="164" text-anchor="middle" font-size="13" font-weight="700">120</text>
+              <text x="175" y="164" text-anchor="middle" font-size="13" font-weight="700">130</text>
+
+              <line x1="115" y1="176" x2="115" y2="202" stroke="#15803d" stroke-width="1.8" marker-end="url(#arr-b)" />
+              <line x1="175" y1="176" x2="175" y2="202" stroke="#15803d" stroke-width="1.8" marker-end="url(#arr-b)" />
+              <line x1="275" y1="159" x2="335" y2="159" stroke="#15803d" stroke-width="2" marker-end="url(#arr-b)" />
+
+              <text x="115" y="212" text-anchor="middle" font-size="9.5" font-weight="600">To record 120</text>
+              <text x="185" y="212" text-anchor="middle" font-size="9.5" font-weight="600">To record 130</text>
+              <text x="342" y="162" font-size="10" font-weight="700" fill="#15803d">Next leaf</text>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- SLIDES 23 - 40: COMPLETE B+ TREE CREATION WALKTHROUGH (ORDER n = 4) -->
+      <!-- ===================================================================== -->
+      <section id="slides-23-28" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <span class="slide-badge text-white text-xs font-bold px-3 py-1 rounded-full">Slides 23 to 40 (Complete Walkthrough)</span>
+          <span class="text-xs font-semibold text-rose-600 uppercase tracking-wider">Most Important Problem-Solving Section</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900">5. Step-by-Step B+ Tree Creation (Order n = 4) — Following Every Slide</h2>
+
+        <!-- Rules & Splitting Convention Box (Slides 23-24) -->
+        <div class="bg-amber-50 border-l-4 border-amber-500 rounded-r-2xl p-5 space-y-3">
+          <h3 class="font-bold text-amber-950 text-base">Slide 23 &amp; 24 Setup &amp; Golden Rules (খুব মনোযোগ দিয়ে পড়ো!)</h3>
+          <div class="grid sm:grid-cols-2 gap-3 text-xs sm:text-sm">
+            <div class="bg-white p-3.5 rounded-xl border border-amber-200 code-font space-y-1">
+              <div><strong>Order, n = 4</strong></div>
+              <div>• Non-leaf Max children = <strong>4</strong> (Max keys = <strong>3</strong>)</div>
+              <div>• Non-leaf Min children = <strong>&lceil;4/2&rceil; = 2</strong> (Min keys = <strong>1</strong>)</div>
+              <div>• Leaf node Max keys = <strong>(4 - 1) = 3</strong></div>
+              <div>• Leaf node Min keys = <strong>&lceil;(4 - 1)/2&rceil; = &lceil;1.5&rceil; = 2</strong></div>
+            </div>
+            <div class="bg-white p-3.5 rounded-xl border border-amber-200 bangla-text space-y-1">
+              <div><strong>Lecture Convention (Slides 24, 35, 36):</strong></div>
+              <div>১. নতুন ডাটা <strong>সবসময় Leaf Node-এ</strong> ইনসার্ট হয়।</div>
+              <div>২. যখন কোনো নোডে ৩টির বেশি (৪টি) কী জমে <strong>Overflow</strong> হয়, তখন মাঝখানের দুটি কী-এর মধ্যে <strong>ডানপাশেরটি (Right-biased / 3rd element)</strong> বেছে Split করা হয় (Slide 24: 4 ও 7-এর মধ্যে <strong>7</strong> নেওয়া হয়েছে)।</div>
+              <div>৩. <strong>Leaf Split</strong> হলে প্রোমোট করা কী-টি <strong>ডান পাশের Leaf-এ কপি হয়ে থেকে যায়</strong> এবং Parent-এও যায়।</div>
+              <div>৪. <strong>Internal Node Split</strong> হলে প্রোমোট করা কী-টি <strong>সরাসরি উপরে উঠে যায় (Moved up)</strong> — Internal node-এ রিপিট হয় না (Slide 36: <em>"We can not repeat elements in internal node"</em>)!</div>
+            </div>
+          </div>
+          <div class="bg-slate-900 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm code-font">
+            Input Sequence (12 keys): <strong>1, 4, 7, 10, 17, 21, 31, 25, 19, 20, 28, 42</strong>
+          </div>
+        </div>
+
+        <!-- STEP-BY-STEP CARDS (EVERY SINGLE SLIDE 23 TO 40) -->
+        <div class="space-y-6">
+
+          <!-- STEP 1: Slide 23 (Insert 1, 4, 7) -->
+          <div class="border border-slate-200 rounded-2xl p-5 bg-slate-50/50 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-blue-900 text-sm">Step 1 (Slide 23): Insert 1, Insert 4, Insert 7</span>
+              <span class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-semibold">No Overflow (3/3 keys)</span>
+            </div>
+            <p class="bangla-text text-xs sm:text-sm text-slate-700">
+              শুরুতে গাছ খালি। একটি Leaf Node (যা একই সাথে Root) তৈরি করে প্রথমে <strong>1</strong>, তারপর <strong>4</strong>, এবং তারপর <strong>7</strong> সাজিয়ে বসাই। যেহেতু Leaf Node-এ সর্বোচ্চ <strong>3টি</strong> কী থাকতে পারে, তাই এখনো কোনো Overflow হয়নি।
+            </p>
+            <div class="flex flex-wrap items-center gap-4 code-font text-sm">
+              <div class="bg-white border-2 border-amber-500 rounded-lg px-3 py-1.5 shadow-sm">Insert 1 → <strong>[ 1 | _ | _ ]</strong></div>
+              <div class="bg-white border-2 border-amber-500 rounded-lg px-3 py-1.5 shadow-sm">Insert 4 → <strong>[ 1 | 4 | _ ]</strong></div>
+              <div class="bg-white border-2 border-amber-500 rounded-lg px-3 py-1.5 shadow-sm">Insert 7 → <strong>[ 1 | 4 | 7 ]</strong></div>
+            </div>
+          </div>
+
+          <!-- STEP 2: Slides 24 & 25 (Insert 10 -> Split at 7) -->
+          <div class="border border-rose-200 rounded-2xl p-5 bg-rose-50/20 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-rose-900 text-sm">Step 2 (Slides 24 &amp; 25): Insert 10 → Leaf Overflow! Split at 7 (Right-Biased)</span>
+              <span class="text-xs bg-rose-100 text-rose-800 px-2.5 py-0.5 rounded-full font-semibold">Leaf Split + New Root</span>
+            </div>
+            <p class="bangla-text text-xs sm:text-sm text-slate-800">
+              <strong>১. কী ঘটল?</strong> Leaf Node <code class="code-font">[1, 4, 7]</code>-এ <strong>10</strong> বসালে অস্থায়ীভাবে 4টি কী হয়: <code class="code-font font-bold">[1, 4, 7, 10]</code> &gt; Max (3)। অর্থাৎ <strong>Overflow</strong>!
+              <br><strong>২. কোন কী প্রোমোট হবে (Slide 24)?</strong> মাঝখানের দুটি সংখ্যা 4 এবং 7। আমাদের লেকচারের <strong>Right-biased</strong> নিয়ম অনুযায়ী <strong>7</strong>-কে বেছে নেওয়া হলো।
+              <br><strong>৩. Split-এর ফলাফল (Slide 25):</strong> বাম Leaf-এ থাকবে <code class="code-font">[1, 4]</code>, ডান Leaf-এ থাকবে <code class="code-font">[7, 10]</code> (7 কপি হয়ে ডান Leaf-এ থাকবে), এবং <strong>7</strong> উপরে উঠে নতুন Root তৈরি করবে।
+            </p>
+            <!-- SVG Slide 25 -->
+            <div class="bg-white border border-slate-200 rounded-xl p-3 flex justify-center">
+              <svg viewBox="0 0 420 140" class="w-full max-w-md h-auto">
+                <defs>
+                  <marker id="arr-t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb" />
+                  </marker>
+                </defs>
+                <!-- Root [7] -->
+                <rect x="150" y="10" width="120" height="32" rx="4" fill="#fff7ed" stroke="#f97316" stroke-width="2" />
+                <line x1="190" y1="10" x2="190" y2="42" stroke="#f97316" stroke-width="1.5" />
+                <line x1="230" y1="10" x2="230" y2="42" stroke="#f97316" stroke-width="1.5" />
+                <text x="170" y="31" text-anchor="middle" font-size="14" font-weight="700">7</text>
+
+                <!-- Arrows -->
+                <line x1="155" y1="42" x2="100" y2="86" stroke="#2563eb" stroke-width="2" marker-end="url(#arr-t)" />
+                <line x1="195" y1="42" x2="310" y2="86" stroke="#2563eb" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <!-- Left Leaf [1, 4] -->
+                <rect x="30" y="90" width="135" height="32" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="75" y1="90" x2="75" y2="122" stroke="#eab308" stroke-width="1.5" />
+                <line x1="120" y1="90" x2="120" y2="122" stroke="#eab308" stroke-width="1.5" />
+                <text x="52" y="111" text-anchor="middle" font-size="14" font-weight="700">1</text>
+                <text x="97" y="111" text-anchor="middle" font-size="14" font-weight="700">4</text>
+
+                <!-- Leaf Link -->
+                <line x1="165" y1="106" x2="245" y2="106" stroke="#16a34a" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <!-- Right Leaf [7, 10] -->
+                <rect x="250" y="90" width="135" height="32" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="295" y1="90" x2="295" y2="122" stroke="#eab308" stroke-width="1.5" />
+                <line x1="340" y1="90" x2="340" y2="122" stroke="#eab308" stroke-width="1.5" />
+                <text x="272" y="111" text-anchor="middle" font-size="14" font-weight="700">7</text>
+                <text x="317" y="111" text-anchor="middle" font-size="14" font-weight="700">10</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- STEP 3: Slides 26, 27 & 28 (Insert 17, Insert 21 -> Split at 17) -->
+          <div class="border border-rose-200 rounded-2xl p-5 bg-rose-50/20 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-rose-900 text-sm">Step 3 (Slides 26, 27 &amp; 28): Insert 17, then Insert 21 → Split at 17</span>
+              <span class="text-xs bg-rose-100 text-rose-800 px-2.5 py-0.5 rounded-full font-semibold">Leaf Split</span>
+            </div>
+            <p class="bangla-text text-xs sm:text-sm text-slate-800">
+              • <strong>Insert 17 (Slide 26):</strong> 17 &ge; 7 হওয়ায় ডান Leaf-এ গিয়ে বসবে → <code class="code-font">[7, 10, 17]</code> (Valid, 3 keys)।
+              <br>• <strong>Insert 21 (Slide 27 &amp; 28):</strong> ডান Leaf-এ 21 বসালে হয় <code class="code-font font-bold">[7, 10, 17, 21]</code> → <strong>Overflow!</strong> মাঝখানের ডান দিকের সংখ্যা <strong>17</strong>-এ Split হবে। ফলে <code class="code-font">[7, 10]</code> এবং <code class="code-font">[17, 21]</code> তৈরি হবে, আর <strong>17</strong> কপি হয়ে Root-এ যুক্ত হয়ে Root হবে <code class="code-font font-bold">[7, 17]</code>।
+            </p>
+            <!-- SVG Slide 28 -->
+            <div class="bg-white border border-slate-200 rounded-xl p-3 flex justify-center">
+              <svg viewBox="0 0 520 145" class="w-full max-w-xl h-auto">
+                <!-- Root [7, 17] -->
+                <rect x="195" y="10" width="130" height="32" rx="4" fill="#fff7ed" stroke="#f97316" stroke-width="2" />
+                <line x1="238" y1="10" x2="238" y2="42" stroke="#f97316" stroke-width="1.5" />
+                <line x1="281" y1="10" x2="281" y2="42" stroke="#f97316" stroke-width="1.5" />
+                <text x="216" y="31" text-anchor="middle" font-size="14" font-weight="700">7</text>
+                <text x="259" y="31" text-anchor="middle" font-size="14" font-weight="700">17</text>
+
+                <!-- 3 Child Arrows -->
+                <line x1="200" y1="42" x2="80" y2="88" stroke="#2563eb" stroke-width="2" marker-end="url(#arr-t)" />
+                <line x1="242" y1="42" x2="260" y2="88" stroke="#2563eb" stroke-width="2" marker-end="url(#arr-t)" />
+                <line x1="285" y1="42" x2="435" y2="88" stroke="#2563eb" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <!-- Leaf 1: [1, 4] -->
+                <rect x="20" y="92" width="120" height="32" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="60" y1="92" x2="60" y2="124" stroke="#eab308" stroke-width="1.5" />
+                <line x1="100" y1="92" x2="100" y2="124" stroke="#eab308" stroke-width="1.5" />
+                <text x="40" y="113" text-anchor="middle" font-size="14" font-weight="700">1</text>
+                <text x="80" y="113" text-anchor="middle" font-size="14" font-weight="700">4</text>
+
+                <line x1="140" y1="108" x2="195" y2="108" stroke="#16a34a" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <!-- Leaf 2: [7, 10] -->
+                <rect x="200" y="92" width="120" height="32" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="240" y1="92" x2="240" y2="124" stroke="#eab308" stroke-width="1.5" />
+                <line x1="280" y1="92" x2="280" y2="124" stroke="#eab308" stroke-width="1.5" />
+                <text x="220" y="113" text-anchor="middle" font-size="14" font-weight="700">7</text>
+                <text x="260" y="113" text-anchor="middle" font-size="14" font-weight="700">10</text>
+
+                <line x1="320" y1="108" x2="375" y2="108" stroke="#16a34a" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <!-- Leaf 3: [17, 21] -->
+                <rect x="380" y="92" width="120" height="32" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="420" y1="92" x2="420" y2="124" stroke="#eab308" stroke-width="1.5" />
+                <line x1="460" y1="92" x2="460" y2="124" stroke="#eab308" stroke-width="1.5" />
+                <text x="400" y="113" text-anchor="middle" font-size="14" font-weight="700">17</text>
+                <text x="440" y="113" text-anchor="middle" font-size="14" font-weight="700">21</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- STEP 4: Slides 29, 30, 31 & 32 (Insert 31, Insert 25 -> Split at 25, Insert 19) -->
+          <div id="slides-29-36" class="border border-rose-200 rounded-2xl p-5 bg-rose-50/20 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-rose-900 text-sm">Step 4 (Slides 29–32): Insert 31, Insert 25 (Split at 25), then Insert 19</span>
+              <span class="text-xs bg-rose-100 text-rose-800 px-2.5 py-0.5 rounded-full font-semibold">Leaf Split + Root Full (3/3)</span>
+            </div>
+            <p class="bangla-text text-xs sm:text-sm text-slate-800">
+              • <strong>Insert 31 (Slide 29):</strong> 31 &ge; 17 হওয়ায় তৃতীয় Leaf-এ বসে হয় <code class="code-font">[17, 21, 31]</code> (3 keys, Valid)।
+              <br>• <strong>Insert 25 (Slides 30 &amp; 31):</strong> তৃতীয় Leaf-এ 25 বসালে সাজিয়ে হয় <code class="code-font font-bold">[17, 21, 25, 31]</code> → <strong>Overflow!</strong> Right-biased নিয়মে <strong>25</strong>-এ Split হবে। ফলে <code class="code-font">[17, 21]</code> এবং <code class="code-font">[25, 31]</code> তৈরি হবে, আর <strong>25</strong> Root-এ গিয়ে Root পূর্ণ করবে: <code class="code-font font-bold">[7, 17, 25]</code>।
+              <br>• <strong>Insert 19 (Slide 32):</strong> 17 &le; 19 &lt; 25 হওয়ায় <code class="code-font">[17, 21]</code> Leaf-এ বসে হয় <code class="code-font font-bold">[17, 19, 21]</code> (3 keys, Valid)।
+            </p>
+            <!-- SVG Slide 32 -->
+            <div class="bg-white border border-slate-200 rounded-xl p-3 flex justify-center">
+              <svg viewBox="0 0 640 150" class="w-full max-w-2xl h-auto">
+                <!-- Root [7, 17, 25] -->
+                <rect x="245" y="10" width="150" height="32" rx="4" fill="#fff7ed" stroke="#f97316" stroke-width="2" />
+                <line x1="295" y1="10" x2="295" y2="42" stroke="#f97316" stroke-width="1.5" />
+                <line x1="345" y1="10" x2="345" y2="42" stroke="#f97316" stroke-width="1.5" />
+                <text x="270" y="31" text-anchor="middle" font-size="14" font-weight="700">7</text>
+                <text x="320" y="31" text-anchor="middle" font-size="14" font-weight="700">17</text>
+                <text x="370" y="31" text-anchor="middle" font-size="14" font-weight="700">25</text>
+
+                <!-- 4 Arrows -->
+                <line x1="250" y1="42" x2="75" y2="90" stroke="#2563eb" stroke-width="2" marker-end="url(#arr-t)" />
+                <line x1="298" y1="42" x2="235" y2="90" stroke="#2563eb" stroke-width="2" marker-end="url(#arr-t)" />
+                <line x1="348" y1="42" x2="395" y2="90" stroke="#2563eb" stroke-width="2" marker-end="url(#arr-t)" />
+                <line x1="392" y1="42" x2="555" y2="90" stroke="#2563eb" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <!-- 4 Leaves -->
+                <rect x="15" y="94" width="120" height="32" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="55" y1="94" x2="55" y2="126" stroke="#eab308" stroke-width="1.5" />
+                <line x1="95" y1="94" x2="95" y2="126" stroke="#eab308" stroke-width="1.5" />
+                <text x="35" y="115" text-anchor="middle" font-size="13" font-weight="700">1</text>
+                <text x="75" y="115" text-anchor="middle" font-size="13" font-weight="700">4</text>
+
+                <line x1="135" y1="110" x2="170" y2="110" stroke="#16a34a" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <rect x="175" y="94" width="120" height="32" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="215" y1="94" x2="215" y2="126" stroke="#eab308" stroke-width="1.5" />
+                <line x1="255" y1="94" x2="255" y2="126" stroke="#eab308" stroke-width="1.5" />
+                <text x="195" y="115" text-anchor="middle" font-size="13" font-weight="700">7</text>
+                <text x="235" y="115" text-anchor="middle" font-size="13" font-weight="700">10</text>
+
+                <line x1="295" y1="110" x2="330" y2="110" stroke="#16a34a" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <rect x="335" y="94" width="120" height="32" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="375" y1="94" x2="375" y2="126" stroke="#eab308" stroke-width="1.5" />
+                <line x1="415" y1="94" x2="415" y2="126" stroke="#eab308" stroke-width="1.5" />
+                <text x="355" y="115" text-anchor="middle" font-size="13" font-weight="700">17</text>
+                <text x="395" y="115" text-anchor="middle" font-size="13" font-weight="700">19</text>
+                <text x="435" y="115" text-anchor="middle" font-size="13" font-weight="700">21</text>
+
+                <line x1="455" y1="110" x2="490" y2="110" stroke="#16a34a" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <rect x="495" y="94" width="120" height="32" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="535" y1="94" x2="535" y2="126" stroke="#eab308" stroke-width="1.5" />
+                <line x1="575" y1="94" x2="575" y2="126" stroke="#eab308" stroke-width="1.5" />
+                <text x="515" y="115" text-anchor="middle" font-size="13" font-weight="700">25</text>
+                <text x="555" y="115" text-anchor="middle" font-size="13" font-weight="700">31</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- STEP 5: Slides 33, 34, 35 & 36 (Insert 20 -> Double Split: Leaf + Root!) -->
+          <div class="border-2 border-purple-400 rounded-2xl p-5 bg-purple-50/30 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-purple-950 text-sm">Step 5 (Slides 33, 34, 35 &amp; 36): Insert 20 → Double Split (Leaf Split + Root Split!)</span>
+              <span class="text-xs bg-purple-700 text-white px-2.5 py-0.5 rounded-full font-bold">CRITICAL EXAM STEP</span>
+            </div>
+            <p class="bangla-text text-xs sm:text-sm text-slate-800">
+              <strong>এই ধাপটি পরীক্ষার জন্য সবচেয়ে গুরুত্বপূর্ণ! ভালোভাবে বোঝো:</strong>
+              <br><strong>১. Leaf-এ ইনসার্ট ও স্প্লিট (Slide 33 &amp; 34):</strong> 20 গিয়ে বসবে <code class="code-font">[17, 19, 21]</code> Leaf-এ। তখন সেটি হয় <code class="code-font font-bold">[17, 19, 20, 21]</code> → <strong>Overflow!</strong> Right-biased নিয়মে <strong>20</strong>-এ Split হবে। ফলে দুটি Leaf তৈরি হবে: <code class="code-font">[17, 19]</code> এবং <code class="code-font">[20, 21]</code>। আর <strong>20</strong> উপরে Parent (Root)-এ যাবে।
+              <br><strong>২. Root Node Overflow ও স্প্লিট (Slides 34, 35 &amp; 36):</strong> Root আগে থেকেই পূর্ণ ছিল <code class="code-font">[7, 17, 25]</code>। এখন 20 যুক্ত হলে Root-এ অস্থায়ীভাবে 4টি কী হয়: <code class="code-font font-bold">[7, 17, 20, 25]</code> → <strong>Root Overflow!</strong>
+              <br><strong>৩. Internal/Root Split-এর নিয়ম (Slide 36):</strong> মাঝখানের ডান সংখ্যা <strong>20</strong> উপরে উঠে <strong>নতুন Root</strong> হবে! কিন্তু মনে রাখবে: <em>"We can not repeat elements in internal node" (Slide 36)</em> — অর্থাৎ 20 যখন Internal/Root নোড থেকে উপরে উঠবে, তখন সেটি নিচের Internal নোডে আর কপি থাকবে না (সরাসরি Move up হবে)! তাই বাম Internal নোড হবে <code class="code-font font-bold">[7, 17]</code> এবং ডান Internal নোড হবে <code class="code-font font-bold">[25]</code>!
+            </p>
+            <!-- SVG Slide 36 -->
+            <div class="bg-white border border-slate-200 rounded-xl p-3 flex justify-center">
+              <svg viewBox="0 0 680 205" class="w-full max-w-2xl h-auto">
+                <!-- New Root [20] -->
+                <rect x="280" y="8" width="120" height="30" rx="4" fill="#f3e8ff" stroke="#7e22ce" stroke-width="2.2" />
+                <line x1="320" y1="8" x2="320" y2="38" stroke="#7e22ce" stroke-width="1.5" />
+                <line x1="360" y1="8" x2="360" y2="38" stroke="#7e22ce" stroke-width="1.5" />
+                <text x="300" y="28" text-anchor="middle" font-size="14" font-weight="800" fill="#581c87">20</text>
+
+                <!-- Root to Internal Arrows -->
+                <line x1="285" y1="38" x2="180" y2="74" stroke="#2563eb" stroke-width="2" marker-end="url(#arr-t)" />
+                <line x1="325" y1="38" x2="495" y2="74" stroke="#2563eb" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <!-- Left Internal [7, 17] -->
+                <rect x="115" y="76" width="130" height="30" rx="4" fill="#fff7ed" stroke="#f97316" stroke-width="2" />
+                <line x1="158" y1="76" x2="158" y2="106" stroke="#f97316" stroke-width="1.5" />
+                <line x1="201" y1="76" x2="201" y2="106" stroke="#f97316" stroke-width="1.5" />
+                <text x="136" y="96" text-anchor="middle" font-size="13" font-weight="700">7</text>
+                <text x="179" y="96" text-anchor="middle" font-size="13" font-weight="700">17</text>
+
+                <!-- Right Internal [25] (20 NOT repeated!) -->
+                <rect x="440" y="76" width="120" height="30" rx="4" fill="#fff7ed" stroke="#f97316" stroke-width="2" />
+                <line x1="480" y1="76" x2="480" y2="106" stroke="#f97316" stroke-width="1.5" />
+                <line x1="520" y1="76" x2="520" y2="106" stroke="#f97316" stroke-width="1.5" />
+                <text x="460" y="96" text-anchor="middle" font-size="13" font-weight="700">25</text>
+
+                <!-- Internal to 5 Leaves Arrows -->
+                <line x1="120" y1="106" x2="65" y2="148" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arr-t)" />
+                <line x1="162" y1="106" x2="195" y2="148" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arr-t)" />
+                <line x1="205" y1="106" x2="325" y2="148" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arr-t)" />
+                <line x1="445" y1="106" x2="455" y2="148" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arr-t)" />
+                <line x1="485" y1="106" x2="585" y2="148" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arr-t)" />
+
+                <!-- 5 Leaf Nodes -->
+                <rect x="10" y="152" width="110" height="30" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="46" y1="152" x2="46" y2="182" stroke="#eab308" stroke-width="1.2" />
+                <line x1="82" y1="152" x2="82" y2="182" stroke="#eab308" stroke-width="1.2" />
+                <text x="28" y="172" text-anchor="middle" font-size="12" font-weight="700">1</text>
+                <text x="64" y="172" text-anchor="middle" font-size="12" font-weight="700">4</text>
+
+                <line x1="120" y1="167" x2="138" y2="167" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arr-t)" />
+
+                <rect x="142" y="152" width="110" height="30" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="178" y1="152" x2="178" y2="182" stroke="#eab308" stroke-width="1.2" />
+                <line x1="214" y1="152" x2="214" y2="182" stroke="#eab308" stroke-width="1.2" />
+                <text x="160" y="172" text-anchor="middle" font-size="12" font-weight="700">7</text>
+                <text x="196" y="172" text-anchor="middle" font-size="12" font-weight="700">10</text>
+
+                <line x1="252" y1="167" x2="270" y2="167" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arr-t)" />
+
+                <rect x="274" y="152" width="110" height="30" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="310" y1="152" x2="310" y2="182" stroke="#eab308" stroke-width="1.2" />
+                <line x1="346" y1="152" x2="346" y2="182" stroke="#eab308" stroke-width="1.2" />
+                <text x="292" y="172" text-anchor="middle" font-size="12" font-weight="700">17</text>
+                <text x="328" y="172" text-anchor="middle" font-size="12" font-weight="700">19</text>
+
+                <line x1="384" y1="167" x2="402" y2="167" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arr-t)" />
+
+                <rect x="406" y="152" width="110" height="30" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="442" y1="152" x2="442" y2="182" stroke="#eab308" stroke-width="1.2" />
+                <line x1="478" y1="152" x2="478" y2="182" stroke="#eab308" stroke-width="1.2" />
+                <text x="424" y="172" text-anchor="middle" font-size="12" font-weight="700">20</text>
+                <text x="460" y="172" text-anchor="middle" font-size="12" font-weight="700">21</text>
+
+                <line x1="516" y1="167" x2="534" y2="167" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arr-t)" />
+
+                <rect x="538" y="152" width="110" height="30" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="574" y1="152" x2="574" y2="182" stroke="#eab308" stroke-width="1.2" />
+                <line x1="610" y1="152" x2="610" y2="182" stroke="#eab308" stroke-width="1.2" />
+                <text x="556" y="172" text-anchor="middle" font-size="12" font-weight="700">25</text>
+                <text x="592" y="172" text-anchor="middle" font-size="12" font-weight="700">31</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- STEP 6: Slides 37, 38, 39 & 40 (Insert 28, Insert 42 -> Split at 31 — FINAL TREE) -->
+          <div id="slides-37-40" class="border-2 border-emerald-500 rounded-2xl p-5 bg-emerald-50/30 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-emerald-950 text-sm">Step 6 (Slides 37, 38, 39 &amp; 40): Insert 28, Insert 42 → Split at 31 (FINAL B+ TREE)</span>
+              <span class="text-xs bg-emerald-700 text-white px-2.5 py-0.5 rounded-full font-bold">FINAL RESULT (SLIDE 40)</span>
+            </div>
+            <p class="bangla-text text-xs sm:text-sm text-slate-800">
+              • <strong>Insert 28 (Slide 37):</strong> 28 &ge; 20 এবং 28 &ge; 25 হওয়ায় একদম ডানের Leaf <code class="code-font">[25, 31]</code>-এ গিয়ে সাজিয়ে বসবে → <code class="code-font font-bold">[25, 28, 31]</code> (3 keys, Valid)।
+              <br>• <strong>Insert 42 (Slides 38, 39 &amp; 40):</strong> 42 গিয়ে <code class="code-font">[25, 28, 31]</code> Leaf-এ বসলে হয় <code class="code-font font-bold">[25, 28, 31, 42]</code> → <strong>Overflow!</strong> Right-biased নিয়মে <strong>31</strong>-এ Split হবে। ফলে দুটি Leaf তৈরি হবে: <code class="code-font">[25, 28]</code> এবং <code class="code-font">[31, 42]</code>। আর <strong>31</strong> উপরে ডান Internal Node <code class="code-font">[25]</code>-এ যুক্ত হয়ে হবে <code class="code-font font-bold">[25, 31]</code>। নিচে সব Leaf Node বাম থেকে ডানে সুন্দরভাবে লিংকড আছে!
+            </p>
+            <!-- Final SVG Slide 39 & 40 -->
+            <div class="bg-white border border-slate-200 rounded-xl p-4 flex justify-center overflow-x-auto">
+              <svg viewBox="0 0 760 220" class="w-full max-w-3xl h-auto">
+                <!-- Root [20] -->
+                <rect x="320" y="8" width="120" height="32" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="2.5" />
+                <line x1="360" y1="8" x2="360" y2="40" stroke="#15803d" stroke-width="1.5" />
+                <line x1="400" y1="8" x2="400" y2="40" stroke="#15803d" stroke-width="1.5" />
+                <text x="340" y="29" text-anchor="middle" font-size="14" font-weight="800" fill="#14532d">20</text>
+
+                <!-- Root Arrows -->
+                <line x1="325" y1="40" x2="185" y2="78" stroke="#2563eb" stroke-width="2" marker-end="url(#arr-t)" />
+                <line x1="365" y1="40" x2="555" y2="78" stroke="#2563eb" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <!-- Left Internal [7, 17] -->
+                <rect x="120" y="80" width="130" height="32" rx="4" fill="#fff7ed" stroke="#f97316" stroke-width="2" />
+                <line x1="163" y1="80" x2="163" y2="112" stroke="#f97316" stroke-width="1.5" />
+                <line x1="206" y1="80" x2="206" y2="112" stroke="#f97316" stroke-width="1.5" />
+                <text x="141" y="101" text-anchor="middle" font-size="14" font-weight="700">7</text>
+                <text x="184" y="101" text-anchor="middle" font-size="14" font-weight="700">17</text>
+
+                <!-- Right Internal [25, 31] -->
+                <rect x="490" y="80" width="130" height="32" rx="4" fill="#fff7ed" stroke="#f97316" stroke-width="2" />
+                <line x1="533" y1="80" x2="533" y2="112" stroke="#f97316" stroke-width="1.5" />
+                <line x1="576" y1="80" x2="576" y2="112" stroke="#f97316" stroke-width="1.5" />
+                <text x="511" y="101" text-anchor="middle" font-size="14" font-weight="700">25</text>
+                <text x="554" y="101" text-anchor="middle" font-size="14" font-weight="700">31</text>
+
+                <!-- 6 Child Arrows -->
+                <line x1="125" y1="112" x2="60" y2="158" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arr-t)" />
+                <line x1="168" y1="112" x2="185" y2="158" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arr-t)" />
+                <line x1="210" y1="112" x2="310" y2="158" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arr-t)" />
+
+                <line x1="495" y1="112" x2="435" y2="158" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arr-t)" />
+                <line x1="538" y1="112" x2="560" y2="158" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arr-t)" />
+                <line x1="580" y1="112" x2="685" y2="158" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arr-t)" />
+
+                <!-- 6 Leaf Nodes -->
+                <!-- L1: 1, 4 -->
+                <rect x="8" y="162" width="102" height="32" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="42" y1="162" x2="42" y2="194" stroke="#eab308" stroke-width="1.2" />
+                <line x1="76" y1="162" x2="76" y2="194" stroke="#eab308" stroke-width="1.2" />
+                <text x="25" y="183" text-anchor="middle" font-size="13" font-weight="700">1</text>
+                <text x="59" y="183" text-anchor="middle" font-size="13" font-weight="700">4</text>
+                <line x1="110" y1="178" x2="130" y2="178" stroke="#16a34a" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <!-- L2: 7, 10 -->
+                <rect x="134" y="162" width="102" height="32" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="168" y1="162" x2="168" y2="194" stroke="#eab308" stroke-width="1.2" />
+                <line x1="202" y1="162" x2="202" y2="194" stroke="#eab308" stroke-width="1.2" />
+                <text x="151" y="183" text-anchor="middle" font-size="13" font-weight="700">7</text>
+                <text x="185" y="183" text-anchor="middle" font-size="13" font-weight="700">10</text>
+                <line x1="236" y1="178" x2="256" y2="178" stroke="#16a34a" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <!-- L3: 17, 19 -->
+                <rect x="260" y="162" width="102" height="32" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="294" y1="162" x2="294" y2="194" stroke="#eab308" stroke-width="1.2" />
+                <line x1="328" y1="162" x2="328" y2="194" stroke="#eab308" stroke-width="1.2" />
+                <text x="277" y="183" text-anchor="middle" font-size="13" font-weight="700">17</text>
+                <text x="311" y="183" text-anchor="middle" font-size="13" font-weight="700">19</text>
+                <line x1="362" y1="178" x2="382" y2="178" stroke="#16a34a" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <!-- L4: 20, 21 -->
+                <rect x="386" y="162" width="102" height="32" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="420" y1="162" x2="420" y2="194" stroke="#eab308" stroke-width="1.2" />
+                <line x1="454" y1="162" x2="454" y2="194" stroke="#eab308" stroke-width="1.2" />
+                <text x="403" y="183" text-anchor="middle" font-size="13" font-weight="700">20</text>
+                <text x="437" y="183" text-anchor="middle" font-size="13" font-weight="700">21</text>
+                <line x1="488" y1="178" x2="508" y2="178" stroke="#16a34a" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <!-- L5: 25, 28 -->
+                <rect x="512" y="162" width="102" height="32" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="546" y1="162" x2="546" y2="194" stroke="#eab308" stroke-width="1.2" />
+                <line x1="580" y1="162" x2="580" y2="194" stroke="#eab308" stroke-width="1.2" />
+                <text x="529" y="183" text-anchor="middle" font-size="13" font-weight="700">25</text>
+                <text x="563" y="183" text-anchor="middle" font-size="13" font-weight="700">28</text>
+                <line x1="614" y1="178" x2="634" y2="178" stroke="#16a34a" stroke-width="2" marker-end="url(#arr-t)" />
+
+                <!-- L6: 31, 42 -->
+                <rect x="638" y="162" width="102" height="32" rx="4" fill="#fefce8" stroke="#eab308" stroke-width="2" />
+                <line x1="672" y1="162" x2="672" y2="194" stroke="#eab308" stroke-width="1.2" />
+                <line x1="706" y1="162" x2="706" y2="194" stroke="#eab308" stroke-width="1.2" />
+                <text x="655" y="183" text-anchor="middle" font-size="13" font-weight="700">31</text>
+                <text x="689" y="183" text-anchor="middle" font-size="13" font-weight="700">42</text>
+              </svg>
+            </div>
+            <div class="bg-white p-3 rounded-xl border border-emerald-200 text-xs text-slate-800">
+              <strong>Final Validity Check (n = 4):</strong> Every leaf has <strong>2 keys</strong> (satisfies Min = 2, Max = 3). Both internal nodes have <strong>2 keys &amp; 3 children</strong> (satisfies Min = 2 children, Max = 4). Root has <strong>1 key &amp; 2 children</strong> (satisfies Min = 2 children). All 6 leaves are at Level 2 and linked sequentially: <code class="code-font font-bold">1, 4 → 7, 10 → 17, 19 → 20, 21 → 25, 28 → 31, 42</code>!
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- PRACTICE EXERCISES, VALIDATION CHECKLIST & REVISION -->
+      <!-- ===================================================================== -->
+      <section id="practice-exam" class="page-card bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-8">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full">Exam Mastery Zone</span>
+          <h2 class="text-2xl font-bold text-slate-900 mt-2">6. Practice Problems, Validation Checklist &amp; Quick Revision</h2>
+        </div>
+
+        <!-- Solved Practice Problems -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-bold text-slate-900">A. Solved B+ Tree Insertion Practice Problems (Using Same Lecture Convention)</h3>
+
+          <!-- Practice 1 -->
+          <div class="border border-slate-200 rounded-2xl p-5 bg-slate-50/60 space-y-2.5 text-xs sm:text-sm">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-bold text-blue-900">Practice Problem 1 (Order n = 4, Multiple Splits): Insert 5, 15, 25, 35, 45, 55, 65, 75</span>
+              <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full font-semibold">Solved Step-by-Step</span>
+            </div>
+            <div class="space-y-1.5 text-slate-800 code-font text-xs">
+              <div><strong>1. Insert 5, 15, 25:</strong> Root/Leaf = <span class="text-blue-700">[5, 15, 25]</span> (Full, 3/3).</div>
+              <div><strong>2. Insert 35:</strong> Overflow <span class="text-rose-700">[5, 15, 25, 35]</span> → Split at <strong>25</strong> → Root: <span class="text-emerald-700">[25]</span>, Leaves: <span class="text-blue-700">[5, 15] → [25, 35]</span>.</div>
+              <div><strong>3. Insert 45:</strong> Goes to right leaf → <span class="text-blue-700">[25, 35, 45]</span>.</div>
+              <div><strong>4. Insert 55:</strong> Overflow <span class="text-rose-700">[25, 35, 45, 55]</span> → Split at <strong>45</strong> → Root: <span class="text-emerald-700">[25, 45]</span>, Leaves: <span class="text-blue-700">[5, 15] → [25, 35] → [45, 55]</span>.</div>
+              <div><strong>5. Insert 65:</strong> Goes to rightmost leaf → <span class="text-blue-700">[45, 55, 65]</span>.</div>
+              <div><strong>6. Insert 75:</strong> Overflow <span class="text-rose-700">[45, 55, 65, 75]</span> → Split at <strong>65</strong> → Root becomes <span class="text-emerald-700 font-bold">[25, 45, 65]</span>, Leaves: <span class="text-blue-700 font-bold">[5, 15] → [25, 35] → [45, 55] → [65, 75]</span>.</div>
+            </div>
+          </div>
+
+          <!-- Practice 2 -->
+          <div class="border border-slate-200 rounded-2xl p-5 bg-slate-50/60 space-y-2.5 text-xs sm:text-sm">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-bold text-purple-900">Practice Problem 2 (Order n = 3): Insert 10, 20, 30, 40, 50</span>
+              <span class="text-xs bg-purple-100 text-purple-800 px-2.5 py-0.5 rounded-full font-semibold">Order n = 3 Trace</span>
+            </div>
+            <p class="text-xs text-slate-700">
+              <strong>Parameters for n = 3:</strong> Max keys per node = <code class="code-font">3 - 1 = 2</code>. Min keys in leaf = <code class="code-font">&lceil;2/2&rceil; = 1</code>. Max children = <code class="code-font">3</code>. When 3 keys accumulate in a node, the middle (2nd) key splits!
+            </p>
+            <div class="space-y-1 text-slate-800 code-font text-xs">
+              <div>• <strong>Insert 10, 20:</strong> Leaf = [10, 20] (Full, 2/2).</div>
+              <div>• <strong>Insert 30:</strong> Overflow [10, 20, 30] → Split at <strong>20</strong> → Root: [20], Leaves: [10] → [20, 30].</div>
+              <div>• <strong>Insert 40:</strong> Overflow [20, 30, 40] → Split at <strong>30</strong> → Root: [20, 30], Leaves: [10] → [20] → [30, 40].</div>
+              <div>• <strong>Insert 50:</strong> Leaf overflow [30, 40, 50] → Split at <strong>40</strong> → Root overflow [20, 30, 40] → Split at <strong>30</strong> (move up!) → Final Root: <strong>[30]</strong>, Internal: <strong>[20]</strong> and <strong>[40]</strong>, Leaves: <strong>[10] → [20] → [30] → [40, 50]</strong>.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5-Step Validation Method & Common Mistakes -->
+        <div class="grid md:grid-cols-2 gap-5">
+          <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-5 space-y-2">
+            <h3 class="font-bold text-emerald-950 text-base">B. 5-Second Final B+ Tree Validation Checklist</h3>
+            <ol class="bangla-text list-decimal list-inside text-xs sm:text-sm text-slate-800 space-y-1.5">
+              <li><strong>Count All Input Keys:</strong> সব ইনপুট ডাটা নিচের Leaf Node গুলোতে ছোট থেকে বড় সাজানো অবস্থায় আছে কি না গুনে দেখো।</li>
+              <li><strong>Check Leaf Node Limits:</strong> প্রতিটি Leaf-এ <code class="code-font">&lceil;(n-1)/2&rceil;</code> থেকে <code class="code-font">n-1</code> সংখ্যক কী আছে কি না দেখো।</li>
+              <li><strong>Check Internal Node Limits:</strong> প্রতিটি Internal Node-এ <code class="code-font">&lceil;n/2&rceil;</code> থেকে <code class="code-font">n</code> সংখ্যক Child এবং <code class="code-font">(Children - 1)</code> সংখ্যক কী আছে কি না দেখো।</li>
+              <li><strong>No Duplicate Internal Keys:</strong> কোনো একটি কী একই সাথে দুটি Internal/Root নোডে আছে কি না দেখো (থাকলে ভুল হয়েছে)।</li>
+              <li><strong>Same Depth + Leaf Links:</strong> সব Leaf Node একদম একই সারিতে আছে কি না এবং বাম থেকে ডানে তীর দিয়ে যুক্ত কি না চেক করো।</li>
+            </ol>
+          </div>
+
+          <div class="bg-rose-50/70 border border-rose-200 rounded-2xl p-5 space-y-2">
+            <h3 class="font-bold text-rose-950 text-base">C. Common Exam Mistakes &amp; How to Avoid Them</h3>
+            <ul class="bangla-text list-disc list-inside text-xs sm:text-sm text-slate-800 space-y-1.5">
+              <li><strong>ভুল ১ (Leaf Split-এ কী মুছে ফেলা):</strong> Leaf Node ভাগ করার সময় প্রোমোট করা কী-টি (যেমন 7 বা 17) ডান পাশের Leaf থেকে মুছে ফেলবে না—এটি ডান Leaf-এ <strong>কপি হয়ে থাকবে</strong>।</li>
+              <li><strong>ভুল ২ (Internal Split-এ কী রিপিট করা):</strong> Slide 36 অনুযায়ী Internal বা Root নোড ভাগ করার সময় মাঝের কী-টি (যেমন 20) উপরে উঠে যাবে, নিচের Internal নোডে <strong>রিপিট হবে না</strong>।</li>
+              <li><strong>ভুল ৩ (Splitting Bias পরিবর্তন করা):</strong> শুরুতে যদি Right-biased (4 ও 7-এর মধ্যে 7) ধরো, তবে পুরো অংকে সব সময় Right-biased নিয়মই অনুসরণ করতে হবে।</li>
+              <li><strong>ভুল ৪ (Leaf Pointer না আঁকা):</strong> পরীক্ষার খাতায় অবশ্যই নিচের Leaf Node গুলোর মাঝে বাম থেকে ডানে সংযোগকারী তীর চিহ্ন (Next leaf pointer) আঁকবে।</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Exam Ready 5-Mark Answers -->
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-blue-50/70 border border-blue-200 rounded-2xl p-4 space-y-2">
+            <h4 class="font-bold text-blue-950 text-sm">5-Mark Exam Answer: What is a B+ Tree &amp; Its Properties?</h4>
+            <p class="text-xs text-slate-800 leading-relaxed">
+              A <strong>B+ Tree</strong> is a balanced multi-level tree index structure that automatically reorganizes itself with small, local changes upon insertions and deletions. For a B+ tree of order <code class="code-font">n</code>:
+              <br>1. All search-key values in a node are kept in sorted order.
+              <br>2. All paths from the root to every leaf node are of the exact same length.
+              <br>3. Each internal (non-leaf, non-root) node has between <code class="code-font">&lceil;n/2&rceil;</code> and <code class="code-font">n</code> children.
+              <br>4. Each leaf node holds between <code class="code-font">&lceil;(n-1)/2&rceil;</code> and <code class="code-font">n-1</code> key values, and all leaf nodes are linked sequentially to support fast range queries.
+            </p>
+          </div>
+          <div class="bg-blue-50/70 border border-blue-200 rounded-2xl p-4 space-y-2">
+            <h4 class="font-bold text-blue-950 text-sm">5-Mark Exam Answer: Dense Index vs Sparse Index</h4>
+            <p class="text-xs text-slate-800 leading-relaxed">
+              <strong>Dense Index:</strong> An index record appears for every search-key value in the data file. It enables direct, fast access to any record, but requires more storage space and higher maintenance cost during insertions/deletions.
+              <br><strong>Sparse Index:</strong> Index records are created for only some of the search-key values (typically one entry per disk block). It requires significantly less space, though it strictly requires the data file to be physically sorted on the search key and needs a short sequential scan within the block.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="text-center text-xs text-slate-500 py-6 border-t border-slate-200">
+        CSE-302 Database Systems • Chapter 10: Indexing &amp; B+ Tree (Complete Bilingual Study Note) • Ready for Browser Viewing &amp; Printing
+      </footer>
+
+    </main>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar.classList.contains('hidden')) {
+        sidebar.classList.remove('hidden');
+        sidebar.classList.add('fixed', 'inset-0', 'z-50', 'bg-slate-900/50', 'p-4', 'flex', 'justify-center', 'items-start');
+      } else {
+        sidebar.classList.add('hidden');
+        sidebar.classList.remove('fixed', 'inset-0', 'z-50', 'bg-slate-900/50', 'p-4', 'flex', 'justify-center', 'items-start');
+      }
+    }
+
+    document.querySelectorAll('#sidebar a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 1024) {
+          const sidebar = document.getElementById('sidebar');
+          sidebar.classList.add('hidden');
+          sidebar.classList.remove('fixed', 'inset-0', 'z-50', 'bg-slate-900/50', 'p-4', 'flex', 'justify-center', 'items-start');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
