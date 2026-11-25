@@ -1,8 +1,7 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import webpush from 'web-push';
-import { createClient } from '@supabase/supabase-js';
+const webpush = require('web-push');
+const { createClient } = require('@supabase/supabase-js');
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+module.exports = async function handler(req, res) {
   try {
     const supabaseUrl = process.env.VITE_SUPABASE_URL;
     const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
@@ -50,10 +49,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const exams = Array.isArray(device.exams) ? device.exams : [];
 
       const activePendingTasks = tasks.filter(
-        (t: any) => !t.completed && (!t.expiresAt || t.expiresAt > now)
+        (t) => !t.completed && (!t.expiresAt || t.expiresAt > now)
       );
 
-      const upcomingExams = exams.filter((e: any) => {
+      const upcomingExams = exams.filter((e) => {
         const examDate = new Date(`${e.date}T00:00:00Z`);
         const diffDays = Math.ceil(
           (examDate.getTime() - bdToday.getTime()) / (1000 * 60 * 60 * 24)
@@ -65,17 +64,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         continue;
       }
 
-      const lines: string[] = [];
+      const lines = [];
       if (activePendingTasks.length > 0) {
         lines.push(
           `Tasks (${activePendingTasks.length}): ${activePendingTasks
-            .map((t: any) => t.text)
+            .map((t) => t.text)
             .join(', ')}`
         );
       }
       if (upcomingExams.length > 0) {
         lines.push(
-          `Exams: ${upcomingExams.map((e: any) => `${e.title} (${e.date})`).join(', ')}`
+          `Exams: ${upcomingExams.map((e) => `${e.title} (${e.date})`).join(', ')}`
         );
       }
 
@@ -88,7 +87,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       try {
         await webpush.sendNotification(device.subscription, payload);
         sentCount++;
-      } catch (pushErr: any) {
+      } catch (pushErr) {
         if (pushErr.statusCode === 410 || pushErr.statusCode === 404) {
           await supabase
             .from('device_reminders')
@@ -99,7 +98,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     return res.status(200).json({ success: true, sentCount });
-  } catch (err: any) {
+  } catch (err) {
     return res.status(500).json({ error: err.message });
   }
-}
+};
